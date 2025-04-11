@@ -1,10 +1,14 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import React from "react";
+import { createRoot } from "react-dom/client";
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+// application
+import App from "./App";
+
+const container = document.getElementById("baseui");
+const root = createRoot(container as HTMLElement);
+
+root.render(
+  <React.Fragment>
     <App />
-  </StrictMode>,
-)
+  </React.Fragment>,
+);
