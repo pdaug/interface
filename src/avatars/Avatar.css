@@ -1,7 +1,9 @@
 .baseui-avatar {
   align-items: center;
-  background: var(--info-light);
-  background-color: var(--info-light);
+  background: var(--border-light);
+  background-color: var(--border-light);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
   border-radius: var(--rounded);
   cursor: default;
   display: flex;
@@ -18,11 +20,11 @@
 }
 
 .baseui-avatar svg {
-  color: var(--info-dark);
+  color: var(--font-light);
 }
 
 .baseui-avatar span {
-  color: var(--info-dark);
+  color: var(--font-light);
   font-weight: bold;
   user-select: none;
 }

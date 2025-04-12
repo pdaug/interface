@@ -1,0 +1,42 @@
+.baseui-stats {
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.baseui-stats-head {
+  display: flex;
+  font-size: var(--text-small);
+  gap: 1rem;
+  overflow: hidden;
+  padding: 0.6rem;
+  padding-bottom: 0;
+}
+
+.baseui-stats-head-title {
+  flex: 1;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+}
+
+.baseui-stats-head-metric-up {
+  color: var(--success);
+}
+
+.baseui-stats-head-metric-down {
+  color: var(--danger);
+}
+
+.baseui-stats-body {
+  font-size: var(--text-title);
+  padding: 1.4rem;
+  padding-top: 0;
+}
