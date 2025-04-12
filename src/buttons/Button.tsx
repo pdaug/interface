@@ -60,7 +60,7 @@ const Button = function ({
   dropdown,
 }: ButtonProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const buttonDropdown = useRef<HTMLDivElement | null>(null);
+  const buttonDropdownRef = useRef<HTMLDivElement | null>(null);
 
   const ToggleDropdown = function () {
     setDropdownOpen(!dropdownOpen);
@@ -91,8 +91,8 @@ const Button = function ({
     const HandleClickButton = function (event: MouseEvent) {
       if (
         event.target &&
-        buttonDropdown.current &&
-        !buttonDropdown.current.contains(event.target as Node)
+        buttonDropdownRef.current &&
+        !buttonDropdownRef.current.contains(event.target as Node)
       ) {
         setDropdownOpen(false);
         return;
@@ -107,7 +107,7 @@ const Button = function ({
   }, []);
 
   return dropdown ? (
-    <div ref={buttonDropdown} className="baseui-button-dropdown">
+    <div ref={buttonDropdownRef} className="baseui-button-dropdown">
       <div className="baseui-button-dropdown-actor">
         {ButtonContent}
         <button

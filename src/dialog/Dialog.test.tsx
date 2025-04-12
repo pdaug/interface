@@ -1,5 +1,7 @@
-// components
 import Button from "../buttons/Button";
+
+// components
+import { Trash } from "@phosphor-icons/react";
 
 // context
 import { useDialog } from "./Dialog";
@@ -19,6 +21,43 @@ const DialogTest = function () {
               title: "Título",
               category: "primary",
               description: "descrição",
+              confirmText: "Confirmar",
+              onConfirm: function () {
+                console.log("Clicado");
+                CloseDialog();
+                return;
+              },
+            });
+            return;
+          }}
+        />
+        <Button
+          text="Dialog Secondary"
+          category="secondary"
+          onClick={function () {
+            OpenDialog({
+              title: "Título",
+              category: "secondary",
+              description: "descrição",
+              confirmText: "Confirmar",
+              onConfirm: function () {
+                console.log("Clicado");
+                CloseDialog();
+                return;
+              },
+            });
+            return;
+          }}
+        />
+        <Button
+          text="Dialog Warning"
+          category="warn"
+          onClick={function () {
+            OpenDialog({
+              title: "Título",
+              category: "warn",
+              description: "descrição",
+              confirmText: "Confirmar",
               onConfirm: function () {
                 console.log("Clicado");
                 CloseDialog();
@@ -33,9 +72,12 @@ const DialogTest = function () {
           category="danger"
           onClick={function () {
             OpenDialog({
+              Icon: Trash,
               title: "Título",
               category: "danger",
               description: "descrição",
+              confirmIcon: Trash,
+              confirmText: "Deletar",
               onConfirm: function () {
                 console.log("Clicado");
                 CloseDialog();

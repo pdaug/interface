@@ -1,6 +1,8 @@
 .baseui-badge {
   align-items: center;
-  border-radius: var(--radius);
+  border-radius: var(--rounded);
+  box-shadow: var(--shadow);
+  cursor: default;
   display: flex;
   font-size: var(--text-small);
   justify-content: center;
@@ -11,4 +13,30 @@
 .baseui-badge-primary {
   background: var(--success-light);
   background-color: var(--success-light);
+  color: var(--success-dark);
+}
+
+.baseui-badge-secondary {
+  background: var(--info-light);
+  background-color: var(--info-light);
+  color: var(--info-dark);
+}
+
+.baseui-badge-warn {
+  background: var(--warn-light);
+  background-color: var(--warn-light);
+  color: var(--warn-dark);
+}
+
+.baseui-badge-danger {
+  background: var(--danger-light);
+  background-color: var(--danger-light);
+  font-weight: bold;
+  color: var(--danger-dark);
+}
+
+.baseui-badge-neutral {
+  background: var(--background);
+  background-color: var(--background);
+  color: var(--font-light);
 }

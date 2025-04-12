@@ -1,5 +1,11 @@
 import { Icon as PhosphorIcon } from "@phosphor-icons/react";
-import React, { createContext, useContext, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 // styles
 import "./Dialog.css";
@@ -7,14 +13,15 @@ import "./Dialog.css";
 // components
 import Button from "../buttons/Button";
 
-// types
-import type { ButtonCategories } from "../buttons/Button";
+export type DialogCategories = "primary" | "secondary" | "danger" | "warn";
 
 export type DialogContextProps = {
   open: boolean;
   title: string;
   description: string;
-  category: ButtonCategories;
+  category: DialogCategories;
+  confirmIcon?: PhosphorIcon;
+  confirmText: string;
   onConfirm: () => void;
   Icon?: PhosphorIcon;
   onCancel?: () => void;
@@ -37,6 +44,7 @@ export const DialogProvider = function ({ children }: DialogProviderProps) {
     open: false,
     title: "",
     description: "",
+    confirmText: "Confirmar",
     category: "primary",
     onConfirm: function () {
       return;
@@ -82,12 +90,36 @@ export const useDialog = function () {
 
 export const DialogElement = function () {
   const { dialogProps, CloseDialog } = useDialog();
+  const dialogContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(function () {
+    const HandleClickButton = function (event: MouseEvent) {
+      if (
+        event.target &&
+        dialogContainerRef.current &&
+        !dialogContainerRef.current.contains(event.target as Node)
+      ) {
+        CloseDialog();
+        return;
+      }
+      return;
+    };
+    document.addEventListener("mousedown", HandleClickButton);
+    return function () {
+      document.removeEventListener("mousedown", HandleClickButton);
+      return;
+    };
+  }, []);
+
   return (
     dialogProps?.open && (
       <div className="baseui-dialog">
-        <div className="baseui-dialog-container">
+        <div ref={dialogContainerRef} className="baseui-dialog-container">
           <div className="baseui-dialog-content">
-            <div className="baseui-dialog-title">{dialogProps.title}</div>
+            <div className="baseui-dialog-title">
+              {dialogProps.Icon && <dialogProps.Icon />}
+              <span>{dialogProps.title}</span>
+            </div>
             <div>{dialogProps.description}</div>
           </div>
           <div className="baseui-dialog-footer">
@@ -99,7 +131,8 @@ export const DialogElement = function () {
             />
             <Button
               type="submit"
-              text="Confirmar"
+              Icon={dialogProps.confirmIcon}
+              text={dialogProps.confirmText}
               category={dialogProps.category}
               onClick={dialogProps.onConfirm}
             />

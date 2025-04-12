@@ -1,14 +1,21 @@
 :root {
+  --success-light: #d3edd9;
   --success: #22c55e;
   --success-dark: #059669;
+
+  --warn-light: #fff3cc;
   --warn: #fb923c;
   --warn-dark: #d37528;
+
+  --info-light: #d3eef2;
   --info: #0ea5e9;
   --info-dark: #197ca8;
+
+  --danger-light: #fad7da;
   --danger: #ef4444;
   --danger-dark: #b52a2a;
 
-  --background: #eee;
+  --background: #fafafa;
   --foreground: white;
 
   --border-light: #ebebeb;
@@ -41,6 +48,7 @@ button {
 }
 
 body {
-  background: var(--gray-light);
+  background: var(--background);
+  background-color: var(--background);
   margin: 0;
 }

@@ -2,6 +2,7 @@
   align-items: center;
   background: var(--modal);
   background-color: var(--modal);
+  box-shadow: var(--shadow);
   display: flex;
   height: 100vh;
   justify-content: center;
@@ -29,6 +30,9 @@
 }
 
 .baseui-dialog-title {
+  align-items: center;
+  display: flex;
+  gap: 0.4rem;
   font-size: var(--text-subtitle);
   font-weight: bold;
 }
