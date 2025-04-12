@@ -6,7 +6,7 @@
   "homepage": "https://pdaug.github.io/baseui",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite --port 5055 --host ",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

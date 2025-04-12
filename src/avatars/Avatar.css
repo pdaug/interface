@@ -1,0 +1,32 @@
+.baseui-avatar {
+  align-items: center;
+  background: var(--info-light);
+  background-color: var(--info-light);
+  border-radius: var(--rounded);
+  cursor: default;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.baseui-avatar img {
+  aspect-ratio: 1;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  width: 100%;
+}
+
+.baseui-avatar svg {
+  color: var(--info-dark);
+}
+
+.baseui-avatar span {
+  color: var(--info-dark);
+  font-weight: bold;
+  user-select: none;
+}
+
+.baseui-avatar-circle {
+  border-radius: 100% !important;
+}
