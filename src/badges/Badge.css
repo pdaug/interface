@@ -10,6 +10,10 @@
   padding: 2px 0.8rem;
 }
 
+.baseui-badge-dropdown .baseui-badge {
+  cursor: pointer !important;
+}
+
 .baseui-badge-primary {
   background: var(--success-light);
   background-color: var(--success-light);
@@ -39,4 +43,34 @@
   background: var(--background);
   background-color: var(--background);
   color: var(--font-light);
+}
+
+.baseui-badge-dropdown-content {
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded);
+  box-shadow: var(--shadow);
+  display: none;
+  flex-direction: column;
+  font-size: var(--text-small);
+  gap: 0.4rem;
+  margin: 4px 0;
+  padding: 6px;
+  position: absolute;
+  width: 15rem;
+  z-index: 1;
+}
+
+.baseui-badge-dropdown-content-option {
+  align-items: center;
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: none;
+  border-radius: var(--rounded);
+  display: flex;
+  gap: 0.4rem;
+  padding: 4px 1rem;
+  text-align: left;
+  transition: 200ms;
 }

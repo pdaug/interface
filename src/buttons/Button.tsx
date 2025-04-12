@@ -67,7 +67,7 @@ const Button = function ({
     return;
   };
 
-  const ButtonContent = (
+  const ButtonBase = (
     <button
       id={id}
       name={name}
@@ -109,7 +109,7 @@ const Button = function ({
   return dropdown ? (
     <div ref={buttonDropdownRef} className="baseui-button-dropdown">
       <div className="baseui-button-dropdown-actor">
-        {ButtonContent}
+        {ButtonBase}
         <button
           onClick={ToggleDropdown}
           className={`baseui-button baseui-button-${category} baseui-button-actor`}
@@ -146,7 +146,7 @@ const Button = function ({
       </div>
     </div>
   ) : (
-    ButtonContent
+    ButtonBase
   );
 };
 
