@@ -15,7 +15,6 @@ const AvatarTest = function () {
         <Avatar Icon={Image} label="Text" size={10} />
         <Avatar circle label="Text" size={10} />
       </div>
-      <div style={{ display: "flex", gap: "1rem" }}></div>
       <div style={{ display: "flex", gap: "1rem" }}>
         <Avatar photo="http://picsum.photos/100/100" label="Photo" size={4} />
         <Avatar photo="http://picsum.photos/100/100" label="Photo" size={6} />

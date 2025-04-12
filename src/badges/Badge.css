@@ -9,6 +9,17 @@
   padding: 2px 0.8rem;
 }
 
+.baseui-badge span {
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.baseui-badge-dropdown {
+  overflow: hidden;
+}
+
 .baseui-badge-dropdown .baseui-badge {
   cursor: pointer !important;
 }

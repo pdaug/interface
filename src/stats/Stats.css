@@ -39,4 +39,8 @@
   font-size: var(--text-title);
   padding: 1.4rem;
   padding-top: 0;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

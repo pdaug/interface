@@ -7,15 +7,15 @@ const StatsTest = function () {
       <div>Stats</div>
       <div style={{ display: "flex", gap: "1rem" }}>
         <Stats
-          title="Total Subscribers"
-          metric={0.0802}
-          metricStatus="down"
+          title="Inflow Sales"
+          metric={0.1}
+          metricStatus="up"
           metricLocale="en-US"
           metricOptions={{
             style: "percent",
             minimumFractionDigits: 2,
           }}
-          value={4}
+          value={1000}
           valueLocale="en-US"
           valueOptions={{
             currency: "USD",
@@ -25,15 +25,15 @@ const StatsTest = function () {
         />
 
         <Stats
-          title="Average Open Rate"
-          metric={0.1603}
-          metricStatus="up"
+          title="Outflow Monthly"
+          metric={0.1}
+          metricStatus="down"
           metricLocale="en-US"
           metricOptions={{
             style: "percent",
             minimumFractionDigits: 2,
           }}
-          value={834.22}
+          value={500}
           valueLocale="pt-BR"
           valueOptions={{
             currency: "BRL",
@@ -43,25 +43,24 @@ const StatsTest = function () {
         />
 
         <Stats
-          title="Average Click Rate"
-          metric={0.3204}
-          metricStatus="down"
+          title="Distance"
+          metric={0.1}
+          metricStatus="up"
           metricLocale="en-US"
           metricOptions={{
             style: "percent",
             minimumFractionDigits: 2,
           }}
-          value={10}
+          value={120}
           valueLocale="en-US"
+          valueUnit="km"
           valueOptions={{
-            currency: "EUR",
-            style: "currency",
             minimumFractionDigits: 2,
           }}
         />
 
         <Stats
-          title="Reais"
+          title="Temperature"
           metric={0.6405}
           metricStatus="up"
           metricLocale="en-US"
@@ -69,11 +68,10 @@ const StatsTest = function () {
             style: "percent",
             minimumFractionDigits: 2,
           }}
-          value={1234}
+          value={24.5}
+          valueUnit="ºC"
           valueLocale="en-US"
           valueOptions={{
-            currency: "USD",
-            style: "currency",
             minimumFractionDigits: 2,
           }}
         />

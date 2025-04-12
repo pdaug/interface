@@ -26,6 +26,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  overflow: hidden;
   padding: 1rem;
 }
 
@@ -35,6 +36,18 @@
   gap: 0.4rem;
   font-size: var(--text-subtitle);
   font-weight: bold;
+}
+
+.baseui-dialog-title span {
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.baseui-dialog-description {
+  font-size: var(--text-small);
+  text-align: justify;
 }
 
 .baseui-dialog-footer {

@@ -10,6 +10,7 @@ export type StatsProps = {
   metricLocale?: Intl.LocalesArgument;
   metricOptions?: Intl.NumberFormatOptions;
   value: number;
+  valueUnit?: string;
   valueLocale?: Intl.LocalesArgument;
   valueOptions?: Intl.NumberFormatOptions;
 };
@@ -21,6 +22,7 @@ const Stats = function ({
   metricLocale,
   metricOptions,
   value,
+  valueUnit,
   valueLocale,
   valueOptions,
 }: StatsProps) {
@@ -45,7 +47,9 @@ const Stats = function ({
           {metricFormatted}
         </div>
       </div>
-      <div className="baseui-stats-body">{valueFormatted}</div>
+      <div className="baseui-stats-body">
+        {valueFormatted} {valueUnit}
+      </div>
     </div>
   );
 };

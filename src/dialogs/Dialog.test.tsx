@@ -36,9 +36,11 @@ const DialogTest = function () {
           category="secondary"
           onClick={function () {
             OpenDialog({
-              title: "Título",
+              title:
+                "Nunc ullamcorper cursus neque, in sollicitudin erat aliquam vehicula. Phasellus finibus, dui et suscipit finibus, tellus nibh maximus nibh, vel semper enim magna eu nisl.",
               category: "secondary",
-              description: "descrição",
+              description:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices facilisis metus sed mollis. Fusce elit lorem, efficitur ut sem eu, laoreet tempor mauris. Nullam nisl libero, facilisis ut dapibus in, eleifend in urna. Nulla facilisi. Donec scelerisque leo vitae semper pharetra. Vivamus ex turpis, laoreet sed nisi eget, tristique pretium mi. Ut vel neque ultricies, congue mauris nec, scelerisque est. Vivamus ultrices pellentesque eros, a semper ex posuere et. Donec lacinia magna mauris, id ullamcorper dolor vulputate non. Quisque vel luctus lectus, vel aliquam magna. Proin viverra viverra mi, in maximus metus semper nec. Pellentesque gravida sollicitudin lacinia. Nunc ullamcorper cursus neque, in sollicitudin erat aliquam vehicula. Phasellus finibus, dui et suscipit finibus, tellus nibh maximus nibh, vel semper enim magna eu nisl.",
               confirmText: "Confirmar",
               onConfirm: function () {
                 console.log("Clicado");

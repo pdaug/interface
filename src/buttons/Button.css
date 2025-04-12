@@ -73,6 +73,7 @@
 
 .baseui-button-dropdown {
   position: relative;
+  overflow: hidden;
 }
 
 .baseui-button-dropdown-actor {

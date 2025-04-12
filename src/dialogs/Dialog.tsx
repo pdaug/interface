@@ -120,7 +120,9 @@ export const DialogElement = function () {
               {dialogProps.Icon && <dialogProps.Icon />}
               <span>{dialogProps.title}</span>
             </div>
-            <div>{dialogProps.description}</div>
+            <div className="baseui-dialog-description">
+              {dialogProps.description}
+            </div>
           </div>
           <div className="baseui-dialog-footer">
             <Button

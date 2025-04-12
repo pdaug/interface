@@ -1,5 +1,6 @@
 .baseui-avatar {
   align-items: center;
+  aspect-ratio: 1 / 1;
   background: var(--border-light);
   background-color: var(--border-light);
   border: 1px solid var(--border);
@@ -8,11 +9,10 @@
   cursor: default;
   display: flex;
   justify-content: center;
-  overflow: hidden;
 }
 
 .baseui-avatar img {
-  aspect-ratio: 1;
+  aspect-ratio: 1 / 1;
   height: 100%;
   object-fit: cover;
   user-select: none;
