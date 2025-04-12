@@ -1,7 +1,3 @@
 # Base UI
 
-# Buttons
-
-- Button
-- Button with Icon
-- Button with Dropdown
+(Open Website)[https://pdaug.github.io/baseui/]
