@@ -1,49 +1,56 @@
 .baseui-tooltip {
   display: flex;
+  gap: 1rem;
   position: relative;
 }
 
-.baseui-tooltip-content {
-  cursor: default;
-  border-radius: var(--rounded);
-  font-size: var(--text-small);
+.baseui-tooltip-container {
   opacity: 0;
-  padding: 4px 0.4rem;
+  padding: 8px;
   position: absolute;
-  text-align: center;
   transition: 200ms;
   user-select: none;
   visibility: hidden;
   z-index: 1;
 }
 
-.baseui-tooltip:hover .baseui-tooltip-content {
+.baseui-tooltip:hover .baseui-tooltip-container {
   visibility: visible;
   opacity: 1;
 }
 
-.baseui-tooltip-content-top {
+.baseui-tooltip-container-top {
   left: 50%;
   top: 0;
-  transform: translateX(-50%) translateY(-100%);
+  transform: translate(-50%, -100%);
 }
 
-.baseui-tooltip-content-bottom {
+.baseui-tooltip-container-bottom {
   left: 50%;
   bottom: 0;
-  transform: translateX(-50%) translateY(100%);
+  transform: translate(-50%, 100%);
 }
 
-.baseui-tooltip-content-left {
+.baseui-tooltip-container-left {
   top: 50%;
   left: 0;
-  transform: translateX(-100%) translateY(-50%);
+  transform: translate(-100%, -50%);
 }
 
-.baseui-tooltip-content-right {
+.baseui-tooltip-container-right {
   top: 50%;
   right: 0;
-  transform: translateX(100%) translateY(-50%);
+  transform: translate(100%, -50%);
+}
+
+.baseui-tooltip-content {
+  border-radius: var(--rounded);
+  box-shadow: var(--shadow);
+  cursor: default;
+  font-size: var(--text-small);
+  padding: 4px 0.4rem;
+  text-align: center;
+  z-index: 1;
 }
 
 .baseui-tooltip-content-light {

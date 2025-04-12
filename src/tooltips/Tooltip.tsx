@@ -26,9 +26,13 @@ const Tooltip = function ({
     <div className="baseui-tooltip">
       <div
         style={{ width }}
-        className={`baseui-tooltip-content baseui-tooltip-content-${position} baseui-tooltip-content-${theme}`}
+        className={`baseui-tooltip-container baseui-tooltip-container-${position}`}
       >
-        {content}
+        <div
+          className={`baseui-tooltip-content baseui-tooltip-content-${theme}`}
+        >
+          {content}
+        </div>
       </div>
       {children}
     </div>
