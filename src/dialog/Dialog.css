@@ -1,0 +1,44 @@
+.baseui-dialog {
+  align-items: center;
+  background: var(--modal);
+  background-color: var(--modal);
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  z-index: 9;
+}
+
+.baseui-dialog-container {
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded);
+  overflow: hidden;
+  width: 35rem;
+}
+
+.baseui-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1rem;
+}
+
+.baseui-dialog-title {
+  font-size: var(--text-subtitle);
+  font-weight: bold;
+}
+
+.baseui-dialog-footer {
+  background: var(--background);
+  background-color: var(--background);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding: 0.8rem;
+}

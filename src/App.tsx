@@ -1,21 +1,29 @@
 // styles
 import "./App.css";
 
+// contexts
+import { DialogElement, DialogProvider } from "./dialog/Dialog";
+
 // tests
 import ButtonTest from "./buttons/Button.test";
+import DialogTest from "./dialog/Dialog.test";
 
 const App = function () {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "1rem",
-        padding: "1rem",
-      }}
-    >
-      <ButtonTest />
-    </div>
+    <DialogProvider>
+      <DialogElement />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+          padding: "1rem",
+        }}
+      >
+        <ButtonTest />
+        <DialogTest />
+      </div>
+    </DialogProvider>
   );
 };
 

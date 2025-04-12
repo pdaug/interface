@@ -95,6 +95,7 @@ const ButtonTest = function () {
           text="Button with Icon"
           Icon={Cube}
           IconWeight="fill"
+          IconPosition="right"
           category="neutral"
         />
       </div>

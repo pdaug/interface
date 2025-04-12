@@ -1,22 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
 import {
   CaretDown,
   CaretUp,
   IconWeight,
   Icon as PhosphorIcons,
 } from "@phosphor-icons/react";
+import React, { useEffect, useRef, useState } from "react";
 
 // styles
 import "./Button.css";
 
-export type TypeButtonCategories =
+export type ButtonCategories =
   | "primary"
   | "secondary"
   | "danger"
   | "warn"
   | "neutral";
 
-export type TypeButtonDropdowns = {
+export type ButtonDropdowns = {
   id: string;
   label: string;
   disabled?: boolean;
@@ -24,18 +24,23 @@ export type TypeButtonDropdowns = {
   onClick?: React.EventHandler<React.MouseEvent<HTMLButtonElement>>;
 }[];
 
-type ButtonProps = {
+export type ButtonType = "submit" | "reset" | "button";
+
+export type ButtonIconPosition = "left" | "right";
+
+export type ButtonProps = {
   text: React.ReactNode;
-  category: TypeButtonCategories;
+  category: ButtonCategories;
   id?: string;
   name?: string;
   disabled?: boolean;
   Icon?: PhosphorIcons;
   IconWeight?: IconWeight;
   IconSize?: number;
+  IconPosition?: ButtonIconPosition;
   style?: React.CSSProperties;
-  dropdown?: TypeButtonDropdowns;
-  type?: "submit" | "reset" | "button";
+  dropdown?: ButtonDropdowns;
+  type?: ButtonType;
   onClick?: React.EventHandler<React.MouseEvent<HTMLButtonElement>>;
 };
 
@@ -47,14 +52,15 @@ const Button = function ({
   Icon,
   IconSize,
   IconWeight,
+  IconPosition = "left",
   text,
   style,
   onClick,
   disabled,
   dropdown,
 }: ButtonProps) {
-  const buttonDropdown = useRef<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const buttonDropdown = useRef<HTMLDivElement | null>(null);
 
   const ToggleDropdown = function () {
     setDropdownOpen(!dropdownOpen);
@@ -71,8 +77,13 @@ const Button = function ({
       disabled={disabled}
       className={`baseui-button baseui-button-${category}`}
     >
-      {Icon && <Icon weight={IconWeight} size={IconSize} />}
+      {Icon && IconPosition === "left" && (
+        <Icon weight={IconWeight} size={IconSize} />
+      )}
       {text && <span>{text}</span>}
+      {Icon && IconPosition === "right" && (
+        <Icon weight={IconWeight} size={IconSize} />
+      )}
     </button>
   );
 
@@ -111,11 +122,20 @@ const Button = function ({
         className="baseui-button-dropdown-content"
       >
         {dropdown.map(function ({ id, label, Icon, disabled, onClick }) {
+          const onClickWithClose = function (
+            event: React.MouseEvent<HTMLButtonElement>,
+          ) {
+            if (onClick) {
+              onClick(event);
+            }
+            setDropdownOpen(false);
+            return;
+          };
           return (
             <button
               key={id}
-              onClick={onClick}
               disabled={disabled}
+              onClick={onClickWithClose}
               className="baseui-button-dropdown-content-option"
             >
               {Icon && <Icon />}
