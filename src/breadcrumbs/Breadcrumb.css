@@ -1,0 +1,30 @@
+.baseui-breadcrumb {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.baseui-breadcrumb svg {
+  fill: var(--font-light);
+  color: var(--font-light);
+}
+
+.baseui-breadcrumb a {
+  color: var(--font);
+  font-size: var(--text-small);
+  font-weight: 400;
+  transition: 200ms;
+  text-decoration: none;
+}
+
+.baseui-breadcrumb a:hover {
+  color: var(--font-dark);
+  filter: brightness(0.8);
+  transition: 200ms;
+}
+
+.baseui-breadcrumb a:active {
+  color: var(--font-light);
+  transition: 200ms;
+}

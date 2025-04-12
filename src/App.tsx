@@ -7,6 +7,7 @@ import { DialogElement, DialogProvider } from "./dialogs/Dialog";
 // tests
 import AvatarTest from "./avatars/Avatar.test";
 import BadgeTest from "./badges/Badge.test";
+import BreadcrumbTest from "./breadcrumbs/Breadcrumb.test";
 import ButtonTest from "./buttons/Button.test";
 import CalloutTest from "./callouts/Callout.test";
 import DialogTest from "./dialogs/Dialog.test";
@@ -27,6 +28,7 @@ const App = function () {
       >
         <AvatarTest />
         <BadgeTest />
+        <BreadcrumbTest />
         <ButtonTest />
         <CalloutTest />
         <DialogTest />
