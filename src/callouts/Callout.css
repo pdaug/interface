@@ -1,0 +1,43 @@
+.baseui-callout {
+  align-items: center;
+  border-radius: var(--rounded);
+  cursor: default;
+  display: flex;
+  font-size: var(--text-small);
+  gap: 0.6rem;
+  overflow: hidden;
+  padding: 0.4rem 1rem;
+  width: 100%;
+}
+
+.baseui-callout-primary {
+  background: var(--success-light);
+  background-color: var(--success-light);
+  color: var(--success-dark);
+}
+
+.baseui-callout-secondary {
+  background: var(--info-light);
+  background-color: var(--info-light);
+  color: var(--info-dark);
+}
+
+.baseui-callout-warn {
+  background: var(--warn-light);
+  background-color: var(--warn-light);
+  color: var(--warn-dark);
+}
+
+.baseui-callout-danger {
+  background: var(--danger-light);
+  background-color: var(--danger-light);
+  font-weight: bold;
+  color: var(--danger-dark);
+}
+
+.baseui-callout-neutral {
+  background: var(--background);
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  color: var(--font-light);
+}
