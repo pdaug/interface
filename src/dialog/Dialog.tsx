@@ -12,11 +12,12 @@ import type { ButtonCategories } from "../buttons/Button";
 
 export type DialogContextProps = {
   open: boolean;
-  Icon?: PhosphorIcon;
   title: string;
   description: string;
   category: ButtonCategories;
   onConfirm: () => void;
+  Icon?: PhosphorIcon;
+  onCancel?: () => void;
 };
 
 export type DialogContextType = {
@@ -32,22 +33,30 @@ type DialogProviderProps = {
 };
 
 export const DialogProvider = function ({ children }: DialogProviderProps) {
-  const initialDialogProps = {
+  const initialDialogProps: DialogContextProps = {
     open: false,
     title: "",
     description: "",
-    category: "primary" as ButtonCategories,
+    category: "primary",
     onConfirm: function () {
+      return;
+    },
+    onCancel: function () {
+      CloseDialog();
       return;
     },
   };
 
-  const [dialogProps, setDialogProps] = useState(initialDialogProps);
+  const [dialogProps, setDialogProps] =
+    useState<DialogContextProps>(initialDialogProps);
 
   const OpenDialog = function (
     newDialogProps: Omit<DialogContextProps, "open">,
   ) {
-    setDialogProps({ ...newDialogProps, open: true });
+    setDialogProps({
+      ...newDialogProps,
+      open: true,
+    });
     return;
   };
 
@@ -86,7 +95,7 @@ export const DialogElement = function () {
               type="button"
               category="neutral"
               text="Cancelar"
-              onClick={CloseDialog}
+              onClick={dialogProps?.onCancel || CloseDialog}
             />
             <Button
               type="submit"

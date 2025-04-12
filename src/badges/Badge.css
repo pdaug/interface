@@ -1,0 +1,14 @@
+.baseui-badge {
+  align-items: center;
+  border-radius: var(--radius);
+  display: flex;
+  font-size: var(--text-small);
+  justify-content: center;
+  overflow: hidden;
+  padding: 2px 0.8rem;
+}
+
+.baseui-badge-primary {
+  background: var(--success-light);
+  background-color: var(--success-light);
+}

@@ -5,6 +5,7 @@ import "./App.css";
 import { DialogElement, DialogProvider } from "./dialog/Dialog";
 
 // tests
+import BadgeTest from "./badges/Badge.test";
 import ButtonTest from "./buttons/Button.test";
 import DialogTest from "./dialog/Dialog.test";
 
@@ -20,6 +21,7 @@ const App = function () {
           padding: "1rem",
         }}
       >
+        <BadgeTest />
         <ButtonTest />
         <DialogTest />
       </div>
