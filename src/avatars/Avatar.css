@@ -9,6 +9,7 @@
   cursor: default;
   display: flex;
   justify-content: center;
+  overflow: hidden;
 }
 
 .baseui-avatar img {

@@ -11,6 +11,7 @@ import BreadcrumbTest from "./breadcrumbs/Breadcrumb.test";
 import ButtonTest from "./buttons/Button.test";
 import CalloutTest from "./callouts/Callout.test";
 import DialogTest from "./dialogs/Dialog.test";
+import SectionTest from "./sections/Section.test";
 import StatsTest from "./stats/Stats.test";
 import TooltipTest from "./tooltips/Tooltip.test";
 
@@ -32,6 +33,7 @@ const App = function () {
         <ButtonTest />
         <CalloutTest />
         <DialogTest />
+        <SectionTest />
         <StatsTest />
         <TooltipTest />
       </div>

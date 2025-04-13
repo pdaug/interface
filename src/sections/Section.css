@@ -1,0 +1,38 @@
+.baseui-section {
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.baseui-section-header {
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.6rem 1rem;
+}
+
+.baseui-section-header-title {
+  font-size: var(--text-highlight);
+}
+
+.baseui-section-header-description {
+  font-size: var(--text-small);
+}
+
+.baseui-section-content {
+  padding: 1rem;
+}
+
+.baseui-section-footer {
+  background: var(--background);
+  background-color: var(--background);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end;
+  padding: 0.6rem 1rem;
+}
