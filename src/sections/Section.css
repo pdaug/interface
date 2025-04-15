@@ -4,6 +4,7 @@
   border: 1px solid var(--border);
   border-radius: var(--rounded);
   box-shadow: var(--shadow);
+  flex: 1;
   overflow: hidden;
 }
 
@@ -11,16 +12,22 @@
   border-bottom: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.4rem;
   padding: 0.6rem 1rem;
 }
 
 .baseui-section-header-title {
   font-size: var(--text-highlight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .baseui-section-header-description {
+  color: var(--font-light);
   font-size: var(--text-small);
+  line-height: 1.2;
+  text-align: justify;
 }
 
 .baseui-section-content {
