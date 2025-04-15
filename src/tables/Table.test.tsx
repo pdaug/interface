@@ -1,5 +1,6 @@
 // components
 import Badge from "../badges/Badge";
+import Profile from "../profiles/Profile";
 import Table from "./Table";
 
 const TableTest = function () {
@@ -124,6 +125,54 @@ const TableTest = function () {
       },
     },
   ];
+  const columnsProfile = [
+    {
+      id: "status",
+      label: "Status",
+      width: "100px",
+    },
+    {
+      id: "brand",
+      label: "Brand",
+    },
+    {
+      id: "profile",
+      label: "Profile",
+    },
+    {
+      id: "model",
+      label: "Model",
+    },
+    {
+      id: "year",
+      label: "Year",
+    },
+  ];
+  const rowsProfile = [
+    {
+      id: "1",
+      datas: {
+        status: {
+          id: "1-status",
+          value: <Badge category="primary" text="Primary" />,
+        },
+        brand: "Volkswagen",
+        profile: {
+          id: "1-profile",
+          value: (
+            <Profile
+              name="Pedro Augusto"
+              description="Developer"
+              photo="http://picsum.photos/100/100"
+              padding={false}
+            />
+          ),
+        },
+        model: "Polo",
+        year: "2024",
+      },
+    },
+  ];
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
       <div>Table</div>
@@ -140,6 +189,10 @@ const TableTest = function () {
           columns={columnsStatus}
           rows={rowsStatus}
         />
+      </div>
+      <div style={{ alignItems: "flex-start", display: "flex", gap: "1rem" }}>
+        <Table border columns={columnsProfile} rows={rowsProfile} />
+        <Table border columns={columnsProfile} rows={rowsProfile} />{" "}
       </div>
     </div>
   );

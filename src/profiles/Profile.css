@@ -1,0 +1,66 @@
+.baseui-profile {
+  align-items: center;
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border-radius: var(--rounded);
+  display: flex;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.baseui-profile-padding {
+  padding: 0.4rem 0.6rem;
+}
+
+.baseui-profile-border {
+  border: 1px solid var(--border);
+}
+
+.baseui-profile-photo {
+  align-items: center;
+  background: var(--border-light);
+  background: var(--border-light);
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  height: 32px;
+  overflow: hidden;
+  width: 32px;
+}
+
+.baseui-profile-photo svg {
+  fill: var(--font-light);
+  color: var(--font-light);
+}
+
+.baseui-profile-photo img {
+  aspect-ratio: 1 / 1;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.baseui-profile-data {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  overflow: hidden;
+}
+
+.baseui-profile-data-name {
+  line-height: 1;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.baseui-profile-data-description {
+  color: var(--font-light);
+  font-size: var(--text-small);
+  line-height: 1;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -25,6 +25,7 @@
 }
 
 .baseui-table-body-row {
+  align-items: center;
   display: flex;
 }
 

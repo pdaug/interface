@@ -1,4 +1,4 @@
-import { Buildings, House } from "@phosphor-icons/react";
+import { Folder, House } from "@phosphor-icons/react";
 
 // components
 import Breadcrumb from "./Breadcrumb";
@@ -26,7 +26,7 @@ const BreadcrumbTest = function () {
       </div>
       <div style={{ display: "flex", gap: "1rem" }}>
         <Breadcrumb
-          Icon={Buildings}
+          Icon={Folder}
           links={[
             {
               id: "corporation",

@@ -19,11 +19,11 @@ export type BreadcrumbProps = {
 const Breadcrumb = function ({ Icon, links }: BreadcrumbProps) {
   return (
     <div className="baseui-breadcrumb">
-      <Icon weight="fill" size={20} />
+      <Icon size={20} />
       {links?.map(function ({ id, label, url, target }) {
         return (
           <React.Fragment key={id}>
-            <CaretRight weight="bold" />
+            <CaretRight />
             <div id={id}>
               <a href={url} target={target}>
                 {label}
