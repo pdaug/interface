@@ -1,0 +1,56 @@
+.baseui-table {
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded);
+  border-style: none;
+  box-shadow: none;
+  flex: 1;
+  overflow: hidden;
+}
+
+.baseui-table-border {
+  border-style: solid !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.baseui-table-border .baseui-table-head {
+  background: var(--background);
+  background-color: var(--background);
+}
+
+.baseui-table-head-row {
+  border-bottom: 1px solid var(--border);
+  display: flex;
+}
+
+.baseui-table-body-row {
+  display: flex;
+}
+
+.baseui-table-body-row-striped:nth-child(even) {
+  background: var(--background);
+  background-color: var(--background);
+}
+
+.baseui-table-body-row:not(:last-child) {
+  border-bottom: 1px solid var(--border);
+}
+
+.baseui-table-head-data {
+  font-size: var(--text-paragraph);
+  font-weight: 600;
+  flex: 1;
+  padding: 1rem;
+}
+
+.baseui-table-body-data {
+  font-size: var(--text-small);
+  font-weight: 400;
+  flex: 1;
+  overflow: hidden;
+  padding: 0.6rem 1rem;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
