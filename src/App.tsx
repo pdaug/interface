@@ -2,6 +2,7 @@
 import "./App.css";
 
 // contexts
+import { ToastElement } from "./toasts/Toast";
 import { DialogElement, DialogProvider } from "./dialogs/Dialog";
 
 // tests
@@ -18,12 +19,14 @@ import ProfileTest from "./profiles/Profile.test";
 import SectionTest from "./sections/Section.test";
 import StatsTest from "./stats/Stats.test";
 import TableTest from "./tables/Table.test";
+import ToastTest from "./toasts/Toast.test";
 import TooltipTest from "./tooltips/Tooltip.test";
 
 const App = function () {
   return (
     <DialogProvider>
       <DialogElement />
+      <ToastElement />
       <div
         style={{
           display: "flex",
@@ -45,6 +48,7 @@ const App = function () {
         <SectionTest />
         <StatsTest />
         <TableTest />
+        <ToastTest />
         <TooltipTest />
       </div>
     </DialogProvider>
