@@ -37,8 +37,10 @@
 }
 
 .fadeui-pagination-button-selected {
-  background: var(--border-light) !important;
-  background-color: var(--border-light) !important;
+  background: var(--info) !important;
+  background-color: var(--info) !important;
+  border-color: var(--info-dark) !important;
+  color: white;
 }
 
 .fadeui-pagination-button-left {
