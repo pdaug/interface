@@ -1,4 +1,4 @@
-.baseui-avatar {
+.fadeui-avatar {
   align-items: center;
   aspect-ratio: 1 / 1;
   background: var(--border-light);
@@ -12,7 +12,7 @@
   overflow: hidden;
 }
 
-.baseui-avatar img {
+.fadeui-avatar img {
   aspect-ratio: 1 / 1;
   height: 100%;
   object-fit: cover;
@@ -20,16 +20,16 @@
   width: 100%;
 }
 
-.baseui-avatar svg {
+.fadeui-avatar svg {
   color: var(--font-light);
 }
 
-.baseui-avatar span {
+.fadeui-avatar span {
   color: var(--font-light);
   font-weight: bold;
   user-select: none;
 }
 
-.baseui-avatar-circle {
+.fadeui-avatar-circle {
   border-radius: 100% !important;
 }

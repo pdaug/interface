@@ -18,7 +18,7 @@ export type BreadcrumbProps = {
 
 const Breadcrumb = function ({ Icon, links }: BreadcrumbProps) {
   return (
-    <div className="baseui-breadcrumb">
+    <div className="fadeui-breadcrumb">
       <Icon size={20} />
       {links?.map(function ({ id, label, url, target }) {
         return (

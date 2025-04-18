@@ -113,18 +113,18 @@ export const DialogElement = function () {
 
   return (
     dialogProps?.open && (
-      <div className="baseui-dialog">
-        <div ref={dialogContainerRef} className="baseui-dialog-container">
-          <div className="baseui-dialog-content">
-            <div className="baseui-dialog-title">
+      <div className="fadeui-dialog">
+        <div ref={dialogContainerRef} className="fadeui-dialog-container">
+          <div className="fadeui-dialog-content">
+            <div className="fadeui-dialog-title">
               {dialogProps.Icon && <dialogProps.Icon />}
               <span>{dialogProps.title}</span>
             </div>
-            <div className="baseui-dialog-description">
+            <div className="fadeui-dialog-description">
               {dialogProps.description}
             </div>
           </div>
-          <div className="baseui-dialog-footer">
+          <div className="fadeui-dialog-footer">
             <Button
               type="button"
               category="neutral"

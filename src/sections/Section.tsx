@@ -24,13 +24,13 @@ const Section = function ({
   actions,
 }: SectionProps) {
   return (
-    <div className="baseui-section">
-      <div className="baseui-section-header">
-        <div className="baseui-section-header-title">{title}</div>
-        <div className="baseui-section-header-description">{description}</div>
+    <div className="fadeui-section">
+      <div className="fadeui-section-header">
+        <div className="fadeui-section-header-title">{title}</div>
+        <div className="fadeui-section-header-description">{description}</div>
       </div>
-      <div className="baseui-section-content">{children}</div>
-      <div className="baseui-section-footer">
+      <div className="fadeui-section-content">{children}</div>
+      <div className="fadeui-section-footer">
         {onCancel && (
           <Button category="neutral" text="Cancelar" onClick={onCancel} />
         )}

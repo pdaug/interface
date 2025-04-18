@@ -1,11 +1,11 @@
-.baseui-tooltip {
+.fadeui-tooltip {
   display: flex;
   gap: 1rem;
   position: relative;
   z-index: 999;
 }
 
-.baseui-tooltip-container {
+.fadeui-tooltip-container {
   opacity: 0;
   padding: 8px;
   position: absolute;
@@ -15,36 +15,36 @@
   z-index: 1;
 }
 
-.baseui-tooltip:hover .baseui-tooltip-container {
+.fadeui-tooltip:hover .fadeui-tooltip-container {
   visibility: visible;
   opacity: 1;
 }
 
-.baseui-tooltip-container-top {
+.fadeui-tooltip-container-top {
   left: 50%;
   top: 0;
   transform: translate(-50%, -100%);
 }
 
-.baseui-tooltip-container-bottom {
+.fadeui-tooltip-container-bottom {
   left: 50%;
   bottom: 0;
   transform: translate(-50%, 100%);
 }
 
-.baseui-tooltip-container-left {
+.fadeui-tooltip-container-left {
   top: 50%;
   left: 0;
   transform: translate(-100%, -50%);
 }
 
-.baseui-tooltip-container-right {
+.fadeui-tooltip-container-right {
   top: 50%;
   right: 0;
   transform: translate(100%, -50%);
 }
 
-.baseui-tooltip-content {
+.fadeui-tooltip-content {
   border-radius: var(--rounded);
   box-shadow: var(--shadow);
   cursor: default;
@@ -54,14 +54,14 @@
   z-index: 1;
 }
 
-.baseui-tooltip-content-light {
+.fadeui-tooltip-content-light {
   background: var(--background);
   background-color: var(--background);
   border: 1px solid var(--border);
   color: var(--font);
 }
 
-.baseui-tooltip-content-dark {
+.fadeui-tooltip-content-dark {
   background: var(--font);
   background-color: var(--font);
   border: 1px solid var(--font-dark);

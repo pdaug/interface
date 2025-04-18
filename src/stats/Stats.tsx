@@ -37,17 +37,17 @@ const Stats = function ({
   ).format(value);
 
   return (
-    <div className="baseui-stats">
-      <div className="baseui-stats-head">
-        <div className="baseui-stats-head-title">{title}</div>
+    <div className="fadeui-stats">
+      <div className="fadeui-stats-head">
+        <div className="fadeui-stats-head-title">{title}</div>
         <div
-          className={`baseui-stats-head-metric baseui-stats-head-metric-${metricStatus}`}
+          className={`fadeui-stats-head-metric fadeui-stats-head-metric-${metricStatus}`}
         >
           {metricStatus === "up" ? "+" : "-"}
           {metricFormatted}
         </div>
       </div>
-      <div className="baseui-stats-body">
+      <div className="fadeui-stats-body">
         {valueFormatted} {valueUnit}
       </div>
     </div>

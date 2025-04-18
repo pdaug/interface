@@ -1,4 +1,4 @@
-.baseui-dialog {
+.fadeui-dialog {
   align-items: center;
   background: var(--modal);
   background-color: var(--modal);
@@ -13,7 +13,7 @@
   z-index: 9;
 }
 
-.baseui-dialog-container {
+.fadeui-dialog-container {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -22,7 +22,7 @@
   width: 35rem;
 }
 
-.baseui-dialog-content {
+.fadeui-dialog-content {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
@@ -30,7 +30,7 @@
   padding: 1rem;
 }
 
-.baseui-dialog-title {
+.fadeui-dialog-title {
   align-items: center;
   display: flex;
   gap: 0.4rem;
@@ -38,19 +38,19 @@
   font-weight: bold;
 }
 
-.baseui-dialog-title span {
+.fadeui-dialog-title span {
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.baseui-dialog-description {
+.fadeui-dialog-description {
   font-size: var(--text-small);
   text-align: justify;
 }
 
-.baseui-dialog-footer {
+.fadeui-dialog-footer {
   background: var(--background);
   background-color: var(--background);
   border-top: 1px solid var(--border);

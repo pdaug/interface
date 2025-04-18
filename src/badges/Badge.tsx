@@ -45,7 +45,7 @@ const Badge = function ({
     <div
       id={id}
       style={style}
-      className={`baseui-badge baseui-badge-${category}`}
+      className={`fadeui-badge fadeui-badge-${category}`}
     >
       <span style={styleText}>{text}</span>
     </div>
@@ -74,12 +74,12 @@ const Badge = function ({
     <div
       ref={badgeDropdownRef}
       onClick={ToggleDropdown}
-      className="baseui-badge-dropdown"
+      className="fadeui-badge-dropdown"
     >
       {BadgeBase}
       <div
         style={{ display: dropdownOpen ? "flex" : "none" }}
-        className="baseui-badge-dropdown-content"
+        className="fadeui-badge-dropdown-content"
       >
         {dropdown.map(function ({ id, label, onClick }) {
           const onClickWithClose = function (
@@ -95,7 +95,7 @@ const Badge = function ({
             <button
               key={id}
               onClick={onClickWithClose}
-              className="baseui-button-dropdown-content-option"
+              className="fadeui-button-dropdown-content-option"
             >
               <span>{label}</span>
             </button>

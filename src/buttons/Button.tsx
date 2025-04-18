@@ -75,7 +75,7 @@ const Button = function ({
       style={style}
       onClick={onClick}
       disabled={disabled}
-      className={`baseui-button baseui-button-${category}`}
+      className={`fadeui-button fadeui-button-${category}`}
     >
       {Icon && IconPosition === "left" && (
         <Icon weight={IconWeight} size={IconSize} />
@@ -107,19 +107,19 @@ const Button = function ({
   }, []);
 
   return dropdown ? (
-    <div ref={buttonDropdownRef} className="baseui-button-dropdown">
-      <div className="baseui-button-dropdown-actor">
+    <div ref={buttonDropdownRef} className="fadeui-button-dropdown">
+      <div className="fadeui-button-dropdown-actor">
         {ButtonBase}
         <button
           onClick={ToggleDropdown}
-          className={`baseui-button baseui-button-${category} baseui-button-actor`}
+          className={`fadeui-button fadeui-button-${category} fadeui-button-actor`}
         >
           {dropdownOpen ? <CaretUp /> : <CaretDown />}
         </button>
       </div>
       <div
         style={{ display: dropdownOpen ? "flex" : "none" }}
-        className="baseui-button-dropdown-content"
+        className="fadeui-button-dropdown-content"
       >
         {dropdown.map(function ({ id, label, Icon, disabled, onClick }) {
           const onClickWithClose = function (
@@ -136,7 +136,7 @@ const Button = function ({
               key={id}
               disabled={disabled}
               onClick={onClickWithClose}
-              className="baseui-button-dropdown-content-option"
+              className="fadeui-button-dropdown-content-option"
             >
               {Icon && <Icon />}
               <span>{label}</span>

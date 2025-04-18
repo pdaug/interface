@@ -42,12 +42,12 @@ const Table = function ({
   striped,
 }: TableProps) {
   return (
-    <div className={`baseui-table ${border ? "baseui-table-border" : ""}`}>
-      <div className="baseui-table-head">
-        <div className="baseui-table-head-row">
+    <div className={`fadeui-table ${border ? "fadeui-table-border" : ""}`}>
+      <div className="fadeui-table-head">
+        <div className="fadeui-table-head-row">
           {checkbox && (
             <div
-              className="baseui-table-head-data"
+              className="fadeui-table-head-data"
               style={{ maxWidth: 32, textAlign: "center" }}
             >
               #
@@ -57,7 +57,7 @@ const Table = function ({
             return (
               <div
                 key={column.id}
-                className="baseui-table-head-data"
+                className="fadeui-table-head-data"
                 style={{ maxWidth: column?.width }}
               >
                 {column.tooltip ? (
@@ -72,16 +72,16 @@ const Table = function ({
           })}
         </div>
       </div>
-      <div className="baseui-table-body">
+      <div className="fadeui-table-body">
         {rows?.map(function (row) {
           return (
             <div
               key={row.id}
-              className={`baseui-table-body-row ${striped ? "baseui-table-body-row-striped" : ""}`}
+              className={`fadeui-table-body-row ${striped ? "fadeui-table-body-row-striped" : ""}`}
             >
               {checkbox && (
                 <div
-                  className="baseui-table-body-data"
+                  className="fadeui-table-body-data"
                   style={{ maxWidth: 32, textAlign: "center" }}
                 >
                   <input type="checkbox" />
@@ -92,7 +92,7 @@ const Table = function ({
                 return typeof rowData === "string" ? (
                   <div
                     key={`${row.id}-${column.id}`}
-                    className="baseui-table-body-data"
+                    className="fadeui-table-body-data"
                     style={{ maxWidth: column?.width }}
                   >
                     {rowData}
@@ -100,7 +100,7 @@ const Table = function ({
                 ) : (
                   <div
                     key={rowData.id}
-                    className="baseui-table-body-data"
+                    className="fadeui-table-body-data"
                     style={{ maxWidth: column?.width }}
                   >
                     {rowData.tooltip ? (

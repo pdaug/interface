@@ -1,9 +1,9 @@
 {
-  "name": "baseui",
+  "name": "fadeui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://pdaug.github.io/baseui",
+  "homepage": "https://pdaug.github.io/fadeui",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",

@@ -23,13 +23,13 @@ const Tooltip = function ({
   children,
 }: TooltipProps) {
   return (
-    <div className="baseui-tooltip">
+    <div className="fadeui-tooltip">
       <div
         style={{ width }}
-        className={`baseui-tooltip-container baseui-tooltip-container-${position}`}
+        className={`fadeui-tooltip-container fadeui-tooltip-container-${position}`}
       >
         <div
-          className={`baseui-tooltip-content baseui-tooltip-content-${theme}`}
+          className={`fadeui-tooltip-content fadeui-tooltip-content-${theme}`}
         >
           {content}
         </div>

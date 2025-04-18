@@ -1,4 +1,4 @@
-.baseui-callout {
+.fadeui-callout {
   align-items: center;
   border-radius: var(--rounded);
   cursor: default;
@@ -10,32 +10,32 @@
   width: 100%;
 }
 
-.baseui-callout-primary {
+.fadeui-callout-primary {
   background: var(--success-light);
   background-color: var(--success-light);
   color: var(--success-dark);
 }
 
-.baseui-callout-secondary {
+.fadeui-callout-secondary {
   background: var(--info-light);
   background-color: var(--info-light);
   color: var(--info-dark);
 }
 
-.baseui-callout-warn {
+.fadeui-callout-warn {
   background: var(--warn-light);
   background-color: var(--warn-light);
   color: var(--warn-dark);
 }
 
-.baseui-callout-danger {
+.fadeui-callout-danger {
   background: var(--danger-light);
   background-color: var(--danger-light);
   font-weight: bold;
   color: var(--danger-dark);
 }
 
-.baseui-callout-neutral {
+.fadeui-callout-neutral {
   background: var(--background);
   background-color: var(--background);
   border: 1px solid var(--border);

@@ -4,7 +4,7 @@ import { createRoot } from "react-dom/client";
 // application
 import App from "./App";
 
-const container = document.getElementById("baseui");
+const container = document.getElementById("fadeui");
 const root = createRoot(container as HTMLElement);
 
 root.render(

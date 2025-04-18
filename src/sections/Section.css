@@ -1,4 +1,4 @@
-.baseui-section {
+.fadeui-section {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -8,7 +8,7 @@
   overflow: hidden;
 }
 
-.baseui-section-header {
+.fadeui-section-header {
   border-bottom: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -16,25 +16,25 @@
   padding: 0.6rem 1rem;
 }
 
-.baseui-section-header-title {
+.fadeui-section-header-title {
   font-size: var(--text-highlight);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.baseui-section-header-description {
+.fadeui-section-header-description {
   color: var(--font-light);
   font-size: var(--text-small);
   line-height: 1.2;
   text-align: justify;
 }
 
-.baseui-section-content {
+.fadeui-section-content {
   padding: 1rem;
 }
 
-.baseui-section-footer {
+.fadeui-section-footer {
   background: var(--background);
   background-color: var(--background);
   border-top: 1px solid var(--border);

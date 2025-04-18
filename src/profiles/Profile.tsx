@@ -22,18 +22,18 @@ const Profile = function ({
 }: ProfileProps) {
   return (
     <div
-      className={`baseui-profile ${border ? "baseui-profile-border" : ""} ${padding ? "baseui-profile-padding" : ""}`}
+      className={`fadeui-profile ${border ? "fadeui-profile-border" : ""} ${padding ? "fadeui-profile-padding" : ""}`}
     >
       <div
-        className="baseui-profile-photo"
+        className="fadeui-profile-photo"
         style={{ height: photoSize, width: photoSize }}
       >
         {photo ? <img src={photo} alt={name} /> : <User />}
       </div>
-      <div className="baseui-profile-data">
-        <div className="baseui-profile-data-name">{name}</div>
+      <div className="fadeui-profile-data">
+        <div className="fadeui-profile-data-name">{name}</div>
         {description && (
-          <div className="baseui-profile-data-description">{description}</div>
+          <div className="fadeui-profile-data-description">{description}</div>
         )}
       </div>
     </div>
