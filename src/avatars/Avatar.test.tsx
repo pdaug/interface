@@ -8,12 +8,12 @@ const AvatarTest = function () {
     <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
       <div>Avatar</div>
       <div style={{ display: "flex", gap: "1rem" }}>
-        <Avatar label="Text" size={4} />
-        <Avatar label="Text" size={6} />
-        <Avatar label="Text" size={8} />
-        <Avatar label="Text" size={10} />
-        <Avatar Icon={Image} label="Text" size={10} />
-        <Avatar circle label="Text" size={10} />
+        <Avatar label="Avatar" size={4} />
+        <Avatar label="Avatar" size={6} />
+        <Avatar label="Avatar" size={8} />
+        <Avatar label="Avatar" size={10} />
+        <Avatar Icon={Image} label="Avatar" size={10} />
+        <Avatar circle label="Avatar" size={10} />
       </div>
       <div style={{ display: "flex", gap: "1rem" }}>
         <Avatar photo="http://picsum.photos/100/100" label="Photo" size={4} />
