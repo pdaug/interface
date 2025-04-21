@@ -236,3 +236,77 @@
   cursor: not-allowed;
   opacity: 1;
 }
+
+/* RADIO */
+.fadeui-form-radio-horizontal {
+  display: flex;
+  flex: 1;
+  gap: 0.6rem;
+}
+
+.fadeui-form-radio-vertical {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.fadeui-form-radio-option {
+  align-items: center;
+  display: flex;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.fadeui-form-radio-option-box {
+  align-items: center;
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  height: 16px;
+  transition: 200ms;
+  width: 16px;
+}
+
+.fadeui-form-radio-option-box:hover {
+  cursor: pointer;
+  transition: 200ms;
+}
+
+.fadeui-form-radio-option:has(input:checked) .fadeui-form-radio-option-box {
+  align-items: center;
+  border: 1px solid var(--info);
+  color: var(--info);
+  display: flex;
+  justify-content: center;
+  transition: 200ms;
+}
+
+.fadeui-form-radio-option:has(input:checked)
+  .fadeui-form-radio-option-box::after {
+  background: var(--info);
+  background-color: var(--info);
+  border-radius: 100%;
+  content: "";
+  height: 10px;
+  line-height: 1;
+  margin: 0;
+  width: 10px;
+}
+
+.fadeui-form-radio-option input[type="radio"] {
+  appearance: none;
+  display: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fadeui-form-radio-option span {
+  cursor: pointer;
+  font-size: var(--text-small);
+  font-weight: 400;
+  line-height: 1;
+}

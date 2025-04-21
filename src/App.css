@@ -54,7 +54,8 @@ button {
   width: 0.6rem;
 }
 
-::-webkit-scrollbar-track {
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
   background: var(--background);
   background-color: var(--background);
 }

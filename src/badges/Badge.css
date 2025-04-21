@@ -85,3 +85,10 @@
   text-align: left;
   transition: 200ms;
 }
+
+.fadeui-badge-dropdown-content-option:hover {
+  background: var(--background);
+  background-color: var(--background);
+  cursor: pointer;
+  transition: 200ms;
+}

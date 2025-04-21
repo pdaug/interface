@@ -7,6 +7,7 @@ import {
   FormMask,
   FormMoney,
   FormPrefix,
+  FormRadio,
   FormSelect,
   FormText,
 } from "./Form";
@@ -28,6 +29,7 @@ const FormTest = function () {
     carplate: "",
     zipcode: "",
     poem: "",
+    movie: "",
   });
 
   return (
@@ -216,6 +218,67 @@ const FormTest = function () {
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div>Form: Radio</div>
+        <div style={{ alignItems: "flex-start", display: "flex", gap: "1rem" }}>
+          <FormRadio
+            value={form.movie}
+            onChange={function (value) {
+              setForm({
+                ...form,
+                movie: value || "",
+              });
+              return;
+            }}
+            options={[
+              {
+                id: "donnie_darko",
+                value: "donnie_darko",
+                label: "Donnie Darko ",
+              },
+              {
+                id: "inception",
+                value: "inception",
+                label: "Inception ",
+              },
+              {
+                id: "interstellar",
+                value: "interstellar",
+                label: "Interstellar ",
+              },
+            ]}
+          />
+          <FormRadio
+            horizontal
+            value={form.movie}
+            onChange={function (value) {
+              setForm({
+                ...form,
+                movie: value || "",
+              });
+              return;
+            }}
+            options={[
+              {
+                id: "donnie_darko",
+                value: "donnie_darko",
+                label: "Donnie Darko ",
+              },
+              {
+                id: "inception",
+                value: "inception",
+                label: "Inception ",
+              },
+              {
+                id: "interstellar",
+                value: "interstellar",
+                label: "Interstellar ",
+              },
+            ]}
+          />
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         <div>Form: Prefix</div>
         <div style={{ alignItems: "flex-start", display: "flex", gap: "1rem" }}>
           <FormPrefix
@@ -360,7 +423,7 @@ const FormTest = function () {
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-        <div>Form: Select</div>
+        <div>Form: TextArea</div>
         <div style={{ alignItems: "flex-start", display: "flex", gap: "1rem" }}>
           <FormText
             label="Poem"

@@ -231,6 +231,66 @@ const FormMoney = function ({
   );
 };
 
+export type FormRadioOptions = {
+  id: string;
+  value: string;
+  label: string;
+}[];
+
+export type FormRadioProps = {
+  options: FormRadioOptions;
+  value: string;
+  name?: string;
+  horizontal?: boolean;
+  onChange?: (value: string) => void;
+};
+
+const FormRadio = function ({
+  name,
+  options,
+  value,
+  horizontal,
+  onChange,
+}: FormRadioProps) {
+  return (
+    <div
+      className={
+        horizontal
+          ? "fadeui-form-radio-horizontal"
+          : "fadeui-form-radio-vertical"
+      }
+    >
+      {options?.map(function (option, index) {
+        return (
+          <label
+            htmlFor={option.id}
+            key={`${option.id}${index}`}
+            className="fadeui-form-radio-option"
+          >
+            <div>
+              <div className="fadeui-form-radio-option-box"></div>
+            </div>
+            <input
+              name={name}
+              type="radio"
+              id={option.id}
+              value={option.value}
+              checked={value === option.value}
+              onChange={function () {
+                if (onChange) {
+                  onChange(option.value);
+                }
+                return;
+              }}
+            />
+            <span>{option.label}</span>
+          </label>
+        );
+      })}
+    </div>
+  );
+};
+
 export type FormPrefixProps = {
   id: string;
   label: string;
@@ -481,4 +541,12 @@ const FormText = function ({
   );
 };
 
-export { FormInput, FormMask, FormMoney, FormPrefix, FormSelect, FormText };
+export {
+  FormInput,
+  FormMask,
+  FormMoney,
+  FormRadio,
+  FormPrefix,
+  FormSelect,
+  FormText,
+};
