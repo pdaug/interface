@@ -47,6 +47,30 @@ button {
   font-family: "Open Sans", sans-serif;
 }
 
+::-webkit-scrollbar {
+  background: var(--background);
+  background-color: var(--background);
+  height: 0.6rem;
+  width: 0.6rem;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+  background-color: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  background-color: var(--border);
+  border-radius: var(--rounded);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-dark);
+  background-color: var(--border-dark);
+  cursor: grab;
+}
+
 body {
   background: var(--background);
   background-color: var(--background);
