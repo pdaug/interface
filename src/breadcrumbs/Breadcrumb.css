@@ -5,9 +5,12 @@
   gap: 0.6rem;
 }
 
+.fadeui-breadcrumb span,
 .fadeui-breadcrumb svg {
   fill: var(--font-light);
   color: var(--font-light);
+  font-weight: 500;
+  opacity: 0.6;
 }
 
 .fadeui-breadcrumb a {

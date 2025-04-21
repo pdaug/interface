@@ -24,11 +24,13 @@ const Profile = function ({
     <div
       className={`fadeui-profile ${border ? "fadeui-profile-border" : ""} ${padding ? "fadeui-profile-padding" : ""}`}
     >
-      <div
-        className="fadeui-profile-photo"
-        style={{ height: photoSize, width: photoSize }}
-      >
-        {photo ? <img src={photo} alt={name} /> : <User />}
+      <div>
+        <div
+          className="fadeui-profile-photo"
+          style={{ height: photoSize, width: photoSize }}
+        >
+          {photo ? <img src={photo} alt={name} /> : <User />}
+        </div>
       </div>
       <div className="fadeui-profile-data">
         <div className="fadeui-profile-data-name">{name}</div>

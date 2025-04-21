@@ -1,5 +1,5 @@
 import React from "react";
-import { CaretRight, Icon as PhosphorIcon } from "@phosphor-icons/react";
+import { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 // styles
 import "./Breadcrumb.css";
@@ -23,7 +23,7 @@ const Breadcrumb = function ({ Icon, links }: BreadcrumbProps) {
       {links?.map(function ({ id, label, url, target }) {
         return (
           <React.Fragment key={id}>
-            <CaretRight />
+            <span>/</span>
             <div id={id}>
               <a href={url} target={target}>
                 {label}

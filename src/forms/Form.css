@@ -1,0 +1,138 @@
+.fadeui-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.fadeui-form-header {
+  align-items: center;
+  display: flex;
+}
+
+.fadeui-form-header[data-required="true"] label::before {
+  content: "*";
+  color: var(--danger);
+  font-size: var(--text-small);
+  line-height: 1;
+  padding-right: 0.2rem;
+}
+
+.fadeui-form label {
+  font-size: var(--text-small);
+  font-weight: 400;
+  line-height: 1;
+  flex: 1;
+}
+
+.fadeui-form span {
+  color: var(--danger);
+  font-size: var(--text-small);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.fadeui-form-content {
+  display: flex;
+  flex: 1;
+}
+
+.fadeui-form-content input,
+.fadeui-form-content select,
+.fadeui-form-content textarea {
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded);
+  box-sizing: border-box;
+  font-size: var(--text-small);
+  flex: 1;
+  height: 2rem;
+  margin: 0;
+  line-height: 1;
+  padding: 0 0.8rem;
+}
+
+.fadeui-form-content textarea {
+  height: auto !important;
+  padding: 0.8rem !important;
+}
+
+.fadeui-form-content input:focus,
+.fadeui-form-content select:focus,
+.fadeui-form-content textarea:focus {
+  border-color: var(--info);
+  outline: none;
+}
+
+.fadeui-form-content input:disabled,
+.fadeui-form-content select:disabled,
+.fadeui-form-content textarea:disabled {
+  background: var(--background) !important;
+  background-color: var(--background) !important;
+  cursor: not-allowed;
+}
+
+.fadeui-form-content input:read-only {
+  background: var(--background) !important;
+  background-color: var(--background) !important;
+}
+
+/* PREFIX */
+.fadeui-form-prefix {
+  display: flex;
+}
+
+.fadeui-form-prefix button {
+  align-items: center;
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-top-left-radius: var(--rounded);
+  border-bottom-left-radius: var(--rounded);
+  box-sizing: border-box;
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  line-height: 1;
+  height: 2rem;
+  padding: 0 0.6rem;
+}
+
+.fadeui-form-prefix:has(input:focus) button {
+  border-color: var(--info);
+}
+
+.fadeui-form-prefix button div {
+  color: var(--font-light);
+  font-size: var(--text-small);
+}
+
+.fadeui-form-prefix input {
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-top-right-radius: var(--rounded);
+  border-bottom-right-radius: var(--rounded);
+  box-sizing: border-box;
+  flex: 1;
+  line-height: 1;
+  height: 2rem;
+  font-size: var(--text-small);
+  outline: none;
+  overflow: hidden;
+  padding: 0 0.6rem;
+}
+
+.fadeui-form-prefix input:focus {
+  border-color: var(--info);
+  border-left-color: var(--border);
+  outline: none;
+}
+
+.fadeui-form-prefix input:disabled {
+  background: var(--background) !important;
+  background-color: var(--background) !important;
+  cursor: not-allowed;
+}

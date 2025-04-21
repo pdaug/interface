@@ -40,7 +40,7 @@
 
 .fadeui-table-head-data {
   font-size: var(--text-paragraph);
-  font-weight: 600;
+  font-weight: 500;
   flex: 1;
   padding: 1rem;
 }

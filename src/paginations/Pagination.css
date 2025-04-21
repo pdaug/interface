@@ -11,6 +11,14 @@
   gap: 0.2rem;
 }
 
+.fadeui-pagination-data span {
+  color: var(--font-light);
+}
+
+.fadeui-pagination-data b {
+  font-weight: 500;
+}
+
 .fadeui-pagination-buttons {
   align-items: center;
   display: flex;
@@ -41,6 +49,7 @@
   background-color: var(--info) !important;
   border-color: var(--info-dark) !important;
   color: white;
+  cursor: default !important;
 }
 
 .fadeui-pagination-button-left {

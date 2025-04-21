@@ -13,6 +13,7 @@ import ButtonTest from "./buttons/Button.test";
 import CalloutTest from "./callouts/Callout.test";
 import DialogTest from "./dialogs/Dialog.test";
 import DropdownTest from "./dropdowns/Dropdown.test";
+import FormTest from "./forms/Form.test";
 import PaginationTest from "./paginations/Pagination.test";
 import PanelTest from "./panels/Panel.test";
 import ProfileTest from "./profiles/Profile.test";
@@ -42,6 +43,7 @@ const App = function () {
         <CalloutTest />
         <DialogTest />
         <DropdownTest />
+        <FormTest />
         <PaginationTest />
         <PanelTest />
         <ProfileTest />
