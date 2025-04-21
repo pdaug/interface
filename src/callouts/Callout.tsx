@@ -29,7 +29,7 @@ const Callout = function ({
 }: CalloutProps) {
   return (
     <div id={id} className={`fadeui-callout fadeui-callout-${category}`}>
-      {Icon && <Icon weight={IconWeight} size={IconSize} />}
+      <div>{Icon && <Icon weight={IconWeight} size={IconSize} />}</div>
       <span>{text}</span>
     </div>
   );

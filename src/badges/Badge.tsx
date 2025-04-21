@@ -95,7 +95,7 @@ const Badge = function ({
             <button
               key={id}
               onClick={onClickWithClose}
-              className="fadeui-button-dropdown-content-option"
+              className="fadeui-badge-dropdown-content-option"
             >
               <span>{label}</span>
             </button>

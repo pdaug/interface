@@ -5,11 +5,15 @@ const BadgeTest = function () {
   const dropdown = [
     {
       id: "online",
-      label: "Disponível",
+      label: "Online",
+    },
+    {
+      id: "away",
+      label: "Away",
     },
     {
       id: "offline",
-      label: "Indisponível",
+      label: "Offline",
     },
   ];
   return (

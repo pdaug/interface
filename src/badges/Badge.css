@@ -78,6 +78,7 @@
   background-color: var(--foreground);
   border: none;
   border-radius: var(--rounded);
+  color: var(--font);
   display: flex;
   gap: 0.4rem;
   padding: 4px 1rem;

@@ -45,6 +45,7 @@
   border: 1px solid var(--border);
   border-radius: var(--rounded);
   box-sizing: border-box;
+  color: var(--font);
   font-size: var(--text-small);
   flex: 1;
   height: 2rem;
@@ -70,12 +71,15 @@
 .fadeui-form-content textarea:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
+  color: var(--font-light);
   cursor: not-allowed;
+  opacity: 1;
 }
 
 .fadeui-form-content input:read-only {
   background: var(--background) !important;
   background-color: var(--background) !important;
+  color: var(--font-light);
 }
 
 /* PREFIX */
@@ -92,6 +96,7 @@
   border-top-left-radius: var(--rounded);
   border-bottom-left-radius: var(--rounded);
   box-sizing: border-box;
+  color: var(--font-light);
   display: flex;
   gap: 0.4rem;
   justify-content: center;
@@ -113,6 +118,7 @@
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
+  border-radius: 0px;
   border-top-right-radius: var(--rounded);
   border-bottom-right-radius: var(--rounded);
   box-sizing: border-box;
@@ -151,6 +157,7 @@
   border-top-left-radius: var(--rounded);
   border-bottom-left-radius: var(--rounded);
   box-sizing: border-box;
+  color: var(--font-light);
   display: flex;
   gap: 0.4rem;
   justify-content: center;
@@ -178,6 +185,7 @@
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
+  border-radius: 0px;
   box-sizing: border-box;
   flex: 1;
   line-height: 1;
@@ -198,7 +206,9 @@
 .fadeui-form-money input:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
+  color: var(--font-light);
   cursor: not-allowed;
+  opacity: 1;
 }
 
 .fadeui-form-money select {
@@ -208,8 +218,9 @@
   border-left: none;
   border-top-right-radius: var(--rounded);
   border-bottom-right-radius: var(--rounded);
-  line-height: 1;
+  color: var(--font);
   height: 2rem;
+  line-height: 1;
   outline: none;
   padding: 0 0.6rem;
   user-select: none;

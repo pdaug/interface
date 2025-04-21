@@ -7,16 +7,16 @@ const ButtonTest = function () {
   const dropdown = [
     {
       id: "option1",
-      label: "Opção 1",
+      label: "Option",
     },
     {
       id: "option2",
       Icon: Cube,
-      label: "Opção 2",
+      label: "Option with Icon",
     },
     {
       id: "option3",
-      label: "Opção 3",
+      label: "Option Disabled",
       disabled: true,
     },
   ];

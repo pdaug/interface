@@ -22,17 +22,19 @@ const Avatar = function ({
   const sizePixel = size * 8;
   const fontPixel = size * 4;
   return (
-    <div
-      style={{ height: sizePixel, width: sizePixel }}
-      className={`fadeui-avatar ${circle ? "fadeui-avatar-circle" : ""}`}
-    >
-      {photo ? (
-        <img src={photo} alt={label} />
-      ) : Icon ? (
-        <Icon size={iconPixel} />
-      ) : (
-        <span style={{ fontSize: fontPixel }}>{label[0] || "A"}</span>
-      )}
+    <div>
+      <div
+        style={{ height: sizePixel, width: sizePixel }}
+        className={`fadeui-avatar ${circle ? "fadeui-avatar-circle" : ""}`}
+      >
+        {photo ? (
+          <img src={photo} alt={label} />
+        ) : Icon ? (
+          <Icon size={iconPixel} />
+        ) : (
+          <span style={{ fontSize: fontPixel }}>{label[0] || "A"}</span>
+        )}
+      </div>
     </div>
   );
 };
