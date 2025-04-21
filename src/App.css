@@ -54,6 +54,11 @@ button {
   width: 0.6rem;
 }
 
+::-webkit-scrollbar-track {
+  box-sizing: content-box;
+  border: 1px solid var(--border);
+}
+
 ::-webkit-scrollbar-track,
 ::-webkit-scrollbar-corner {
   background: var(--background);
@@ -63,7 +68,6 @@ button {
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   background-color: var(--border);
-  border-radius: var(--rounded);
 }
 
 ::-webkit-scrollbar-thumb:hover {

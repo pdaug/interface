@@ -7,10 +7,10 @@ const ProfileTest = function () {
       <div>Profile</div>
       <div style={{ alignItems: "flex-start", display: "flex", gap: "1rem" }}>
         <Profile
+          photoSize={6}
           name="Pedro Augusto"
           description="Developer"
           photo="http://picsum.photos/100/100"
-          photoSize={48}
         />
         <Profile border name="John Doe" description="john@email.com" />
         <Profile border name="John Doe" />

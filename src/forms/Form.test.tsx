@@ -3,6 +3,7 @@ import { At, LinkSimple, MagnifyingGlass } from "@phosphor-icons/react";
 
 // components
 import {
+  FormCheck,
   FormInput,
   FormMask,
   FormMoney,
@@ -30,10 +31,72 @@ const FormTest = function () {
     zipcode: "",
     poem: "",
     movie: "",
+    games: [] as Array<string>,
   });
 
   return (
     <React.Fragment>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div>Form: Check</div>
+        <div style={{ alignItems: "flex-start", display: "flex", gap: "1rem" }}>
+          <FormCheck
+            values={form.games}
+            onChange={function (values) {
+              setForm({
+                ...form,
+                games: values,
+              });
+              return;
+            }}
+            options={[
+              {
+                id: "galaga",
+                value: "galaga",
+                label: " Galaga",
+              },
+              {
+                id: "tetris",
+                value: "Tetris",
+                label: "Tetris",
+              },
+              {
+                id: "space_invaders",
+                value: "space_invaders",
+                label: "Space Invaders",
+              },
+            ]}
+          />
+          <FormCheck
+            horizontal
+            values={form.games}
+            onChange={function (values) {
+              setForm({
+                ...form,
+                games: values,
+              });
+              return;
+            }}
+            options={[
+              {
+                id: "galaga",
+                value: "galaga",
+                label: " Galaga",
+              },
+              {
+                id: "tetris",
+                value: "Tetris",
+                label: "Tetris",
+              },
+              {
+                id: "space_invaders",
+                value: "space_invaders",
+                label: "Space Invaders",
+              },
+            ]}
+          />
+        </div>
+      </div>
+
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         <div>Form: Input</div>
         <div style={{ alignItems: "flex-start", display: "flex", gap: "1rem" }}>

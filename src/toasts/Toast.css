@@ -10,7 +10,7 @@
   display: flex;
   gap: 1rem;
   padding: 0.8rem 1rem;
-  width: 20rem !important;
+  width: 100%;
 }
 
 .fadeui-toast-success {

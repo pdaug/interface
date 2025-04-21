@@ -3,6 +3,7 @@ import "./Table.css";
 
 // components
 import Tooltip from "../tooltips/Tooltip";
+import { FormCheckSimple } from "../forms/Form";
 
 export type TableColumn = {
   id: string;
@@ -82,9 +83,13 @@ const Table = function ({
               {checkbox && (
                 <div
                   className="fadeui-table-body-data"
-                  style={{ maxWidth: 32, textAlign: "center" }}
+                  style={{
+                    display: "flex",
+                    maxWidth: 32,
+                    justifyContent: "center",
+                  }}
                 >
-                  <input type="checkbox" />
+                  <FormCheckSimple id={row.id} value="" />
                 </div>
               )}
               {columns?.map(function (column) {

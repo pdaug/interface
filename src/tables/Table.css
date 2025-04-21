@@ -35,14 +35,14 @@
 }
 
 .fadeui-table-body-row:not(:last-child) {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .fadeui-table-head-data {
   font-size: var(--text-paragraph);
   font-weight: 500;
   flex: 1;
-  padding: 1rem;
+  padding: 0.6rem 0.4rem;
 }
 
 .fadeui-table-body-data {
@@ -50,7 +50,7 @@
   font-weight: 400;
   flex: 1;
   overflow: hidden;
-  padding: 0.6rem 1rem;
+  padding: 0.4rem 0.4rem;
   text-wrap: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap;

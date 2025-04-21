@@ -238,27 +238,24 @@
 }
 
 /* RADIO */
-.fadeui-form-radio-horizontal {
+.fadeui-form-radio {
   display: flex;
   flex: 1;
   gap: 0.6rem;
 }
 
 .fadeui-form-radio-vertical {
-  display: flex;
-  flex: 1;
   flex-direction: column;
-  gap: 0.6rem;
 }
 
-.fadeui-form-radio-option {
+.fadeui-form-radio label {
   align-items: center;
   display: flex;
   gap: 0.4rem;
   flex: 1;
 }
 
-.fadeui-form-radio-option-box {
+.fadeui-form-radio-option {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -271,12 +268,12 @@
   width: 16px;
 }
 
-.fadeui-form-radio-option-box:hover {
+.fadeui-form-radio-option:hover {
   cursor: pointer;
   transition: 200ms;
 }
 
-.fadeui-form-radio-option:has(input:checked) .fadeui-form-radio-option-box {
+.fadeui-form-radio label:has(input:checked) .fadeui-form-radio-option {
   align-items: center;
   border: 1px solid var(--info);
   color: var(--info);
@@ -285,8 +282,7 @@
   transition: 200ms;
 }
 
-.fadeui-form-radio-option:has(input:checked)
-  .fadeui-form-radio-option-box::after {
+.fadeui-form-radio label:has(input:checked) .fadeui-form-radio-option::after {
   background: var(--info);
   background-color: var(--info);
   border-radius: 100%;
@@ -297,14 +293,86 @@
   width: 10px;
 }
 
-.fadeui-form-radio-option input[type="radio"] {
+.fadeui-form-radio label input[type="radio"] {
   appearance: none;
   display: none;
   margin: 0;
   padding: 0;
 }
 
-.fadeui-form-radio-option span {
+.fadeui-form-radio label span {
+  color: var(--font);
+  cursor: pointer;
+  font-size: var(--text-small);
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* CHECK */
+.fadeui-form-check {
+  display: flex;
+  flex: 1;
+  gap: 0.6rem;
+}
+
+.fadeui-form-check-vertical {
+  flex-direction: column;
+}
+
+.fadeui-form-check label {
+  align-items: center;
+  display: flex;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.fadeui-form-check-option {
+  align-items: center;
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded);
+  display: flex;
+  justify-content: center;
+  height: 16px;
+  transition: 200ms;
+  width: 16px;
+}
+
+.fadeui-form-check-option:hover {
+  cursor: pointer;
+  transition: 200ms;
+}
+
+.fadeui-form-check label:has(input:checked) .fadeui-form-check-option {
+  align-items: center;
+  border: 1px solid var(--info);
+  color: var(--info);
+  display: flex;
+  justify-content: center;
+  transition: 200ms;
+}
+
+.fadeui-form-check label:has(input:checked) .fadeui-form-check-option::after {
+  background: var(--info);
+  background-color: var(--info);
+  border-radius: 2px;
+  content: "";
+  height: 10px;
+  line-height: 1;
+  margin: 0;
+  width: 10px;
+}
+
+.fadeui-form-check label input[type="checkbox"] {
+  appearance: none;
+  display: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fadeui-form-check label span {
+  color: var(--font);
   cursor: pointer;
   font-size: var(--text-small);
   font-weight: 400;

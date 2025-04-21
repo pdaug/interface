@@ -5,6 +5,104 @@ import { Icon as IconPhosphor } from "@phosphor-icons/react";
 // styles
 import "./Form.css";
 
+export type FormCheckOptions = {
+  id: string;
+  value: string;
+  label: string;
+}[];
+
+export type FormCheckProps = {
+  options: FormCheckOptions;
+  values: string[];
+  name?: string;
+  horizontal?: boolean;
+  onChange?: (value: string[]) => void;
+};
+
+const FormCheck = function ({
+  name,
+  options,
+  values,
+  horizontal,
+  onChange,
+}: FormCheckProps) {
+  return (
+    <div
+      className={`fadeui-form-check ${
+        !horizontal ? "fadeui-form-check-vertical" : ""
+      }`}
+    >
+      {options?.map(function (option, index) {
+        return (
+          <label htmlFor={option.id} key={`${option.id}${index}`}>
+            <div className="fadeui-form-check-option-content">
+              <div className="fadeui-form-check-option"></div>
+            </div>
+            <input
+              name={name}
+              type="checkbox"
+              id={option.id}
+              value={option.value}
+              checked={values.includes(option.value)}
+              onChange={function () {
+                const valueIndex = values.findIndex(function (currentValue) {
+                  return currentValue === option.value;
+                });
+                const cloneValues = window.structuredClone([...values]);
+                if (valueIndex > -1) {
+                  cloneValues.splice(valueIndex, 1);
+                } else {
+                  cloneValues.push(option.value);
+                }
+                if (onChange) {
+                  onChange(cloneValues);
+                }
+                return;
+              }}
+            />
+            <span>{option.label}</span>
+          </label>
+        );
+      })}
+    </div>
+  );
+};
+
+export type FormCheckSimpleProps = {
+  id: string;
+  name?: string;
+  label?: string;
+  value: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+};
+
+const FormCheckSimple = function ({
+  id,
+  name,
+  label,
+  value,
+  onChange,
+}: FormCheckSimpleProps) {
+  return (
+    <div className="fadeui-form-check">
+      <label htmlFor={id}>
+        <div className="fadeui-form-check-option-content">
+          <div className="fadeui-form-check-option"></div>
+        </div>
+        <input
+          id={id}
+          name={name}
+          value={value}
+          type="checkbox"
+          onChange={onChange}
+          checked={Boolean(value)}
+        />
+        {label && <span>{label}</span>}
+      </label>
+    </div>
+  );
+};
+
 export type FormInputProps = {
   id: string;
   label: string;
@@ -254,21 +352,15 @@ const FormRadio = function ({
 }: FormRadioProps) {
   return (
     <div
-      className={
-        horizontal
-          ? "fadeui-form-radio-horizontal"
-          : "fadeui-form-radio-vertical"
-      }
+      className={`fadeui-form-radio ${
+        horizontal ? "" : "fadeui-form-radio-vertical"
+      }`}
     >
       {options?.map(function (option, index) {
         return (
-          <label
-            htmlFor={option.id}
-            key={`${option.id}${index}`}
-            className="fadeui-form-radio-option"
-          >
-            <div>
-              <div className="fadeui-form-radio-option-box"></div>
+          <label htmlFor={option.id} key={`${option.id}${index}`}>
+            <div className="fadeui-form-radio-option-content">
+              <div className="fadeui-form-radio-option"></div>
             </div>
             <input
               name={name}
@@ -542,6 +634,8 @@ const FormText = function ({
 };
 
 export {
+  FormCheck,
+  FormCheckSimple,
   FormInput,
   FormMask,
   FormMoney,
