@@ -173,7 +173,8 @@ const FormMoney = function ({
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fadeui-form-content">
+      <div className="fadeui-form-money">
+        <button>$</button>
         <input
           id={id}
           type="text"
@@ -220,6 +221,11 @@ const FormMoney = function ({
             return;
           }}
         />
+        <select disabled={disabled}>
+          <option value="usd">USD</option>
+          <option value="brl">BRL</option>
+          <option value="eur">EUR</option>
+        </select>
       </div>
     </div>
   );

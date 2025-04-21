@@ -136,3 +136,92 @@
   background-color: var(--background) !important;
   cursor: not-allowed;
 }
+
+/* MONEY */
+.fadeui-form-money {
+  display: flex;
+}
+
+.fadeui-form-money button {
+  align-items: center;
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-top-left-radius: var(--rounded);
+  border-bottom-left-radius: var(--rounded);
+  box-sizing: border-box;
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  line-height: 1;
+  height: 2rem;
+  padding: 0 0.6rem;
+  user-select: none;
+}
+
+.fadeui-form-money:has(input:focus) button {
+  border-color: var(--info);
+}
+
+.fadeui-form-money:has(input:disabled) button {
+  background: var(--background);
+  background-color: var(--background);
+}
+
+.fadeui-form-money button div {
+  color: var(--font-light);
+  font-size: var(--text-small);
+}
+
+.fadeui-form-money input {
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  box-sizing: border-box;
+  flex: 1;
+  line-height: 1;
+  height: 2rem;
+  font-size: var(--text-small);
+  outline: none;
+  overflow: hidden;
+  padding: 0 0.6rem;
+}
+
+.fadeui-form-money input:focus {
+  border-color: var(--info);
+  border-left-color: var(--border);
+  border-right-color: var(--border);
+  outline: none;
+}
+
+.fadeui-form-money input:disabled {
+  background: var(--background) !important;
+  background-color: var(--background) !important;
+  cursor: not-allowed;
+}
+
+.fadeui-form-money select {
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-left: none;
+  border-top-right-radius: var(--rounded);
+  border-bottom-right-radius: var(--rounded);
+  line-height: 1;
+  height: 2rem;
+  outline: none;
+  padding: 0 0.6rem;
+  user-select: none;
+}
+
+.fadeui-form-money:has(input:focus) select {
+  border-color: var(--info);
+}
+
+.fadeui-form-money select:disabled {
+  background: var(--background);
+  background-color: var(--background);
+  cursor: not-allowed;
+  opacity: 1;
+}
