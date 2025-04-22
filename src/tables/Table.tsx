@@ -47,10 +47,7 @@ const Table = function ({
       <div className="fadeui-table-head">
         <div className="fadeui-table-head-row">
           {checkbox && (
-            <div
-              className="fadeui-table-head-data"
-              style={{ maxWidth: 32, textAlign: "center" }}
-            >
+            <div style={{ maxWidth: 32 }} className="fadeui-table-head-data">
               #
             </div>
           )}
@@ -82,12 +79,8 @@ const Table = function ({
             >
               {checkbox && (
                 <div
+                  style={{ maxWidth: 32 }}
                   className="fadeui-table-body-data"
-                  style={{
-                    display: "flex",
-                    maxWidth: 32,
-                    justifyContent: "center",
-                  }}
                 >
                   <FormCheckSimple id={row.id} value="" />
                 </div>

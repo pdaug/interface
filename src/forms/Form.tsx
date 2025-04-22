@@ -103,6 +103,70 @@ const FormCheckSimple = function ({
   );
 };
 
+export type FormFileProps = {
+  id: string;
+  label: string;
+  value?: File | FileList | null;
+  name?: string;
+  multiple?: boolean;
+  disabled?: boolean;
+  required?: boolean;
+  helper?: string;
+  accept?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+};
+
+const FormFile = function ({
+  id,
+  label,
+  value,
+  name,
+  accept,
+  multiple,
+  onChange,
+  disabled,
+  required,
+  helper,
+}: FormFileProps) {
+  return (
+    <div className="fadeui-form">
+      <div
+        className="fadeui-form-header"
+        data-required={String(Boolean(required))}
+      >
+        <label htmlFor={id}>{label}</label>
+        {helper && <span>{helper}</span>}
+      </div>
+      <label htmlFor={id} className="fadeui-form-file">
+        <button>Escolher arquivo(s)</button>
+        <input
+          id={id}
+          name={name}
+          type="file"
+          accept={accept}
+          multiple={multiple}
+          disabled={disabled}
+          required={required}
+          onChange={onChange}
+        />
+        <div className="fadeui-form-file-info">
+          <span>
+            {value instanceof File && value.name
+              ? value.name
+              : value instanceof FileList && value.length
+                ? Array.from(value)
+                    ?.map(function (file) {
+                      return file.name;
+                    })
+                    ?.join(", ")
+                : "Nenhum arquivo escolhido"}
+          </span>
+        </div>
+      </label>
+    </div>
+  );
+};
+
 export type FormInputProps = {
   id: string;
   label: string;
@@ -636,6 +700,7 @@ const FormText = function ({
 export {
   FormCheck,
   FormCheckSimple,
+  FormFile,
   FormInput,
   FormMask,
   FormMoney,

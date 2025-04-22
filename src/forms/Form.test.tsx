@@ -4,6 +4,7 @@ import { At, LinkSimple, MagnifyingGlass } from "@phosphor-icons/react";
 // components
 import {
   FormCheck,
+  FormFile,
   FormInput,
   FormMask,
   FormMoney,
@@ -14,6 +15,9 @@ import {
 } from "./Form";
 
 const FormTest = function () {
+  const [file, setFile] = useState<File | null | undefined>(null);
+  const [files, setFiles] = useState<FileList | null | undefined>(null);
+
   const [form, setForm] = useState({
     name: "",
     word: "",
@@ -93,6 +97,32 @@ const FormTest = function () {
                 label: "Space Invaders",
               },
             ]}
+          />
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div>Form: File</div>
+        <div style={{ alignItems: "flex-start", display: "flex", gap: "1rem" }}>
+          <FormFile
+            accept="image/*"
+            id="form_file_photo"
+            label="Photo"
+            value={file}
+            onChange={function (event) {
+              setFile(event.currentTarget.files?.[0] || null);
+              return;
+            }}
+          />
+          <FormFile
+            multiple
+            value={files}
+            label="Folder"
+            id="form_file_folder"
+            onChange={function (event) {
+              setFiles(event.currentTarget.files || null);
+              return;
+            }}
           />
         </div>
       </div>

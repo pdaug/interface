@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 0.4rem;
   flex: 1;
+  overflow: hidden;
 }
 
 .fadeui-form-header {
@@ -25,7 +26,7 @@
   flex: 1;
 }
 
-.fadeui-form span {
+.fadeui-form-header span {
   color: var(--danger);
   font-size: var(--text-small);
   font-weight: 400;
@@ -377,4 +378,59 @@
   font-size: var(--text-small);
   font-weight: 400;
   line-height: 1;
+}
+
+/* FILE */
+.fadeui-form-file {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.fadeui-form-file input {
+  appearance: none;
+  display: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fadeui-form-file button {
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-top-left-radius: var(--rounded);
+  border-bottom-left-radius: var(--rounded);
+  color: var(--font);
+  height: 32px;
+  font-size: var(--text-small);
+  padding: 0 0.6rem;
+}
+
+.fadeui-form-file-info {
+  align-items: center;
+  background: var(--foreground);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
+  border-left: none;
+  border-top-right-radius: var(--rounded);
+  border-bottom-right-radius: var(--rounded);
+  box-sizing: border-box;
+  color: var(--font-light);
+  display: flex;
+  font-size: var(--text-small);
+  flex: 1;
+  height: 32px;
+  overflow: hidden;
+  padding: 0 0.6rem;
+}
+
+.fadeui-form-file-info span {
+  color: var(--font-light);
+  font-size: var(--text-small);
+  font-weight: 400;
+  line-height: 1.5;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

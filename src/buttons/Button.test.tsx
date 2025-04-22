@@ -23,13 +23,7 @@ const ButtonTest = function () {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
       <div>Buttons</div>
-      <div style={{ display: "flex", gap: "1rem" }}>
-        <Button text="Button Primary" category="primary" />
-        <Button text="Button Secondary" category="secondary" />
-        <Button text="Button Warning" category="warn" />
-        <Button text="Button Danger" category="danger" />
-        <Button text="Button Neutral" category="neutral" />
-      </div>
+
       <div style={{ display: "flex", gap: "1rem" }}>
         <Button
           text=""
@@ -66,6 +60,13 @@ const ButtonTest = function () {
           IconSize={20}
           category="neutral"
         />
+      </div>
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <Button text="Button Primary" category="primary" />
+        <Button text="Button Secondary" category="secondary" />
+        <Button text="Button Warning" category="warn" />
+        <Button text="Button Danger" category="danger" />
+        <Button text="Button Neutral" category="neutral" />
       </div>
       <div style={{ display: "flex", gap: "1rem" }}>
         <Button
