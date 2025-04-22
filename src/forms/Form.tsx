@@ -43,7 +43,7 @@ const FormCheck = function ({
               type="checkbox"
               id={option.id}
               value={option.value}
-              checked={values.includes(option.value)}
+              checked={Array.isArray(values) && values.includes(option.value)}
               onChange={function () {
                 const valueIndex = values.findIndex(function (currentValue) {
                   return currentValue === option.value;
@@ -54,9 +54,7 @@ const FormCheck = function ({
                 } else {
                   cloneValues.push(option.value);
                 }
-                if (onChange) {
-                  onChange(cloneValues);
-                }
+                onChange?.(cloneValues);
                 return;
               }}
             />
@@ -92,9 +90,11 @@ const FormCheckSimple = function ({
         <input
           id={id}
           name={name}
-          value={value}
           type="checkbox"
-          onChange={onChange}
+          onChange={function (event) {
+            onChange?.(event);
+            return;
+          }}
           checked={Boolean(value)}
         />
         {label && <span>{label}</span>}
