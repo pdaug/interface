@@ -1,5 +1,10 @@
-.fadeui-badge {
+.fz-badge {
+  -webkit-appearance: none;
+  -moz-appearance: none;
   align-items: center;
+  appearance: none;
+  background-image: none;
+  border: none;
   border-radius: var(--rounded);
   cursor: default;
   display: flex;
@@ -9,86 +14,45 @@
   padding: 2px 0.8rem;
 }
 
-.fadeui-badge span {
+.fz-badge::-ms-expand {
+  display: none;
+}
+
+.fz-badge span,
+.fz-badge option {
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.fadeui-badge-dropdown {
-  overflow: hidden;
-}
-
-.fadeui-badge-dropdown .fadeui-badge {
-  cursor: pointer !important;
-}
-
-.fadeui-badge-primary {
+.fz-badge-primary {
   background: var(--success-light);
   background-color: var(--success-light);
   color: var(--success-dark);
 }
 
-.fadeui-badge-secondary {
+.fz-badge-secondary {
   background: var(--info-light);
   background-color: var(--info-light);
   color: var(--info-dark);
 }
 
-.fadeui-badge-warn {
+.fz-badge-warn {
   background: var(--warn-light);
   background-color: var(--warn-light);
   color: var(--warn-dark);
 }
 
-.fadeui-badge-danger {
+.fz-badge-danger {
   background: var(--danger-light);
   background-color: var(--danger-light);
   font-weight: bold;
   color: var(--danger-dark);
 }
 
-.fadeui-badge-neutral {
+.fz-badge-neutral {
   background: var(--background);
   background-color: var(--background);
   color: var(--font-light);
-}
-
-.fadeui-badge-dropdown-content {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--rounded);
-  box-shadow: var(--shadow);
-  display: none;
-  flex-direction: column;
-  font-size: var(--text-small);
-  gap: 0.4rem;
-  margin: 4px 0;
-  padding: 6px;
-  position: absolute;
-  width: 15rem;
-  z-index: 1;
-}
-
-.fadeui-badge-dropdown-content-option {
-  align-items: center;
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: none;
-  border-radius: var(--rounded);
-  color: var(--font);
-  display: flex;
-  gap: 0.4rem;
-  padding: 4px 1rem;
-  text-align: left;
-  transition: 200ms;
-}
-
-.fadeui-badge-dropdown-content-option:hover {
-  background: var(--background);
-  background-color: var(--background);
-  cursor: pointer;
-  transition: 200ms;
 }

@@ -6,8 +6,6 @@ import { ToastElement } from "./toasts/Toast";
 import { DialogElement, DialogProvider } from "./dialogs/Dialog";
 
 // tests
-import AvatarTest from "./avatars/Avatar.test";
-import BadgeTest from "./badges/Badge.test";
 import BreadcrumbTest from "./breadcrumbs/Breadcrumb.test";
 import ButtonTest from "./buttons/Button.test";
 import CalloutTest from "./callouts/Callout.test";
@@ -36,8 +34,6 @@ const App = function () {
           padding: "1rem",
         }}
       >
-        <AvatarTest />
-        <BadgeTest />
         <BreadcrumbTest />
         <ButtonTest />
         <CalloutTest />

@@ -1,16 +1,18 @@
 {
-  "name": "fadeui",
+  "name": "components",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://pdaug.github.io/fadeui",
+  "homepage": "https://pdaug.github.io/components",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "dev": "vite --port 5055 --host ",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
@@ -21,6 +23,13 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.24.0",
+    "@storybook/addon-essentials": "^8.6.14",
+    "@storybook/addon-interactions": "^8.6.14",
+    "@storybook/addon-onboarding": "^8.6.14",
+    "@storybook/blocks": "^8.6.14",
+    "@storybook/react": "^8.6.14",
+    "@storybook/react-vite": "^8.6.14",
+    "@storybook/test": "^8.6.14",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react-swc": "^3.8.0",
@@ -28,11 +37,18 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
+    "eslint-plugin-storybook": "^0.12.0",
     "gh-pages": "^6.3.0",
     "globals": "^15.15.0",
     "prettier": "3.5.3",
+    "storybook": "^8.6.14",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.29.1",
     "vite": "^6.2.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
   }
 }

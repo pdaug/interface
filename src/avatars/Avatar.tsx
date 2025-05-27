@@ -25,7 +25,7 @@ const Avatar = function ({
     <div>
       <div
         style={{ height: sizePixel, width: sizePixel }}
-        className={`fadeui-avatar ${circle ? "fadeui-avatar-circle" : ""}`}
+        className={`fz-avatar ${circle ? "fz-avatar-circle" : ""}`}
       >
         {photo ? (
           <img src={photo} alt={label} />
