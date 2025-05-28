@@ -1,4 +1,4 @@
-.fadeui-button {
+.fz-button {
   align-items: center;
   border-radius: var(--rounded);
   box-shadow: var(--shadow);
@@ -12,124 +12,61 @@
   transition: 0.2s;
 }
 
-.fadeui-button:hover {
+.fz-button:hover {
   opacity: 0.8;
   transition: 0.2s;
 }
 
-.fadeui-button:active {
+.fz-button:active {
   filter: brightness(110%);
   transform: scale(95%);
   transition: 0.2s;
 }
 
-.fadeui-button span {
+.fz-button span {
   overflow: hidden;
   text-overflow: ellipsis;
   user-select: none;
   white-space: nowrap;
 }
 
-.fadeui-button-primary {
+.fz-button-primary {
   background: var(--success);
   background-color: var(--success);
   border: 1px solid var(--success-dark);
   color: var(--background);
 }
 
-.fadeui-button-secondary {
+.fz-button-secondary {
   background: var(--info);
   background-color: var(--info);
   border: 1px solid var(--info-dark);
   color: var(--background);
 }
 
-.fadeui-button-danger {
+.fz-button-danger {
   background: var(--danger);
   background-color: var(--danger);
   border: 1px solid var(--danger-dark);
   color: var(--background);
 }
 
-.fadeui-button-warn {
+.fz-button-warn {
   background: var(--warn);
   background-color: var(--warn);
   border: 1px solid var(--warn-dark);
   color: var(--background);
 }
 
-.fadeui-button-neutral {
+.fz-button-neutral {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
   color: var(--font);
 }
 
-.fadeui-button-primary *,
-.fadeui-button-secondary *,
-.fadeui-button-danger * {
+.fz-button-primary *,
+.fz-button-secondary *,
+.fz-button-danger * {
   color: var(--background);
-}
-
-.fadeui-button-dropdown {
-  position: relative;
-}
-
-.fadeui-button-dropdown-actor {
-  display: flex;
-}
-
-.fadeui-button-dropdown-actor button:first-child {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-  border-right: none;
-}
-
-.fadeui-button-dropdown-actor button.fadeui-button-actor {
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-  padding: 6px 0.6rem;
-}
-
-.fadeui-button-dropdown-content {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--rounded);
-  box-shadow: var(--shadow);
-  display: none;
-  flex-direction: column;
-  font-size: var(--text-small);
-  gap: 0.4rem;
-  margin: 4px 0;
-  padding: 6px;
-  position: absolute;
-  width: 15rem;
-  z-index: 1;
-}
-
-.fadeui-button-dropdown-content-option {
-  align-items: center;
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: none;
-  border-radius: var(--rounded);
-  color: var(--font);
-  display: flex;
-  gap: 0.4rem;
-  padding: 4px 1rem;
-  text-align: left;
-  transition: 200ms;
-}
-
-.fadeui-button-dropdown-content-option:not(:disabled):hover {
-  background: var(--background);
-  background-color: var(--background);
-  cursor: pointer;
-  transition: 200ms;
-}
-
-.fadeui-button-dropdown-content-option:disabled {
-  color: var(--font-light);
-  cursor: not-allowed;
 }

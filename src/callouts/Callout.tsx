@@ -28,7 +28,7 @@ const Callout = function ({
   IconWeight,
 }: CalloutProps) {
   return (
-    <div id={id} className={`fadeui-callout fadeui-callout-${category}`}>
+    <div id={id} className={`fz-callout fz-callout-${category}`}>
       <div>{Icon && <Icon weight={IconWeight} size={IconSize} />}</div>
       <span>{text}</span>
     </div>

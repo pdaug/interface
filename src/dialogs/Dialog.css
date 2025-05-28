@@ -1,4 +1,4 @@
-.fadeui-dialog {
+.fz-dialog {
   align-items: center;
   background: var(--modal);
   background-color: var(--modal);
@@ -13,7 +13,7 @@
   z-index: 9;
 }
 
-.fadeui-dialog-container {
+.fz-dialog-container {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -22,7 +22,7 @@
   width: 35rem;
 }
 
-.fadeui-dialog-content {
+.fz-dialog-content {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
@@ -30,7 +30,7 @@
   padding: 1rem;
 }
 
-.fadeui-dialog-title {
+.fz-dialog-title {
   align-items: center;
   display: flex;
   gap: 0.4rem;
@@ -38,19 +38,19 @@
   font-weight: bold;
 }
 
-.fadeui-dialog-title span {
+.fz-dialog-title span {
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.fadeui-dialog-description {
+.fz-dialog-description {
   font-size: var(--text-small);
   text-align: justify;
 }
 
-.fadeui-dialog-footer {
+.fz-dialog-footer {
   background: var(--background);
   background-color: var(--background);
   border-top: 1px solid var(--border);
@@ -61,7 +61,7 @@
 }
 
 @media only screen and (max-width: 768px) and (orientation: portrait) {
-  .fadeui-dialog-container {
+  .fz-dialog-container {
     margin: 0 1rem !important;
     width: 100% !important;
   }
