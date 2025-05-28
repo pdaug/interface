@@ -1,9 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { Smiley, Lightning } from "@phosphor-icons/react";
 
-// styles
-import "./Avatar.css";
-
 import Avatar from "./Avatar";
 
 const meta: Meta<typeof Avatar> = {
@@ -17,6 +14,7 @@ const meta: Meta<typeof Avatar> = {
     Icon: { control: false },
   },
 };
+
 export default meta;
 
 type Story = StoryObj<typeof Avatar>;

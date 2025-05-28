@@ -6,7 +6,6 @@ import { ToastElement } from "./toasts/Toast";
 import { DialogElement, DialogProvider } from "./dialogs/Dialog";
 
 // tests
-import BreadcrumbTest from "./breadcrumbs/Breadcrumb.test";
 import ButtonTest from "./buttons/Button.test";
 import CalloutTest from "./callouts/Callout.test";
 import DialogTest from "./dialogs/Dialog.test";
@@ -34,7 +33,6 @@ const App = function () {
           padding: "1rem",
         }}
       >
-        <BreadcrumbTest />
         <ButtonTest />
         <CalloutTest />
         <DialogTest />

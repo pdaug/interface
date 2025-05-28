@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon as PhosphorIcon } from "@phosphor-icons/react";
+import { CaretRight } from "@phosphor-icons/react";
 
 // styles
 import "./Breadcrumb.css";
@@ -12,18 +12,16 @@ export type BreadcrumbLinks = {
 }[];
 
 export type BreadcrumbProps = {
-  Icon: PhosphorIcon;
   links: BreadcrumbLinks;
 };
 
-const Breadcrumb = function ({ Icon, links }: BreadcrumbProps) {
+const Breadcrumb = function ({ links }: BreadcrumbProps) {
   return (
-    <div className="fadeui-breadcrumb">
-      <Icon size={20} />
-      {links?.map(function ({ id, label, url, target }) {
+    <div className="fz-breadcrumb">
+      {links?.map(function ({ id, label, url, target }, index) {
         return (
           <React.Fragment key={id}>
-            <span>/</span>
+            {index != 0 && links.length != index && <CaretRight />}
             <div id={id}>
               <a href={url} target={target}>
                 {label}

@@ -41,7 +41,7 @@ export type ButtonProps = {
   style?: React.CSSProperties;
   dropdown?: ButtonDropdowns;
   type?: ButtonType;
-  onClick?: React.EventHandler<React.MouseEvent<HTMLButtonElement>>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 const Button = function ({
@@ -143,6 +143,7 @@ const Button = function ({
             </button>
           );
         })}
+        x
       </div>
     </div>
   ) : (

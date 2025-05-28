@@ -1,19 +1,19 @@
-.fadeui-breadcrumb {
+.fz-breadcrumb {
   align-items: center;
   display: flex;
   justify-content: center;
   gap: 0.6rem;
 }
 
-.fadeui-breadcrumb span,
-.fadeui-breadcrumb svg {
+.fz-breadcrumb span,
+.fz-breadcrumb svg {
   fill: var(--font-light);
   color: var(--font-light);
   font-weight: 500;
   opacity: 0.6;
 }
 
-.fadeui-breadcrumb a {
+.fz-breadcrumb a {
   color: var(--font);
   font-size: var(--text-small);
   font-weight: 400;
@@ -21,13 +21,13 @@
   text-decoration: none;
 }
 
-.fadeui-breadcrumb a:hover {
+.fz-breadcrumb a:hover {
   color: var(--font-dark);
   filter: brightness(0.8);
   transition: 200ms;
 }
 
-.fadeui-breadcrumb a:active {
+.fz-breadcrumb a:active {
   color: var(--font-light);
   transition: 200ms;
 }
