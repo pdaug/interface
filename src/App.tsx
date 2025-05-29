@@ -14,7 +14,6 @@ import ProfileTest from "./profiles/Profile.test";
 import SectionTest from "./sections/Section.test";
 import StatsTest from "./stats/Stats.test";
 import TableTest from "./tables/Table.test";
-import ToastTest from "./toasts/Toast.test";
 
 const App = function () {
   return (
@@ -37,7 +36,6 @@ const App = function () {
         <SectionTest />
         <StatsTest />
         <TableTest />
-        <ToastTest />
       </div>
     </DialogProvider>
   );

@@ -23,12 +23,12 @@ const toastIcons = {
 const toastOptions = {
   unstyled: true,
   classNames: {
-    toast: "fadeui-toast",
-    error: "fadeui-toast-error",
-    success: "fadeui-toast-success",
-    warning: "fadeui-toast-warn",
-    info: "fadeui-toast-info",
-    message: "fadeui-toast-message",
+    toast: "fz-toast",
+    error: "fz-toast-error",
+    success: "fz-toast-success",
+    warning: "fz-toast-warn",
+    info: "fz-toast-info",
+    message: "fz-toast-message",
   },
 };
 

@@ -1,4 +1,4 @@
-.fadeui-toast {
+.fz-toast {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -13,39 +13,39 @@
   width: 100%;
 }
 
-.fadeui-toast-success {
+.fz-toast-success {
   background: var(--success);
   background-color: var(--success);
   border-color: var(--success-dark);
   color: white;
 }
 
-.fadeui-toast-info {
+.fz-toast-info {
   background: var(--info);
   background-color: var(--info);
   border-color: var(--info-dark);
   color: white;
 }
 
-.fadeui-toast-error {
+.fz-toast-error {
   background: var(--danger);
   background-color: var(--danger);
   border-color: var(--danger-dark);
   color: white;
 }
 
-.fadeui-toast-warn {
+.fz-toast-warn {
   background: var(--warn);
   background-color: var(--warn);
   border-color: var(--warn-dark);
   color: white;
 }
 
-.fadeui-toast * {
+.fz-toast * {
   font-size: 0.8rem;
 }
 
-.fadeui-toast [data-close-button="true"] {
+.fz-toast [data-close-button="true"] {
   align-items: center;
   background: white;
   border: 1px solid var(--border);
@@ -63,13 +63,13 @@
   width: 24px;
 }
 
-.fadeui-toast [data-close-button="true"] * {
+.fz-toast [data-close-button="true"] * {
   color: var(--font);
   fill: var(--font);
 }
 
 @media only screen and (max-width: 768px) and (orientation: portrait) {
-  .fadeui-toast {
+  .fz-toast {
     width: 60vw;
   }
 }
