@@ -1,49 +1,51 @@
-import { Meta } from "@storybook/react";
-import { Gear, Trash, SignOut, UserCircle } from "@phosphor-icons/react";
+import { CopySimple } from "@phosphor-icons/react";
+import type { StoryObj } from "@storybook/react";
 
-import Dropdown from "./Dropdown";
+import Dropdown, {
+  DropdownCategories,
+  DropdownCategoriesList,
+  DropdownProps,
+} from "./Dropdown";
 
 export default {
   title: "Components/Dropdown",
   component: Dropdown,
-} as Meta;
+  tags: ["autodocs"],
+  args: {
+    values: [
+      {
+        id: "1",
+        label: "Paste",
+        onClick: () => alert(`Paste clicked!`),
+      },
+      {
+        id: "2",
+        label: "Copy",
+        Icon: CopySimple,
+        onClick: () => alert(`Copy clicked!`),
+      },
+      {
+        id: "3",
+        label: "Delete",
+        disabled: true,
+      },
+    ],
+  },
+};
 
-export const Default = () => {
-  const handleSelect = (label: string) => () =>
-    alert(`Opção selecionada: ${label}`);
-
-  return (
-    <div style={{ padding: "2rem" }}>
-      <Dropdown
-        text="Menu"
-        category="primary"
-        values={[
-          {
-            id: "1",
-            label: "Configurações",
-            Icon: Gear,
-            onClick: handleSelect("Configurações"),
-          },
-          {
-            id: "2",
-            label: "Perfil",
-            Icon: UserCircle,
-            onClick: handleSelect("Perfil"),
-          },
-          {
-            id: "3",
-            label: "Sair",
-            Icon: SignOut,
-            onClick: handleSelect("Sair"),
-          },
-          {
-            id: "4",
-            label: "Deletar conta",
-            Icon: Trash,
-            disabled: true,
-          },
-        ]}
-      />
-    </div>
-  );
+export const All: StoryObj<typeof Dropdown> = {
+  render: (args: DropdownProps) => {
+    return (
+      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+        {DropdownCategoriesList.map((category) => (
+          <Dropdown
+            {...args}
+            key={category}
+            category={category as DropdownCategories}
+            text={category.charAt(0).toUpperCase() + category.slice(1)}
+          />
+        ))}
+      </div>
+    );
+  },
 };

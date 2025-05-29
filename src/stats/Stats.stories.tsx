@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
 
 import Stats, { StatsProps } from "./Stats";
 
@@ -6,58 +6,57 @@ export default {
   title: "Components/Stats",
   component: Stats,
   tags: ["autodocs"],
-} as Meta<StatsProps>;
+};
 
 export const Default: StoryObj<StatsProps> = {
   args: {
-    title: "Vendas Mensais",
-    metric: 12.5,
+    title: "Title Stats",
+    metric: 0.0125,
     metricStatus: "up",
-    metricLocale: "pt-BR",
-    metricOptions: { style: "percent", minimumFractionDigits: 1 },
+    metricLocale: "en",
+    metricOptions: { style: "percent", minimumFractionDigits: 2 },
     value: 42500,
-    valueUnit: "R$",
-    valueLocale: "pt-BR",
-    valueOptions: { style: "currency", currency: "BRL" },
+    valueLocale: "en",
+    valueOptions: { style: "currency", currency: "USD" },
   },
 };
 
 export const Down: StoryObj<StatsProps> = {
   args: {
-    title: "Usuários Ativos",
-    metric: 8.3,
+    title: "Title Stats",
+    metric: 0.0822,
     metricStatus: "down",
-    metricLocale: "en-US",
-    metricOptions: { style: "percent", minimumFractionDigits: 1 },
+    metricLocale: "en",
+    metricOptions: { style: "percent", minimumFractionDigits: 2 },
     value: 912,
-    valueUnit: "",
-    valueLocale: "en-US",
+    valueUnit: "cars",
+    valueLocale: "en",
     valueOptions: { maximumFractionDigits: 0 },
   },
 };
 
 export const Grouped = () => (
-  <div style={{ display: "flex", gap: "1.5rem" }}>
+  <div style={{ display: "flex", gap: "1rem" }}>
     <Stats
-      title="Receita"
+      title="Inflow Ccash"
       metric={12.5}
       metricStatus="up"
       value={42500}
-      valueUnit="R$"
+      valueUnit="$"
     />
     <Stats
-      title="Clientes"
+      title="New customers"
       metric={3.2}
-      metricStatus="down"
-      value={120}
-      valueUnit=""
+      metricStatus="up"
+      value={51}
+      valueUnit="Customers"
     />
     <Stats
-      title="Conversão"
+      title="Convertion"
       metric={1.1}
-      metricStatus="up"
-      value={4.2}
-      valueUnit="%"
+      metricStatus="down"
+      value={4}
+      valueUnit="points"
     />
   </div>
 );

@@ -1,57 +1,58 @@
-import { Info } from "@phosphor-icons/react";
-import { Meta, StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
 
 import Button from "../buttons/Button";
-import Tooltip, { TooltipProps } from "./Tooltip";
+import Tooltip, { TooltipPlacement } from "./Tooltip";
 
-const meta: Meta<typeof Tooltip> = {
+export default {
   title: "Components/Tooltip",
   component: Tooltip,
-  args: {
-    content: "Tooltip message",
-    placement: "top",
-    theme: "light",
-  },
-  argTypes: {
-    content: { control: "text" },
-    placement: {
-      control: "select",
-      options: [
-        "top",
-        "bottom",
-        "left",
-        "right",
-        "top-start",
-        "top-end",
-        "bottom-start",
-        "bottom-end",
-        "left-start",
-        "left-end",
-        "right-start",
-        "right-end",
-        "auto",
-      ],
-    },
-    theme: { control: "radio", options: ["light", "dark"] },
-  },
+  tags: ["autodocs"],
 };
 
-export default meta;
-
-type Story = StoryObj<typeof Tooltip>;
-
-export const Default: Story = {
-  render: (args: TooltipProps) => (
-    <Tooltip {...args}>
-      <Button text="Hover me" category="danger" />
+export const Default: StoryObj<typeof Tooltip> = {
+  render: () => (
+    <Tooltip content="Tooltip message">
+      <Button text="Hover me" category="primary" />
     </Tooltip>
   ),
 };
 
-export const WithIcon: Story = {
-  render: (args: TooltipProps) => (
-    <Tooltip {...args}>
-      <Info size={24} />
-    </Tooltip>
-  ),
+export const Light: StoryObj<typeof Tooltip> = {
+  render: () => {
+    const placements = ["top", "bottom", "left", "right"];
+    return (
+      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+        {placements.map((placement) => (
+          <Tooltip
+            theme="light"
+            key={placement}
+            content={`Tooltip ${placement}`}
+            placement={placement as TooltipPlacement}
+          >
+            <Button text={placement} category="neutral" />
+          </Tooltip>
+        ))}
+      </div>
+    );
+  },
+};
+
+export const Dark: StoryObj<typeof Tooltip> = {
+  render: () => {
+    const placements = ["top", "bottom", "left", "right"];
+    return (
+      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+        {placements.map((placement) => (
+          <Tooltip
+            theme="dark"
+            key={placement}
+            content={`Tooltip ${placement}`}
+            placement={placement as TooltipPlacement}
+          >
+            <Button text={placement} category="neutral" />
+          </Tooltip>
+        ))}
+      </div>
+    );
+  },
 };

@@ -16,7 +16,7 @@ export type ProfileProps = {
 const Profile = function ({
   border,
   photo,
-  photoSize = 3,
+  photoSize = 4,
   name,
   description,
   padding = true,

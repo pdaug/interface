@@ -1,7 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
+
 import Profile from "./Profile";
 
-const meta: Meta<typeof Profile> = {
+export default {
   title: "Components/Profile",
   component: Profile,
   tags: ["autodocs"],
@@ -15,39 +16,32 @@ const meta: Meta<typeof Profile> = {
   },
 };
 
-export default meta;
-type Story = StoryObj<typeof Profile>;
-
-export const Basic: Story = {
+export const Default: StoryObj<typeof Profile> = {
   args: {
-    name: "Ana Paula",
-    description: "Desenvolvedora Frontend",
+    name: "John Doe",
+    description: "Frontend Dev",
+    padding: false,
+    border: false,
   },
 };
 
-export const WithPhoto: Story = {
+export const WithPhoto: StoryObj<typeof Profile> = {
   args: {
-    name: "Lucas Ribeiro",
+    name: "Edward Cullen",
     description: "Product Designer",
     photo: "https://randomuser.me/api/portraits/men/75.jpg",
     photoSize: 4,
-    border: true,
-  },
-};
-
-export const WithoutPadding: Story = {
-  args: {
-    name: "João Mendes",
-    description: "Analista de Dados",
     padding: false,
+    border: false,
   },
 };
 
-export const CustomSize: Story = {
+export const WithBorder: StoryObj<typeof Profile> = {
   args: {
-    name: "Carla Souza",
-    description: "CTO",
-    photoSize: 6,
+    name: "Isabella Swan",
+    description: "Product Designer",
+    photo: "https://randomuser.me/api/portraits/women/2.jpg",
+    photoSize: 4,
     border: true,
   },
 };

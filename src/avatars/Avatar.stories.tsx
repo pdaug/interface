@@ -1,4 +1,4 @@
-import { Smiley } from "@phosphor-icons/react";
+import { Rocket } from "@phosphor-icons/react";
 import type { StoryObj } from "@storybook/react";
 
 import Avatar from "./Avatar";
@@ -45,6 +45,6 @@ export const WithIcon: StoryObj<typeof Avatar> = {
     label: "Icon",
     size: 8,
     circle: true,
-    Icon: Smiley,
+    Icon: Rocket,
   },
 };

@@ -7,10 +7,12 @@ import "tippy.js/dist/tippy.css";
 
 export type TooltipTheme = "dark" | "light";
 
+export type TooltipPlacement = Placement;
+
 export type TooltipProps = {
   content: string;
   theme?: TooltipTheme;
-  placement?: Placement;
+  placement?: TooltipPlacement;
   children: React.ReactElement;
 };
 

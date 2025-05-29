@@ -4,14 +4,17 @@ import { Icon as PhosphorIcons } from "@phosphor-icons/react";
 // styles
 import "./Dropdown.css";
 
+export const DropdownCategoriesList = [
+  "primary",
+  "secondary",
+  "danger",
+  "warn",
+  "neutral",
+] as const;
+
 export type DropdownType = "submit" | "reset" | "button";
 
-export type DropdownCategories =
-  | "primary"
-  | "secondary"
-  | "danger"
-  | "warn"
-  | "neutral";
+export type DropdownCategories = (typeof DropdownCategoriesList)[number];
 
 export type DropdownValues = {
   id: string;
