@@ -1,4 +1,4 @@
-.fadeui-form {
+.fz-form {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -6,12 +6,12 @@
   overflow: hidden;
 }
 
-.fadeui-form-header {
+.fz-form-header {
   align-items: center;
   display: flex;
 }
 
-.fadeui-form-header[data-required="true"] label::before {
+.fz-form-header[data-required="true"] label::before {
   content: "*";
   color: var(--danger);
   font-size: var(--text-small);
@@ -19,28 +19,28 @@
   padding-right: 0.2rem;
 }
 
-.fadeui-form label {
+.fz-form label {
   font-size: var(--text-small);
   font-weight: 400;
   line-height: 1;
   flex: 1;
 }
 
-.fadeui-form-header span {
+.fz-form-header span {
   color: var(--danger);
   font-size: var(--text-small);
   font-weight: 400;
   line-height: 1;
 }
 
-.fadeui-form-content {
+.fz-form-content {
   display: flex;
   flex: 1;
 }
 
-.fadeui-form-content input,
-.fadeui-form-content select,
-.fadeui-form-content textarea {
+.fz-form-content input,
+.fz-form-content select,
+.fz-form-content textarea {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -55,21 +55,21 @@
   padding: 0 0.8rem;
 }
 
-.fadeui-form-content textarea {
+.fz-form-content textarea {
   height: auto !important;
   padding: 0.8rem !important;
 }
 
-.fadeui-form-content input:focus,
-.fadeui-form-content select:focus,
-.fadeui-form-content textarea:focus {
+.fz-form-content input:focus,
+.fz-form-content select:focus,
+.fz-form-content textarea:focus {
   border-color: var(--info);
   outline: none;
 }
 
-.fadeui-form-content input:disabled,
-.fadeui-form-content select:disabled,
-.fadeui-form-content textarea:disabled {
+.fz-form-content input:disabled,
+.fz-form-content select:disabled,
+.fz-form-content textarea:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   color: var(--font-light);
@@ -77,18 +77,18 @@
   opacity: 1;
 }
 
-.fadeui-form-content input:read-only {
+.fz-form-content input:read-only {
   background: var(--background) !important;
   background-color: var(--background) !important;
   color: var(--font-light);
 }
 
 /* PREFIX */
-.fadeui-form-prefix {
+.fz-form-prefix {
   display: flex;
 }
 
-.fadeui-form-prefix button {
+.fz-form-prefix button {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -106,16 +106,16 @@
   padding: 0 0.6rem;
 }
 
-.fadeui-form-prefix:has(input:focus) button {
+.fz-form-prefix:has(input:focus) button {
   border-color: var(--info);
 }
 
-.fadeui-form-prefix button div {
+.fz-form-prefix button div {
   color: var(--font-light);
   font-size: var(--text-small);
 }
 
-.fadeui-form-prefix input {
+.fz-form-prefix input {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -132,24 +132,24 @@
   padding: 0 0.6rem;
 }
 
-.fadeui-form-prefix input:focus {
+.fz-form-prefix input:focus {
   border-color: var(--info);
   border-left-color: var(--border);
   outline: none;
 }
 
-.fadeui-form-prefix input:disabled {
+.fz-form-prefix input:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   cursor: not-allowed;
 }
 
 /* MONEY */
-.fadeui-form-money {
+.fz-form-money {
   display: flex;
 }
 
-.fadeui-form-money button {
+.fz-form-money button {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -168,21 +168,21 @@
   user-select: none;
 }
 
-.fadeui-form-money:has(input:focus) button {
+.fz-form-money:has(input:focus) button {
   border-color: var(--info);
 }
 
-.fadeui-form-money:has(input:disabled) button {
+.fz-form-money:has(input:disabled) button {
   background: var(--background);
   background-color: var(--background);
 }
 
-.fadeui-form-money button div {
+.fz-form-money button div {
   color: var(--font-light);
   font-size: var(--text-small);
 }
 
-.fadeui-form-money input {
+.fz-form-money input {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -197,14 +197,14 @@
   padding: 0 0.6rem;
 }
 
-.fadeui-form-money input:focus {
+.fz-form-money input:focus {
   border-color: var(--info);
   border-left-color: var(--border);
   border-right-color: var(--border);
   outline: none;
 }
 
-.fadeui-form-money input:disabled {
+.fz-form-money input:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   color: var(--font-light);
@@ -212,7 +212,7 @@
   opacity: 1;
 }
 
-.fadeui-form-money select {
+.fz-form-money select {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -227,11 +227,11 @@
   user-select: none;
 }
 
-.fadeui-form-money:has(input:focus) select {
+.fz-form-money:has(input:focus) select {
   border-color: var(--info);
 }
 
-.fadeui-form-money select:disabled {
+.fz-form-money select:disabled {
   background: var(--background);
   background-color: var(--background);
   cursor: not-allowed;
@@ -239,24 +239,24 @@
 }
 
 /* RADIO */
-.fadeui-form-radio {
+.fz-form-radio {
   display: flex;
   flex: 1;
   gap: 0.6rem;
 }
 
-.fadeui-form-radio-vertical {
+.fz-form-radio-vertical {
   flex-direction: column;
 }
 
-.fadeui-form-radio label {
+.fz-form-radio label {
   align-items: center;
   display: flex;
   gap: 0.4rem;
   flex: 1;
 }
 
-.fadeui-form-radio-option {
+.fz-form-radio-option {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -269,12 +269,12 @@
   width: 16px;
 }
 
-.fadeui-form-radio-option:hover {
+.fz-form-radio-option:hover {
   cursor: pointer;
   transition: 200ms;
 }
 
-.fadeui-form-radio label:has(input:checked) .fadeui-form-radio-option {
+.fz-form-radio label:has(input:checked) .fz-form-radio-option {
   align-items: center;
   border: 1px solid var(--info);
   color: var(--info);
@@ -283,7 +283,7 @@
   transition: 200ms;
 }
 
-.fadeui-form-radio label:has(input:checked) .fadeui-form-radio-option::after {
+.fz-form-radio label:has(input:checked) .fz-form-radio-option::after {
   background: var(--info);
   background-color: var(--info);
   border-radius: 100%;
@@ -294,14 +294,14 @@
   width: 10px;
 }
 
-.fadeui-form-radio label input[type="radio"] {
+.fz-form-radio label input[type="radio"] {
   appearance: none;
   display: none;
   margin: 0;
   padding: 0;
 }
 
-.fadeui-form-radio label span {
+.fz-form-radio label span {
   color: var(--font);
   cursor: pointer;
   font-size: var(--text-small);
@@ -310,24 +310,24 @@
 }
 
 /* CHECK */
-.fadeui-form-check {
+.fz-form-check {
   display: flex;
   flex: 1;
   gap: 0.6rem;
 }
 
-.fadeui-form-check-vertical {
+.fz-form-check-vertical {
   flex-direction: column;
 }
 
-.fadeui-form-check label {
+.fz-form-check label {
   align-items: center;
   display: flex;
   gap: 0.4rem;
   flex: 1;
 }
 
-.fadeui-form-check-option {
+.fz-form-check-option {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -340,12 +340,12 @@
   width: 16px;
 }
 
-.fadeui-form-check-option:hover {
+.fz-form-check-option:hover {
   cursor: pointer;
   transition: 200ms;
 }
 
-.fadeui-form-check label:has(input:checked) .fadeui-form-check-option {
+.fz-form-check label:has(input:checked) .fz-form-check-option {
   align-items: center;
   border: 1px solid var(--info);
   color: var(--info);
@@ -354,7 +354,7 @@
   transition: 200ms;
 }
 
-.fadeui-form-check label:has(input:checked) .fadeui-form-check-option::after {
+.fz-form-check label:has(input:checked) .fz-form-check-option::after {
   background: var(--info);
   background-color: var(--info);
   border-radius: 2px;
@@ -365,14 +365,14 @@
   width: 10px;
 }
 
-.fadeui-form-check label input[type="checkbox"] {
+.fz-form-check label input[type="checkbox"] {
   appearance: none;
   display: none;
   margin: 0;
   padding: 0;
 }
 
-.fadeui-form-check label span {
+.fz-form-check label span {
   color: var(--font);
   cursor: pointer;
   font-size: var(--text-small);
@@ -381,20 +381,20 @@
 }
 
 /* FILE */
-.fadeui-form-file {
+.fz-form-file {
   display: flex;
   flex: 1;
   overflow: hidden;
 }
 
-.fadeui-form-file input {
+.fz-form-file input {
   appearance: none;
   display: none;
   margin: 0;
   padding: 0;
 }
 
-.fadeui-form-file button {
+.fz-form-file button {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -406,7 +406,7 @@
   padding: 0 0.6rem;
 }
 
-.fadeui-form-file-info {
+.fz-form-file-info {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -424,7 +424,7 @@
   padding: 0 0.6rem;
 }
 
-.fadeui-form-file-info span {
+.fz-form-file-info span {
   color: var(--font-light);
   font-size: var(--text-small);
   font-weight: 400;

@@ -6,7 +6,6 @@ import { ToastElement } from "./toasts/Toast";
 import { DialogElement, DialogProvider } from "./dialogs/Dialog";
 
 // tests
-import FormTest from "./forms/Form.test";
 import PaginationTest from "./paginations/Pagination.test";
 import PanelTest from "./panels/Panel.test";
 import SectionTest from "./sections/Section.test";
@@ -25,7 +24,6 @@ const App = function () {
           padding: "1rem",
         }}
       >
-        <FormTest />
         <PaginationTest />
         <PanelTest />
         <SectionTest />

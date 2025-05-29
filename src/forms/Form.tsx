@@ -1,6 +1,5 @@
 import React from "react";
 import { withMask } from "use-mask-input";
-import { Icon as IconPhosphor } from "@phosphor-icons/react";
 
 // styles
 import "./Form.css";
@@ -28,15 +27,13 @@ const FormCheck = function ({
 }: FormCheckProps) {
   return (
     <div
-      className={`fadeui-form-check ${
-        !horizontal ? "fadeui-form-check-vertical" : ""
-      }`}
+      className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
     >
       {options?.map(function (option, index) {
         return (
           <label htmlFor={option.id} key={`${option.id}${index}`}>
-            <div className="fadeui-form-check-option-content">
-              <div className="fadeui-form-check-option"></div>
+            <div className="fz-form-check-option-content">
+              <div className="fz-form-check-option"></div>
             </div>
             <input
               name={name}
@@ -82,10 +79,10 @@ const FormCheckSimple = function ({
   onChange,
 }: FormCheckSimpleProps) {
   return (
-    <div className="fadeui-form-check">
+    <div className="fz-form-check">
       <label htmlFor={id}>
-        <div className="fadeui-form-check-option-content">
-          <div className="fadeui-form-check-option"></div>
+        <div className="fz-form-check-option-content">
+          <div className="fz-form-check-option"></div>
         </div>
         <input
           id={id}
@@ -129,15 +126,12 @@ const FormFile = function ({
   helper,
 }: FormFileProps) {
   return (
-    <div className="fadeui-form">
-      <div
-        className="fadeui-form-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="fz-form">
+      <div className="fz-form-header" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <label htmlFor={id} className="fadeui-form-file">
+      <label htmlFor={id} className="fz-form-file">
         <button>Escolher arquivo(s)</button>
         <input
           id={id}
@@ -149,7 +143,7 @@ const FormFile = function ({
           required={required}
           onChange={onChange}
         />
-        <div className="fadeui-form-file-info">
+        <div className="fz-form-file-info">
           <span>
             {value instanceof File && value.name
               ? value.name
@@ -203,15 +197,12 @@ const FormInput = function ({
   helper,
 }: FormInputProps) {
   return (
-    <div className="fadeui-form">
-      <div
-        className="fadeui-form-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="fz-form">
+      <div className="fz-form-header" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fadeui-form-content">
+      <div className="fz-form-content">
         <input
           id={id}
           name={name}
@@ -273,15 +264,12 @@ const FormMask = function ({
 }: FormMaskProps) {
   const inputRef = withMask(mask);
   return (
-    <div className="fadeui-form">
-      <div
-        className="fadeui-form-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="fz-form">
+      <div className="fz-form-header" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fadeui-form-content">
+      <div className="fz-form-content">
         <input
           id={id}
           name={name}
@@ -327,16 +315,12 @@ const FormMoney = function ({
   onChange,
 }: FormMoneyProps) {
   return (
-    <div className="fadeui-form">
-      <div
-        className="fadeui-form-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="fz-form">
+      <div className="fz-form-header" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fadeui-form-money">
-        <button>$</button>
+      <div className="fz-form-money">
         <input
           id={id}
           type="text"
@@ -416,15 +400,13 @@ const FormRadio = function ({
 }: FormRadioProps) {
   return (
     <div
-      className={`fadeui-form-radio ${
-        horizontal ? "" : "fadeui-form-radio-vertical"
-      }`}
+      className={`fz-form-radio ${horizontal ? "" : "fz-form-radio-vertical"}`}
     >
       {options?.map(function (option, index) {
         return (
           <label htmlFor={option.id} key={`${option.id}${index}`}>
-            <div className="fadeui-form-radio-option-content">
-              <div className="fadeui-form-radio-option"></div>
+            <div className="fz-form-radio-option-content">
+              <div className="fz-form-radio-option"></div>
             </div>
             <input
               name={name}
@@ -443,86 +425,6 @@ const FormRadio = function ({
           </label>
         );
       })}
-    </div>
-  );
-};
-
-export type FormPrefixProps = {
-  id: string;
-  label: string;
-  value: string;
-  Icon?: IconPhosphor;
-  prefix?: string;
-  placeholder: string;
-  disabled?: boolean;
-  required?: boolean;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  type?: React.HTMLInputTypeAttribute;
-  step?: number;
-  name?: string;
-  min?: number;
-  max?: number;
-  readOnly?: boolean;
-  helper?: string;
-  list?: string;
-};
-
-const FormPrefix = function ({
-  id,
-  label,
-  value,
-  Icon,
-  prefix,
-  placeholder,
-  disabled,
-  required,
-  onChange,
-  type = "text",
-  step,
-  name,
-  min,
-  max,
-  readOnly,
-  helper,
-  list,
-}: FormPrefixProps) {
-  return (
-    <div className="fadeui-form">
-      <div
-        className="fadeui-form-header"
-        data-required={String(Boolean(required))}
-      >
-        <label htmlFor={id}>{label}</label>
-        {helper && <span>{helper}</span>}
-      </div>
-      <div className="fadeui-form-prefix">
-        <button>
-          {Icon && <Icon size={16} />}
-          {prefix && <div>{prefix}</div>}
-        </button>
-        <input
-          id={id}
-          step={step}
-          name={name}
-          type={type}
-          list={list}
-          value={value}
-          disabled={disabled}
-          required={required}
-          readOnly={readOnly}
-          placeholder={placeholder}
-          onChange={onChange}
-          {...(type === "number"
-            ? {
-                min,
-                max,
-              }
-            : {
-                minLength: min,
-                maxLength: max,
-              })}
-        />
-      </div>
     </div>
   );
 };
@@ -574,15 +476,12 @@ const FormSelect = function ({
     return;
   });
   return (
-    <div className="fadeui-form">
-      <div
-        className="fadeui-form-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="fz-form">
+      <div className="fz-form-header" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fadeui-form-content">
+      <div className="fz-form-content">
         <select
           id={id}
           name={name}
@@ -669,15 +568,12 @@ const FormText = function ({
   resize,
 }: FormTextProps) {
   return (
-    <div className="fadeui-form">
-      <div
-        className="fadeui-form-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="fz-form">
+      <div className="fz-form-header" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fadeui-form-content">
+      <div className="fz-form-content">
         <textarea
           id={id}
           name={name}
@@ -705,7 +601,6 @@ export {
   FormMask,
   FormMoney,
   FormRadio,
-  FormPrefix,
   FormSelect,
   FormText,
 };
