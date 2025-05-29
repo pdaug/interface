@@ -1,12 +1,15 @@
 // styles
 import "./Badge.css";
 
-export type BadgeCategories =
-  | "primary"
-  | "secondary"
-  | "danger"
-  | "warn"
-  | "neutral";
+export const BadgeCategoriesList = [
+  "primary",
+  "secondary",
+  "danger",
+  "warn",
+  "neutral",
+] as const;
+
+export type BadgeCategories = (typeof BadgeCategoriesList)[number];
 
 export type BadgeDropdowns = {
   id: string;

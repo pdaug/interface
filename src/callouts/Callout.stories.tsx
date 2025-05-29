@@ -4,13 +4,14 @@ import {
   CheckCircle,
   WarningOctagon,
 } from "@phosphor-icons/react";
-import { Meta, StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
 
-import Callout, { CalloutProps } from "./Callout";
+import Callout, { CalloutCategoriesList, CalloutProps } from "./Callout";
 
-const meta: Meta<CalloutProps> = {
+export default {
   title: "Components/Callout",
   component: Callout,
+  tags: ["autodocs"],
   args: {
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas et ligula sit amet tortor dapibus tempus ac et augue.",
     IconSize: 20,
@@ -18,7 +19,7 @@ const meta: Meta<CalloutProps> = {
   argTypes: {
     category: {
       control: { type: "select" },
-      options: ["primary", "secondary", "danger", "warn", "neutral"],
+      options: CalloutCategoriesList,
     },
     Icon: {
       control: false,
@@ -26,41 +27,30 @@ const meta: Meta<CalloutProps> = {
   },
 };
 
-export default meta;
-
-type Story = StoryObj<CalloutProps>;
-
-export const Primary: Story = {
+export const Primary: StoryObj<CalloutProps> = {
   args: {
     category: "primary",
     Icon: CheckCircle,
   },
 };
 
-export const Secondary: Story = {
+export const Secondary: StoryObj<CalloutProps> = {
   args: {
     category: "secondary",
     Icon: Info,
   },
 };
 
-export const Warn: Story = {
+export const Warn: StoryObj<CalloutProps> = {
   args: {
     category: "warn",
     Icon: Warning,
   },
 };
 
-export const Danger: Story = {
+export const Danger: StoryObj<CalloutProps> = {
   args: {
     category: "danger",
     Icon: WarningOctagon,
-  },
-};
-
-export const Neutral: Story = {
-  args: {
-    category: "neutral",
-    Icon: undefined,
   },
 };

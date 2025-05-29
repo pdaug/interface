@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { StoryObj } from "@storybook/react";
 
-import Badge, { BadgeCategories } from "./Badge";
+import Badge, { BadgeCategoriesList } from "./Badge";
 
 export default {
   title: "Components/Badge",
@@ -10,7 +10,7 @@ export default {
   argTypes: {
     category: {
       control: "select",
-      options: ["primary", "secondary", "danger", "warn", "neutral"],
+      options: BadgeCategoriesList,
     },
   },
 };
@@ -25,16 +25,9 @@ export const Default: StoryObj<typeof Badge> = {
 
 export const All: StoryObj<typeof Badge> = {
   render: () => {
-    const categories: BadgeCategories[] = [
-      "primary",
-      "secondary",
-      "danger",
-      "warn",
-      "neutral",
-    ];
     return (
       <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-        {categories.map((category) => (
+        {BadgeCategoriesList.map((category) => (
           <Badge
             key={category}
             category={category}

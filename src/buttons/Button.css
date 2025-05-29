@@ -12,14 +12,21 @@
   transition: 0.2s;
 }
 
-.fz-button:hover {
+.fz-button:not(:disabled):hover {
   opacity: 0.8;
   transition: 0.2s;
 }
 
-.fz-button:active {
+.fz-button:not(:disabled):active {
   filter: brightness(110%);
   transform: scale(95%);
+  transition: 0.2s;
+}
+
+.fz-button:disabled {
+  filter: saturate(90%);
+  opacity: 0.6;
+  cursor: not-allowed !important;
   transition: 0.2s;
 }
 
@@ -63,6 +70,11 @@
   background-color: var(--foreground);
   border: 1px solid var(--border);
   color: var(--font);
+}
+
+.fz-button-neutral:disabled {
+  background: var(--border);
+  background-color: var(--border);
 }
 
 .fz-button-primary *,

@@ -11,7 +11,9 @@ export type WrapperProps = {
   description?: string;
   children: React.ReactNode;
   onCancel?: () => void;
+  onCancelLabel?: string;
   onConfirm?: () => void;
+  onConfirmLabel?: string;
   actions?: ButtonProps[];
 };
 
@@ -20,7 +22,9 @@ const Wrapper = function ({
   description,
   children,
   onCancel,
+  onCancelLabel,
   onConfirm,
+  onConfirmLabel,
   actions,
 }: WrapperProps) {
   return (
@@ -37,14 +41,22 @@ const Wrapper = function ({
       {(onCancel || onConfirm || actions?.length) && (
         <div className="fz-wrapper-footer">
           {onCancel && (
-            <Button category="neutral" text="Cancelar" onClick={onCancel} />
+            <Button
+              category="neutral"
+              onClick={onCancel}
+              text={onCancelLabel || "Cancel"}
+            />
           )}
           {actions &&
             actions?.map(function (action, index) {
               return <Button key={`action-${index}`} {...action} />;
             })}
           {onConfirm && (
-            <Button category="primary" text="Confirmar" onClick={onConfirm} />
+            <Button
+              category="primary"
+              text={onConfirmLabel || "Confirm"}
+              onClick={onConfirm}
+            />
           )}
         </div>
       )}

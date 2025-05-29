@@ -1,5 +1,5 @@
-import { Gear, Trash, SignOut, UserCircle } from "@phosphor-icons/react";
 import { Meta } from "@storybook/react";
+import { Gear, Trash, SignOut, UserCircle } from "@phosphor-icons/react";
 
 import Dropdown from "./Dropdown";
 

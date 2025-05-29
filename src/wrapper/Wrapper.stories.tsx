@@ -1,92 +1,118 @@
-import { Meta, StoryObj } from "@storybook/react";
+import { StoryObj } from "@storybook/react";
 
 import Wrapper from "./Wrapper";
-import { ButtonProps } from "../buttons/Button";
 
-const meta: Meta<typeof Wrapper> = {
+export default {
   title: "Components/Wrapper",
   component: Wrapper,
+  tags: ["autodocs"],
 };
 
-export default meta;
-
-type Story = StoryObj<typeof Wrapper>;
-
-export const Simple: Story = {
+export const Default: StoryObj<typeof Wrapper> = {
   args: {
-    children: <div>Conteúdo da seção vai aqui.</div>,
+    children: (
+      <div>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus
+        lacus vitae feugiat sagittis. Nunc varius libero id arcu sodales
+        rhoncus. Curabitur diam eros.
+      </div>
+    ),
   },
 };
 
-export const WithFooter: Story = {
+export const WithFooter: StoryObj<typeof Wrapper> = {
   args: {
-    children: <div>Conteúdo da seção vai aqui.</div>,
+    children: (
+      <div>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus
+        lacus vitae feugiat sagittis. Nunc varius libero id arcu sodales
+        rhoncus. Curabitur diam eros.
+      </div>
+    ),
     actions: [
       {
+        text: "Edit",
         category: "secondary",
-        text: "Editar",
-        onClick: () => alert("Editar clicado"),
+        onClick: () => alert("Edit clicked!"),
       },
     ],
   },
 };
 
-export const Default: Story = {
+export const WithHeader: StoryObj<typeof Wrapper> = {
   args: {
-    title: "Título da Seção",
-    description: "Descrição breve da seção.",
-    children: <div>Conteúdo da seção vai aqui.</div>,
+    title: "Title Wrapper",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    children: (
+      <div>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus
+        lacus vitae feugiat sagittis. Nunc varius libero id arcu sodales
+        rhoncus. Curabitur diam eros.
+      </div>
+    ),
   },
 };
 
-export const WithCancelConfirm: Story = {
+export const WithCancelConfirm: StoryObj<typeof Wrapper> = {
   args: {
-    title: "Confirmação",
-    description: "Você tem certeza que deseja prosseguir?",
-    children: <div>A ação é irreversível.</div>,
-    onCancel: () => alert("Cancelado"),
-    onConfirm: () => alert("Confirmado"),
+    title: "Title Wrapper",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    children: (
+      <div>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus
+        lacus vitae feugiat sagittis. Nunc varius libero id arcu sodales
+        rhoncus. Curabitur diam eros.
+      </div>
+    ),
+    onCancel: () => alert("Cancel clicked!"),
+    onConfirm: () => alert("Confirm clicked!"),
   },
 };
 
-export const WithCustomActions: Story = {
+export const WithActions: StoryObj<typeof Wrapper> = {
   args: {
-    title: "Ações Customizadas",
-    description: "Abaixo estão ações adicionais.",
-    children: <div>Você pode adicionar qualquer ação aqui.</div>,
+    title: "Title Wrapper",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    children: (
+      <div>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus
+        lacus vitae feugiat sagittis. Nunc varius libero id arcu sodales
+        rhoncus. Curabitur diam eros.
+      </div>
+    ),
     actions: [
       {
         category: "secondary",
-        text: "Editar",
-        onClick: () => alert("Editar clicado"),
+        text: "Edit",
+        onClick: () => alert("Edit clicked!"),
       },
       {
         category: "danger",
-        text: "Excluir",
-        onClick: () => alert("Excluir clicado"),
+        text: "Delete",
+        onClick: () => alert("Delete clicked!"),
       },
-    ] as ButtonProps[],
+    ],
   },
 };
 
-export const FullExample: Story = {
+export const Full: StoryObj<typeof Wrapper> = {
   args: {
-    title: "Seção Completa",
-    description: "Com ações, cancelamento e confirmação.",
+    title: "Title Wrapper",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     children: (
       <ul>
         <li>Item 1</li>
         <li>Item 2</li>
       </ul>
     ),
-    onCancel: () => alert("Ação cancelada"),
-    onConfirm: () => alert("Ação confirmada"),
+    onCancel: () => alert("Cancel clicked!"),
+    onConfirm: () => alert("Confirm clicked!"),
     actions: [
       {
         category: "neutral",
-        text: "Ajuda",
-        onClick: () => alert("Ajuda clicada"),
+        text: "Help",
+        onClick: () => alert("Help clicked!"),
       },
-    ] as ButtonProps[],
+    ],
   },
 };

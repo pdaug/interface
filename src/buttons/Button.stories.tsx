@@ -1,15 +1,16 @@
-import { StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
 import { Plus, Trash } from "@phosphor-icons/react";
 
-import Button, { ButtonCategories } from "./Button";
+import Button, { ButtonCategories, ButtonCategoriesList } from "./Button";
 
 export default {
   title: "Components/Button",
   component: Button,
+  tags: ["autodocs"],
   argTypes: {
     category: {
       control: "select",
-      options: ["primary", "secondary", "danger", "warn", "neutral"],
+      options: ButtonCategoriesList,
     },
     Icon: {
       control: false,
@@ -27,10 +28,9 @@ export const Default: StoryObj<typeof Button> = {
 
 export const All: StoryObj<typeof Button> = {
   render: () => {
-    const categories = ["primary", "secondary", "danger", "warn", "neutral"];
     return (
       <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-        {categories.map((category) => (
+        {ButtonCategoriesList.map((category) => (
           <Button
             key={category}
             category={category as ButtonCategories}
@@ -66,9 +66,18 @@ export const WithRightIcon: StoryObj<typeof Button> = {
 };
 
 export const Disabled: StoryObj<typeof Button> = {
-  args: {
-    text: "Disabled",
-    category: "primary",
-    disabled: true,
+  render: () => {
+    return (
+      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+        {ButtonCategoriesList.map((category) => (
+          <Button
+            disabled
+            key={category}
+            category={category as ButtonCategories}
+            text={category.charAt(0).toUpperCase() + category.slice(1)}
+          />
+        ))}
+      </div>
+    );
   },
 };

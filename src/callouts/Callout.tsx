@@ -3,12 +3,14 @@ import { IconWeight, Icon as PhosphorIcons } from "@phosphor-icons/react";
 // styles
 import "./Callout.css";
 
-export type CalloutCategories =
-  | "primary"
-  | "secondary"
-  | "danger"
-  | "warn"
-  | "neutral";
+export const CalloutCategoriesList = [
+  "primary",
+  "secondary",
+  "danger",
+  "warn",
+] as const;
+
+export type CalloutCategories = (typeof CalloutCategoriesList)[number];
 
 export type CalloutProps = {
   text: React.ReactNode;

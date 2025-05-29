@@ -4,12 +4,15 @@ import { IconWeight, Icon as PhosphorIcons } from "@phosphor-icons/react";
 // styles
 import "./Button.css";
 
-export type ButtonCategories =
-  | "primary"
-  | "secondary"
-  | "danger"
-  | "warn"
-  | "neutral";
+export const ButtonCategoriesList = [
+  "primary",
+  "secondary",
+  "danger",
+  "warn",
+  "neutral",
+] as const;
+
+export type ButtonCategories = (typeof ButtonCategoriesList)[number];
 
 export type ButtonType = "submit" | "reset" | "button";
 

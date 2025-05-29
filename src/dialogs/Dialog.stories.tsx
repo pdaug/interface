@@ -1,19 +1,20 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { Trash } from "@phosphor-icons/react";
+import type { StoryObj } from "@storybook/react";
 
 // components
-import Button, { ButtonCategories } from "../buttons/Button";
 import {
-  DialogProvider,
   useDialog,
   DialogElement,
+  DialogProvider,
   DialogContextProps,
 } from "./Dialog";
+import Button, { ButtonCategories } from "../buttons/Button";
 
-const meta: Meta = {
+export default {
   title: "Components/Dialog",
+  tags: ["autodocs"],
   decorators: [
-    (Story) => (
+    (Story: () => React.JSX.Element) => (
       <DialogProvider>
         <Story />
         <DialogElement />
@@ -21,9 +22,6 @@ const meta: Meta = {
     ),
   ],
 };
-export default meta;
-
-type Story = StoryObj;
 
 const Template = (
   dialogProps: {
@@ -32,7 +30,6 @@ const Template = (
   } & Omit<DialogContextProps, "open">,
 ) => {
   const { OpenDialog, CloseDialog } = useDialog();
-
   return (
     <Button
       text={dialogProps.buttonText}
@@ -50,7 +47,7 @@ const Template = (
   );
 };
 
-export const Primary: Story = {
+export const Primary: StoryObj = {
   render: () =>
     Template({
       buttonText: "Dialog Primary",
@@ -63,7 +60,7 @@ export const Primary: Story = {
     }),
 };
 
-export const Secondary: Story = {
+export const Secondary: StoryObj = {
   render: () =>
     Template({
       buttonText: "Dialog Secondary",
@@ -77,7 +74,7 @@ export const Secondary: Story = {
     }),
 };
 
-export const Warn: Story = {
+export const Warn: StoryObj = {
   render: () =>
     Template({
       buttonText: "Dialog Warning",
@@ -90,7 +87,7 @@ export const Warn: Story = {
     }),
 };
 
-export const Danger: Story = {
+export const Danger: StoryObj = {
   render: () =>
     Template({
       buttonText: "Dialog Danger",

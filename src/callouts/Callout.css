@@ -34,10 +34,3 @@
   font-weight: bold;
   color: var(--danger-dark);
 }
-
-.fz-callout-neutral {
-  background: var(--background);
-  background-color: var(--background);
-  border: 1px solid var(--border);
-  color: var(--font-light);
-}
