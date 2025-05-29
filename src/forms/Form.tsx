@@ -4,101 +4,90 @@ import { withMask } from "use-mask-input";
 // styles
 import "./Form.css";
 
-export type FormCheckOptions = {
+export type FormCheckOption = {
   id: string;
   value: string;
   label: string;
-}[];
-
-export type FormCheckProps = {
-  options: FormCheckOptions;
-  values: string[];
-  name?: string;
-  horizontal?: boolean;
-  onChange?: (value: string[]) => void;
 };
 
-const FormCheck = function ({
+export type FormCheckProps<T extends string[] | boolean> = {
+  name?: string;
+  options: FormCheckOption[];
+  value: T;
+  horizontal?: boolean;
+  onChange?: (value: T) => void;
+};
+
+function FormCheck<T extends string[] | boolean>({
   name,
   options,
-  values,
-  horizontal,
+  value,
+  horizontal = false,
   onChange,
-}: FormCheckProps) {
-  return (
-    <div
-      className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
-    >
-      {options?.map(function (option, index) {
-        return (
-          <label htmlFor={option.id} key={`${option.id}${index}`}>
+}: FormCheckProps<T>) {
+  const isMultiple = Array.isArray(value);
+
+  const handleMultiChange = (optionValue: string) => {
+    if (!isMultiple || !onChange) return;
+
+    const exists = value.includes(optionValue);
+    const updated = exists
+      ? value.filter((val) => val !== optionValue)
+      : [...value, optionValue];
+
+    onChange(updated as T);
+  };
+
+  const handleBooleanChange = () => {
+    if (typeof value !== "boolean" || !onChange) return;
+    onChange(!value as T);
+  };
+
+  if (isMultiple) {
+    return (
+      <div
+        className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
+      >
+        {options.map((option, index) => (
+          <label htmlFor={option.id} key={option.id}>
             <div className="fz-form-check-option-content">
-              <div className="fz-form-check-option"></div>
+              <div className="fz-form-check-option" />
             </div>
             <input
-              name={name}
               type="checkbox"
               id={option.id}
+              name={name}
               value={option.value}
-              checked={Array.isArray(values) && values.includes(option.value)}
-              onChange={function () {
-                const valueIndex = values.findIndex(function (currentValue) {
-                  return currentValue === option.value;
-                });
-                const cloneValues = window.structuredClone([...values]);
-                if (valueIndex > -1) {
-                  cloneValues.splice(valueIndex, 1);
-                } else {
-                  cloneValues.push(option.value);
-                }
-                onChange?.(cloneValues);
-                return;
-              }}
+              checked={value.includes(option.value)}
+              onChange={() => handleMultiChange(option.value)}
             />
             <span>{option.label}</span>
           </label>
-        );
-      })}
-    </div>
-  );
-};
+        ))}
+      </div>
+    );
+  }
 
-export type FormCheckSimpleProps = {
-  id: string;
-  name?: string;
-  label?: string;
-  value: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
-};
-
-const FormCheckSimple = function ({
-  id,
-  name,
-  label,
-  value,
-  onChange,
-}: FormCheckSimpleProps) {
+  // Boolean mode (single checkbox)
+  const option = options[0]; // assumimos que só o primeiro importa para boolean
   return (
     <div className="fz-form-check">
-      <label htmlFor={id}>
+      <label htmlFor={option.id}>
         <div className="fz-form-check-option-content">
-          <div className="fz-form-check-option"></div>
+          <div className="fz-form-check-option" />
         </div>
         <input
-          id={id}
-          name={name}
           type="checkbox"
-          onChange={function (event) {
-            onChange?.(event);
-            return;
-          }}
-          checked={Boolean(value)}
+          id={option.id}
+          name={name}
+          checked={value}
+          onChange={handleBooleanChange}
         />
-        {label && <span>{label}</span>}
+        <span>{option.label}</span>
       </label>
     </div>
   );
-};
+}
 
 export type FormFileProps = {
   id: string;
@@ -595,7 +584,6 @@ const FormText = function ({
 
 export {
   FormCheck,
-  FormCheckSimple,
   FormFile,
   FormInput,
   FormMask,

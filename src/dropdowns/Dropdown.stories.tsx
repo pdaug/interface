@@ -2,9 +2,9 @@ import { CopySimple } from "@phosphor-icons/react";
 import type { StoryObj } from "@storybook/react";
 
 import Dropdown, {
+  DropdownProps,
   DropdownCategories,
   DropdownCategoriesList,
-  DropdownProps,
 } from "./Dropdown";
 
 export default {

@@ -1,10 +1,9 @@
 // Form.stories.tsx
 import { useState } from "react";
-import { Meta, StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
 
 import {
   FormCheck,
-  FormCheckSimple,
   FormFile,
   FormInput,
   FormMask,
@@ -14,11 +13,10 @@ import {
   FormText,
 } from "./Form";
 
-const meta: Meta = {
+export default {
   title: "Components/Form",
+  tags: ["autodocs"],
 };
-
-export default meta;
 
 export const Input: StoryObj = {
   render: () => {
@@ -26,9 +24,9 @@ export const Input: StoryObj = {
     return (
       <FormInput
         id="input-example"
-        label="Nome"
+        label="Full name"
         value={value}
-        placeholder="Digite seu nome"
+        placeholder="John Doe"
         onChange={(e) => setValue(e.target.value)}
       />
     );
@@ -40,10 +38,10 @@ export const Number = () => {
   return (
     <FormInput
       id="input-number"
-      label="Número"
+      label="Age"
       type="number"
       value={value}
-      placeholder="Digite um número"
+      placeholder="Type your age"
       onChange={(e) => setValue(e.target.value)}
       min={0}
       max={100}
@@ -57,10 +55,10 @@ export const Password = () => {
   return (
     <FormInput
       id="input-password"
-      label="Senha"
+      label="Password Top-Secret"
       type="password"
       value={value}
-      placeholder="Digite sua senha"
+      placeholder="**********"
       onChange={(e) => setValue(e.target.value)}
     />
   );
@@ -71,7 +69,7 @@ export const Date = () => {
   return (
     <FormInput
       id="input-date"
-      label="Data"
+      label="Birthdate"
       type="date"
       value={value}
       placeholder=""
@@ -85,7 +83,7 @@ export const DateTimeLocal = () => {
   return (
     <FormInput
       id="input-datetime-local"
-      label="Data e Hora"
+      label="Datetime"
       type="datetime-local"
       value={value}
       placeholder=""
@@ -98,8 +96,8 @@ export const Disabled = () => {
   return (
     <FormInput
       id="input-disabled"
-      label="Desabilitado"
-      value="Não pode editar"
+      label="Input disabled"
+      value="Don't edit input"
       placeholder=""
       onChange={() => {}}
       disabled
@@ -113,7 +111,7 @@ export const Mask: StoryObj = {
     return (
       <FormMask
         id="cpf-mask"
-        label="CPF"
+        label="Document"
         mask="999.999.999-99"
         value={value}
         placeholder="000.000.000-00"
@@ -215,20 +213,6 @@ export const Text: StoryObj = {
         placeholder="Escreva algo"
         height={4}
         onChange={(e) => setValue(e.target.value)}
-      />
-    );
-  },
-};
-
-export const CheckSimple: StoryObj = {
-  render: () => {
-    const [checked, setChecked] = useState(false);
-    return (
-      <FormCheckSimple
-        id="check-termos"
-        label="Aceito os termos"
-        value="1"
-        onChange={() => setChecked(!checked)}
       />
     );
   },
