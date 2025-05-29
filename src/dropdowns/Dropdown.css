@@ -1,8 +1,8 @@
-.fadeui-dropdown {
+.fz-dropdown {
   position: relative;
 }
 
-.fadeui-dropdown-button {
+.fz-dropdown-button {
   align-items: center;
   border-radius: var(--rounded);
   box-shadow: var(--shadow);
@@ -16,66 +16,66 @@
   transition: 0.2s;
 }
 
-.fadeui-dropdown-button:hover {
+.fz-dropdown-button:hover {
   opacity: 0.8;
   transition: 0.2s;
 }
 
-.fadeui-dropdown-button:active {
+.fz-dropdown-button:active {
   filter: brightness(110%);
   transform: scale(95%);
   transition: 0.2s;
 }
 
-.fadeui-dropdown-button span {
+.fz-dropdown-button span {
   overflow: hidden;
   text-overflow: ellipsis;
   user-select: none;
   white-space: nowrap;
 }
 
-.fadeui-dropdown-button-primary {
+.fz-dropdown-button-primary {
   background: var(--success);
   background-color: var(--success);
   border: 1px solid var(--success-dark);
   color: var(--background);
 }
 
-.fadeui-dropdown-button-secondary {
+.fz-dropdown-button-secondary {
   background: var(--info);
   background-color: var(--info);
   border: 1px solid var(--info-dark);
   color: var(--background);
 }
 
-.fadeui-dropdown-button-danger {
+.fz-dropdown-button-danger {
   background: var(--danger);
   background-color: var(--danger);
   border: 1px solid var(--danger-dark);
   color: var(--background);
 }
 
-.fadeui-dropdown-button-warn {
+.fz-dropdown-button-warn {
   background: var(--warn);
   background-color: var(--warn);
   border: 1px solid var(--warn-dark);
   color: var(--background);
 }
 
-.fadeui-dropdown-button-neutral {
+.fz-dropdown-button-neutral {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
   color: var(--font);
 }
 
-.fadeui-dropdown-button-primary *,
-.fadeui-dropdown-button-secondary *,
-.fadeui-dropdown-button-danger * {
+.fz-dropdown-button-primary *,
+.fz-dropdown-button-secondary *,
+.fz-dropdown-button-danger * {
   color: var(--background);
 }
 
-.fadeui-dropdown-content {
+.fz-dropdown-content {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -92,7 +92,7 @@
   z-index: 1;
 }
 
-.fadeui-dropdown-content-option {
+.fz-dropdown-content-option {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -106,14 +106,15 @@
   transition: 200ms;
 }
 
-.fadeui-dropdown-content-option:not(:disabled):hover {
+.fz-dropdown-content-option:not(:disabled):hover {
   background: var(--background);
   background-color: var(--background);
   cursor: pointer;
   transition: 200ms;
 }
 
-.fadeui-dropdown-content-option:disabled {
+.fz-dropdown-content-option:disabled {
   color: var(--font-light);
   cursor: not-allowed;
+  opacity: 0.6;
 }

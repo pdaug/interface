@@ -2,8 +2,13 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Trash } from "@phosphor-icons/react";
 
 // components
-import Button from "../buttons/Button";
-import { DialogProvider, useDialog, DialogElement } from "./Dialog";
+import Button, { ButtonCategories } from "../buttons/Button";
+import {
+  DialogProvider,
+  useDialog,
+  DialogElement,
+  DialogContextProps,
+} from "./Dialog";
 
 const meta: Meta = {
   title: "Components/Dialog",
@@ -20,7 +25,12 @@ export default meta;
 
 type Story = StoryObj;
 
-const Template = (dialogProps: object) => {
+const Template = (
+  dialogProps: {
+    buttonText: string;
+    buttonCategory: ButtonCategories;
+  } & Omit<DialogContextProps, "open">,
+) => {
   const { OpenDialog, CloseDialog } = useDialog();
 
   return (
@@ -49,6 +59,7 @@ export const Primary: Story = {
       category: "primary",
       description: "Descrição do diálogo primário",
       confirmText: "Confirmar",
+      onConfirm: () => null,
     }),
 };
 
@@ -62,6 +73,7 @@ export const Secondary: Story = {
       description:
         "Este é um diálogo de categoria secundária para confirmações gerais.",
       confirmText: "Entendi",
+      onConfirm: () => null,
     }),
 };
 
@@ -74,6 +86,7 @@ export const Warn: Story = {
       category: "warn",
       description: "Você tem certeza que deseja continuar?",
       confirmText: "Sim, continuar",
+      onConfirm: () => null,
     }),
 };
 
@@ -88,5 +101,6 @@ export const Danger: Story = {
       description: "Essa ação não poderá ser desfeita.",
       confirmText: "Deletar",
       confirmIcon: Trash,
+      onConfirm: () => null,
     }),
 };

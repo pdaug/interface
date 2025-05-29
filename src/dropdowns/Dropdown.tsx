@@ -70,7 +70,7 @@ const Dropdown = function ({
   }, []);
 
   return (
-    <div ref={dropdownRef} className="fadeui-dropdown">
+    <div ref={dropdownRef} className="fz-dropdown">
       <button
         id={id}
         name={name}
@@ -78,13 +78,13 @@ const Dropdown = function ({
         style={style}
         disabled={disabled}
         onClick={ToggleDropdown}
-        className={`fadeui-dropdown-button fadeui-dropdown-button-${category}`}
+        className={`fz-dropdown-button fz-dropdown-button-${category}`}
       >
         <span>{text}</span>
       </button>
       <div
         style={{ display: dropdownOpen ? "flex" : "none" }}
-        className="fadeui-dropdown-content"
+        className="fz-dropdown-content"
       >
         {values.map(function ({ id, label, Icon, disabled, onClick }) {
           const onClickWithClose = function (
@@ -101,9 +101,9 @@ const Dropdown = function ({
               key={id}
               disabled={disabled}
               onClick={onClickWithClose}
-              className="fadeui-dropdown-content-option"
+              className="fz-dropdown-content-option"
             >
-              {Icon && <Icon />}
+              {Icon && <Icon size={16} />}
               <span>{label}</span>
             </button>
           );
