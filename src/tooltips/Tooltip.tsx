@@ -1,41 +1,29 @@
 import React from "react";
+import Tippy from "@tippyjs/react";
+import { Placement } from "tippy.js";
 
 // styles
-import "./Tooltip.css";
+import "tippy.js/dist/tippy.css";
 
 export type TooltipTheme = "dark" | "light";
-
-export type TooltipPosition = "bottom" | "top" | "left" | "right";
 
 export type TooltipProps = {
   content: string;
   theme?: TooltipTheme;
-  position?: TooltipPosition;
-  width?: string | number;
-  children: React.ReactNode;
+  placement?: Placement;
+  children: React.ReactElement;
 };
 
 const Tooltip = function ({
   content,
   theme = "light",
-  position = "top",
-  width = "auto",
+  placement = "top",
   children,
 }: TooltipProps) {
   return (
-    <div className="fadeui-tooltip">
-      <div
-        style={{ width }}
-        className={`fadeui-tooltip-container fadeui-tooltip-container-${position}`}
-      >
-        <div
-          className={`fadeui-tooltip-content fadeui-tooltip-content-${theme}`}
-        >
-          {content}
-        </div>
-      </div>
+    <Tippy content={content} theme={theme} placement={placement}>
       {children}
-    </div>
+    </Tippy>
   );
 };
 
