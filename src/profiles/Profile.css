@@ -1,4 +1,4 @@
-.fadeui-profile {
+.fz-profile {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -8,15 +8,15 @@
   overflow: hidden;
 }
 
-.fadeui-profile-padding {
+.fz-profile-padding {
   padding: 0.4rem 0.6rem;
 }
 
-.fadeui-profile-border {
+.fz-profile-border {
   border: 1px solid var(--border);
 }
 
-.fadeui-profile-photo {
+.fz-profile-photo {
   align-items: center;
   background: var(--border-light);
   background: var(--border-light);
@@ -28,32 +28,32 @@
   width: 32px;
 }
 
-.fadeui-profile-photo svg {
+.fz-profile-photo svg {
   fill: var(--font-light);
   color: var(--font-light);
 }
 
-.fadeui-profile-photo img {
+.fz-profile-photo img {
   aspect-ratio: 1 / 1;
   height: 100%;
   object-fit: cover;
   width: 100%;
 }
 
-.fadeui-profile-data {
+.fz-profile-data {
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.fadeui-profile-data-name {
+.fz-profile-data-name {
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.fadeui-profile-data-description {
+.fz-profile-data-description {
   color: var(--font-light);
   font-size: var(--text-small);
   overflow: hidden;

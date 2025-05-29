@@ -9,7 +9,6 @@ import { DialogElement, DialogProvider } from "./dialogs/Dialog";
 import FormTest from "./forms/Form.test";
 import PaginationTest from "./paginations/Pagination.test";
 import PanelTest from "./panels/Panel.test";
-import ProfileTest from "./profiles/Profile.test";
 import SectionTest from "./sections/Section.test";
 import TableTest from "./tables/Table.test";
 
@@ -29,7 +28,6 @@ const App = function () {
         <FormTest />
         <PaginationTest />
         <PanelTest />
-        <ProfileTest />
         <SectionTest />
         <TableTest />
       </div>
