@@ -22,7 +22,7 @@ const Tooltip = function ({
 }: TooltipProps) {
   return (
     <Tippy content={content} theme={theme} placement={placement}>
-      {children}
+      <div>{children}</div>
     </Tippy>
   );
 };

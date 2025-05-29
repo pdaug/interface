@@ -34,30 +34,35 @@ export const AllToasts = () => {
           category="primary"
           text="Success Toast"
           Icon={CheckCircle}
+          IconSize={16}
           onClick={() => toast.success("Operação realizada com sucesso!")}
         />
         <Button
           category="secondary"
           text="Info Toast"
           Icon={Info}
+          IconSize={16}
           onClick={() => toast.info("Informação relevante exibida.")}
         />
         <Button
           category="warn"
           text="Warning Toast"
           Icon={Warning}
+          IconSize={16}
           onClick={() => toast.warning("Atenção: verifique os dados.")}
         />
         <Button
           category="danger"
           text="Error Toast"
           Icon={WarningOctagon}
+          IconSize={16}
           onClick={() => toast.error("Erro ao executar a ação.")}
         />
         <Button
           category="neutral"
           text="Loading Toast"
           Icon={Spinner}
+          IconSize={16}
           onClick={() => {
             toast.loading("Processando...");
             setTimeout(() => toast.success("Finalizado!"), 2000);

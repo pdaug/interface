@@ -1,7 +1,7 @@
+import { Info } from "@phosphor-icons/react";
 import { Meta, StoryObj } from "@storybook/react";
 
-import { Info } from "@phosphor-icons/react";
-
+import Button from "../buttons/Button";
 import Tooltip, { TooltipProps } from "./Tooltip";
 
 const meta: Meta<typeof Tooltip> = {
@@ -43,7 +43,7 @@ type Story = StoryObj<typeof Tooltip>;
 export const Default: Story = {
   render: (args: TooltipProps) => (
     <Tooltip {...args}>
-      <button style={{ padding: "0.5rem 1rem" }}>Hover me</button>
+      <Button text="Hover me" category="danger" />
     </Tooltip>
   ),
 };
