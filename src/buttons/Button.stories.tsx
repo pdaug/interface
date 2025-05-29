@@ -1,9 +1,9 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { Plus, Trash, WarningCircle } from "@phosphor-icons/react";
+import { StoryObj } from "@storybook/react";
+import { Plus, Trash } from "@phosphor-icons/react";
 
-import Button from "./Button";
+import Button, { ButtonCategories } from "./Button";
 
-const meta: Meta<typeof Button> = {
+export default {
   title: "Components/Button",
   component: Button,
   argTypes: {
@@ -18,41 +18,32 @@ const meta: Meta<typeof Button> = {
   },
 };
 
-export const AllCategories = () => {
-  const categories = [
-    "primary",
-    "secondary",
-    "danger",
-    "warn",
-    "neutral",
-  ] as const;
-
-  return (
-    <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-      {categories.map((category) => (
-        <Button
-          key={category}
-          category={category}
-          text={category.charAt(0).toUpperCase() + category.slice(1)}
-          onClick={() => console.log(`${category} clicked`)}
-        />
-      ))}
-    </div>
-  );
-};
-
-export default meta;
-
-type Story = StoryObj<typeof Button>;
-
-export const Basic: Story = {
+export const Default: StoryObj<typeof Button> = {
   args: {
-    text: "Click me",
+    text: "Default",
     category: "primary",
   },
 };
 
-export const WithLeftIcon: Story = {
+export const All: StoryObj<typeof Button> = {
+  render: () => {
+    const categories = ["primary", "secondary", "danger", "warn", "neutral"];
+    return (
+      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+        {categories.map((category) => (
+          <Button
+            key={category}
+            category={category as ButtonCategories}
+            onClick={() => alert(`${category} clicked`)}
+            text={category.charAt(0).toUpperCase() + category.slice(1)}
+          />
+        ))}
+      </div>
+    );
+  },
+};
+
+export const WithLeftIcon: StoryObj<typeof Button> = {
   args: {
     text: "Add",
     category: "primary",
@@ -63,7 +54,7 @@ export const WithLeftIcon: Story = {
   },
 };
 
-export const WithRightIcon: Story = {
+export const WithRightIcon: StoryObj<typeof Button> = {
   args: {
     text: "Delete",
     category: "danger",
@@ -74,13 +65,10 @@ export const WithRightIcon: Story = {
   },
 };
 
-export const Disabled: Story = {
+export const Disabled: StoryObj<typeof Button> = {
   args: {
     text: "Disabled",
-    category: "neutral",
+    category: "primary",
     disabled: true,
-    Icon: WarningCircle,
-    IconSize: 16,
-    IconWeight: "regular",
   },
 };

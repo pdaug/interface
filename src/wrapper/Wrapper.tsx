@@ -1,37 +1,41 @@
 import React from "react";
 
 // styles
-import "./Section.css";
+import "./Wrapper.css";
 
 // components
 import Button, { ButtonProps } from "../buttons/Button";
 
-export type SectionProps = {
-  title: string;
-  description: string;
+export type WrapperProps = {
+  title?: string;
+  description?: string;
   children: React.ReactNode;
   onCancel?: () => void;
   onConfirm?: () => void;
   actions?: ButtonProps[];
 };
 
-const Section = function ({
+const Wrapper = function ({
   title,
   description,
   children,
   onCancel,
   onConfirm,
   actions,
-}: SectionProps) {
+}: WrapperProps) {
   return (
-    <div className="fz-section">
-      <div className="fz-section-header">
-        <div className="fz-section-header-title">{title}</div>
-        <div className="fz-section-header-description">{description}</div>
-      </div>
-      <div className="fz-section-content">{children}</div>
+    <div className="fz-wrapper">
+      {title && (
+        <div className="fz-wrapper-header">
+          <div className="fz-wrapper-header-title">{title}</div>
+          {description && (
+            <div className="fz-wrapper-header-description">{description}</div>
+          )}
+        </div>
+      )}
+      <div className="fz-wrapper-content">{children}</div>
       {(onCancel || onConfirm || actions?.length) && (
-        <div className="fz-section-footer">
+        <div className="fz-wrapper-footer">
           {onCancel && (
             <Button category="neutral" text="Cancelar" onClick={onCancel} />
           )}
@@ -48,4 +52,4 @@ const Section = function ({
   );
 };
 
-export default Section;
+export default Wrapper;

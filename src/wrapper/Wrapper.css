@@ -1,4 +1,4 @@
-.fz-section {
+.fz-wrapper {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -8,7 +8,7 @@
   overflow: hidden;
 }
 
-.fz-section-header {
+.fz-wrapper-header {
   border-bottom: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -16,25 +16,25 @@
   padding: 0.6rem 1rem;
 }
 
-.fz-section-header-title {
+.fz-wrapper-header-title {
   font-size: var(--text-highlight);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.fz-section-header-description {
+.fz-wrapper-header-description {
   color: var(--font-light);
   font-size: var(--text-small);
   line-height: 1.2;
   text-align: justify;
 }
 
-.fz-section-content {
+.fz-wrapper-content {
   padding: 1rem;
 }
 
-.fz-section-footer {
+.fz-wrapper-footer {
   background: var(--background);
   background-color: var(--background);
   border-top: 1px solid var(--border);

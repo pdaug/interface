@@ -1,17 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { StoryObj } from "@storybook/react";
 
 import Breadcrumb from "./Breadcrumb";
 
-const meta: Meta<typeof Breadcrumb> = {
+export default {
   title: "Components/Breadcrumb",
   component: Breadcrumb,
   tags: ["autodocs"],
 };
 
-export default meta;
-type Story = StoryObj<typeof Breadcrumb>;
-
-export const Basic: Story = {
+export const Default: StoryObj<typeof Breadcrumb> = {
   args: {
     links: [
       { id: "home", label: "Home", url: "/" },
@@ -20,29 +17,25 @@ export const Basic: Story = {
   },
 };
 
-export const MultiLevel: Story = {
+export const WithMultiples: StoryObj<typeof Breadcrumb> = {
   args: {
     links: [
+      { id: "home", label: "Home", url: "/" },
       { id: "corporation", label: "Corporation", url: "/corporation" },
       { id: "workspace", label: "Workspace", url: "/corporation/workspace" },
       {
-        id: "user",
-        label: "John Smith",
-        url: "/corporation/workspace/JohnSmith",
+        id: "users",
+        label: "Users",
+        url: "/corporation/workspace/users",
       },
     ],
   },
 };
 
-export const WithExternalLink: Story = {
+export const WithExternalLink: StoryObj<typeof Breadcrumb> = {
   args: {
     links: [
-      {
-        id: "docs",
-        label: "Docs",
-        url: "https://docs.example.com",
-        target: "_blank",
-      },
+      { id: "home", label: "Home", url: "/" },
       {
         id: "api",
         label: "API",

@@ -1,11 +1,12 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { Smiley, Lightning } from "@phosphor-icons/react";
+import { Smiley } from "@phosphor-icons/react";
+import type { StoryObj } from "@storybook/react";
 
 import Avatar from "./Avatar";
 
-const meta: Meta<typeof Avatar> = {
+export default {
   title: "Components/Avatar",
   component: Avatar,
+  tags: ["autodocs"],
   argTypes: {
     size: { control: { type: "number", min: 1, max: 10 } },
     circle: { control: "boolean" },
@@ -15,56 +16,35 @@ const meta: Meta<typeof Avatar> = {
   },
 };
 
-export default meta;
-
-type Story = StoryObj<typeof Avatar>;
-
-export const Default: Story = {
+export const Default: StoryObj<typeof Avatar> = {
   args: {
-    label: "Alice",
-    size: 4,
+    label: "Default",
+    size: 8,
   },
 };
 
-export const CircleWithInitial: Story = {
+export const WithCircle: StoryObj<typeof Avatar> = {
   args: {
-    label: "Bob",
-    size: 5,
+    label: "Circle",
+    size: 8,
     circle: true,
   },
 };
 
-export const WithPhoto: Story = {
+export const WithPhoto: StoryObj<typeof Avatar> = {
   args: {
-    label: "Carla",
-    size: 5,
+    label: "Photo",
+    size: 8,
     circle: true,
     photo: "https://i.pravatar.cc/100?img=3",
   },
 };
 
-export const WithIcon: Story = {
+export const WithIcon: StoryObj<typeof Avatar> = {
   args: {
-    label: "Daniel",
-    size: 5,
-    circle: false,
-    Icon: Smiley,
-  },
-};
-
-export const CustomIcon: Story = {
-  args: {
-    label: "Eva",
-    size: 6,
-    circle: true,
-    Icon: Lightning,
-  },
-};
-
-export const LargeSize: Story = {
-  args: {
-    label: "Felipe",
+    label: "Icon",
     size: 8,
     circle: true,
+    Icon: Smiley,
   },
 };

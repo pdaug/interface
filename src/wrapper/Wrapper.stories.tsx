@@ -1,22 +1,41 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import Section from "./Section";
+import Wrapper from "./Wrapper";
 import { ButtonProps } from "../buttons/Button";
 
-const meta: Meta<typeof Section> = {
-  title: "Components/Section",
-  component: Section,
+const meta: Meta<typeof Wrapper> = {
+  title: "Components/Wrapper",
+  component: Wrapper,
 };
 
 export default meta;
 
-type Story = StoryObj<typeof Section>;
+type Story = StoryObj<typeof Wrapper>;
+
+export const Simple: Story = {
+  args: {
+    children: <div>Conteúdo da seção vai aqui.</div>,
+  },
+};
+
+export const WithFooter: Story = {
+  args: {
+    children: <div>Conteúdo da seção vai aqui.</div>,
+    actions: [
+      {
+        category: "secondary",
+        text: "Editar",
+        onClick: () => alert("Editar clicado"),
+      },
+    ],
+  },
+};
 
 export const Default: Story = {
   args: {
     title: "Título da Seção",
     description: "Descrição breve da seção.",
-    children: <p>Conteúdo da seção vai aqui.</p>,
+    children: <div>Conteúdo da seção vai aqui.</div>,
   },
 };
 
@@ -24,7 +43,7 @@ export const WithCancelConfirm: Story = {
   args: {
     title: "Confirmação",
     description: "Você tem certeza que deseja prosseguir?",
-    children: <p>A ação é irreversível.</p>,
+    children: <div>A ação é irreversível.</div>,
     onCancel: () => alert("Cancelado"),
     onConfirm: () => alert("Confirmado"),
   },
@@ -34,7 +53,7 @@ export const WithCustomActions: Story = {
   args: {
     title: "Ações Customizadas",
     description: "Abaixo estão ações adicionais.",
-    children: <p>Você pode adicionar qualquer ação aqui.</p>,
+    children: <div>Você pode adicionar qualquer ação aqui.</div>,
     actions: [
       {
         category: "secondary",
