@@ -24,41 +24,26 @@ const Section = function ({
   actions,
 }: SectionProps) {
   return (
-    <div className="fadeui-section">
-      <div className="fadeui-section-header">
-        <div className="fadeui-section-header-title">{title}</div>
-        <div className="fadeui-section-header-description">{description}</div>
+    <div className="fz-section">
+      <div className="fz-section-header">
+        <div className="fz-section-header-title">{title}</div>
+        <div className="fz-section-header-description">{description}</div>
       </div>
-      <div className="fadeui-section-content">{children}</div>
-      <div className="fadeui-section-footer">
-        {onCancel && (
-          <Button category="neutral" text="Cancelar" onClick={onCancel} />
-        )}
-        {actions &&
-          actions?.map(function (action, index) {
-            return (
-              <Button
-                key={`action-${index}`}
-                text={action.text}
-                category={action.category}
-                id={action.id}
-                name={action.name}
-                disabled={action.disabled}
-                Icon={action.Icon}
-                IconWeight={action.IconWeight}
-                IconSize={action.IconSize}
-                IconPosition={action.IconPosition}
-                style={action.style}
-                dropdown={action.dropdown}
-                type={action.type}
-                onClick={action.onClick}
-              />
-            );
-          })}
-        {onConfirm && (
-          <Button category="primary" text="Confirmar" onClick={onConfirm} />
-        )}
-      </div>
+      <div className="fz-section-content">{children}</div>
+      {(onCancel || onConfirm || actions?.length) && (
+        <div className="fz-section-footer">
+          {onCancel && (
+            <Button category="neutral" text="Cancelar" onClick={onCancel} />
+          )}
+          {actions &&
+            actions?.map(function (action, index) {
+              return <Button key={`action-${index}`} {...action} />;
+            })}
+          {onConfirm && (
+            <Button category="primary" text="Confirmar" onClick={onConfirm} />
+          )}
+        </div>
+      )}
     </div>
   );
 };
