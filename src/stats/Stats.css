@@ -1,4 +1,4 @@
-.fadeui-stats {
+.fz-stats {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -11,7 +11,7 @@
   overflow: hidden;
 }
 
-.fadeui-stats-head {
+.fz-stats-head {
   display: flex;
   font-size: var(--text-small);
   gap: 1rem;
@@ -20,22 +20,22 @@
   padding-bottom: 0;
 }
 
-.fadeui-stats-head-title {
+.fz-stats-head-title {
   flex: 1;
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;
 }
 
-.fadeui-stats-head-metric-up {
+.fz-stats-head-metric-up {
   color: var(--success);
 }
 
-.fadeui-stats-head-metric-down {
+.fz-stats-head-metric-down {
   color: var(--danger);
 }
 
-.fadeui-stats-body {
+.fz-stats-body {
   font-size: var(--text-title);
   padding: 1.4rem;
   padding-top: 0;

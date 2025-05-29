@@ -11,7 +11,6 @@ import PaginationTest from "./paginations/Pagination.test";
 import PanelTest from "./panels/Panel.test";
 import ProfileTest from "./profiles/Profile.test";
 import SectionTest from "./sections/Section.test";
-import StatsTest from "./stats/Stats.test";
 import TableTest from "./tables/Table.test";
 
 const App = function () {
@@ -32,7 +31,6 @@ const App = function () {
         <PanelTest />
         <ProfileTest />
         <SectionTest />
-        <StatsTest />
         <TableTest />
       </div>
     </DialogProvider>

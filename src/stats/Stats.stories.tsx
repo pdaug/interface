@@ -3,7 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import Stats, { StatsProps } from "./Stats";
 
 export default {
-  title: "Data/Stats",
+  title: "Components/Stats",
   component: Stats,
   tags: ["autodocs"],
 } as Meta<StatsProps>;
@@ -35,3 +35,29 @@ export const Down: StoryObj<StatsProps> = {
     valueOptions: { maximumFractionDigits: 0 },
   },
 };
+
+export const Grouped = () => (
+  <div style={{ display: "flex", gap: "1.5rem" }}>
+    <Stats
+      title="Receita"
+      metric={12.5}
+      metricStatus="up"
+      value={42500}
+      valueUnit="R$"
+    />
+    <Stats
+      title="Clientes"
+      metric={3.2}
+      metricStatus="down"
+      value={120}
+      valueUnit=""
+    />
+    <Stats
+      title="Conversão"
+      metric={1.1}
+      metricStatus="up"
+      value={4.2}
+      valueUnit="%"
+    />
+  </div>
+);
