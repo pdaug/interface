@@ -4,6 +4,7 @@ import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import "./Pagination.css";
 
 export type PaginationProps = {
+  data?: boolean;
   pageCurrent: number;
   pageSize: number;
   itemsTotal: number;
@@ -11,6 +12,7 @@ export type PaginationProps = {
 };
 
 const Pagination = function ({
+  data,
   pageCurrent,
   pageSize = 10,
   itemsTotal,
@@ -50,15 +52,17 @@ const Pagination = function ({
 
   return (
     <div className="fz-pagination">
-      <div className="fz-pagination-data">
-        <span>Mostrando</span>
-        <b>{pageCurrent}</b>
-        <span>de</span>
-        <b>{pageTotal}</b>
-        <span>páginas -</span>
-        <b>{itemsTotal}</b>
-        <span>items</span>
-      </div>
+      {data && (
+        <div className="fz-pagination-data">
+          <span>Mostrando</span>
+          <b>{pageCurrent}</b>
+          <span>de</span>
+          <b>{pageTotal}</b>
+          <span>páginas -</span>
+          <b>{itemsTotal}</b>
+          <span>items</span>
+        </div>
+      )}
       <div className="fz-pagination-buttons">
         <button
           onClick={GoPageStart}
