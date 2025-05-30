@@ -22,10 +22,17 @@ export const Input: StoryObj = {
   render: () => {
     const [value, setValue] = useState("");
     return (
-      <div style={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexDirection: "column",
+          width: "30rem",
+        }}
+      >
         <FormInput
-          id="input-example"
-          label="Full name"
+          id="input-text"
+          label="Input Text"
           value={value}
           placeholder="John Doe"
           onChange={(e) => setValue(e.target.value)}
@@ -33,34 +40,34 @@ export const Input: StoryObj = {
         <FormInput
           required
           id="input-required"
-          label="Input required"
-          value=""
-          placeholder="required"
-          onChange={() => {}}
+          label="Input with required"
+          value={value}
+          placeholder="John Doe"
+          onChange={(e) => setValue(e.target.value)}
         />
         <FormInput
           id="input-validator"
           label="Input with validator"
           value={value}
-          placeholder="Validator"
+          placeholder="John Doe"
           helper={value.length ? "" : "Invalid"}
           onChange={(e) => setValue(e.target.value)}
         />
         <FormInput
           readOnly
           id="input-readonly"
-          label="Input readonly"
-          value="Select to copy"
-          placeholder=""
-          onChange={() => {}}
+          label="Input with readonly"
+          value={value}
+          placeholder="John Doe"
+          onChange={(e) => setValue(e.target.value)}
         />
         <FormInput
           disabled
           id="input-disabled"
           label="Input disabled"
-          value="Don't edit input"
-          placeholder=""
-          onChange={() => {}}
+          value={value}
+          placeholder="John Doe"
+          onChange={(e) => setValue(e.target.value)}
         />
       </div>
     );
@@ -70,59 +77,123 @@ export const Input: StoryObj = {
 export const Number = () => {
   const [value, setValue] = useState("");
   return (
-    <FormInput
-      id="input-number"
-      label="Age"
-      type="number"
-      value={value}
-      placeholder="Type your age"
-      onChange={(e) => setValue(e.target.value)}
-      min={0}
-      max={100}
-      step={1}
-    />
+    <div
+      style={{
+        display: "flex",
+        gap: "1rem",
+        flexDirection: "column",
+        width: "30rem",
+      }}
+    >
+      <FormInput
+        id="input-number"
+        label="Input number"
+        type="number"
+        value={value}
+        placeholder="Type a number"
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <FormInput
+        id="input-limit"
+        label="Input with limit"
+        type="number"
+        value={value}
+        placeholder="Type a number"
+        onChange={(e) => setValue(e.target.value)}
+        min={1}
+        max={100}
+        step={1}
+      />
+      <FormInput
+        id="input-step"
+        label="Input number float"
+        type="number"
+        value={value}
+        placeholder="Type a number"
+        onChange={(e) => setValue(e.target.value)}
+        min={1}
+        max={100}
+        step={0.1}
+      />
+    </div>
   );
 };
 
 export const Password = () => {
   const [value, setValue] = useState("");
   return (
-    <FormInput
-      id="input-password"
-      label="Password Top-Secret"
-      type="password"
-      value={value}
-      placeholder="**********"
-      onChange={(e) => setValue(e.target.value)}
-    />
+    <div
+      style={{
+        display: "flex",
+        gap: "1rem",
+        flexDirection: "column",
+        width: "30rem",
+      }}
+    >
+      <FormInput
+        id="input-password"
+        label="Password"
+        type="password"
+        value={value}
+        placeholder="**********"
+        onChange={(e) => setValue(e.target.value)}
+      />
+    </div>
   );
 };
 
 export const Date = () => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string>("2025-01-01");
   return (
-    <FormInput
-      id="input-date"
-      label="Birthdate"
-      type="date"
-      value={value}
-      placeholder=""
-      onChange={(e) => setValue(e.target.value)}
-    />
+    <div
+      style={{
+        display: "flex",
+        gap: "1rem",
+        flexDirection: "column",
+        width: "30rem",
+      }}
+    >
+      <FormInput
+        id="input-date"
+        label="Input date"
+        type="date"
+        value={value}
+        placeholder="DD/MM/AAAA"
+        onChange={(e) => setValue(e.target.value)}
+      />
+    </div>
   );
 };
 
-export const DateTimeLocal = () => {
-  const [value, setValue] = useState("");
+export const DateTime = () => {
+  const [value, setValue] = useState("2025-01-01T00:00:00");
   return (
-    <FormInput
-      id="input-datetime-local"
-      label="Datetime"
-      type="datetime-local"
-      value={value}
-      placeholder=""
-      onChange={(e) => setValue(e.target.value)}
-    />
+    <div
+      style={{
+        display: "flex",
+        gap: "1rem",
+        flexDirection: "column",
+        width: "30rem",
+      }}
+    >
+      <FormInput
+        id="input-datetime"
+        label="Input date, hour and minutes"
+        type="datetime-local"
+        value={value}
+        placeholder="DD/MM/AAAA HH:MM:SS"
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <FormInput
+        id="input-datetime"
+        label="Input date and time"
+        type="datetime-local"
+        value={value}
+        step={1}
+        placeholder="DD/MM/AAAA HH:MM:SS"
+        onChange={(e) => setValue(e.target.value)}
+      />
+    </div>
   );
 };
 
@@ -130,47 +201,103 @@ export const Mask: StoryObj = {
   render: () => {
     const [value, setValue] = useState("");
     return (
-      <FormMask
-        id="cpf-mask"
-        label="Document"
-        mask="999.999.999-99"
-        value={value}
-        placeholder="000.000.000-00"
-        onChange={(e) => setValue(e.target.value)}
-      />
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexDirection: "column",
+          width: "30rem",
+        }}
+      >
+        <FormMask
+          id="input-mask"
+          label="Input mask only number"
+          mask="9999"
+          value={value}
+          placeholder="1234"
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <FormMask
+          id="input-mask"
+          label="Input mask only text"
+          mask="AAA"
+          value={value}
+          placeholder="ABC"
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <FormMask
+          id="input-mask"
+          label="Input mask"
+          mask="AAA-9999"
+          value={value}
+          placeholder="ABC-1234"
+          onChange={(e) => setValue(e.target.value)}
+        />
+      </div>
     );
   },
 };
 
 export const Check: StoryObj = {
   render: () => {
+    const [checked, setChecked] = useState<boolean>(false);
     const [terms, setTerms] = useState<boolean>(false);
+    const [games, setGames] = useState<string[]>([""]);
     const [fruits, setFruits] = useState<string[]>(["apple"]);
 
     return (
-      <div style={{ display: "flex", gap: "1rem" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexDirection: "column",
+          width: "30rem",
+        }}
+      >
+        <FormCheck
+          value={checked}
+          onChange={(newChecked) => {
+            setChecked(newChecked);
+            console.log(newChecked);
+          }}
+          options={[{ id: "check", value: "check", label: "Without label" }]}
+        />
+        <FormCheck
+          value={terms}
+          label="Input check"
+          onChange={(newTerms) => {
+            setTerms(newTerms);
+            console.log(newTerms);
+          }}
+          options={[{ id: "agree", value: "agree", label: "Agree" }]}
+        />
         <FormCheck
           value={fruits}
-          label="Select fruits"
-          name="form_check_multiple"
+          label="Input check multiples"
           onChange={(newFruits) => {
             setFruits(newFruits);
             console.log(newFruits);
           }}
           options={[
-            { id: "check-1", value: "apple", label: "Maçã" },
-            { id: "check-2", value: "banana", label: "Banana" },
+            { id: "apple", value: "apple", label: "Apple" },
+            { id: "banana", value: "banana", label: "Banana" },
+            { id: "orange", value: "orange", label: "Orange" },
+            { id: "kiwi", value: "kiwi", label: "Kiwi" },
           ]}
         />
         <FormCheck
-          value={terms}
-          label="Accept the terms"
-          name="form_check_simple"
-          onChange={(newTerms) => {
-            setTerms(newTerms);
-            console.log(newTerms);
+          value={games}
+          horizontal
+          label="Input check horizontal"
+          onChange={(newGames) => {
+            setGames(newGames);
+            console.log(newGames);
           }}
-          options={[{ id: "check-3", value: "yes", label: "Yes, I do" }]}
+          options={[
+            { id: "galaga", value: "galaga", label: "Galaga" },
+            { id: "tetris", value: "tetris", label: "Tetris" },
+            { id: "pitfall", value: "pitfall", label: "Pitfall" },
+          ]}
         />
       </div>
     );
@@ -179,17 +306,19 @@ export const Check: StoryObj = {
 
 export const Radio: StoryObj = {
   render: () => {
-    const [value, setValue] = useState("yes");
+    const [yesOrNot, setYesOrNot] = useState("yes");
     return (
-      <FormRadio
-        name="sim-nao"
-        value={value}
-        onChange={setValue}
-        options={[
-          { id: "radio-yes", value: "yes", label: "Sim" },
-          { id: "radio-no", value: "no", label: "Não" },
-        ]}
-      />
+      <div style={{ display: "flex", gap: "1rem", width: "30rem" }}>
+        <FormRadio
+          name="input-radio"
+          value={yesOrNot}
+          onChange={setYesOrNot}
+          options={[
+            { id: "yes", value: "yes", label: "Yes" },
+            { id: "no", value: "no", label: "No" },
+          ]}
+        />
+      </div>
     );
   },
 };

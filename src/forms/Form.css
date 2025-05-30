@@ -31,6 +31,7 @@
   font-size: var(--text-small);
   font-weight: 400;
   line-height: 1;
+  transition: 600ms;
 }
 
 .fz-form-content {
@@ -217,6 +218,13 @@
 }
 
 /* CHECK */
+.fz-form-check-container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
 .fz-form-check {
   display: flex;
   flex: 1;

@@ -34,12 +34,44 @@ function FormCheck<T extends string[] | boolean>({
   const option = options[0];
   const isMultiple = Array.isArray(value);
   return isMultiple ? (
-    <div
-      className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
-    >
+    <div className="fz-form-check-container">
       {label && <label htmlFor={id}>{label}</label>}
-      {options.map((option) => (
-        <label htmlFor={option.id} key={option.id}>
+      <div
+        className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
+      >
+        {options.map((option) => (
+          <label htmlFor={option.id} key={option.id}>
+            <div className="fz-form-check-option-content">
+              <div className="fz-form-check-option" />
+            </div>
+            <input
+              type="checkbox"
+              id={option.id}
+              name={name}
+              value={option.value}
+              checked={value.includes(option.value)}
+              onChange={function () {
+                if (!onChange) return;
+                const exists = value.includes(option.value);
+                const updated = exists
+                  ? value.filter((valueState) => valueState !== option.value)
+                  : [...value, option.value];
+
+                onChange(updated as T);
+              }}
+            />
+            <span>{option.label}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div className="fz-form-check-container">
+      {label && <label htmlFor={id}>{label}</label>}
+      <div
+        className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
+      >
+        <label htmlFor={option.id}>
           <div className="fz-form-check-option-content">
             <div className="fz-form-check-option" />
           </div>
@@ -47,43 +79,15 @@ function FormCheck<T extends string[] | boolean>({
             type="checkbox"
             id={option.id}
             name={name}
-            value={option.value}
-            checked={value.includes(option.value)}
+            checked={value}
             onChange={function () {
               if (!onChange) return;
-              const exists = value.includes(option.value);
-              const updated = exists
-                ? value.filter((valueState) => valueState !== option.value)
-                : [...value, option.value];
-
-              onChange(updated as T);
+              onChange(!value as T);
             }}
           />
           <span>{option.label}</span>
         </label>
-      ))}
-    </div>
-  ) : (
-    <div
-      className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
-    >
-      {label && <label htmlFor={id}>{label}</label>}
-      <label htmlFor={option.id}>
-        <div className="fz-form-check-option-content">
-          <div className="fz-form-check-option" />
-        </div>
-        <input
-          type="checkbox"
-          id={option.id}
-          name={name}
-          checked={value}
-          onChange={function () {
-            if (!onChange) return;
-            onChange(!value as T);
-          }}
-        />
-        <span>{option.label}</span>
-      </label>
+      </div>
     </div>
   );
 }
@@ -188,7 +192,7 @@ const FormInput = function ({
     <div className="fz-form">
       <div className="fz-form-header" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
-        {helper && <span>{helper}</span>}
+        <span style={{ opacity: helper ? 1 : 0 }}>{helper || ""}</span>
       </div>
       <div className="fz-form-content">
         <input

@@ -1,6 +1,6 @@
 import type { Preview } from "@storybook/react";
 
-import "../src/App.css";
+import "../src/Global.css";
 
 const preview: Preview = {
   decorators: [
