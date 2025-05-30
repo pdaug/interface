@@ -22,13 +22,47 @@ export const Input: StoryObj = {
   render: () => {
     const [value, setValue] = useState("");
     return (
-      <FormInput
-        id="input-example"
-        label="Full name"
-        value={value}
-        placeholder="John Doe"
-        onChange={(e) => setValue(e.target.value)}
-      />
+      <div style={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
+        <FormInput
+          id="input-example"
+          label="Full name"
+          value={value}
+          placeholder="John Doe"
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <FormInput
+          required
+          id="input-required"
+          label="Input required"
+          value=""
+          placeholder="required"
+          onChange={() => {}}
+        />
+        <FormInput
+          id="input-validator"
+          label="Input with validator"
+          value={value}
+          placeholder="Validator"
+          helper={value.length ? "" : "Invalid"}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <FormInput
+          readOnly
+          id="input-readonly"
+          label="Input readonly"
+          value="Select to copy"
+          placeholder=""
+          onChange={() => {}}
+        />
+        <FormInput
+          disabled
+          id="input-disabled"
+          label="Input disabled"
+          value="Don't edit input"
+          placeholder=""
+          onChange={() => {}}
+        />
+      </div>
     );
   },
 };
@@ -88,19 +122,6 @@ export const DateTimeLocal = () => {
       value={value}
       placeholder=""
       onChange={(e) => setValue(e.target.value)}
-    />
-  );
-};
-
-export const Disabled = () => {
-  return (
-    <FormInput
-      id="input-disabled"
-      label="Input disabled"
-      value="Don't edit input"
-      placeholder=""
-      onChange={() => {}}
-      disabled
     />
   );
 };

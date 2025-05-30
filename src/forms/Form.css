@@ -83,103 +83,9 @@
   color: var(--font-light);
 }
 
-/* PREFIX */
-.fz-form-prefix {
-  display: flex;
-}
-
-.fz-form-prefix button {
-  align-items: center;
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-right: none;
-  border-top-left-radius: var(--rounded);
-  border-bottom-left-radius: var(--rounded);
-  box-sizing: border-box;
-  color: var(--font-light);
-  display: flex;
-  gap: 0.4rem;
-  justify-content: center;
-  line-height: 1;
-  height: 2rem;
-  padding: 0 0.6rem;
-}
-
-.fz-form-prefix:has(input:focus) button {
-  border-color: var(--info);
-}
-
-.fz-form-prefix button div {
-  color: var(--font-light);
-  font-size: var(--text-small);
-}
-
-.fz-form-prefix input {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: 0px;
-  border-top-right-radius: var(--rounded);
-  border-bottom-right-radius: var(--rounded);
-  box-sizing: border-box;
-  flex: 1;
-  line-height: 1;
-  height: 2rem;
-  font-size: var(--text-small);
-  outline: none;
-  overflow: hidden;
-  padding: 0 0.6rem;
-}
-
-.fz-form-prefix input:focus {
-  border-color: var(--info);
-  border-left-color: var(--border);
-  outline: none;
-}
-
-.fz-form-prefix input:disabled {
-  background: var(--background) !important;
-  background-color: var(--background) !important;
-  cursor: not-allowed;
-}
-
 /* MONEY */
 .fz-form-money {
   display: flex;
-}
-
-.fz-form-money button {
-  align-items: center;
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-right: none;
-  border-top-left-radius: var(--rounded);
-  border-bottom-left-radius: var(--rounded);
-  box-sizing: border-box;
-  color: var(--font-light);
-  display: flex;
-  gap: 0.4rem;
-  justify-content: center;
-  line-height: 1;
-  height: 2rem;
-  padding: 0 0.6rem;
-  user-select: none;
-}
-
-.fz-form-money:has(input:focus) button {
-  border-color: var(--info);
-}
-
-.fz-form-money:has(input:disabled) button {
-  background: var(--background);
-  background-color: var(--background);
-}
-
-.fz-form-money button div {
-  color: var(--font-light);
-  font-size: var(--text-small);
 }
 
 .fz-form-money input {
@@ -187,6 +93,8 @@
   background-color: var(--foreground);
   border: 1px solid var(--border);
   border-radius: 0px;
+  border-top-left-radius: var(--rounded);
+  border-bottom-left-radius: var(--rounded);
   box-sizing: border-box;
   flex: 1;
   line-height: 1;
@@ -199,7 +107,6 @@
 
 .fz-form-money input:focus {
   border-color: var(--info);
-  border-left-color: var(--border);
   border-right-color: var(--border);
   outline: none;
 }
