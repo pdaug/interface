@@ -11,6 +11,8 @@ export type FormCheckOption = {
 };
 
 export type FormCheckProps<T extends string[] | boolean> = {
+  id?: string;
+  label?: string;
   name?: string;
   options: FormCheckOption[];
   value: T;
@@ -18,60 +20,54 @@ export type FormCheckProps<T extends string[] | boolean> = {
   onChange?: (value: T) => void;
 };
 
+function FormCheck(props: FormCheckProps<string[]>): React.JSX.Element;
+function FormCheck(props: FormCheckProps<boolean>): React.JSX.Element;
 function FormCheck<T extends string[] | boolean>({
+  id,
   name,
+  label,
   options,
   value,
   horizontal = false,
   onChange,
 }: FormCheckProps<T>) {
+  const option = options[0];
   const isMultiple = Array.isArray(value);
+  return isMultiple ? (
+    <div
+      className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
+    >
+      {label && <label htmlFor={id}>{label}</label>}
+      {options.map((option) => (
+        <label htmlFor={option.id} key={option.id}>
+          <div className="fz-form-check-option-content">
+            <div className="fz-form-check-option" />
+          </div>
+          <input
+            type="checkbox"
+            id={option.id}
+            name={name}
+            value={option.value}
+            checked={value.includes(option.value)}
+            onChange={function () {
+              if (!onChange) return;
+              const exists = value.includes(option.value);
+              const updated = exists
+                ? value.filter((valueState) => valueState !== option.value)
+                : [...value, option.value];
 
-  const handleMultiChange = (optionValue: string) => {
-    if (!isMultiple || !onChange) return;
-
-    const exists = value.includes(optionValue);
-    const updated = exists
-      ? value.filter((val) => val !== optionValue)
-      : [...value, optionValue];
-
-    onChange(updated as T);
-  };
-
-  const handleBooleanChange = () => {
-    if (typeof value !== "boolean" || !onChange) return;
-    onChange(!value as T);
-  };
-
-  if (isMultiple) {
-    return (
-      <div
-        className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
-      >
-        {options.map((option, index) => (
-          <label htmlFor={option.id} key={option.id}>
-            <div className="fz-form-check-option-content">
-              <div className="fz-form-check-option" />
-            </div>
-            <input
-              type="checkbox"
-              id={option.id}
-              name={name}
-              value={option.value}
-              checked={value.includes(option.value)}
-              onChange={() => handleMultiChange(option.value)}
-            />
-            <span>{option.label}</span>
-          </label>
-        ))}
-      </div>
-    );
-  }
-
-  // Boolean mode (single checkbox)
-  const option = options[0]; // assumimos que só o primeiro importa para boolean
-  return (
-    <div className="fz-form-check">
+              onChange(updated as T);
+            }}
+          />
+          <span>{option.label}</span>
+        </label>
+      ))}
+    </div>
+  ) : (
+    <div
+      className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
+    >
+      {label && <label htmlFor={id}>{label}</label>}
       <label htmlFor={option.id}>
         <div className="fz-form-check-option-content">
           <div className="fz-form-check-option" />
@@ -81,7 +77,10 @@ function FormCheck<T extends string[] | boolean>({
           id={option.id}
           name={name}
           checked={value}
-          onChange={handleBooleanChange}
+          onChange={function () {
+            if (!onChange) return;
+            onChange(!value as T);
+          }}
         />
         <span>{option.label}</span>
       </label>

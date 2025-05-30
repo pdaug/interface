@@ -123,17 +123,35 @@ export const Mask: StoryObj = {
 
 export const Check: StoryObj = {
   render: () => {
-    const [values, setValues] = useState<string[]>(["apple"]);
+    const [terms, setTerms] = useState<boolean>(false);
+    const [fruits, setFruits] = useState<string[]>(["apple"]);
+
     return (
-      <FormCheck
-        name="frutas"
-        options={[
-          { id: "check-1", value: "apple", label: "Maçã" },
-          { id: "check-2", value: "banana", label: "Banana" },
-        ]}
-        values={values}
-        onChange={setValues}
-      />
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <FormCheck
+          value={fruits}
+          label="Select fruits"
+          name="form_check_multiple"
+          onChange={(newFruits) => {
+            setFruits(newFruits);
+            console.log(newFruits);
+          }}
+          options={[
+            { id: "check-1", value: "apple", label: "Maçã" },
+            { id: "check-2", value: "banana", label: "Banana" },
+          ]}
+        />
+        <FormCheck
+          value={terms}
+          label="Accept the terms"
+          name="form_check_simple"
+          onChange={(newTerms) => {
+            setTerms(newTerms);
+            console.log(newTerms);
+          }}
+          options={[{ id: "check-3", value: "yes", label: "Yes, I do" }]}
+        />
+      </div>
     );
   },
 };
