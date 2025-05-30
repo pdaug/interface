@@ -93,10 +93,11 @@ function FormCheck<T extends string[] | boolean>({
 }
 
 export type FormFileProps = {
-  id: string;
+  id?: string;
   label: string;
   value?: File | FileList | null;
   name?: string;
+  mimetype?: string;
   multiple?: boolean;
   disabled?: boolean;
   required?: boolean;
@@ -110,6 +111,7 @@ const FormFile = function ({
   label,
   value,
   name,
+  mimetype,
   accept,
   multiple,
   onChange,
@@ -124,7 +126,7 @@ const FormFile = function ({
         {helper && <span>{helper}</span>}
       </div>
       <label htmlFor={id} className="fz-form-file">
-        <button>Escolher arquivo(s)</button>
+        <button disabled={disabled}>{mimetype || "Choose file"}</button>
         <input
           id={id}
           name={name}
@@ -135,7 +137,9 @@ const FormFile = function ({
           required={required}
           onChange={onChange}
         />
-        <div className="fz-form-file-info">
+        <div
+          className={`fz-form-file-info ${disabled ? "fz-form-file-info-disabled" : ""}`}
+        >
           <span>
             {value instanceof File && value.name
               ? value.name
@@ -145,7 +149,7 @@ const FormFile = function ({
                       return file.name;
                     })
                     ?.join(", ")
-                : "Nenhum arquivo escolhido"}
+                : "No file chosen"}
           </span>
         </div>
       </label>
@@ -154,7 +158,7 @@ const FormFile = function ({
 };
 
 export type FormInputProps = {
-  id: string;
+  id?: string;
   label: string;
   value: string;
   placeholder: string;
@@ -223,7 +227,7 @@ const FormInput = function ({
 };
 
 export type FormMaskProps = {
-  id: string;
+  id?: string;
   label: string;
   value: string;
   placeholder: string;
@@ -544,13 +548,13 @@ const FormSelect = function ({
 };
 
 export type FormTextProps = {
-  id: string;
+  id?: string;
   label: string;
   value: string;
   placeholder: string;
   name?: string;
-  minLength?: number;
-  maxLength?: number;
+  min?: number;
+  max?: number;
   disabled?: boolean;
   required?: boolean;
   readOnly?: boolean;
@@ -567,8 +571,8 @@ const FormText = function ({
   name,
   onChange,
   placeholder,
-  minLength,
-  maxLength,
+  min,
+  max,
   disabled,
   required,
   readOnly,
@@ -593,8 +597,8 @@ const FormText = function ({
           onChange={onChange}
           style={{ resize }}
           readOnly={readOnly}
-          minLength={minLength}
-          maxLength={maxLength}
+          minLength={min}
+          maxLength={max}
           placeholder={placeholder}
         ></textarea>
       </div>

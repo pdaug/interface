@@ -18,7 +18,7 @@ export default {
   tags: ["autodocs"],
 };
 
-export const Input: StoryObj = {
+export const Text: StoryObj = {
   render: () => {
     const [value, setValue] = useState("");
     return (
@@ -31,7 +31,6 @@ export const Input: StoryObj = {
         }}
       >
         <FormInput
-          id="input-text"
           label="Input Text"
           value={value}
           placeholder="John Doe"
@@ -39,14 +38,12 @@ export const Input: StoryObj = {
         />
         <FormInput
           required
-          id="input-required"
           label="Input with Required"
           value={value}
           placeholder="John Doe"
           onChange={(e) => setValue(e.target.value)}
         />
         <FormInput
-          id="input-helper"
           label="Input with Helper"
           value={value}
           placeholder="John Doe"
@@ -55,7 +52,6 @@ export const Input: StoryObj = {
         />
         <FormInput
           readOnly
-          id="input-readonly"
           label="Input Read Only"
           value={value}
           placeholder="John Doe"
@@ -63,10 +59,17 @@ export const Input: StoryObj = {
         />
         <FormInput
           disabled
-          id="input-disabled"
           label="Input Disabled"
           value={value}
           placeholder="John Doe"
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <FormText
+          label="Input Text Area"
+          value={value}
+          placeholder="Type here your name"
+          height={4}
+          resize="vertical"
           onChange={(e) => setValue(e.target.value)}
         />
       </div>
@@ -86,7 +89,6 @@ export const Number = () => {
       }}
     >
       <FormInput
-        id="input-number"
         label="Input Number"
         type="number"
         value={value}
@@ -94,7 +96,6 @@ export const Number = () => {
         onChange={(e) => setValue(e.target.value)}
       />
       <FormInput
-        id="input-limit"
         label="Input Number with Limit"
         type="number"
         value={value}
@@ -105,7 +106,6 @@ export const Number = () => {
         step={1}
       />
       <FormInput
-        id="input-step"
         label="Input Number Float"
         type="number"
         value={value}
@@ -131,7 +131,6 @@ export const Password = () => {
       }}
     >
       <FormInput
-        id="input-password"
         label="Password"
         type="password"
         value={value}
@@ -154,7 +153,6 @@ export const Date = () => {
       }}
     >
       <FormInput
-        id="input-date"
         label="Input Date"
         type="date"
         value={value}
@@ -177,7 +175,6 @@ export const DateTime = () => {
       }}
     >
       <FormInput
-        id="input-datetime"
         label="Input Date, Hour and Minutes"
         type="datetime-local"
         value={value}
@@ -185,7 +182,6 @@ export const DateTime = () => {
         onChange={(e) => setValue(e.target.value)}
       />
       <FormInput
-        id="input-datetime"
         label="Input Date and Time"
         type="datetime-local"
         value={value}
@@ -210,7 +206,6 @@ export const Mask: StoryObj = {
         }}
       >
         <FormMask
-          id="input-mask"
           label="Input Mask only Numbers"
           mask="9999"
           value={value}
@@ -218,7 +213,6 @@ export const Mask: StoryObj = {
           onChange={(e) => setValue(e.target.value)}
         />
         <FormMask
-          id="input-mask"
           label="Input Mask only Text"
           mask="AAA"
           value={value}
@@ -226,7 +220,6 @@ export const Mask: StoryObj = {
           onChange={(e) => setValue(e.target.value)}
         />
         <FormMask
-          id="input-mask"
           label="Input Mask Numbers and Text"
           mask="AAA-9999"
           value={value}
@@ -515,28 +508,40 @@ export const File: StoryObj = {
   render: () => {
     const [value, setValue] = useState<FileList | null>(null);
     return (
-      <FormFile
-        id="file-upload"
-        label="Upload de Arquivo"
-        value={value}
-        onChange={(e) => setValue(e.target.files)}
-      />
-    );
-  },
-};
-
-export const Text: StoryObj = {
-  render: () => {
-    const [value, setValue] = useState("");
-    return (
-      <FormText
-        id="descricao"
-        label="Descrição"
-        value={value}
-        placeholder="Escreva algo"
-        height={4}
-        onChange={(e) => setValue(e.target.value)}
-      />
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexDirection: "column",
+          width: "30rem",
+        }}
+      >
+        <FormFile
+          id="input-file"
+          label="Input File"
+          value={value}
+          onChange={(e) => setValue(e.target.files)}
+        />
+        <FormFile
+          id="input-file-required"
+          required
+          accept="image/*"
+          label="Input File Required"
+          mimetype="Send image"
+          value={value}
+          onChange={(e) => setValue(e.target.files)}
+        />
+        <FormFile
+          id="input-file-disabled"
+          disabled
+          multiple
+          accept="video/*"
+          label="Input File Disabled"
+          mimetype="Choose videos"
+          value={value}
+          onChange={(e) => setValue(e.target.files)}
+        />
+      </div>
     );
   },
 };
