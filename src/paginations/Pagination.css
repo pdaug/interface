@@ -1,30 +1,30 @@
-.fadeui-pagination {
+.fz-pagination {
   align-items: center;
   display: flex;
   flex: 1;
 }
 
-.fadeui-pagination-data {
+.fz-pagination-data {
   display: flex;
   font-size: var(--text-small);
   flex: 1;
   gap: 0.2rem;
 }
 
-.fadeui-pagination-data span {
+.fz-pagination-data span {
   color: var(--font-light);
 }
 
-.fadeui-pagination-data b {
+.fz-pagination-data b {
   font-weight: 500;
 }
 
-.fadeui-pagination-buttons {
+.fz-pagination-buttons {
   align-items: center;
   display: flex;
 }
 
-.fadeui-pagination-buttons button {
+.fz-pagination-buttons button {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -34,17 +34,17 @@
   width: 3rem;
 }
 
-.fadeui-pagination-buttons button:hover {
+.fz-pagination-buttons button:hover {
   cursor: pointer;
 }
 
-.fadeui-pagination-buttons button:disabled {
+.fz-pagination-buttons button:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   cursor: not-allowed;
 }
 
-.fadeui-pagination-button-selected {
+.fz-pagination-button-selected {
   background: var(--info) !important;
   background-color: var(--info) !important;
   border-color: var(--info-dark) !important;
@@ -52,17 +52,17 @@
   cursor: default !important;
 }
 
-.fadeui-pagination-button-left {
+.fz-pagination-button-left {
   border-top-left-radius: var(--rounded);
   border-bottom-left-radius: var(--rounded);
 }
 
-.fadeui-pagination-button-center {
+.fz-pagination-button-center {
   border-left: none !important;
   border-right: none !important;
 }
 
-.fadeui-pagination-button-right {
+.fz-pagination-button-right {
   border-top-right-radius: var(--rounded);
   border-bottom-right-radius: var(--rounded);
 }

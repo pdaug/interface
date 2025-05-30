@@ -49,8 +49,8 @@ const Pagination = function ({
   };
 
   return (
-    <div className="fadeui-pagination">
-      <div className="fadeui-pagination-data">
+    <div className="fz-pagination">
+      <div className="fz-pagination-data">
         <span>Mostrando</span>
         <b>{pageCurrent}</b>
         <span>de</span>
@@ -59,18 +59,18 @@ const Pagination = function ({
         <b>{itemsTotal}</b>
         <span>items</span>
       </div>
-      <div className="fadeui-pagination-buttons">
+      <div className="fz-pagination-buttons">
         <button
           onClick={GoPageStart}
           disabled={pageCurrent === 1}
-          className="fadeui-pagination-button-left"
+          className="fz-pagination-button-left"
         >
           <CaretLeft />
         </button>
         {pageCurrent === pageTotal && (
           <button
             onClick={() => GoPage(2, "sub")}
-            className={`fadeui-pagination-button-center`}
+            className={`fz-pagination-button-center`}
           >
             {pageCurrent - 2}
           </button>
@@ -79,13 +79,13 @@ const Pagination = function ({
           <button
             onClick={GoPageBack}
             disabled={pageCurrent - 1 <= 0}
-            className={`fadeui-pagination-button-center`}
+            className={`fz-pagination-button-center`}
           >
             {pageCurrent - 1}
           </button>
         )}
         <button
-          className={`fadeui-pagination-button-center fadeui-pagination-button-selected`}
+          className={`fz-pagination-button-center fz-pagination-button-selected`}
         >
           {pageCurrent}
         </button>
@@ -93,7 +93,7 @@ const Pagination = function ({
           <button
             onClick={GoPageNext}
             disabled={pageCurrent + 1 > pageTotal}
-            className={`fadeui-pagination-button-center`}
+            className={`fz-pagination-button-center`}
           >
             {pageCurrent + 1}
           </button>
@@ -101,7 +101,7 @@ const Pagination = function ({
         {pageCurrent - 1 === 0 && (
           <button
             onClick={() => GoPage(2, "add")}
-            className={`fadeui-pagination-button-center`}
+            className={`fz-pagination-button-center`}
           >
             {pageCurrent + 2}
           </button>
@@ -109,7 +109,7 @@ const Pagination = function ({
         <button
           onClick={GoPageEnd}
           disabled={pageCurrent === pageTotal}
-          className="fadeui-pagination-button-right"
+          className="fz-pagination-button-right"
         >
           <CaretRight />
         </button>

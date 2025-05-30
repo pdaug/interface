@@ -2,7 +2,6 @@
 import "./App.css";
 
 // tests
-import PaginationTest from "./paginations/Pagination.test";
 import TableTest from "./tables/Table.test";
 
 const App = function () {
@@ -15,7 +14,6 @@ const App = function () {
         padding: "1rem",
       }}
     >
-      <PaginationTest />
       <TableTest />
     </div>
   );
