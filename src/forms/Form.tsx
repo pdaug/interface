@@ -282,16 +282,18 @@ const FormMask = function ({
 };
 
 export type FormMoneyProps = {
-  id: string;
+  id?: string;
   label: string;
   value: string;
+  currency?: string;
+  setCurrency?: (currency: string) => void;
   placeholder: string;
   disabled?: boolean;
   required?: boolean;
   name?: string;
   readOnly?: boolean;
   helper?: string;
-  onChange?: (digit: string) => void;
+  onChange?: (digit: string, currency: string) => void;
 };
 
 const FormMoney = function ({
@@ -299,6 +301,8 @@ const FormMoney = function ({
   label,
   value,
   name,
+  currency,
+  setCurrency,
   placeholder,
   disabled,
   required,
@@ -312,7 +316,9 @@ const FormMoney = function ({
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fz-form-money">
+      <div
+        className={`fz-form-money ${currency ? "fz-form-money-currency" : ""}`}
+      >
         <input
           id={id}
           type="text"
@@ -329,21 +335,17 @@ const FormMoney = function ({
           }}
           onKeyDown={function (event) {
             const valueParsed = Number(value);
-            if (valueParsed === 0 && event.key === "0") {
-              return;
-            }
+            if (valueParsed === 0 && event.key === "0") return;
             if (event.key === "Backspace" || event.key === "Delete") {
               const dotIndex = value.indexOf(".") - 1;
               const str = value.replace(/\D/g, "");
               const newValue = `${str.slice(0, dotIndex)}.${str.slice(dotIndex, str.length - 1)}`;
               if (onChange) {
-                onChange(newValue.padStart(4, "0"));
+                onChange(newValue.padStart(4, "0"), currency || "USD");
               }
               return;
             }
-            if (value.length > 8) {
-              return;
-            }
+            if (value.length > 9) return;
             const characterAllowed = "1234567890";
             if (characterAllowed.includes(event.key)) {
               const digit = parseInt(event.key);
@@ -352,18 +354,24 @@ const FormMoney = function ({
               const valueAdded = valueMultiplied + digitCents;
               const newValue = valueAdded.toFixed(2);
               if (onChange) {
-                onChange(newValue);
+                onChange(newValue, currency || "USD");
               }
               return;
             }
             return;
           }}
         />
-        <select disabled={disabled}>
-          <option value="usd">USD</option>
-          <option value="brl">BRL</option>
-          <option value="eur">EUR</option>
-        </select>
+        {currency && (
+          <select
+            value={currency}
+            disabled={disabled || readOnly}
+            onChange={(event) => setCurrency?.(event.currentTarget.value)}
+          >
+            <option value="USD">USD</option>
+            <option value="BRL">BRL</option>
+            <option value="EUR">EUR</option>
+          </select>
+        )}
       </div>
     </div>
   );
@@ -376,6 +384,8 @@ export type FormRadioOptions = {
 }[];
 
 export type FormRadioProps = {
+  id?: string;
+  label?: string;
   options: FormRadioOptions;
   value: string;
   name?: string;
@@ -384,6 +394,8 @@ export type FormRadioProps = {
 };
 
 const FormRadio = function ({
+  id,
+  label,
   name,
   options,
   value,
@@ -391,32 +403,35 @@ const FormRadio = function ({
   onChange,
 }: FormRadioProps) {
   return (
-    <div
-      className={`fz-form-radio ${horizontal ? "" : "fz-form-radio-vertical"}`}
-    >
-      {options?.map(function (option, index) {
-        return (
-          <label htmlFor={option.id} key={`${option.id}${index}`}>
-            <div className="fz-form-radio-option-content">
-              <div className="fz-form-radio-option"></div>
-            </div>
-            <input
-              name={name}
-              type="radio"
-              id={option.id}
-              value={option.value}
-              checked={value === option.value}
-              onChange={function () {
-                if (onChange) {
-                  onChange(option.value);
-                }
-                return;
-              }}
-            />
-            <span>{option.label}</span>
-          </label>
-        );
-      })}
+    <div className="fz-form-radio-container">
+      {label && <label htmlFor={id}>{label}</label>}
+      <div
+        className={`fz-form-radio ${horizontal ? "" : "fz-form-radio-vertical"}`}
+      >
+        {options?.map(function (option, index) {
+          return (
+            <label htmlFor={option.id} key={`${option.id}${index}`}>
+              <div className="fz-form-radio-option-content">
+                <div className="fz-form-radio-option"></div>
+              </div>
+              <input
+                name={name}
+                type="radio"
+                id={option.id}
+                value={option.value}
+                checked={value === option.value}
+                onChange={function () {
+                  if (onChange) {
+                    onChange(option.value);
+                  }
+                  return;
+                }}
+              />
+              <span>{option.label}</span>
+            </label>
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -426,12 +441,13 @@ export type FormSelectOptions = {
   value: string;
   text: string;
   disabled?: boolean;
-  optionGroup?: string;
+  group?: string;
 };
 
 export type FormSelectProps = {
-  id: string;
+  id?: string;
   label: string;
+  empty: string;
   value: string;
   options: FormSelectOptions[];
   disabled?: boolean;
@@ -443,6 +459,7 @@ export type FormSelectProps = {
 
 const FormSelect = function ({
   id,
+  empty,
   label,
   name,
   value,
@@ -456,12 +473,12 @@ const FormSelect = function ({
     default: [],
   };
   options.forEach(function (option) {
-    if (option?.optionGroup) {
-      if (Array.isArray(optionsGroupped?.[option.optionGroup])) {
-        optionsGroupped[option.optionGroup].push(option);
+    if (option?.group) {
+      if (Array.isArray(optionsGroupped?.[option.group])) {
+        optionsGroupped[option.group].push(option);
         return;
       }
-      optionsGroupped[option.optionGroup] = [option];
+      optionsGroupped[option.group] = [option];
       return;
     }
     optionsGroupped.default.push(option);
@@ -484,7 +501,7 @@ const FormSelect = function ({
         >
           {!value && (
             <option value="" disabled>
-              Nenhuma opção selecionada
+              {empty}
             </option>
           )}
           {Object.entries(optionsGroupped)?.map(function (

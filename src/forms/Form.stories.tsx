@@ -40,14 +40,14 @@ export const Input: StoryObj = {
         <FormInput
           required
           id="input-required"
-          label="Input with required"
+          label="Input with Required"
           value={value}
           placeholder="John Doe"
           onChange={(e) => setValue(e.target.value)}
         />
         <FormInput
-          id="input-validator"
-          label="Input with validator"
+          id="input-helper"
+          label="Input with Helper"
           value={value}
           placeholder="John Doe"
           helper={value.length ? "" : "Invalid"}
@@ -56,7 +56,7 @@ export const Input: StoryObj = {
         <FormInput
           readOnly
           id="input-readonly"
-          label="Input with readonly"
+          label="Input Read Only"
           value={value}
           placeholder="John Doe"
           onChange={(e) => setValue(e.target.value)}
@@ -64,7 +64,7 @@ export const Input: StoryObj = {
         <FormInput
           disabled
           id="input-disabled"
-          label="Input disabled"
+          label="Input Disabled"
           value={value}
           placeholder="John Doe"
           onChange={(e) => setValue(e.target.value)}
@@ -87,7 +87,7 @@ export const Number = () => {
     >
       <FormInput
         id="input-number"
-        label="Input number"
+        label="Input Number"
         type="number"
         value={value}
         placeholder="Type a number"
@@ -95,7 +95,7 @@ export const Number = () => {
       />
       <FormInput
         id="input-limit"
-        label="Input with limit"
+        label="Input Number with Limit"
         type="number"
         value={value}
         placeholder="Type a number"
@@ -106,7 +106,7 @@ export const Number = () => {
       />
       <FormInput
         id="input-step"
-        label="Input number float"
+        label="Input Number Float"
         type="number"
         value={value}
         placeholder="Type a number"
@@ -155,7 +155,7 @@ export const Date = () => {
     >
       <FormInput
         id="input-date"
-        label="Input date"
+        label="Input Date"
         type="date"
         value={value}
         placeholder="DD/MM/AAAA"
@@ -178,7 +178,7 @@ export const DateTime = () => {
     >
       <FormInput
         id="input-datetime"
-        label="Input date, hour and minutes"
+        label="Input Date, Hour and Minutes"
         type="datetime-local"
         value={value}
         placeholder="DD/MM/AAAA HH:MM:SS"
@@ -186,7 +186,7 @@ export const DateTime = () => {
       />
       <FormInput
         id="input-datetime"
-        label="Input date and time"
+        label="Input Date and Time"
         type="datetime-local"
         value={value}
         step={1}
@@ -211,7 +211,7 @@ export const Mask: StoryObj = {
       >
         <FormMask
           id="input-mask"
-          label="Input mask only number"
+          label="Input Mask only Numbers"
           mask="9999"
           value={value}
           placeholder="1234"
@@ -219,7 +219,7 @@ export const Mask: StoryObj = {
         />
         <FormMask
           id="input-mask"
-          label="Input mask only text"
+          label="Input Mask only Text"
           mask="AAA"
           value={value}
           placeholder="ABC"
@@ -227,7 +227,7 @@ export const Mask: StoryObj = {
         />
         <FormMask
           id="input-mask"
-          label="Input mask"
+          label="Input Mask Numbers and Text"
           mask="AAA-9999"
           value={value}
           placeholder="ABC-1234"
@@ -264,7 +264,7 @@ export const Check: StoryObj = {
         />
         <FormCheck
           value={terms}
-          label="Input check"
+          label="Input Check"
           onChange={(newTerms) => {
             setTerms(newTerms);
             console.log(newTerms);
@@ -273,7 +273,7 @@ export const Check: StoryObj = {
         />
         <FormCheck
           value={fruits}
-          label="Input check multiples"
+          label="Input Check Multiple"
           onChange={(newFruits) => {
             setFruits(newFruits);
             console.log(newFruits);
@@ -288,7 +288,7 @@ export const Check: StoryObj = {
         <FormCheck
           value={games}
           horizontal
-          label="Input check horizontal"
+          label="Input Check Horizontal"
           onChange={(newGames) => {
             setGames(newGames);
             console.log(newGames);
@@ -306,16 +306,55 @@ export const Check: StoryObj = {
 
 export const Radio: StoryObj = {
   render: () => {
+    const [gender, setGender] = useState("none");
     const [yesOrNot, setYesOrNot] = useState("yes");
+    const [yesNotOrMaybe, setYesNotOrMaybe] = useState("maybe");
     return (
-      <div style={{ display: "flex", gap: "1rem", width: "30rem" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexDirection: "column",
+          width: "30rem",
+        }}
+      >
         <FormRadio
-          name="input-radio"
+          name="input-radio-option"
+          value="option"
+          onChange={() => {}}
+          options={[{ id: "option", value: "option", label: "Option 1" }]}
+        />
+        <FormRadio
+          name="input-radio-label"
+          label="Input Radio Label"
           value={yesOrNot}
           onChange={setYesOrNot}
           options={[
             { id: "yes", value: "yes", label: "Yes" },
             { id: "no", value: "no", label: "No" },
+          ]}
+        />
+        <FormRadio
+          name="input-radio-multiple"
+          label="Input Radio Multiple"
+          value={yesNotOrMaybe}
+          onChange={setYesNotOrMaybe}
+          options={[
+            { id: "yes", value: "yes", label: "Yes" },
+            { id: "no", value: "no", label: "No" },
+            { id: "maybe", value: "maybe", label: "Maybe" },
+          ]}
+        />
+        <FormRadio
+          horizontal
+          name="input-radio-horizontal"
+          label="Input Radio Horizontal"
+          value={gender}
+          onChange={setGender}
+          options={[
+            { id: "male", value: "male", label: "Male" },
+            { id: "female", value: "female", label: "Female" },
+            { id: "none", value: "none", label: "None" },
           ]}
         />
       </div>
@@ -327,16 +366,76 @@ export const Select: StoryObj = {
   render: () => {
     const [value, setValue] = useState("");
     return (
-      <FormSelect
-        id="select-pais"
-        label="País"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        options={[
-          { id: "br", value: "br", text: "Brasil" },
-          { id: "us", value: "us", text: "Estados Unidos" },
-        ]}
-      />
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexDirection: "column",
+          width: "30rem",
+        }}
+      >
+        <FormSelect
+          label="Select"
+          value={value}
+          empty="No options selected"
+          onChange={(e) => setValue(e.target.value)}
+          options={[
+            { id: "br", value: "br", text: "Brazil" },
+            { id: "us", value: "us", text: "United States" },
+          ]}
+        />
+        <FormSelect
+          required
+          empty="No options selected"
+          label="Select with Required"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          options={[
+            { id: "br", value: "br", text: "Brazil" },
+            { id: "us", value: "us", text: "United States" },
+          ]}
+        />
+        <FormSelect
+          empty="No options selected"
+          label="Select with Helper"
+          helper={value ? "" : "Invalid"}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          options={[
+            { id: "br", value: "br", text: "Brazil" },
+            { id: "us", value: "us", text: "United States" },
+          ]}
+        />
+
+        <FormSelect
+          empty="No options selected"
+          label="Select with Group Option"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          options={[
+            { id: "br", value: "br", text: "Brazil", group: "America" },
+            { id: "cl", value: "cl", text: "Chile", group: "America" },
+            { id: "ar", value: "ar", text: "Argentina", group: "America" },
+            { id: "fr", value: "fr", text: "France", group: "Europe" },
+            {
+              id: "it",
+              value: "it",
+              text: "Italy",
+              group: "Europe",
+              disabled: true,
+            },
+          ]}
+        />
+
+        <FormSelect
+          disabled
+          empty="No options selected"
+          label="Select Disabled"
+          value={""}
+          onChange={() => {}}
+          options={[]}
+        />
+      </div>
     );
   },
 };
@@ -344,14 +443,70 @@ export const Select: StoryObj = {
 export const Money: StoryObj = {
   render: () => {
     const [value, setValue] = useState("0.00");
+    const [currency, setCurrency] = useState("USD");
     return (
-      <FormMoney
-        id="money"
-        label="Valor"
-        value={value}
-        placeholder="0,00"
-        onChange={(val) => setValue(val)}
-      />
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexDirection: "column",
+          width: "30rem",
+        }}
+      >
+        <FormMoney
+          label="Money"
+          value={value}
+          placeholder="0.00"
+          onChange={(val) => setValue(val)}
+        />
+        <FormMoney
+          required
+          label="Money with Required"
+          value={value}
+          placeholder="0.00"
+          onChange={(val) => setValue(val)}
+        />
+        <FormMoney
+          helper={parseFloat(value) ? "" : "No value"}
+          label="Money with Helper"
+          value={value}
+          placeholder="0.00"
+          onChange={(val) => setValue(val)}
+        />
+        <FormMoney
+          label="Money with Currency"
+          value={value}
+          currency={currency}
+          setCurrency={setCurrency}
+          placeholder="0.00"
+          onChange={(val) => setValue(val)}
+        />
+        <FormMoney
+          readOnly
+          currency={currency}
+          setCurrency={setCurrency}
+          label="Money Read Only"
+          value={value}
+          placeholder="0.00"
+          onChange={(val) => setValue(val)}
+        />
+        <FormMoney
+          disabled
+          label="Money Disabled"
+          value={value}
+          placeholder="0.00"
+          onChange={(val) => setValue(val)}
+        />
+        <FormMoney
+          disabled
+          currency={currency}
+          setCurrency={setCurrency}
+          label="Money Disabled With Currency"
+          value={value}
+          placeholder="0.00"
+          onChange={(val) => setValue(val)}
+        />
+      </div>
     );
   },
 };

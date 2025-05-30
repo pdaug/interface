@@ -93,9 +93,7 @@
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
-  border-radius: 0px;
-  border-top-left-radius: var(--rounded);
-  border-bottom-left-radius: var(--rounded);
+  border-radius: var(--rounded);
   box-sizing: border-box;
   flex: 1;
   line-height: 1;
@@ -106,10 +104,24 @@
   padding: 0 0.6rem;
 }
 
+.fz-form-money-currency input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .fz-form-money input:focus {
   border-color: var(--info);
-  border-right-color: var(--border);
   outline: none;
+}
+
+.fz-form-money-currency input:focus {
+  border-right-color: var(--border);
+}
+
+.fz-form-money input:read-only {
+  background: var(--background) !important;
+  background-color: var(--background) !important;
+  color: var(--font-light);
 }
 
 .fz-form-money input:disabled {
@@ -147,6 +159,13 @@
 }
 
 /* RADIO */
+.fz-form-radio-container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
 .fz-form-radio {
   display: flex;
   flex: 1;
