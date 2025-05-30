@@ -3,7 +3,7 @@ import "./Table.css";
 
 // components
 import Tooltip from "../tooltips/Tooltip";
-import { FormCheck } from "../forms/Form";
+import { FormCheck } from "../inputs/Input";
 
 export type TableColumn = {
   id: string;

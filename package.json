@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://pdaug.github.io/components",
+  "homepage": "https://pdaug.github.io/components/",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook-build": "storybook build"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",

@@ -2,162 +2,9 @@ import React from "react";
 import { withMask } from "use-mask-input";
 
 // styles
-import "./Form.css";
+import "./Input.css";
 
-export type FormCheckOption = {
-  id: string;
-  value: string;
-  label: string;
-};
-
-export type FormCheckProps<T extends string[] | boolean> = {
-  id?: string;
-  label?: string;
-  name?: string;
-  options: FormCheckOption[];
-  value: T;
-  horizontal?: boolean;
-  onChange?: (value: T) => void;
-};
-
-function FormCheck(props: FormCheckProps<string[]>): React.JSX.Element;
-function FormCheck(props: FormCheckProps<boolean>): React.JSX.Element;
-function FormCheck<T extends string[] | boolean>({
-  id,
-  name,
-  label,
-  options,
-  value,
-  horizontal = false,
-  onChange,
-}: FormCheckProps<T>) {
-  const option = options[0];
-  const isMultiple = Array.isArray(value);
-  return isMultiple ? (
-    <div className="fz-form-check-container">
-      {label && <label htmlFor={id}>{label}</label>}
-      <div
-        className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
-      >
-        {options.map((option) => (
-          <label htmlFor={option.id} key={option.id}>
-            <div className="fz-form-check-option-content">
-              <div className="fz-form-check-option" />
-            </div>
-            <input
-              type="checkbox"
-              id={option.id}
-              name={name}
-              value={option.value}
-              checked={value.includes(option.value)}
-              onChange={function () {
-                if (!onChange) return;
-                const exists = value.includes(option.value);
-                const updated = exists
-                  ? value.filter((valueState) => valueState !== option.value)
-                  : [...value, option.value];
-
-                onChange(updated as T);
-              }}
-            />
-            <span>{option.label}</span>
-          </label>
-        ))}
-      </div>
-    </div>
-  ) : (
-    <div className="fz-form-check-container">
-      {label && <label htmlFor={id}>{label}</label>}
-      <div
-        className={`fz-form-check ${!horizontal ? "fz-form-check-vertical" : ""}`}
-      >
-        <label htmlFor={option.id}>
-          <div className="fz-form-check-option-content">
-            <div className="fz-form-check-option" />
-          </div>
-          <input
-            type="checkbox"
-            id={option.id}
-            name={name}
-            checked={value}
-            onChange={function () {
-              if (!onChange) return;
-              onChange(!value as T);
-            }}
-          />
-          <span>{option.label}</span>
-        </label>
-      </div>
-    </div>
-  );
-}
-
-export type FormFileProps = {
-  id?: string;
-  label: string;
-  value?: File | FileList | null;
-  name?: string;
-  mimetype?: string;
-  multiple?: boolean;
-  disabled?: boolean;
-  required?: boolean;
-  helper?: string;
-  accept?: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
-};
-
-const FormFile = function ({
-  id,
-  label,
-  value,
-  name,
-  mimetype,
-  accept,
-  multiple,
-  onChange,
-  disabled,
-  required,
-  helper,
-}: FormFileProps) {
-  return (
-    <div className="fz-form">
-      <div className="fz-form-header" data-required={String(Boolean(required))}>
-        <label htmlFor={id}>{label}</label>
-        {helper && <span>{helper}</span>}
-      </div>
-      <label htmlFor={id} className="fz-form-file">
-        <button disabled={disabled}>{mimetype || "Choose file"}</button>
-        <input
-          id={id}
-          name={name}
-          type="file"
-          accept={accept}
-          multiple={multiple}
-          disabled={disabled}
-          required={required}
-          onChange={onChange}
-        />
-        <div
-          className={`fz-form-file-info ${disabled ? "fz-form-file-info-disabled" : ""}`}
-        >
-          <span>
-            {value instanceof File && value.name
-              ? value.name
-              : value instanceof FileList && value.length
-                ? Array.from(value)
-                    ?.map(function (file) {
-                      return file.name;
-                    })
-                    ?.join(", ")
-                : "No file chosen"}
-          </span>
-        </div>
-      </label>
-    </div>
-  );
-};
-
-export type FormInputProps = {
+export type InputProps = {
   id?: string;
   label: string;
   value: string;
@@ -175,7 +22,7 @@ export type FormInputProps = {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
-const FormInput = function ({
+const Input = function ({
   id,
   label,
   value,
@@ -191,14 +38,17 @@ const FormInput = function ({
   required,
   readOnly,
   helper,
-}: FormInputProps) {
+}: InputProps) {
   return (
-    <div className="fz-form">
-      <div className="fz-form-header" data-required={String(Boolean(required))}>
+    <div className="fz-input">
+      <div
+        className="fz-input-header"
+        data-required={String(Boolean(required))}
+      >
         <label htmlFor={id}>{label}</label>
         <span style={{ opacity: helper ? 1 : 0 }}>{helper || ""}</span>
       </div>
-      <div className="fz-form-content">
+      <div className="fz-input-content">
         <input
           id={id}
           name={name}
@@ -226,7 +76,163 @@ const FormInput = function ({
   );
 };
 
-export type FormMaskProps = {
+export type InputCheckOption = {
+  id: string;
+  value: string;
+  label: string;
+};
+
+export type InputCheckProps<T extends string[] | boolean> = {
+  id?: string;
+  label?: string;
+  name?: string;
+  options: InputCheckOption[];
+  value: T;
+  horizontal?: boolean;
+  onChange?: (value: T) => void;
+};
+
+function InputCheck(props: InputCheckProps<string[]>): React.JSX.Element;
+function InputCheck(props: InputCheckProps<boolean>): React.JSX.Element;
+function InputCheck<T extends string[] | boolean>({
+  id,
+  name,
+  label,
+  options,
+  value,
+  horizontal = false,
+  onChange,
+}: InputCheckProps<T>) {
+  const option = options[0];
+  const isMultiple = Array.isArray(value);
+  return isMultiple ? (
+    <div className="fz-input-check-container">
+      {label && <label htmlFor={id}>{label}</label>}
+      <div
+        className={`fz-input-check ${!horizontal ? "fz-input-check-vertical" : ""}`}
+      >
+        {options.map((option) => (
+          <label htmlFor={option.id} key={option.id}>
+            <div className="fz-input-check-option-content">
+              <div className="fz-input-check-option" />
+            </div>
+            <input
+              type="checkbox"
+              id={option.id}
+              name={name}
+              value={option.value}
+              checked={value.includes(option.value)}
+              onChange={function () {
+                if (!onChange) return;
+                const exists = value.includes(option.value);
+                const updated = exists
+                  ? value.filter((valueState) => valueState !== option.value)
+                  : [...value, option.value];
+
+                onChange(updated as T);
+              }}
+            />
+            <span>{option.label}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div className="fz-input-check-container">
+      {label && <label htmlFor={id}>{label}</label>}
+      <div
+        className={`fz-input-check ${!horizontal ? "fz-input-check-vertical" : ""}`}
+      >
+        <label htmlFor={option.id}>
+          <div className="fz-input-check-option-content">
+            <div className="fz-input-check-option" />
+          </div>
+          <input
+            type="checkbox"
+            id={option.id}
+            name={name}
+            checked={value}
+            onChange={function () {
+              if (!onChange) return;
+              onChange(!value as T);
+            }}
+          />
+          <span>{option.label}</span>
+        </label>
+      </div>
+    </div>
+  );
+}
+
+export type InputFileProps = {
+  id?: string;
+  label: string;
+  value?: File | FileList | null;
+  name?: string;
+  mimetype?: string;
+  multiple?: boolean;
+  disabled?: boolean;
+  required?: boolean;
+  helper?: string;
+  accept?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+};
+
+const InputFile = function ({
+  id,
+  label,
+  value,
+  name,
+  mimetype,
+  accept,
+  multiple,
+  onChange,
+  disabled,
+  required,
+  helper,
+}: InputFileProps) {
+  return (
+    <div className="fz-input">
+      <div
+        className="fz-input-header"
+        data-required={String(Boolean(required))}
+      >
+        <label htmlFor={id}>{label}</label>
+        {helper && <span>{helper}</span>}
+      </div>
+      <label htmlFor={id} className="fz-input-file">
+        <button disabled={disabled}>{mimetype || "Choose file"}</button>
+        <input
+          id={id}
+          name={name}
+          type="file"
+          accept={accept}
+          multiple={multiple}
+          disabled={disabled}
+          required={required}
+          onChange={onChange}
+        />
+        <div
+          className={`fz-input-file-info ${disabled ? "fz-input-file-info-disabled" : ""}`}
+        >
+          <span>
+            {value instanceof File && value.name
+              ? value.name
+              : value instanceof FileList && value.length
+                ? Array.from(value)
+                    ?.map(function (file) {
+                      return file.name;
+                    })
+                    ?.join(", ")
+                : "No file chosen"}
+          </span>
+        </div>
+      </label>
+    </div>
+  );
+};
+
+export type InputMaskProps = {
   id?: string;
   label: string;
   value: string;
@@ -243,7 +249,7 @@ export type FormMaskProps = {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
-const FormMask = function ({
+const InputMask = function ({
   id,
   label,
   value,
@@ -257,15 +263,18 @@ const FormMask = function ({
   required,
   readOnly,
   helper,
-}: FormMaskProps) {
+}: InputMaskProps) {
   const inputRef = withMask(mask);
   return (
-    <div className="fz-form">
-      <div className="fz-form-header" data-required={String(Boolean(required))}>
+    <div className="fz-input">
+      <div
+        className="fz-input-header"
+        data-required={String(Boolean(required))}
+      >
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fz-form-content">
+      <div className="fz-input-content">
         <input
           id={id}
           name={name}
@@ -285,7 +294,7 @@ const FormMask = function ({
   );
 };
 
-export type FormMoneyProps = {
+export type InputMoneyProps = {
   id?: string;
   label: string;
   value: string;
@@ -300,7 +309,7 @@ export type FormMoneyProps = {
   onChange?: (digit: string, currency: string) => void;
 };
 
-const FormMoney = function ({
+const InputMoney = function ({
   id,
   label,
   value,
@@ -313,15 +322,18 @@ const FormMoney = function ({
   helper,
   readOnly,
   onChange,
-}: FormMoneyProps) {
+}: InputMoneyProps) {
   return (
-    <div className="fz-form">
-      <div className="fz-form-header" data-required={String(Boolean(required))}>
+    <div className="fz-input">
+      <div
+        className="fz-input-header"
+        data-required={String(Boolean(required))}
+      >
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
       <div
-        className={`fz-form-money ${currency ? "fz-form-money-currency" : ""}`}
+        className={`fz-input-money ${currency ? "fz-input-money-currency" : ""}`}
       >
         <input
           id={id}
@@ -381,23 +393,23 @@ const FormMoney = function ({
   );
 };
 
-export type FormRadioOptions = {
+export type InputRadioOptions = {
   id: string;
   value: string;
   label: string;
 }[];
 
-export type FormRadioProps = {
+export type InputRadioProps = {
   id?: string;
   label?: string;
-  options: FormRadioOptions;
+  options: InputRadioOptions;
   value: string;
   name?: string;
   horizontal?: boolean;
   onChange?: (value: string) => void;
 };
 
-const FormRadio = function ({
+const InputRadio = function ({
   id,
   label,
   name,
@@ -405,18 +417,18 @@ const FormRadio = function ({
   value,
   horizontal,
   onChange,
-}: FormRadioProps) {
+}: InputRadioProps) {
   return (
-    <div className="fz-form-radio-container">
+    <div className="fz-input-radio-container">
       {label && <label htmlFor={id}>{label}</label>}
       <div
-        className={`fz-form-radio ${horizontal ? "" : "fz-form-radio-vertical"}`}
+        className={`fz-input-radio ${horizontal ? "" : "fz-input-radio-vertical"}`}
       >
         {options?.map(function (option, index) {
           return (
             <label htmlFor={option.id} key={`${option.id}${index}`}>
-              <div className="fz-form-radio-option-content">
-                <div className="fz-form-radio-option"></div>
+              <div className="fz-input-radio-option-content">
+                <div className="fz-input-radio-option"></div>
               </div>
               <input
                 name={name}
@@ -440,7 +452,7 @@ const FormRadio = function ({
   );
 };
 
-export type FormSelectOptions = {
+export type InputSelectOptions = {
   id: string;
   value: string;
   text: string;
@@ -448,12 +460,12 @@ export type FormSelectOptions = {
   group?: string;
 };
 
-export type FormSelectProps = {
+export type InputSelectProps = {
   id?: string;
   label: string;
   empty: string;
   value: string;
-  options: FormSelectOptions[];
+  options: InputSelectOptions[];
   disabled?: boolean;
   name?: string;
   required?: boolean;
@@ -461,7 +473,7 @@ export type FormSelectProps = {
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 };
 
-const FormSelect = function ({
+const InputSelect = function ({
   id,
   empty,
   label,
@@ -472,8 +484,8 @@ const FormSelect = function ({
   required,
   helper,
   onChange,
-}: FormSelectProps) {
-  const optionsGroupped: { [groupName: string]: FormSelectOptions[] } = {
+}: InputSelectProps) {
+  const optionsGroupped: { [groupName: string]: InputSelectOptions[] } = {
     default: [],
   };
   options.forEach(function (option) {
@@ -489,12 +501,15 @@ const FormSelect = function ({
     return;
   });
   return (
-    <div className="fz-form">
-      <div className="fz-form-header" data-required={String(Boolean(required))}>
+    <div className="fz-input">
+      <div
+        className="fz-input-header"
+        data-required={String(Boolean(required))}
+      >
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fz-form-content">
+      <div className="fz-input-content">
         <select
           id={id}
           name={name}
@@ -547,7 +562,7 @@ const FormSelect = function ({
   );
 };
 
-export type FormTextProps = {
+export type InputTextProps = {
   id?: string;
   label: string;
   value: string;
@@ -564,7 +579,7 @@ export type FormTextProps = {
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
 };
 
-const FormText = function ({
+const InputText = function ({
   id,
   label,
   value,
@@ -579,14 +594,17 @@ const FormText = function ({
   helper,
   height,
   resize,
-}: FormTextProps) {
+}: InputTextProps) {
   return (
-    <div className="fz-form">
-      <div className="fz-form-header" data-required={String(Boolean(required))}>
+    <div className="fz-input">
+      <div
+        className="fz-input-header"
+        data-required={String(Boolean(required))}
+      >
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fz-form-content">
+      <div className="fz-input-content">
         <textarea
           id={id}
           name={name}
@@ -607,12 +625,12 @@ const FormText = function ({
 };
 
 export {
-  FormCheck,
-  FormFile,
-  FormInput,
-  FormMask,
-  FormMoney,
-  FormRadio,
-  FormSelect,
-  FormText,
+  Input,
+  InputCheck,
+  InputFile,
+  InputMask,
+  InputMoney,
+  InputRadio,
+  InputSelect,
+  InputText,
 };

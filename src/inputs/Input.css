@@ -1,4 +1,4 @@
-.fz-form {
+.fz-input {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -6,12 +6,12 @@
   overflow: hidden;
 }
 
-.fz-form-header {
+.fz-input-header {
   align-items: center;
   display: flex;
 }
 
-.fz-form-header[data-required="true"] label::before {
+.fz-input-header[data-required="true"] label::before {
   content: "*";
   color: var(--danger);
   font-size: var(--text-small);
@@ -19,14 +19,14 @@
   padding-right: 0.2rem;
 }
 
-.fz-form label {
+.fz-input label {
   font-size: var(--text-small);
   font-weight: 400;
   line-height: 1;
   flex: 1;
 }
 
-.fz-form-header span {
+.fz-input-header span {
   color: var(--danger);
   font-size: var(--text-small);
   font-weight: 400;
@@ -34,14 +34,14 @@
   transition: 600ms;
 }
 
-.fz-form-content {
+.fz-input-content {
   display: flex;
   flex: 1;
 }
 
-.fz-form-content input,
-.fz-form-content select,
-.fz-form-content textarea {
+.fz-input-content input,
+.fz-input-content select,
+.fz-input-content textarea {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -56,21 +56,21 @@
   padding: 0 0.8rem;
 }
 
-.fz-form-content textarea {
+.fz-input-content textarea {
   height: auto !important;
   padding: 0.8rem !important;
 }
 
-.fz-form-content input:focus,
-.fz-form-content select:focus,
-.fz-form-content textarea:focus {
+.fz-input-content input:focus,
+.fz-input-content select:focus,
+.fz-input-content textarea:focus {
   border-color: var(--info);
   outline: none;
 }
 
-.fz-form-content input:disabled,
-.fz-form-content select:disabled,
-.fz-form-content textarea:disabled {
+.fz-input-content input:disabled,
+.fz-input-content select:disabled,
+.fz-input-content textarea:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   color: var(--font-light);
@@ -78,18 +78,18 @@
   opacity: 1;
 }
 
-.fz-form-content input:read-only {
+.fz-input-content input:read-only {
   background: var(--background) !important;
   background-color: var(--background) !important;
   color: var(--font-light);
 }
 
 /* MONEY */
-.fz-form-money {
+.fz-input-money {
   display: flex;
 }
 
-.fz-form-money input {
+.fz-input-money input {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -104,27 +104,27 @@
   padding: 0 0.6rem;
 }
 
-.fz-form-money-currency input {
+.fz-input-money-currency input {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.fz-form-money input:focus {
+.fz-input-money input:focus {
   border-color: var(--info);
   outline: none;
 }
 
-.fz-form-money-currency input:focus {
+.fz-input-money-currency input:focus {
   border-right-color: var(--border);
 }
 
-.fz-form-money input:read-only {
+.fz-input-money input:read-only {
   background: var(--background) !important;
   background-color: var(--background) !important;
   color: var(--font-light);
 }
 
-.fz-form-money input:disabled {
+.fz-input-money input:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   color: var(--font-light);
@@ -132,7 +132,7 @@
   opacity: 1;
 }
 
-.fz-form-money select {
+.fz-input-money select {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -147,11 +147,11 @@
   user-select: none;
 }
 
-.fz-form-money:has(input:focus) select {
+.fz-input-money:has(input:focus) select {
   border-color: var(--info);
 }
 
-.fz-form-money select:disabled {
+.fz-input-money select:disabled {
   background: var(--background);
   background-color: var(--background);
   cursor: not-allowed;
@@ -159,31 +159,31 @@
 }
 
 /* RADIO */
-.fz-form-radio-container {
+.fz-input-radio-container {
   display: flex;
   flex: 1;
   flex-direction: column;
   gap: 0.6rem;
 }
 
-.fz-form-radio {
+.fz-input-radio {
   display: flex;
   flex: 1;
   gap: 0.6rem;
 }
 
-.fz-form-radio-vertical {
+.fz-input-radio-vertical {
   flex-direction: column;
 }
 
-.fz-form-radio label {
+.fz-input-radio label {
   align-items: center;
   display: flex;
   gap: 0.4rem;
   flex: 1;
 }
 
-.fz-form-radio-option {
+.fz-input-radio-option {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -196,12 +196,12 @@
   width: 16px;
 }
 
-.fz-form-radio-option:hover {
+.fz-input-radio-option:hover {
   cursor: pointer;
   transition: 200ms;
 }
 
-.fz-form-radio label:has(input:checked) .fz-form-radio-option {
+.fz-input-radio label:has(input:checked) .fz-input-radio-option {
   align-items: center;
   border: 1px solid var(--info);
   color: var(--info);
@@ -210,7 +210,7 @@
   transition: 200ms;
 }
 
-.fz-form-radio label:has(input:checked) .fz-form-radio-option::after {
+.fz-input-radio label:has(input:checked) .fz-input-radio-option::after {
   background: var(--info);
   background-color: var(--info);
   border-radius: 100%;
@@ -221,14 +221,14 @@
   width: 10px;
 }
 
-.fz-form-radio label input[type="radio"] {
+.fz-input-radio label input[type="radio"] {
   appearance: none;
   display: none;
   margin: 0;
   padding: 0;
 }
 
-.fz-form-radio label span {
+.fz-input-radio label span {
   color: var(--font);
   cursor: pointer;
   font-size: var(--text-small);
@@ -237,31 +237,31 @@
 }
 
 /* CHECK */
-.fz-form-check-container {
+.fz-input-check-container {
   display: flex;
   flex: 1;
   flex-direction: column;
   gap: 0.6rem;
 }
 
-.fz-form-check {
+.fz-input-check {
   display: flex;
   flex: 1;
   gap: 0.6rem;
 }
 
-.fz-form-check-vertical {
+.fz-input-check-vertical {
   flex-direction: column;
 }
 
-.fz-form-check label {
+.fz-input-check label {
   align-items: center;
   display: flex;
   gap: 0.4rem;
   flex: 1;
 }
 
-.fz-form-check-option {
+.fz-input-check-option {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -274,12 +274,12 @@
   width: 16px;
 }
 
-.fz-form-check-option:hover {
+.fz-input-check-option:hover {
   cursor: pointer;
   transition: 200ms;
 }
 
-.fz-form-check label:has(input:checked) .fz-form-check-option {
+.fz-input-check label:has(input:checked) .fz-input-check-option {
   align-items: center;
   border: 1px solid var(--info);
   color: var(--info);
@@ -288,7 +288,7 @@
   transition: 200ms;
 }
 
-.fz-form-check label:has(input:checked) .fz-form-check-option::after {
+.fz-input-check label:has(input:checked) .fz-input-check-option::after {
   background: var(--info);
   background-color: var(--info);
   border-radius: 2px;
@@ -299,14 +299,14 @@
   width: 10px;
 }
 
-.fz-form-check label input[type="checkbox"] {
+.fz-input-check label input[type="checkbox"] {
   appearance: none;
   display: none;
   margin: 0;
   padding: 0;
 }
 
-.fz-form-check label span {
+.fz-input-check label span {
   color: var(--font);
   cursor: pointer;
   font-size: var(--text-small);
@@ -315,20 +315,20 @@
 }
 
 /* FILE */
-.fz-form-file {
+.fz-input-file {
   display: flex;
   flex: 1;
   overflow: hidden;
 }
 
-.fz-form-file input {
+.fz-input-file input {
   appearance: none;
   display: none;
   margin: 0;
   padding: 0;
 }
 
-.fz-form-file button {
+.fz-input-file button {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -340,13 +340,13 @@
   padding: 0 0.6rem;
 }
 
-.fz-form-file button:disabled {
+.fz-input-file button:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   cursor: not-allowed;
 }
 
-.fz-form-file-info {
+.fz-input-file-info {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -364,13 +364,13 @@
   padding: 0 0.6rem;
 }
 
-.fz-form-file-info-disabled {
+.fz-input-file-info-disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   cursor: not-allowed;
 }
 
-.fz-form-file-info span {
+.fz-input-file-info span {
   color: var(--font-light);
   font-size: var(--text-small);
   font-weight: 400;

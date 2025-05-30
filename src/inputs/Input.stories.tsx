@@ -1,20 +1,20 @@
-// Form.stories.tsx
+// Input.stories.tsx
 import { useState } from "react";
 import type { StoryObj } from "@storybook/react";
 
 import {
-  FormCheck,
-  FormFile,
-  FormInput,
-  FormMask,
-  FormMoney,
-  FormRadio,
-  FormSelect,
-  FormText,
-} from "./Form";
+  Input,
+  InputCheck,
+  InputFile,
+  InputMask,
+  InputMoney,
+  InputRadio,
+  InputSelect,
+  InputText,
+} from "./Input";
 
 export default {
-  title: "Components/Form",
+  title: "Components/Input",
   tags: ["autodocs"],
 };
 
@@ -30,41 +30,41 @@ export const Text: StoryObj = {
           width: "30rem",
         }}
       >
-        <FormInput
+        <Input
           label="Input Text"
           value={value}
           placeholder="John Doe"
           onChange={(e) => setValue(e.target.value)}
         />
-        <FormInput
+        <Input
           required
           label="Input with Required"
           value={value}
           placeholder="John Doe"
           onChange={(e) => setValue(e.target.value)}
         />
-        <FormInput
+        <Input
           label="Input with Helper"
           value={value}
           placeholder="John Doe"
           helper={value.length ? "" : "Invalid"}
           onChange={(e) => setValue(e.target.value)}
         />
-        <FormInput
+        <Input
           readOnly
           label="Input Read Only"
           value={value}
           placeholder="John Doe"
           onChange={(e) => setValue(e.target.value)}
         />
-        <FormInput
+        <Input
           disabled
           label="Input Disabled"
           value={value}
           placeholder="John Doe"
           onChange={(e) => setValue(e.target.value)}
         />
-        <FormText
+        <InputText
           label="Input Text Area"
           value={value}
           placeholder="Type here your name"
@@ -88,14 +88,14 @@ export const Number = () => {
         width: "30rem",
       }}
     >
-      <FormInput
+      <Input
         label="Input Number"
         type="number"
         value={value}
         placeholder="Type a number"
         onChange={(e) => setValue(e.target.value)}
       />
-      <FormInput
+      <Input
         label="Input Number with Limit"
         type="number"
         value={value}
@@ -105,7 +105,7 @@ export const Number = () => {
         max={100}
         step={1}
       />
-      <FormInput
+      <Input
         label="Input Number Float"
         type="number"
         value={value}
@@ -130,7 +130,7 @@ export const Password = () => {
         width: "30rem",
       }}
     >
-      <FormInput
+      <Input
         label="Password"
         type="password"
         value={value}
@@ -152,7 +152,7 @@ export const Date = () => {
         width: "30rem",
       }}
     >
-      <FormInput
+      <Input
         label="Input Date"
         type="date"
         value={value}
@@ -174,14 +174,14 @@ export const DateTime = () => {
         width: "30rem",
       }}
     >
-      <FormInput
+      <Input
         label="Input Date, Hour and Minutes"
         type="datetime-local"
         value={value}
         placeholder="DD/MM/AAAA HH:MM:SS"
         onChange={(e) => setValue(e.target.value)}
       />
-      <FormInput
+      <Input
         label="Input Date and Time"
         type="datetime-local"
         value={value}
@@ -205,21 +205,21 @@ export const Mask: StoryObj = {
           width: "30rem",
         }}
       >
-        <FormMask
+        <InputMask
           label="Input Mask only Numbers"
           mask="9999"
           value={value}
           placeholder="1234"
           onChange={(e) => setValue(e.target.value)}
         />
-        <FormMask
+        <InputMask
           label="Input Mask only Text"
           mask="AAA"
           value={value}
           placeholder="ABC"
           onChange={(e) => setValue(e.target.value)}
         />
-        <FormMask
+        <InputMask
           label="Input Mask Numbers and Text"
           mask="AAA-9999"
           value={value}
@@ -247,7 +247,7 @@ export const Check: StoryObj = {
           width: "30rem",
         }}
       >
-        <FormCheck
+        <InputCheck
           value={checked}
           onChange={(newChecked) => {
             setChecked(newChecked);
@@ -255,7 +255,7 @@ export const Check: StoryObj = {
           }}
           options={[{ id: "check", value: "check", label: "Without label" }]}
         />
-        <FormCheck
+        <InputCheck
           value={terms}
           label="Input Check"
           onChange={(newTerms) => {
@@ -264,7 +264,7 @@ export const Check: StoryObj = {
           }}
           options={[{ id: "agree", value: "agree", label: "Agree" }]}
         />
-        <FormCheck
+        <InputCheck
           value={fruits}
           label="Input Check Multiple"
           onChange={(newFruits) => {
@@ -278,7 +278,7 @@ export const Check: StoryObj = {
             { id: "kiwi", value: "kiwi", label: "Kiwi" },
           ]}
         />
-        <FormCheck
+        <InputCheck
           value={games}
           horizontal
           label="Input Check Horizontal"
@@ -311,13 +311,13 @@ export const Radio: StoryObj = {
           width: "30rem",
         }}
       >
-        <FormRadio
+        <InputRadio
           name="input-radio-option"
           value="option"
           onChange={() => {}}
           options={[{ id: "option", value: "option", label: "Option 1" }]}
         />
-        <FormRadio
+        <InputRadio
           name="input-radio-label"
           label="Input Radio Label"
           value={yesOrNot}
@@ -327,7 +327,7 @@ export const Radio: StoryObj = {
             { id: "no", value: "no", label: "No" },
           ]}
         />
-        <FormRadio
+        <InputRadio
           name="input-radio-multiple"
           label="Input Radio Multiple"
           value={yesNotOrMaybe}
@@ -338,7 +338,7 @@ export const Radio: StoryObj = {
             { id: "maybe", value: "maybe", label: "Maybe" },
           ]}
         />
-        <FormRadio
+        <InputRadio
           horizontal
           name="input-radio-horizontal"
           label="Input Radio Horizontal"
@@ -367,7 +367,7 @@ export const Select: StoryObj = {
           width: "30rem",
         }}
       >
-        <FormSelect
+        <InputSelect
           label="Select"
           value={value}
           empty="No options selected"
@@ -377,7 +377,7 @@ export const Select: StoryObj = {
             { id: "us", value: "us", text: "United States" },
           ]}
         />
-        <FormSelect
+        <InputSelect
           required
           empty="No options selected"
           label="Select with Required"
@@ -388,7 +388,7 @@ export const Select: StoryObj = {
             { id: "us", value: "us", text: "United States" },
           ]}
         />
-        <FormSelect
+        <InputSelect
           empty="No options selected"
           label="Select with Helper"
           helper={value ? "" : "Invalid"}
@@ -400,7 +400,7 @@ export const Select: StoryObj = {
           ]}
         />
 
-        <FormSelect
+        <InputSelect
           empty="No options selected"
           label="Select with Group Option"
           value={value}
@@ -420,7 +420,7 @@ export const Select: StoryObj = {
           ]}
         />
 
-        <FormSelect
+        <InputSelect
           disabled
           empty="No options selected"
           label="Select Disabled"
@@ -446,27 +446,27 @@ export const Money: StoryObj = {
           width: "30rem",
         }}
       >
-        <FormMoney
+        <InputMoney
           label="Money"
           value={value}
           placeholder="0.00"
           onChange={(val) => setValue(val)}
         />
-        <FormMoney
+        <InputMoney
           required
           label="Money with Required"
           value={value}
           placeholder="0.00"
           onChange={(val) => setValue(val)}
         />
-        <FormMoney
+        <InputMoney
           helper={parseFloat(value) ? "" : "No value"}
           label="Money with Helper"
           value={value}
           placeholder="0.00"
           onChange={(val) => setValue(val)}
         />
-        <FormMoney
+        <InputMoney
           label="Money with Currency"
           value={value}
           currency={currency}
@@ -474,7 +474,7 @@ export const Money: StoryObj = {
           placeholder="0.00"
           onChange={(val) => setValue(val)}
         />
-        <FormMoney
+        <InputMoney
           readOnly
           currency={currency}
           setCurrency={setCurrency}
@@ -483,14 +483,14 @@ export const Money: StoryObj = {
           placeholder="0.00"
           onChange={(val) => setValue(val)}
         />
-        <FormMoney
+        <InputMoney
           disabled
           label="Money Disabled"
           value={value}
           placeholder="0.00"
           onChange={(val) => setValue(val)}
         />
-        <FormMoney
+        <InputMoney
           disabled
           currency={currency}
           setCurrency={setCurrency}
@@ -516,13 +516,13 @@ export const File: StoryObj = {
           width: "30rem",
         }}
       >
-        <FormFile
+        <InputFile
           id="input-file"
           label="Input File"
           value={value}
           onChange={(e) => setValue(e.target.files)}
         />
-        <FormFile
+        <InputFile
           id="input-file-required"
           required
           accept="image/*"
@@ -531,7 +531,7 @@ export const File: StoryObj = {
           value={value}
           onChange={(e) => setValue(e.target.files)}
         />
-        <FormFile
+        <InputFile
           id="input-file-disabled"
           disabled
           multiple
