@@ -3,7 +3,7 @@ import "./Table.css";
 
 // components
 import Tooltip from "../tooltips/Tooltip";
-import { FormCheckSimple } from "../forms/Form";
+import { FormCheck } from "../forms/Form";
 
 export type TableColumn = {
   id: string;
@@ -16,7 +16,7 @@ export type TableData = {
   [columnId: string]:
     | {
         id: string;
-        value: React.ReactNode;
+        value: React.ReactElement | string;
         tooltip?: string;
       }
     | string;
@@ -59,7 +59,7 @@ const Table = function ({
                 style={{ maxWidth: column?.width }}
               >
                 {column.tooltip ? (
-                  <Tooltip content={column.tooltip} position="top">
+                  <Tooltip content={column.tooltip} placement="top">
                     {column.label}
                   </Tooltip>
                 ) : (
@@ -82,7 +82,7 @@ const Table = function ({
                   style={{ maxWidth: 32 }}
                   className="fadeui-table-body-data"
                 >
-                  <FormCheckSimple id={row.id} value="" />
+                  <FormCheck id={row.id} value={false} options={[]} />
                 </div>
               )}
               {columns?.map(function (column) {
@@ -102,7 +102,7 @@ const Table = function ({
                     style={{ maxWidth: column?.width }}
                   >
                     {rowData.tooltip ? (
-                      <Tooltip content={rowData.tooltip} position="top">
+                      <Tooltip content={rowData.tooltip} placement="top">
                         {rowData.value}
                       </Tooltip>
                     ) : (

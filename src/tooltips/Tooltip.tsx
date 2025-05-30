@@ -13,7 +13,7 @@ export type TooltipProps = {
   content: string;
   theme?: TooltipTheme;
   placement?: TooltipPlacement;
-  children: React.ReactElement;
+  children: React.ReactElement | string;
 };
 
 const Tooltip = function ({
