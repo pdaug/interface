@@ -1,7 +1,9 @@
+import React from "react";
 import { toast } from "sonner";
 
 import Button from "../buttons/Button";
 import { ToastElement } from "./Toast";
+import { Horizontal } from "../aligns/Align";
 
 export default {
   title: "components/Toast",
@@ -11,15 +13,9 @@ export default {
 
 export const All = () => {
   return (
-    <>
+    <React.Fragment>
       <ToastElement />
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          padding: "1rem",
-        }}
-      >
+      <Horizontal internal={1} styles={{ width: "30rem" }}>
         <Button
           category="primary"
           text="Primary"
@@ -65,7 +61,7 @@ export const All = () => {
             );
           }}
         />
-      </div>
-    </>
+      </Horizontal>
+    </React.Fragment>
   );
 };

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { StoryObj } from "@storybook/react";
 
+import { Horizontal } from "../aligns/Align";
 import Badge, { BadgeCategoriesList } from "./Badge";
 
 export default {
@@ -26,7 +27,7 @@ export const Default: StoryObj<typeof Badge> = {
 export const All: StoryObj<typeof Badge> = {
   render: () => {
     return (
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+      <Horizontal internal={1}>
         {BadgeCategoriesList.map((category) => (
           <Badge
             key={category}
@@ -34,7 +35,7 @@ export const All: StoryObj<typeof Badge> = {
             value={category.charAt(0).toUpperCase() + category.slice(1)}
           />
         ))}
-      </div>
+      </Horizontal>
     );
   },
 };

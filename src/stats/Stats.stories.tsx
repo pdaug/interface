@@ -1,6 +1,7 @@
 import type { StoryObj } from "@storybook/react";
 
 import Stats, { StatsProps } from "./Stats";
+import { Horizontal } from "../aligns/Align";
 
 export default {
   title: "Components/Stats",
@@ -36,7 +37,7 @@ export const Down: StoryObj<StatsProps> = {
 };
 
 export const Grouped = () => (
-  <div style={{ display: "flex", gap: "1rem" }}>
+  <Horizontal internal={1} styles={{ width: "30rem" }}>
     <Stats
       title="Inflow Ccash"
       metric={12.5}
@@ -58,5 +59,5 @@ export const Grouped = () => (
       value={4}
       valueUnit="points"
     />
-  </div>
+  </Horizontal>
 );

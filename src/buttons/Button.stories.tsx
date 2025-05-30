@@ -1,6 +1,7 @@
 import type { StoryObj } from "@storybook/react";
 import { Plus, Trash } from "@phosphor-icons/react";
 
+import { Horizontal } from "../aligns/Align";
 import Button, { ButtonCategories, ButtonCategoriesList } from "./Button";
 
 export default {
@@ -29,7 +30,7 @@ export const Default: StoryObj<typeof Button> = {
 export const All: StoryObj<typeof Button> = {
   render: () => {
     return (
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+      <Horizontal internal={1}>
         {ButtonCategoriesList.map((category) => (
           <Button
             key={category}
@@ -38,7 +39,7 @@ export const All: StoryObj<typeof Button> = {
             text={category.charAt(0).toUpperCase() + category.slice(1)}
           />
         ))}
-      </div>
+      </Horizontal>
     );
   },
 };
@@ -68,7 +69,7 @@ export const WithRightIcon: StoryObj<typeof Button> = {
 export const Disabled: StoryObj<typeof Button> = {
   render: () => {
     return (
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+      <Horizontal internal={1}>
         {ButtonCategoriesList.map((category) => (
           <Button
             disabled
@@ -77,7 +78,7 @@ export const Disabled: StoryObj<typeof Button> = {
             text={category.charAt(0).toUpperCase() + category.slice(1)}
           />
         ))}
-      </div>
+      </Horizontal>
     );
   },
 };

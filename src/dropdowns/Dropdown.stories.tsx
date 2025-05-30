@@ -1,11 +1,12 @@
-import { CopySimple } from "@phosphor-icons/react";
 import type { StoryObj } from "@storybook/react";
+import { CopySimple } from "@phosphor-icons/react";
 
 import Dropdown, {
   DropdownProps,
   DropdownCategories,
   DropdownCategoriesList,
 } from "./Dropdown";
+import { Horizontal } from "../aligns/Align";
 
 export default {
   title: "Components/Dropdown",
@@ -36,7 +37,7 @@ export default {
 export const All: StoryObj<typeof Dropdown> = {
   render: (args: DropdownProps) => {
     return (
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+      <Horizontal internal={1}>
         {DropdownCategoriesList.map((category) => (
           <Dropdown
             {...args}
@@ -45,7 +46,7 @@ export const All: StoryObj<typeof Dropdown> = {
             text={category.charAt(0).toUpperCase() + category.slice(1)}
           />
         ))}
-      </div>
+      </Horizontal>
     );
   },
 };

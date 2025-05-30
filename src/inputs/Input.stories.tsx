@@ -1,4 +1,3 @@
-// Input.stories.tsx
 import { useState } from "react";
 import type { StoryObj } from "@storybook/react";
 
@@ -12,6 +11,7 @@ import {
   InputSelect,
   InputText,
 } from "./Input";
+import { Vertical } from "../aligns/Align";
 
 export default {
   title: "Components/Input",
@@ -22,14 +22,7 @@ export const Text: StoryObj = {
   render: () => {
     const [value, setValue] = useState("");
     return (
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          flexDirection: "column",
-          width: "30rem",
-        }}
-      >
+      <Vertical internal={1} styles={{ width: "30rem" }}>
         <Input
           label="Input Text"
           value={value}
@@ -72,7 +65,7 @@ export const Text: StoryObj = {
           resize="vertical"
           onChange={(e) => setValue(e.target.value)}
         />
-      </div>
+      </Vertical>
     );
   },
 };
@@ -80,14 +73,7 @@ export const Text: StoryObj = {
 export const Number = () => {
   const [value, setValue] = useState("");
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "1rem",
-        flexDirection: "column",
-        width: "30rem",
-      }}
-    >
+    <Vertical internal={1} styles={{ width: "30rem" }}>
       <Input
         label="Input Number"
         type="number"
@@ -115,21 +101,14 @@ export const Number = () => {
         max={100}
         step={0.1}
       />
-    </div>
+    </Vertical>
   );
 };
 
 export const Password = () => {
   const [value, setValue] = useState("");
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "1rem",
-        flexDirection: "column",
-        width: "30rem",
-      }}
-    >
+    <Vertical internal={1} styles={{ width: "30rem" }}>
       <Input
         label="Password"
         type="password"
@@ -137,21 +116,14 @@ export const Password = () => {
         placeholder="**********"
         onChange={(e) => setValue(e.target.value)}
       />
-    </div>
+    </Vertical>
   );
 };
 
 export const Date = () => {
   const [value, setValue] = useState<string>("2025-01-01");
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "1rem",
-        flexDirection: "column",
-        width: "30rem",
-      }}
-    >
+    <Vertical internal={1} styles={{ width: "30rem" }}>
       <Input
         label="Input Date"
         type="date"
@@ -159,21 +131,14 @@ export const Date = () => {
         placeholder="DD/MM/AAAA"
         onChange={(e) => setValue(e.target.value)}
       />
-    </div>
+    </Vertical>
   );
 };
 
 export const DateTime = () => {
   const [value, setValue] = useState("2025-01-01T00:00:00");
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "1rem",
-        flexDirection: "column",
-        width: "30rem",
-      }}
-    >
+    <Vertical internal={1} styles={{ width: "30rem" }}>
       <Input
         label="Input Date, Hour and Minutes"
         type="datetime-local"
@@ -189,7 +154,7 @@ export const DateTime = () => {
         placeholder="DD/MM/AAAA HH:MM:SS"
         onChange={(e) => setValue(e.target.value)}
       />
-    </div>
+    </Vertical>
   );
 };
 
@@ -197,14 +162,7 @@ export const Mask: StoryObj = {
   render: () => {
     const [value, setValue] = useState("");
     return (
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          flexDirection: "column",
-          width: "30rem",
-        }}
-      >
+      <Vertical internal={1} styles={{ width: "30rem" }}>
         <InputMask
           label="Input Mask only Numbers"
           mask="9999"
@@ -226,7 +184,7 @@ export const Mask: StoryObj = {
           placeholder="ABC-1234"
           onChange={(e) => setValue(e.target.value)}
         />
-      </div>
+      </Vertical>
     );
   },
 };
@@ -237,16 +195,8 @@ export const Check: StoryObj = {
     const [terms, setTerms] = useState<boolean>(false);
     const [games, setGames] = useState<string[]>([""]);
     const [fruits, setFruits] = useState<string[]>(["apple"]);
-
     return (
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          flexDirection: "column",
-          width: "30rem",
-        }}
-      >
+      <Vertical internal={1} styles={{ width: "30rem" }}>
         <InputCheck
           value={checked}
           onChange={(newChecked) => {
@@ -292,7 +242,7 @@ export const Check: StoryObj = {
             { id: "pitfall", value: "pitfall", label: "Pitfall" },
           ]}
         />
-      </div>
+      </Vertical>
     );
   },
 };
@@ -303,14 +253,7 @@ export const Radio: StoryObj = {
     const [yesOrNot, setYesOrNot] = useState("yes");
     const [yesNotOrMaybe, setYesNotOrMaybe] = useState("maybe");
     return (
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          flexDirection: "column",
-          width: "30rem",
-        }}
-      >
+      <Vertical internal={1} styles={{ width: "30rem" }}>
         <InputRadio
           name="input-radio-option"
           value="option"
@@ -350,7 +293,7 @@ export const Radio: StoryObj = {
             { id: "none", value: "none", label: "None" },
           ]}
         />
-      </div>
+      </Vertical>
     );
   },
 };
@@ -359,14 +302,7 @@ export const Select: StoryObj = {
   render: () => {
     const [value, setValue] = useState("");
     return (
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          flexDirection: "column",
-          width: "30rem",
-        }}
-      >
+      <Vertical internal={1} styles={{ width: "30rem" }}>
         <InputSelect
           label="Select"
           value={value}
@@ -428,7 +364,7 @@ export const Select: StoryObj = {
           onChange={() => {}}
           options={[]}
         />
-      </div>
+      </Vertical>
     );
   },
 };
@@ -438,14 +374,7 @@ export const Money: StoryObj = {
     const [value, setValue] = useState("0.00");
     const [currency, setCurrency] = useState("USD");
     return (
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          flexDirection: "column",
-          width: "30rem",
-        }}
-      >
+      <Vertical internal={1} styles={{ width: "30rem" }}>
         <InputMoney
           label="Money"
           value={value}
@@ -499,7 +428,7 @@ export const Money: StoryObj = {
           placeholder="0.00"
           onChange={(val) => setValue(val)}
         />
-      </div>
+      </Vertical>
     );
   },
 };
@@ -508,14 +437,7 @@ export const File: StoryObj = {
   render: () => {
     const [value, setValue] = useState<FileList | null>(null);
     return (
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          flexDirection: "column",
-          width: "30rem",
-        }}
-      >
+      <Vertical internal={1} styles={{ width: "30rem" }}>
         <InputFile
           id="input-file"
           label="Input File"
@@ -541,7 +463,7 @@ export const File: StoryObj = {
           value={value}
           onChange={(e) => setValue(e.target.files)}
         />
-      </div>
+      </Vertical>
     );
   },
 };

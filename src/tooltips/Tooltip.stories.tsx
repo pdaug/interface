@@ -1,6 +1,7 @@
 import type { StoryObj } from "@storybook/react";
 
 import Button from "../buttons/Button";
+import { Horizontal } from "../aligns/Align";
 import Tooltip, { TooltipPlacement } from "./Tooltip";
 
 export default {
@@ -21,7 +22,7 @@ export const Light: StoryObj<typeof Tooltip> = {
   render: () => {
     const placements = ["top", "bottom", "left", "right"];
     return (
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+      <Horizontal internal={1} styles={{ width: "30rem" }}>
         {placements.map((placement) => (
           <Tooltip
             theme="light"
@@ -32,7 +33,7 @@ export const Light: StoryObj<typeof Tooltip> = {
             <Button text={placement} category="neutral" />
           </Tooltip>
         ))}
-      </div>
+      </Horizontal>
     );
   },
 };
@@ -41,7 +42,7 @@ export const Dark: StoryObj<typeof Tooltip> = {
   render: () => {
     const placements = ["top", "bottom", "left", "right"];
     return (
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+      <Horizontal internal={1} styles={{ width: "30rem" }}>
         {placements.map((placement) => (
           <Tooltip
             theme="dark"
@@ -52,7 +53,7 @@ export const Dark: StoryObj<typeof Tooltip> = {
             <Button text={placement} category="neutral" />
           </Tooltip>
         ))}
-      </div>
+      </Horizontal>
     );
   },
 };
