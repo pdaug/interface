@@ -13,7 +13,7 @@ export type TooltipProps = {
   content: string;
   theme?: TooltipTheme;
   placement?: TooltipPlacement;
-  children: React.ReactElement | string;
+  children: React.ReactElement | string | number | boolean;
 };
 
 const Tooltip = function ({
