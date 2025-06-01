@@ -11,6 +11,7 @@ export type ProfileProps = {
   photo?: string;
   photoSize?: number;
   padding?: boolean;
+  styles?: React.CSSProperties;
 };
 
 const Profile = function ({
@@ -20,9 +21,11 @@ const Profile = function ({
   name,
   description,
   padding = true,
+  styles,
 }: ProfileProps) {
   return (
     <div
+      style={styles}
       className={`fz-profile ${border ? "fz-profile-border" : ""} ${padding ? "fz-profile-padding" : ""}`}
     >
       <div>

@@ -1,7 +1,5 @@
 .fz-profile {
   align-items: center;
-  background: var(--foreground);
-  background-color: var(--foreground);
   border-radius: var(--rounded);
   display: flex;
   gap: 0.6rem;
