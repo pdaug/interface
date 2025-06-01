@@ -5,7 +5,7 @@ import { Vertical } from "../aligns/Align";
 
 const meta: Meta<typeof Pagination> = {
   title: "Components/Pagination",
-  component: Pagination,
+  tags: ["autodocs"],
 };
 
 export default meta;

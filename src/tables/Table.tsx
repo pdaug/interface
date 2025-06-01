@@ -1,116 +1,144 @@
+import { DotsThreeOutline } from "@phosphor-icons/react";
+
 // styles
 import "./Table.css";
 
 // components
 import Tooltip from "../tooltips/Tooltip";
-import { FormCheck } from "../inputs/Input";
+import { InputCheck } from "../inputs/Input";
+import Dropdown, { DropdownValues } from "../dropdowns/Dropdown";
 
 export type TableColumn = {
-  id: string;
-  label: string;
-  tooltip?: string;
-  width?: number | string;
+  [key: string]: {
+    label: string;
+    tooltip?: string;
+    maxWidth?: number | string;
+    handler?: (
+      data: TableData,
+      index: number,
+    ) => React.ReactElement | number | string;
+  };
 };
 
 export type TableData = {
-  [columnId: string]:
-    | {
-        id: string;
-        value: React.ReactElement | string;
-        tooltip?: string;
-      }
-    | string;
-};
-
-export type TableRow = {
   id: string;
-  datas: TableData;
+  [key: string]: string | number | boolean;
 };
 
 export type TableProps = {
-  columns: TableColumn[];
-  rows: TableRow[];
+  data: TableData[];
+  columns: TableColumn;
   border?: boolean;
-  checkbox?: boolean;
-  striped?: boolean;
+  selected?: string[];
+  setSelected?: React.Dispatch<React.SetStateAction<string[]>>;
+  options?: DropdownValues;
 };
 
 const Table = function ({
   columns,
-  rows,
+  data,
   border,
-  checkbox,
-  striped,
+  selected,
+  setSelected,
+  options,
 }: TableProps) {
+  const rowsId = data.map((item) => item.id);
+  const isSelectedRowsId = selected
+    ? rowsId.every((id) => selected.includes(id))
+    : false;
   return (
-    <div className={`fadeui-table ${border ? "fadeui-table-border" : ""}`}>
-      <div className="fadeui-table-head">
-        <div className="fadeui-table-head-row">
-          {checkbox && (
-            <div style={{ maxWidth: 32 }} className="fadeui-table-head-data">
-              #
-            </div>
-          )}
-          {columns?.map(function (column) {
+    <div className={`fz-table ${border ? "fz-table-border" : ""}`}>
+      <div className="fz-table-head">
+        <div className="fz-table-head-row">
+          <div style={{ maxWidth: 32 }} className="fz-table-head-data">
+            <InputCheck
+              value={isSelectedRowsId}
+              onChange={function () {
+                if (isSelectedRowsId) setSelected?.([]);
+                else setSelected?.(rowsId);
+                return;
+              }}
+              options={[
+                {
+                  id: "all",
+                  value: "all",
+                  label: "",
+                },
+              ]}
+            />
+          </div>
+          {Object.entries(columns)?.map(function (
+            [columnKey, columnValue],
+            index,
+          ) {
             return (
               <div
-                key={column.id}
-                className="fadeui-table-head-data"
-                style={{ maxWidth: column?.width }}
+                className="fz-table-head-data"
+                style={{ maxWidth: columnValue?.maxWidth }}
+                key={`table-head-data-${columnKey}-${index}`}
               >
-                {column.tooltip ? (
-                  <Tooltip content={column.tooltip} placement="top">
-                    {column.label}
-                  </Tooltip>
-                ) : (
-                  column.label
-                )}
+                {columnValue.label}
               </div>
             );
           })}
+          {options && (
+            <div style={{ maxWidth: 32 }} className="fz-table-head-data"></div>
+          )}
         </div>
       </div>
-      <div className="fadeui-table-body">
-        {rows?.map(function (row) {
+      <div className="fz-table-body">
+        {data?.map(function (row, indexRow) {
           return (
             <div
-              key={row.id}
-              className={`fadeui-table-body-row ${striped ? "fadeui-table-body-row-striped" : ""}`}
+              className={`fz-table-body-row ${selected?.includes(row.id) ? "fz-table-body-row-selected" : ""}`}
+              key={`table-body-row-${row.id}-${indexRow}`}
             >
-              {checkbox && (
-                <div
-                  style={{ maxWidth: 32 }}
-                  className="fadeui-table-body-data"
-                >
-                  <FormCheck id={row.id} value={false} options={[]} />
-                </div>
-              )}
-              {columns?.map(function (column) {
-                const rowData = row.datas?.[column.id];
-                return typeof rowData === "string" ? (
+              <div style={{ maxWidth: 32 }} className="fz-table-body-data">
+                <InputCheck
+                  value={selected || []}
+                  onChange={setSelected}
+                  options={[
+                    {
+                      id: row.id,
+                      value: row.id,
+                      label: "",
+                    },
+                  ]}
+                />
+              </div>
+              {Object.entries(columns)?.map(function (
+                [columnKey, columnValue],
+                indexColumn,
+              ) {
+                const rowData = row?.[columnKey];
+                const rowDataValue = columnValue.handler
+                  ? columnValue.handler(row, indexRow)
+                  : rowData;
+                return (
                   <div
-                    key={`${row.id}-${column.id}`}
-                    className="fadeui-table-body-data"
-                    style={{ maxWidth: column?.width }}
+                    className={"fz-table-body-data"}
+                    style={{ maxWidth: columnValue?.maxWidth }}
+                    key={`table-body-row-data-${row.id}-${columnKey}-${indexColumn}`}
                   >
-                    {rowData}
-                  </div>
-                ) : (
-                  <div
-                    key={rowData.id}
-                    className="fadeui-table-body-data"
-                    style={{ maxWidth: column?.width }}
-                  >
-                    {rowData.tooltip ? (
-                      <Tooltip content={rowData.tooltip} placement="top">
-                        {rowData.value}
+                    {columnValue.tooltip ? (
+                      <Tooltip content={columnValue.tooltip}>
+                        {rowDataValue}
                       </Tooltip>
                     ) : (
-                      rowData.value
+                      rowDataValue
                     )}
                   </div>
                 );
               })}
+              {options && (
+                <div style={{ maxWidth: 32 }} className="fz-table-body-data">
+                  <Dropdown values={options}>
+                    <div style={{ cursor: "pointer" }}>
+                      <DotsThreeOutline weight="fill" />
+                    </div>
+                  </Dropdown>
+                </div>
+              )}
             </div>
           );
         })}

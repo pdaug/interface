@@ -1,4 +1,4 @@
-.fadeui-table {
+.fz-table {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -9,43 +9,43 @@
   overflow: hidden;
 }
 
-.fadeui-table-border {
+.fz-table-border {
   border-style: solid !important;
   box-shadow: var(--shadow) !important;
 }
 
-.fadeui-table-border .fadeui-table-head {
+.fz-table-border .fz-table-head {
   background: var(--background);
   background-color: var(--background);
 }
 
-.fadeui-table-head-row {
+.fz-table-head-row {
   border-bottom: 1px solid var(--border);
   display: flex;
 }
 
-.fadeui-table-body-row {
+.fz-table-body-row {
   align-items: center;
   display: flex;
 }
 
-.fadeui-table-body-row-striped:nth-child(even) {
+.fz-table-body-row-selected {
   background: var(--background);
   background-color: var(--background);
 }
 
-.fadeui-table-body-row:not(:last-child) {
+.fz-table-body-row:not(:last-child) {
   border-bottom: 1px solid var(--border-light);
 }
 
-.fadeui-table-head-data {
+.fz-table-head-data {
   font-size: var(--text-paragraph);
-  font-weight: 500;
+  font-weight: 600;
   flex: 1;
   padding: 0.6rem 0.4rem;
 }
 
-.fadeui-table-body-data {
+.fz-table-body-data {
   font-size: var(--text-small);
   font-weight: 400;
   flex: 1;

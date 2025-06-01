@@ -1,199 +1,153 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import Table from "./Table";
 import Badge from "../badges/Badge";
 import Profile from "../profiles/Profile";
+import Table, { TableColumn } from "./Table";
+import { useState } from "react";
 
 const meta: Meta<typeof Table> = {
   title: "Components/Table",
-  component: Table,
+  tags: ["autodocs"],
 };
 
 export default meta;
 
-// Dados base
-const columns = [
-  { id: "brand", label: "Brand" },
-  { id: "model", label: "Model" },
-  { id: "year", label: "Year" },
-];
+const users: {
+  [key: number]: { name: string; description: string; photo: string };
+} = {
+  123: {
+    name: "Edward Cullen",
+    description: "Product Designer",
+    photo: "https://randomuser.me/api/portraits/men/75.jpg",
+  },
+};
 
-const rows = [
-  {
-    id: "1",
-    datas: {
-      brand: "Volkswagen",
-      model: "Polo",
-      year: "2024",
+// id, name, description, userId, createdAt
+const columns: TableColumn = {
+  status: {
+    label: "Status",
+    maxWidth: "96px",
+    handler: function (data) {
+      return (
+        <Badge
+          category={data.status ? "primary" : "danger"}
+          value={data.status ? "Active" : "Disabled"}
+        />
+      );
     },
   },
-  {
-    id: "2",
-    datas: {
-      brand: "Volkswagen",
-      model: "Nivus",
-      year: "2025",
+  name: { label: "Name" },
+  model: { label: "Model" },
+  description: { label: "Description" },
+  userId: {
+    label: "Owner",
+    maxWidth: "18%",
+    handler: function (data) {
+      const currentUser = users?.[data.userId as number];
+      return (
+        <Profile
+          padding={false}
+          name={currentUser.name}
+          photo={currentUser.photo}
+          description={currentUser.description}
+          photoSize={3}
+        />
+      );
     },
   },
-  {
-    id: "3",
-    datas: {
-      brand: "Volkswagen",
-      model: "Tcross",
-      year: "2025",
+  createdAt: {
+    label: "Created at",
+    handler: function (data) {
+      const dateFormatted = new Date(String(data.createdAt)).toLocaleString();
+      return dateFormatted;
     },
   },
-];
-
-const columnsStatus = [
-  { id: "status", label: "Status", width: "100px" },
-  { id: "brand", label: "Brand" },
-  { id: "model", label: "Model" },
-  { id: "year", label: "Year" },
-];
-
-const rowsStatus = [
+};
+const data = [
   {
-    id: "1",
-    datas: {
-      status: {
-        id: "1-status",
-        value: <Badge category="primary" value="Primary" />,
-      },
-      brand: "Volkswagen",
-      model: "Polo",
-      year: "2024",
-    },
+    id: "A123",
+    status: true,
+    name: "Volkswagen",
+    model: "Taos",
+    description:
+      "Volkswagen is a German automobile manufacturer based in Wolfsburg, Lower Saxony, Germany. Established in 1937 by The German Labour Front, it was revitalized into the global brand it is today after World War II by British Army officer Ivan Hirst. The company is well known for the Beetle and serves as the flagship marque of the Volkswagen Group, which became the world's largest automotive manufacturer by global sales in 2016 and 2017",
+    userId: 123,
+    createdAt: "2025-01-01T00:00:00.000Z",
   },
   {
-    id: "2",
-    datas: {
-      status: {
-        id: "2-status",
-        value: <Badge category="secondary" value="Secondary" />,
-      },
-      brand: "Volkswagen",
-      model: "Nivus",
-      year: "2025",
-    },
+    id: "B124",
+    name: "Fiat",
+    model: "500",
+    status: true,
+    description:
+      "Fiat Automobiles S.p.A., commonly known as simply Fiat, is an Italian automobile manufacturer. It became a part of Fiat Chrysler Automobiles in 2014 and, in 2021, became a subsidiary of Stellantis through its Italian division, Stellantis Europe.",
+    userId: 123,
+    createdAt: "2025-01-01T00:00:00.000Z",
   },
   {
-    id: "3",
-    datas: {
-      status: {
-        id: "3-status",
-        value: <Badge category="warn" value="Warning" />,
-      },
-      brand: "Volkswagen",
-      model: "Tcross",
-      year: "2025",
-    },
+    id: "C125",
+    name: "Renault",
+    model: "Clio",
+    status: false,
+    description:
+      "Renault S.A., commonly referred to as Groupe Renault, also known as the Renault Group in English), is a French multinational automobile manufacturer established in 1899. The company currently produces a range of cars and vans. It has manufactured trucks, tractors, tanks, buses/coaches, aircraft and aircraft engines, as well as autorail vehicles.",
+    userId: 123,
+    createdAt: "2025-01-01T00:00:00.000Z",
   },
   {
-    id: "4",
-    datas: {
-      status: {
-        id: "4-status",
-        value: <Badge category="danger" value="Danger" />,
-      },
-      brand: "Volkswagen",
-      model: "Taos",
-      year: "2026",
-    },
-  },
-  {
-    id: "5",
-    datas: {
-      status: {
-        id: "5-status",
-        value: <Badge category="neutral" value="Neutral" />,
-      },
-      brand: "Volkswagen",
-      model: "Saveiro",
-      year: "2023",
-    },
+    id: "D126",
+    name: "Peugeot",
+    model: "206",
+    status: false,
+    description:
+      "The family business that preceded the current Peugeot companies was established in 1810, making it the oldest car company in the world. On 20 November 1858, Émile Peugeot applied for the lion trademark. Armand Peugeot (1849-1915) built the company's first vehicle, a steam-powered tricycle. In 1886, the company collaborated with Léon Serpollet, followed by the development of an internal combustion car in 1890, which used a Panhard-Daimler engine.",
+    userId: 123,
+    createdAt: "2025-01-01T00:00:00.000Z",
   },
 ];
 
-const columnsProfile = [
-  { id: "status", label: "Status", width: "100px" },
-  { id: "brand", label: "Brand" },
-  { id: "profile", label: "Profile" },
-  { id: "model", label: "Model" },
-  { id: "year", label: "Year" },
-];
-
-const rowsProfile = [
-  {
-    id: "1",
-    datas: {
-      status: {
-        id: "1-status",
-        value: <Badge category="primary" value="Primary" />,
-      },
-      brand: "Volkswagen",
-      profile: {
-        id: "1-profile",
-        value: (
-          <Profile
-            name="Pedro Augusto"
-            description="Developer"
-            photo="http://picsum.photos/100/100"
-            padding={false}
-          />
-        ),
-      },
-      model: "Polo",
-      year: "2024",
-    },
-  },
-];
-
-// Stories
-
-export const Basic: StoryObj = {
-  name: "Basic Table",
-  args: {
-    columns,
-    rows,
+export const Default: StoryObj = {
+  render: () => {
+    const [selected, setSelected] = useState<string[]>([]);
+    return (
+      <Table
+        columns={columns}
+        data={data}
+        selected={selected}
+        setSelected={setSelected}
+      />
+    );
   },
 };
 
 export const WithBorder: StoryObj = {
-  name: "With Border",
-  args: {
-    columns: columnsStatus,
-    rows: rowsStatus,
-    border: true,
-  },
-};
-
-export const WithCheckbox: StoryObj = {
-  name: "With Checkbox",
-  args: {
-    columns: columnsStatus,
-    rows: rowsStatus,
-    border: true,
-    checkbox: true,
-  },
-};
-
-export const WithStripedRows: StoryObj = {
-  name: "Striped Rows with Checkbox",
-  args: {
-    columns: columnsStatus,
-    rows: rowsStatus,
-    border: true,
-    checkbox: true,
-    striped: true,
-  },
-};
-
-export const WithProfile: StoryObj = {
-  name: "With Profile Column",
-  args: {
-    columns: columnsProfile,
-    rows: rowsProfile,
-    border: true,
+  render: () => {
+    const [selected, setSelected] = useState<string[]>([]);
+    return (
+      <Table
+        border
+        columns={columns}
+        data={data}
+        selected={selected}
+        setSelected={setSelected}
+        options={[
+          {
+            id: "1",
+            label: "Paste",
+            onClick: () => alert(`Paste clicked!`),
+          },
+          {
+            id: "2",
+            label: "Copy",
+            onClick: () => alert(`Copy clicked!`),
+          },
+          {
+            id: "3",
+            label: "Delete",
+            disabled: true,
+          },
+        ]}
+      />
+    );
   },
 };

@@ -103,7 +103,7 @@ function InputCheck<T extends string[] | boolean>({
   horizontal = false,
   onChange,
 }: InputCheckProps<T>) {
-  const option = options[0];
+  const option = options?.[0];
   const isMultiple = Array.isArray(value);
   return isMultiple ? (
     <div className="fz-input-check-container">

@@ -20,11 +20,27 @@ export type DropdownProps = {
 const Dropdown = function ({ children, values }: DropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const dropdownContentRef = useRef<HTMLDivElement | null>(null);
 
   const ToggleDropdown = function () {
     setDropdownOpen(!dropdownOpen);
     return;
   };
+
+  useEffect(() => {
+    if (!dropdownOpen || !dropdownContentRef.current) return;
+    const dropdownEl = dropdownContentRef.current;
+    const rect = dropdownEl.getBoundingClientRect();
+    if (rect.right > window.innerWidth) {
+      dropdownEl.style.left = "auto";
+      dropdownEl.style.right = "0";
+    }
+    if (rect.bottom > window.innerHeight) {
+      dropdownEl.style.top = "auto";
+      dropdownEl.style.bottom = "100%";
+    }
+    return;
+  }, [dropdownOpen]);
 
   useEffect(function () {
     const HandleClickButton = function (event: MouseEvent) {
@@ -49,16 +65,14 @@ const Dropdown = function ({ children, values }: DropdownProps) {
     <div ref={dropdownRef} className="fz-dropdown">
       <div onClick={ToggleDropdown}>{children}</div>
       <div
-        style={{ display: dropdownOpen ? "flex" : "none" }}
-        className="fz-dropdown-content"
+        ref={dropdownContentRef}
+        className={`fz-dropdown-content ${dropdownOpen ? "open" : ""}`}
       >
         {values.map(function ({ id, label, Icon, disabled, onClick }) {
           const onClickWithClose = function (
             event: React.MouseEvent<HTMLButtonElement>,
           ) {
-            if (onClick) {
-              onClick(event);
-            }
+            onClick?.(event);
             setDropdownOpen(false);
             return;
           };
