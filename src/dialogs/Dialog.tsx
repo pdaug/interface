@@ -112,35 +112,34 @@ export const DialogElement = function () {
   }, []);
 
   return (
-    dialogProps?.open && (
-      <div className="fz-dialog">
-        <div ref={dialogContainerRef} className="fz-dialog-container">
-          <div className="fz-dialog-content">
-            <div className="fz-dialog-title">
-              {dialogProps.Icon && <dialogProps.Icon />}
-              <span>{dialogProps.title}</span>
-            </div>
-            <div className="fz-dialog-description">
-              {dialogProps.description}
-            </div>
+    <div className={`fz-dialog ${dialogProps?.open ? "open" : ""}`}>
+      <div
+        ref={dialogContainerRef}
+        className={`fz-dialog-container ${dialogProps?.open ? "open" : ""}`}
+      >
+        <div className="fz-dialog-content">
+          <div className="fz-dialog-title">
+            {dialogProps.Icon && <dialogProps.Icon />}
+            <span>{dialogProps.title}</span>
           </div>
-          <div className="fz-dialog-footer">
-            <Button
-              type="button"
-              text="Cancelar"
-              category="neutral"
-              onClick={dialogProps?.onCancel || CloseDialog}
-            />
-            <Button
-              type="submit"
-              Icon={dialogProps.confirmIcon}
-              text={dialogProps.confirmText}
-              category={dialogProps.category}
-              onClick={dialogProps.onConfirm}
-            />
-          </div>
+          <div className="fz-dialog-description">{dialogProps.description}</div>
+        </div>
+        <div className="fz-dialog-footer">
+          <Button
+            type="button"
+            text="Cancelar"
+            category="neutral"
+            onClick={dialogProps?.onCancel || CloseDialog}
+          />
+          <Button
+            type="submit"
+            Icon={dialogProps.confirmIcon}
+            text={dialogProps.confirmText}
+            category={dialogProps.category}
+            onClick={dialogProps.onConfirm}
+          />
         </div>
       </div>
-    )
+    </div>
   );
 };

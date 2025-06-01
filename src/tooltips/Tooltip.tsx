@@ -3,6 +3,7 @@ import Tippy from "@tippyjs/react";
 import { Placement } from "tippy.js";
 
 // styles
+import "./Tooltip.css";
 import "tippy.js/dist/tippy.css";
 
 export type TooltipTheme = "dark" | "light";

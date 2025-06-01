@@ -4,6 +4,7 @@
   gap: 0.4rem;
   flex: 1;
   overflow: hidden;
+  transition: 200ms;
 }
 
 .fz-input-header {
@@ -54,11 +55,13 @@
   margin: 0;
   line-height: 1;
   padding: 0 0.8rem;
+  transition: 200ms;
 }
 
 .fz-input-content textarea {
   height: auto !important;
   padding: 0.8rem !important;
+  transition: 200ms;
 }
 
 .fz-input-content input:focus,
@@ -66,6 +69,7 @@
 .fz-input-content textarea:focus {
   border-color: var(--info);
   outline: none;
+  transition: 200ms;
 }
 
 .fz-input-content input:disabled,

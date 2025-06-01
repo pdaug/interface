@@ -11,6 +11,18 @@
   top: 0;
   width: 100vw;
   z-index: 9;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: 200ms;
+  visibility: hidden;
+}
+
+.fz-dialog.open {
+  opacity: 1;
+  pointer-events: auto;
+  transition: 200ms;
+  visibility: visible;
 }
 
 .fz-dialog-container {
@@ -20,6 +32,20 @@
   border-radius: var(--rounded);
   overflow: hidden;
   width: 35rem;
+  
+  opacity: 0;
+  transform: scale(50%);
+  pointer-events: none;
+  transition: 200ms;
+  visibility: hidden;
+}
+
+.fz-dialog-container.open {
+  opacity: 1;
+  transform: scale(100%);
+  pointer-events: auto;
+  transition: 200ms;
+  visibility: visible;
 }
 
 .fz-dialog-content {
