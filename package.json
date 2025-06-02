@@ -19,6 +19,7 @@
     "@tippyjs/react": "^4.2.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "recharts": "^2.15.3",
     "sonner": "^2.0.3",
     "use-mask-input": "^3.4.2"
   },
