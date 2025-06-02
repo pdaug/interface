@@ -17,9 +17,19 @@ import { LayoutType, Margin } from "recharts/types/util/types";
 // styles
 import "./Chart.css";
 
-const ChartTooltip = function (props: unknown) {
-  console.log(props);
-  return <div className="fz-chart-tooltip"></div>;
+const ChartTooltip = function (props: TooltipProps<string, string>) {
+  return (
+    <div className="fz-chart-tooltip">
+      <div>{props.label}</div>
+      {props?.payload?.map(function (payload, index) {
+        return (
+          <div key={`payload-${index}`}>
+            {payload?.name} {payload?.value}
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 export type ChartLineData = {

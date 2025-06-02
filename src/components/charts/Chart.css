@@ -2,5 +2,14 @@
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--rounded);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 1rem;
+}
+
+.fz-chart-tooltip div {
+  line-height: 1;
+  font-size: var(--text-small);
 }
