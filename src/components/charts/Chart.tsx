@@ -1,4 +1,6 @@
 import {
+  Bar,
+  BarChart,
   CartesianGrid,
   CartesianGridProps,
   LegendProps,
@@ -20,11 +22,11 @@ import "./Chart.css";
 const ChartTooltip = function (props: TooltipProps<string, string>) {
   return (
     <div className="fz-chart-tooltip">
-      <div>{props.label}</div>
+      <div className="fz-chart-tooltip-title">{props.label}</div>
       {props?.payload?.map(function (payload, index) {
         return (
-          <div key={`payload-${index}`}>
-            {payload?.name} {payload?.value}
+          <div className="fz-chart-tooltip-payload" key={`payload-${index}`}>
+            {payload?.name}: {payload?.value}
           </div>
         );
       })}
@@ -32,18 +34,27 @@ const ChartTooltip = function (props: TooltipProps<string, string>) {
   );
 };
 
-export type ChartLineData = {
+export type ChartData = {
   [key: string]: number | string;
 };
 
-export type ChartLineProps = {
+export type ChartProps = {
   // container
   width?: string | number;
   height?: string | number;
   // chart
-  data: ChartLineData[];
+  data: ChartData[];
   margin?: Margin;
   layout?: LayoutType;
+  // elements
+  gridProps?: CartesianGridProps;
+  axisXProps?: XAxisProps;
+  axisYProps?: YAxisProps;
+  tooltipProps?: TooltipProps<"name", "value">;
+  legendProps?: LegendProps;
+};
+
+export type ChartLineProps = ChartProps & {
   lines: {
     dataKey: string;
     type?: Line["props"]["type"];
@@ -54,12 +65,6 @@ export type ChartLineProps = {
     strokeDasharray?: string;
     unit?: number;
   }[];
-  // others props
-  gridProps?: CartesianGridProps;
-  axisXProps?: XAxisProps;
-  axisYProps?: YAxisProps;
-  tooltipProps?: TooltipProps<"name", "value">;
-  legendProps?: LegendProps;
 };
 
 const ChartLine = function ({
@@ -91,4 +96,45 @@ const ChartLine = function ({
   );
 };
 
-export { ChartLine };
+export type ChartBarProps = ChartProps & {
+  bars: {
+    layout?: Bar["props"]["layout"];
+    dataKey: string;
+    label?: string;
+    barSize?: number;
+    barSizeMax?: number;
+    fill?: string;
+    stackId?: string;
+  }[];
+};
+
+const ChartBar = function ({
+  // container
+  width = "100%",
+  height = 480,
+  // chart
+  data,
+  layout = "horizontal",
+  margin = { top: 5, right: 5, left: 0, bottom: 5 },
+  bars,
+  // others props
+  gridProps,
+  axisXProps,
+  axisYProps,
+}: ChartBarProps) {
+  return (
+    <ResponsiveContainer width={width} height={height}>
+      <BarChart data={data} margin={margin} layout={layout}>
+        <CartesianGrid {...gridProps} />
+        <XAxis {...axisXProps} />
+        <YAxis {...axisYProps} />
+        <Tooltip content={<ChartTooltip />} />
+        {bars?.map(function (barsProps, index) {
+          return <Bar key={`chart-bar-${index}`} {...barsProps} />;
+        })}
+      </BarChart>
+    </ResponsiveContainer>
+  );
+};
+
+export { ChartLine, ChartBar };
