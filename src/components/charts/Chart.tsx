@@ -23,13 +23,24 @@ const ChartTooltip = function (props: TooltipProps<string, string>) {
   return (
     <div className="fz-chart-tooltip">
       <div className="fz-chart-tooltip-title">{props.label}</div>
-      {props?.payload?.map(function (payload, index) {
-        return (
-          <div className="fz-chart-tooltip-payload" key={`payload-${index}`}>
-            {payload?.name}: {payload?.value}
-          </div>
-        );
-      })}
+      <div className="fz-chart-tooltip-content">
+        {props?.payload?.map(function (payload, index) {
+          return (
+            <div className="fz-chart-tooltip-payload" key={`payload-${index}`}>
+              <div
+                style={{ background: payload?.stroke }}
+                className="fz-chart-tooltip-payload-square"
+              ></div>
+              <div className="fz-chart-tooltip-payload-name">
+                {payload?.name}
+              </div>
+              <div className="fz-chart-tooltip-payload-value">
+                {payload?.value}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -58,7 +69,7 @@ export type ChartLineProps = ChartProps & {
   lines: {
     dataKey: string;
     type?: Line["props"]["type"];
-    dot?: object;
+    dot?: object | boolean;
     label?: string;
     stroke?: string;
     strokeWidth?: number;

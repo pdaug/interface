@@ -2,7 +2,7 @@ import type { StoryObj } from "@storybook/react";
 
 import { ChartBar, ChartLine } from "./Chart";
 import Wrapper from "../wrapper/Wrapper";
-import { Vertical } from "../aligns/Align";
+import { Horizontal } from "../aligns/Align";
 
 export default {
   title: "Components/Chart",
@@ -12,14 +12,58 @@ export default {
 export const Line: StoryObj = {
   render: () => {
     return (
-      <Vertical internal={1} styles={{ width: "30rem" }}>
-        <Wrapper title="Chart Line">
+      <Horizontal internal={1} styles={{ width: "70rem" }}>
+        <Wrapper title="Chart Line Basic">
           <ChartLine
-            height={400}
+            height={320}
+            gridProps={{
+              stroke: "#dedede",
+              horizontal: true,
+              vertical: false,
+            }}
+            lines={[
+              {
+                dot: false,
+                type: "monotone",
+                dataKey: "customer",
+                stroke: "#22c55e",
+                strokeDasharray: "1",
+                strokeWidth: 4,
+              },
+            ]}
+            axisXProps={{
+              stroke: "",
+              strokeWidth: 0,
+              dataKey: "weekday",
+              tick: { fontSize: 10, fill: "#222" },
+              interval: 0,
+              padding: { left: 10, right: 10 },
+            }}
+            axisYProps={{
+              tick: { fontSize: 0, fill: "#222" },
+              stroke: "",
+              strokeWidth: 0,
+              width: 5,
+            }}
+            data={[
+              { weekday: "Mon", customer: 5 },
+              { weekday: "Tue", customer: 13 },
+              { weekday: "Wed", customer: 20 },
+              { weekday: "Thu", customer: 20 },
+              { weekday: "Fri", customer: 25 },
+              { weekday: "Sat", customer: 6 },
+              { weekday: "Sun", customer: 0 },
+            ]}
+          />
+        </Wrapper>
+        <Wrapper title="Chart Line Full">
+          <ChartLine
+            height={320}
             gridProps={{
               stroke: "#dedede",
               strokeWidth: 1,
-              strokeDasharray: "8 8",
+              vertical: false,
+              horizontal: true,
             }}
             lines={[
               {
@@ -27,49 +71,51 @@ export const Line: StoryObj = {
                 dataKey: "temperature",
                 stroke: "#22c55e",
                 strokeDasharray: "1",
-                strokeWidth: 2,
+                strokeWidth: 4,
+                dot: false,
               },
               {
                 type: "monotone",
                 dataKey: "humidity",
                 stroke: "#0ea5e9",
                 strokeDasharray: "1",
-                strokeWidth: 2,
+                strokeWidth: 4,
+                dot: false,
               },
             ]}
             axisXProps={{
               angle: 20,
               stroke: "#bebebe",
               strokeWidth: 1,
-              dataKey: "name",
+              dataKey: "time",
               tick: { fontSize: 10, fill: "#222" },
               interval: 0,
               padding: { left: 10, right: 10 },
             }}
             axisYProps={{
               tick: { fontSize: 10, fill: "#222" },
-              stroke: "#bebebe",
-              strokeWidth: 1,
+              stroke: "",
+              strokeWidth: 0,
               width: 24,
             }}
             data={[
-              { name: "06:00", temperature: 12, humidity: 41 },
-              { name: "07:00", temperature: 13, humidity: 41 },
-              { name: "08:00", temperature: 15, humidity: 41 },
-              { name: "09:00", temperature: 18, humidity: 41 },
-              { name: "10:00", temperature: 21, humidity: 40 },
-              { name: "11:00", temperature: 21, humidity: 39 },
-              { name: "12:00", temperature: 22, humidity: 39 },
-              { name: "13:00", temperature: 23, humidity: 38 },
-              { name: "14:00", temperature: 22, humidity: 39 },
-              { name: "15:00", temperature: 22, humidity: 41 },
-              { name: "16:00", temperature: 22, humidity: 42 },
-              { name: "17:00", temperature: 21, humidity: 42 },
-              { name: "18:00", temperature: 20, humidity: 42 },
+              { time: "06:00", temperature: 9, humidity: 50 },
+              { time: "07:00", temperature: 10, humidity: 48 },
+              { time: "08:00", temperature: 15, humidity: 48 },
+              { time: "09:00", temperature: 18, humidity: 44 },
+              { time: "10:00", temperature: 21, humidity: 40 },
+              { time: "11:00", temperature: 21, humidity: 40 },
+              { time: "12:00", temperature: 25, humidity: 40 },
+              { time: "13:00", temperature: 25, humidity: 40 },
+              { time: "14:00", temperature: 25, humidity: 40 },
+              { time: "15:00", temperature: 25, humidity: 41 },
+              { time: "16:00", temperature: 22, humidity: 42 },
+              { time: "17:00", temperature: 21, humidity: 47 },
+              { time: "18:00", temperature: 20, humidity: 51 },
             ]}
           />
         </Wrapper>
-      </Vertical>
+      </Horizontal>
     );
   },
 };
@@ -77,7 +123,7 @@ export const Line: StoryObj = {
 export const Bar: StoryObj = {
   render: () => {
     return (
-      <Vertical internal={1} styles={{ width: "30rem" }}>
+      <Horizontal internal={1} styles={{ width: "30rem" }}>
         <Wrapper title="Chart Bar">
           <ChartBar
             height={400}
@@ -120,7 +166,7 @@ export const Bar: StoryObj = {
             ]}
           />
         </Wrapper>
-      </Vertical>
+      </Horizontal>
     );
   },
 };
