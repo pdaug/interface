@@ -28,7 +28,7 @@ const ChartTooltip = function (props: TooltipProps<string, string>) {
           return (
             <div className="fz-chart-tooltip-payload" key={`payload-${index}`}>
               <div
-                style={{ background: payload?.stroke }}
+                style={{ background: payload?.stroke || payload?.fill }}
                 className="fz-chart-tooltip-payload-square"
               ></div>
               <div className="fz-chart-tooltip-payload-name">
@@ -98,7 +98,7 @@ const ChartLine = function ({
         <CartesianGrid {...gridProps} />
         <XAxis {...axisXProps} />
         <YAxis {...axisYProps} />
-        <Tooltip content={<ChartTooltip />} />
+        <Tooltip content={<ChartTooltip />} cursor={{ stroke: "#dedede" }} />
         {lines?.map(function (lineProps, index) {
           return <Line key={`chart-line-${index}`} {...lineProps} />;
         })}
@@ -116,6 +116,7 @@ export type ChartBarProps = ChartProps & {
     barSizeMax?: number;
     fill?: string;
     stackId?: string;
+    radius?: [number, number, number, number];
   }[];
 };
 
@@ -139,7 +140,7 @@ const ChartBar = function ({
         <CartesianGrid {...gridProps} />
         <XAxis {...axisXProps} />
         <YAxis {...axisYProps} />
-        <Tooltip content={<ChartTooltip />} />
+        <Tooltip content={<ChartTooltip />} cursor={{ fill: "#ebebeb" }} />
         {bars?.map(function (barsProps, index) {
           return <Bar key={`chart-bar-${index}`} {...barsProps} />;
         })}

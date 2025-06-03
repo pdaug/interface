@@ -123,27 +123,68 @@ export const Line: StoryObj = {
 export const Bar: StoryObj = {
   render: () => {
     return (
-      <Horizontal internal={1} styles={{ width: "30rem" }}>
-        <Wrapper title="Chart Bar">
+      <Horizontal internal={1} styles={{ width: "70rem" }}>
+        <Wrapper title="Chart Bar Basic">
           <ChartBar
-            height={400}
+            height={320}
             gridProps={{
               stroke: "#dedede",
               strokeWidth: 1,
-              strokeDasharray: "8 8",
+              vertical: false,
+              horizontal: true,
+            }}
+            bars={[
+              {
+                dataKey: "task",
+                fill: "#22c55e",
+                radius: [4, 4, 0, 0],
+              },
+            ]}
+            axisXProps={{
+              stroke: "#bebebe",
+              strokeWidth: 1,
+              dataKey: "date",
+              tick: { fontSize: 10, fill: "#222" },
+              interval: 0,
+              padding: { left: 10, right: 10 },
+            }}
+            axisYProps={{
+              tick: { fontSize: 0, fill: "" },
+              stroke: "",
+              strokeWidth: 0,
+              width: 0,
+            }}
+            data={[
+              { date: "21/06", task: 16 },
+              { date: "22/06", task: 17 },
+              { date: "23/06", task: 23 },
+              { date: "24/06", task: 21 },
+              { date: "25/06", task: 21 },
+            ]}
+          />
+        </Wrapper>
+        <Wrapper title="Chart Bar Full">
+          <ChartBar
+            height={320}
+            gridProps={{
+              stroke: "#dedede",
+              strokeWidth: 1,
+              vertical: false,
+              horizontal: true,
             }}
             bars={[
               {
                 dataKey: "temperature",
                 fill: "#22c55e",
+                radius: [4, 4, 0, 0],
               },
               {
                 dataKey: "humidity",
                 fill: "#0ea5e9",
+                radius: [4, 4, 0, 0],
               },
             ]}
             axisXProps={{
-              angle: 20,
               stroke: "#bebebe",
               strokeWidth: 1,
               dataKey: "name",
@@ -153,8 +194,8 @@ export const Bar: StoryObj = {
             }}
             axisYProps={{
               tick: { fontSize: 10, fill: "#222" },
-              stroke: "#bebebe",
-              strokeWidth: 1,
+              stroke: "",
+              strokeWidth: 0,
               width: 24,
             }}
             data={[
