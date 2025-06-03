@@ -1,6 +1,6 @@
 import type { StoryObj } from "@storybook/react";
 
-import { ChartBar, ChartLine } from "./Chart";
+import { ChartBar, ChartLine, ChartPie } from "./Chart";
 import Wrapper from "../wrapper/Wrapper";
 import { Horizontal } from "../aligns/Align";
 
@@ -138,6 +138,8 @@ export const Bar: StoryObj = {
                 dataKey: "task",
                 fill: "#22c55e",
                 radius: [4, 4, 0, 0],
+                barSize: 32,
+                barSizeMax: 32,
               },
             ]}
             axisXProps={{
@@ -177,11 +179,15 @@ export const Bar: StoryObj = {
                 dataKey: "temperature",
                 fill: "#22c55e",
                 radius: [4, 4, 0, 0],
+                barSize: 32,
+                barSizeMax: 32,
               },
               {
                 dataKey: "humidity",
                 fill: "#0ea5e9",
                 radius: [4, 4, 0, 0],
+                barSize: 32,
+                barSizeMax: 32,
               },
             ]}
             axisXProps={{
@@ -204,6 +210,44 @@ export const Bar: StoryObj = {
               { name: "23/06", temperature: 19, humidity: 42 },
               { name: "24/06", temperature: 21, humidity: 39 },
               { name: "25/06", temperature: 21, humidity: 39 },
+            ]}
+          />
+        </Wrapper>
+      </Horizontal>
+    );
+  },
+};
+
+export const Pie: StoryObj = {
+  render: () => {
+    return (
+      <Horizontal internal={1} styles={{ width: "70rem" }}>
+        <Wrapper title="Chart Pie Basic">
+          <ChartPie
+            height={320}
+            gridProps={{
+              stroke: "#dedede",
+              strokeWidth: 1,
+              vertical: false,
+              horizontal: true,
+            }}
+            pie={{
+              cx: 120,
+              cy: 160,
+              dataKey: "value",
+              innerRadius: 60,
+              outerRadius: 100,
+              paddingAngle: 2,
+              pieces: [
+                { fill: "#ef4444" },
+                { fill: "#22c55e" },
+                { fill: "#0ea5e9" },
+              ],
+            }}
+            data={[
+              { date: "Red", value: 17 },
+              { date: "Green", value: 16 },
+              { date: "Blue", value: 21 },
             ]}
           />
         </Wrapper>

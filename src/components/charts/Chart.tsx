@@ -3,9 +3,12 @@ import {
   BarChart,
   CartesianGrid,
   CartesianGridProps,
+  Cell,
   LegendProps,
   Line,
   LineChart,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   TooltipProps,
@@ -149,4 +152,49 @@ const ChartBar = function ({
   );
 };
 
-export { ChartLine, ChartBar };
+export type ChartPieProps = ChartProps & {
+  pie: {
+    cx: number;
+    cy: number;
+    innerRadius: number;
+    outerRadius: number;
+    paddingAngle: number;
+    dataKey: string;
+    pieces: {
+      fill: string;
+    }[];
+  };
+};
+
+const ChartPie = function ({
+  // container
+  width = "100%",
+  height = 480,
+  // chart
+  data,
+  layout = "horizontal",
+  margin = { top: 5, right: 5, left: 0, bottom: 5 },
+  pie,
+}: ChartPieProps) {
+  return (
+    <ResponsiveContainer width={width} height={height}>
+      <PieChart data={data} margin={margin} layout={layout}>
+        <Pie
+          data={data}
+          cx={pie.cx}
+          cy={pie.cy}
+          dataKey={pie.dataKey}
+          innerRadius={pie.innerRadius}
+          outerRadius={pie.outerRadius}
+          paddingAngle={pie.paddingAngle}
+        >
+          {pie.pieces?.map(function (pieceProps, index) {
+            return <Cell key={`cell-${index}`} fill={pieceProps.fill} />;
+          })}
+        </Pie>
+      </PieChart>
+    </ResponsiveContainer>
+  );
+};
+
+export { ChartLine, ChartBar, ChartPie };
