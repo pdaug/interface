@@ -10,6 +10,7 @@ import {
   Pie,
   PieChart,
   ResponsiveContainer,
+  Sector,
   Tooltip,
   TooltipProps,
   XAxis,
@@ -17,6 +18,7 @@ import {
   YAxis,
   YAxisProps,
 } from "recharts";
+import { useState } from "react";
 import { LayoutType, Margin } from "recharts/types/util/types";
 
 // styles
@@ -154,8 +156,9 @@ const ChartBar = function ({
 
 export type ChartPieProps = ChartProps & {
   pie: {
-    cx: number;
-    cy: number;
+    label?: boolean;
+    cx?: number | string;
+    cy?: number | string;
     innerRadius: number;
     outerRadius: number;
     paddingAngle: number;
@@ -176,14 +179,59 @@ const ChartPie = function ({
   margin = { top: 5, right: 5, left: 0, bottom: 5 },
   pie,
 }: ChartPieProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
   return (
     <ResponsiveContainer width={width} height={height}>
       <PieChart data={data} margin={margin} layout={layout}>
         <Pie
           data={data}
-          cx={pie.cx}
-          cy={pie.cy}
+          cx={pie?.cx || "50%"}
+          cy={pie?.cy || "50%"}
           dataKey={pie.dataKey}
+          {...(pie.label
+            ? {
+                activeIndex: activeIndex,
+                activeShape: function (props: Record<string, any>) {
+                  console.log(props);
+                  return (
+                    <g>
+                      <Sector
+                        cx={props.cx}
+                        cy={props.cy}
+                        innerRadius={props.innerRadius - 10}
+                        outerRadius={props.outerRadius}
+                        startAngle={props.startAngle}
+                        endAngle={props.endAngle}
+                        fill={props.fill}
+                      />
+                      <text
+                        dy={8}
+                        x={props.cx}
+                        y={props.cy + 10}
+                        fontSize={20}
+                        fontWeight="bold"
+                        fill={props.fill}
+                        textAnchor="middle"
+                      >
+                        {props.payload.value}
+                      </text>
+                      <text
+                        dy={8}
+                        x={props.cx}
+                        y={props.cy - 10}
+                        fontSize={20}
+                        fontWeight="bold"
+                        fill={props.fill}
+                        textAnchor="middle"
+                      >
+                        {props.payload.date}
+                      </text>
+                    </g>
+                  );
+                },
+                onMouseEnter: (_, index) => setActiveIndex(index),
+              }
+            : {})}
           innerRadius={pie.innerRadius}
           outerRadius={pie.outerRadius}
           paddingAngle={pie.paddingAngle}

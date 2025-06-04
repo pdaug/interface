@@ -1,8 +1,8 @@
 import type { StoryObj } from "@storybook/react";
 
-import { ChartBar, ChartLine, ChartPie } from "./Chart";
 import Wrapper from "../wrapper/Wrapper";
 import { Horizontal } from "../aligns/Align";
+import { ChartBar, ChartLine, ChartPie } from "./Chart";
 
 export default {
   title: "Components/Chart",
@@ -232,11 +232,41 @@ export const Pie: StoryObj = {
               horizontal: true,
             }}
             pie={{
-              cx: 120,
-              cy: 160,
+              cx: "50%",
+              cy: "50%",
               dataKey: "value",
-              innerRadius: 60,
-              outerRadius: 100,
+              innerRadius: 100,
+              outerRadius: 140,
+              paddingAngle: 2,
+              pieces: [
+                { fill: "#ef4444" },
+                { fill: "#22c55e" },
+                { fill: "#0ea5e9" },
+              ],
+            }}
+            data={[
+              { date: "Red", value: 17 },
+              { date: "Green", value: 16 },
+              { date: "Blue", value: 21 },
+            ]}
+          />
+        </Wrapper>
+        <Wrapper title="Chart Pie Basic">
+          <ChartPie
+            height={320}
+            gridProps={{
+              stroke: "#dedede",
+              strokeWidth: 1,
+              vertical: false,
+              horizontal: true,
+            }}
+            pie={{
+              label: true,
+              cx: "50%",
+              cy: "50%",
+              dataKey: "value",
+              innerRadius: 100,
+              outerRadius: 140,
               paddingAngle: 2,
               pieces: [
                 { fill: "#ef4444" },

@@ -1,3 +1,10 @@
+g,
+path,
+.recharts-pie-sector,
+.recharts-pie-sector:focus {
+  outline: none !important;
+}
+
 .fz-chart-tooltip {
   background: var(--foreground);
   background-color: var(--foreground);
