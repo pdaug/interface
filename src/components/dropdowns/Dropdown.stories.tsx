@@ -1,6 +1,7 @@
 import type { StoryObj } from "@storybook/react";
 import { Clipboard, CopySimple, Trash } from "@phosphor-icons/react";
 
+// components
 import Dropdown from "./Dropdown";
 import Button from "../buttons/Button";
 import { Horizontal } from "../aligns/Align";
@@ -24,7 +25,7 @@ export const Default: StoryObj<typeof Dropdown> = {
             },
           ]}
         >
-          <Button category="neutral" text="Dropdown" />
+          <Button category="Neutral" text="Dropdown" />
         </Dropdown>
       </Horizontal>
     );
@@ -51,7 +52,7 @@ export const WithIcon: StoryObj<typeof Dropdown> = {
             },
           ]}
         >
-          <Button category="neutral" text="Dropdown" />
+          <Button category="Neutral" text="Dropdown" />
         </Dropdown>
       </Horizontal>
     );
@@ -84,7 +85,7 @@ export const WithDisabled: StoryObj<typeof Dropdown> = {
             },
           ]}
         >
-          <Button category="neutral" text="Dropdown" />
+          <Button category="Neutral" text="Dropdown" />
         </Dropdown>
       </Horizontal>
     );

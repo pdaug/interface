@@ -5,11 +5,11 @@ import { IconWeight, Icon as PhosphorIcons } from "@phosphor-icons/react";
 import "./Button.css";
 
 export const ButtonCategoriesList = [
-  "primary",
-  "secondary",
-  "danger",
-  "warn",
-  "neutral",
+  "Primary",
+  "Secondary",
+  "Danger",
+  "Warn",
+  "Neutral",
 ] as const;
 
 export type ButtonCategories = (typeof ButtonCategoriesList)[number];
@@ -55,7 +55,7 @@ const Button = function ({
       style={style}
       onClick={onClick}
       disabled={disabled}
-      className={`fz-button fz-button-${category}`}
+      className={`button button${category}`}
     >
       {Icon && IconPosition === "left" && (
         <Icon weight={IconWeight} size={IconSize} />

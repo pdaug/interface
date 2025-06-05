@@ -11,10 +11,10 @@ export default {
 export const AlignVertical: StoryObj = {
   render: () => (
     <Vertical internal={1}>
-      <Button category="primary" text="1" />
-      <Button category="primary" text="2" />
-      <Button category="primary" text="3" />
-      <Button category="primary" text="4" />
+      <Button category="Primary" text="1" />
+      <Button category="Primary" text="2" />
+      <Button category="Primary" text="3" />
+      <Button category="Primary" text="4" />
     </Vertical>
   ),
 };
@@ -22,10 +22,10 @@ export const AlignVertical: StoryObj = {
 export const AlignHorizontal: StoryObj = {
   render: () => (
     <Horizontal internal={1}>
-      <Button category="primary" text="1" />
-      <Button category="primary" text="2" />
-      <Button category="primary" text="3" />
-      <Button category="primary" text="4" />
+      <Button category="Primary" text="1" />
+      <Button category="Primary" text="2" />
+      <Button category="Primary" text="3" />
+      <Button category="Primary" text="4" />
     </Horizontal>
   ),
 };

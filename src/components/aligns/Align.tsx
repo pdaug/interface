@@ -15,7 +15,7 @@ const Vertical = function ({
 }: AlignProps) {
   const style = { gap: `${internal}rem`, margin: `${external}rem`, ...styles };
   return (
-    <div className="fz-vertical" style={style}>
+    <div className="alignVertical" style={style}>
       {children}
     </div>
   );
@@ -29,7 +29,7 @@ const Horizontal = function ({
 }: AlignProps) {
   const style = { gap: `${internal}rem`, margin: `${external}rem`, ...styles };
   return (
-    <div className="fz-horizontal" style={style}>
+    <div className="alignHorizontal" style={style}>
       {children}
     </div>
   );

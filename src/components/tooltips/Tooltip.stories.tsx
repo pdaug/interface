@@ -13,7 +13,7 @@ export default {
 export const Default: StoryObj<typeof Tooltip> = {
   render: () => (
     <Tooltip content="Tooltip message">
-      <Button text="Hover me" category="primary" />
+      <Button text="Hover me" category="Primary" />
     </Tooltip>
   ),
 };
@@ -22,7 +22,7 @@ export const Light: StoryObj<typeof Tooltip> = {
   render: () => {
     const placements = ["top", "bottom", "left", "right"];
     return (
-      <Horizontal internal={1} styles={{ width: "30rem" }}>
+      <Horizontal internal={1}>
         {placements.map((placement) => (
           <Tooltip
             theme="light"
@@ -30,7 +30,7 @@ export const Light: StoryObj<typeof Tooltip> = {
             content={`Tooltip ${placement}`}
             placement={placement as TooltipPlacement}
           >
-            <Button text={placement} category="neutral" />
+            <Button text={placement} category="Neutral" />
           </Tooltip>
         ))}
       </Horizontal>
@@ -42,7 +42,7 @@ export const Dark: StoryObj<typeof Tooltip> = {
   render: () => {
     const placements = ["top", "bottom", "left", "right"];
     return (
-      <Horizontal internal={1} styles={{ width: "30rem" }}>
+      <Horizontal internal={1}>
         {placements.map((placement) => (
           <Tooltip
             theme="dark"
@@ -50,7 +50,7 @@ export const Dark: StoryObj<typeof Tooltip> = {
             content={`Tooltip ${placement}`}
             placement={placement as TooltipPlacement}
           >
-            <Button text={placement} category="neutral" />
+            <Button text={placement} category="Neutral" />
           </Tooltip>
         ))}
       </Horizontal>

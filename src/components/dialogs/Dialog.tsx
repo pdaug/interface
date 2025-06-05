@@ -1,25 +1,23 @@
-import { Icon as PhosphorIcon } from "@phosphor-icons/react";
 import React, {
-  createContext,
-  useContext,
-  useEffect,
   useRef,
   useState,
+  useEffect,
+  useContext,
+  createContext,
 } from "react";
+import { Icon as PhosphorIcon } from "@phosphor-icons/react";
 
 // styles
 import "./Dialog.css";
 
 // components
-import Button from "../buttons/Button";
-
-export type DialogCategories = "primary" | "secondary" | "danger" | "warn";
+import Button, { ButtonCategories } from "../buttons/Button";
 
 export type DialogContextProps = {
   open: boolean;
   title: string;
   description: string;
-  category: DialogCategories;
+  category: ButtonCategories;
   confirmIcon?: PhosphorIcon;
   confirmText: string;
   onConfirm: () => void;
@@ -45,7 +43,7 @@ export const DialogProvider = function ({ children }: DialogProviderProps) {
     title: "",
     description: "",
     confirmText: "Confirmar",
-    category: "primary",
+    category: "Primary",
     onConfirm: function () {
       return;
     },
@@ -112,23 +110,23 @@ export const DialogElement = function () {
   }, []);
 
   return (
-    <div className={`fz-dialog ${dialogProps?.open ? "open" : ""}`}>
+    <div className={`dialog ${dialogProps?.open ? "dialogOpen" : ""}`}>
       <div
         ref={dialogContainerRef}
-        className={`fz-dialog-container ${dialogProps?.open ? "open" : ""}`}
+        className={`dialogContainer ${dialogProps?.open ? "dialogContainerOpen" : ""}`}
       >
-        <div className="fz-dialog-content">
-          <div className="fz-dialog-title">
+        <div className="dialogContent">
+          <div className="dialogTitle">
             {dialogProps.Icon && <dialogProps.Icon />}
             <span>{dialogProps.title}</span>
           </div>
-          <div className="fz-dialog-description">{dialogProps.description}</div>
+          <div className="dialogDescription">{dialogProps.description}</div>
         </div>
-        <div className="fz-dialog-footer">
+        <div className="dialodFooter">
           <Button
             type="button"
-            text="Cancelar"
-            category="neutral"
+            text="Cancel"
+            category="Neutral"
             onClick={dialogProps?.onCancel || CloseDialog}
           />
           <Button

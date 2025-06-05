@@ -27,20 +27,23 @@ const Dropdown = function ({ children, values }: DropdownProps) {
     return;
   };
 
-  useEffect(() => {
-    if (!dropdownOpen || !dropdownContentRef.current) return;
-    const dropdownEl = dropdownContentRef.current;
-    const rect = dropdownEl.getBoundingClientRect();
-    if (rect.right > window.innerWidth) {
-      dropdownEl.style.left = "auto";
-      dropdownEl.style.right = "0";
-    }
-    if (rect.bottom > window.innerHeight) {
-      dropdownEl.style.top = "auto";
-      dropdownEl.style.bottom = "100%";
-    }
-    return;
-  }, [dropdownOpen]);
+  useEffect(
+    function () {
+      if (!dropdownOpen || !dropdownContentRef.current) return;
+      const dropdownEl = dropdownContentRef.current;
+      const rect = dropdownEl.getBoundingClientRect();
+      if (rect.right > window.innerWidth) {
+        dropdownEl.style.left = "auto";
+        dropdownEl.style.right = "0";
+      }
+      if (rect.bottom > window.innerHeight) {
+        dropdownEl.style.top = "auto";
+        dropdownEl.style.bottom = "100%";
+      }
+      return;
+    },
+    [dropdownOpen],
+  );
 
   useEffect(function () {
     const HandleClickButton = function (event: MouseEvent) {
@@ -62,11 +65,11 @@ const Dropdown = function ({ children, values }: DropdownProps) {
   }, []);
 
   return (
-    <div ref={dropdownRef} className="fz-dropdown">
+    <div ref={dropdownRef} className="dropdown">
       <div onClick={ToggleDropdown}>{children}</div>
       <div
         ref={dropdownContentRef}
-        className={`fz-dropdown-content ${dropdownOpen ? "open" : ""}`}
+        className={`dropdownContent ${dropdownOpen ? "dropdownContentOpen" : ""}`}
       >
         {values.map(function ({ id, label, Icon, disabled, onClick }) {
           const onClickWithClose = function (
@@ -81,7 +84,7 @@ const Dropdown = function ({ children, values }: DropdownProps) {
               key={id}
               disabled={disabled}
               onClick={onClickWithClose}
-              className="fz-dropdown-content-option"
+              className="dropdownContentOption"
             >
               {Icon && <Icon size={16} />}
               <span>{label}</span>

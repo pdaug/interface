@@ -25,7 +25,7 @@ const Avatar = function ({
     <div>
       <div
         style={{ height: sizePixel, width: sizePixel }}
-        className={`fz-avatar ${circle ? "fz-avatar-circle" : ""}`}
+        className={`avatar ${circle ? "avatarCircle" : ""}`}
       >
         {photo ? (
           <img src={photo} alt={label} />

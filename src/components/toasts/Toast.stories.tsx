@@ -1,9 +1,9 @@
 import React from "react";
 import { toast } from "sonner";
 
-import Button from "../buttons/Button";
 import { ToastElement } from "./Toast";
 import { Horizontal } from "../aligns/Align";
+import Button, { ButtonCategories } from "../buttons/Button";
 
 export default {
   title: "components/Toast",
@@ -11,56 +11,35 @@ export default {
   tags: ["autodocs"],
 };
 
+type toastTypes = "success" | "info" | "warning" | "error" | "message";
+
+const toasts = [
+  { category: "Primary", name: "success" },
+  { category: "Secondary", name: "info" },
+  { category: "Warn", name: "warning" },
+  { category: "Danger", name: "error" },
+  { category: "Neutral", name: "message" },
+];
+
 export const All = () => {
   return (
     <React.Fragment>
       <ToastElement />
       <Horizontal internal={1} styles={{ width: "30rem" }}>
-        <Button
-          category="primary"
-          text="Primary"
-          onClick={() =>
-            toast.success(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            )
-          }
-        />
-        <Button
-          category="secondary"
-          text="Secondary"
-          onClick={() =>
-            toast.info(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            )
-          }
-        />
-        <Button
-          category="warn"
-          text="Warning"
-          onClick={() =>
-            toast.warning(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            )
-          }
-        />
-        <Button
-          category="danger"
-          text="Danger"
-          onClick={() =>
-            toast.error(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            )
-          }
-        />
-        <Button
-          category="neutral"
-          text="Neutral"
-          onClick={() => {
-            toast.loading(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            );
-          }}
-        />
+        {toasts.map(function ({ category, name }) {
+          return (
+            <Button
+              key={category}
+              category={category as ButtonCategories}
+              text={category}
+              onClick={() =>
+                toast[name as toastTypes](
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                )
+              }
+            />
+          );
+        })}
       </Horizontal>
     </React.Fragment>
   );

@@ -1,30 +1,30 @@
-.fz-pagination {
+.pagination {
   align-items: center;
   display: flex;
   flex: 1;
 }
 
-.fz-pagination-data {
+.paginationData {
   display: flex;
   font-size: var(--text-small);
   flex: 1;
   gap: 0.2rem;
 }
 
-.fz-pagination-data span {
+.paginationData span {
   color: var(--font-light);
 }
 
-.fz-pagination-data b {
+.paginationData b {
   font-weight: 500;
 }
 
-.fz-pagination-buttons {
+.paginationButtons {
   align-items: center;
   display: flex;
 }
 
-.fz-pagination-buttons button {
+.paginationButtons button {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -34,17 +34,17 @@
   width: 3rem;
 }
 
-.fz-pagination-buttons button:hover {
+.paginationButtons button:hover {
   cursor: pointer;
 }
 
-.fz-pagination-buttons button:disabled {
+.paginationButtons button:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   cursor: not-allowed;
 }
 
-.fz-pagination-button-selected {
+.paginationButtonsSelected {
   background: var(--info) !important;
   background-color: var(--info) !important;
   border-color: var(--info-dark) !important;
@@ -52,17 +52,17 @@
   cursor: default !important;
 }
 
-.fz-pagination-button-left {
+.paginationButtonLeft {
   border-top-left-radius: var(--rounded);
   border-bottom-left-radius: var(--rounded);
 }
 
-.fz-pagination-button-center {
+.paginationButtonCenter {
   border-left: none !important;
   border-right: none !important;
 }
 
-.fz-pagination-button-right {
+.paginationButtonRight {
   border-top-right-radius: var(--rounded);
   border-bottom-right-radius: var(--rounded);
 }

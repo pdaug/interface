@@ -1,7 +1,7 @@
 // styles
 import "./Stats.css";
 
-export type StatsStatus = "up" | "down";
+export type StatsStatus = "Up" | "Down";
 
 export type StatsProps = {
   title: string;
@@ -37,17 +37,15 @@ const Stats = function ({
   ).format(value);
 
   return (
-    <div className="fz-stats">
-      <div className="fz-stats-head">
-        <div className="fz-stats-head-title">{title}</div>
-        <div
-          className={`fz-stats-head-metric fz-stats-head-metric-${metricStatus}`}
-        >
-          {metricStatus === "up" ? "+" : "-"}
+    <div className="stats">
+      <div className="statsHead">
+        <div className="statsHeadTitle">{title}</div>
+        <div className={`statsHeadMetric statsHeadMetric${metricStatus}`}>
+          {metricStatus === "Up" ? "+" : "-"}
           {metricFormatted}
         </div>
       </div>
-      <div className="fz-stats-body">
+      <div className="statsBody">
         {valueFormatted} {valueUnit}
       </div>
     </div>

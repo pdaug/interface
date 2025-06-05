@@ -13,7 +13,7 @@ export const Default: StoryObj<StatsProps> = {
   args: {
     title: "Title Stats",
     metric: 0.0125,
-    metricStatus: "up",
+    metricStatus: "Up",
     metricLocale: "en",
     metricOptions: { style: "percent", minimumFractionDigits: 2 },
     value: 42500,
@@ -26,7 +26,7 @@ export const Down: StoryObj<StatsProps> = {
   args: {
     title: "Title Stats",
     metric: 0.0822,
-    metricStatus: "down",
+    metricStatus: "Down",
     metricLocale: "en",
     metricOptions: { style: "percent", minimumFractionDigits: 2 },
     value: 912,
@@ -41,21 +41,21 @@ export const Grouped = () => (
     <Stats
       title="Inflow Ccash"
       metric={12.5}
-      metricStatus="up"
+      metricStatus="Up"
       value={42500}
       valueUnit="$"
     />
     <Stats
       title="New customers"
       metric={3.2}
-      metricStatus="up"
+      metricStatus="Up"
       value={51}
       valueUnit="Customers"
     />
     <Stats
       title="Convertion"
       metric={1.1}
-      metricStatus="down"
+      metricStatus="Down"
       value={4}
       valueUnit="points"
     />

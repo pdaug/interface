@@ -2,11 +2,11 @@
 import "./Badge.css";
 
 export const BadgeCategoriesList = [
-  "primary",
-  "secondary",
-  "danger",
-  "warn",
-  "neutral",
+  "Primary",
+  "Secondary",
+  "Danger",
+  "Warn",
+  "Neutral",
 ] as const;
 
 export type BadgeCategories = (typeof BadgeCategoriesList)[number];
@@ -44,18 +44,18 @@ const Badge = function ({
       name={name}
       value={value}
       onChange={onChange}
-      className={`fz-badge fz-badge-${category}`}
+      className={`badge badge${category}`}
     >
-      {options.map(function ({ id, value, label }, index) {
+      {options.map(function ({ id, value, label }) {
         return (
-          <option key={`fz-badge-option-${index}-${id}`} id={id} value={value}>
+          <option key={id} id={id} value={value}>
             {label}
           </option>
         );
       })}
     </select>
   ) : (
-    <div id={id} className={`fz-badge fz-badge-${category}`}>
+    <div id={id} className={`badge badge${category}`}>
       <span>{value || "badge_empty_text"}</span>
     </div>
   );

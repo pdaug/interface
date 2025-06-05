@@ -1,4 +1,4 @@
-.fz-input {
+.input {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -7,12 +7,12 @@
   transition: 200ms;
 }
 
-.fz-input-header {
+.inputHeader {
   align-items: center;
   display: flex;
 }
 
-.fz-input-header[data-required="true"] label::before {
+.inputHeader[data-required="true"] label::before {
   content: "*";
   color: var(--danger);
   font-size: var(--text-small);
@@ -20,14 +20,14 @@
   padding-right: 0.2rem;
 }
 
-.fz-input label {
+.input label {
   font-size: var(--text-small);
   font-weight: 400;
   line-height: 1;
   flex: 1;
 }
 
-.fz-input-header span {
+.inputHeader span {
   color: var(--danger);
   font-size: var(--text-small);
   font-weight: 400;
@@ -35,14 +35,16 @@
   transition: 600ms;
 }
 
-.fz-input-content {
+.inputContent {
   display: flex;
+  position: relative;
   flex: 1;
 }
 
-.fz-input-content input,
-.fz-input-content select,
-.fz-input-content textarea {
+.inputContent input,
+.inputContent select,
+.inputContent textarea {
+  appearance: none;
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -58,23 +60,23 @@
   transition: 200ms;
 }
 
-.fz-input-content textarea {
+.inputContent textarea {
   height: auto !important;
   padding: 0.8rem !important;
   transition: 200ms;
 }
 
-.fz-input-content input:focus,
-.fz-input-content select:focus,
-.fz-input-content textarea:focus {
+.inputContent input:focus,
+.inputContent select:focus,
+.inputContent textarea:focus {
   border-color: var(--info);
   outline: none;
   transition: 200ms;
 }
 
-.fz-input-content input:disabled,
-.fz-input-content select:disabled,
-.fz-input-content textarea:disabled {
+.inputContent input:disabled,
+.inputContent select:disabled,
+.inputContent textarea:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   color: var(--font-light);
@@ -82,18 +84,18 @@
   opacity: 1;
 }
 
-.fz-input-content input:read-only {
+.inputContent input:read-only {
   background: var(--background) !important;
   background-color: var(--background) !important;
   color: var(--font-light);
 }
 
 /* MONEY */
-.fz-input-money {
+.inputMoney {
   display: flex;
 }
 
-.fz-input-money input {
+.inputMoney input {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -108,27 +110,18 @@
   padding: 0 0.6rem;
 }
 
-.fz-input-money-currency input {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.fz-input-money input:focus {
+.inputMoney input:focus {
   border-color: var(--info);
   outline: none;
 }
 
-.fz-input-money-currency input:focus {
-  border-right-color: var(--border);
-}
-
-.fz-input-money input:read-only {
+.inputMoney input:read-only {
   background: var(--background) !important;
   background-color: var(--background) !important;
   color: var(--font-light);
 }
 
-.fz-input-money input:disabled {
+.inputMoney input:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   color: var(--font-light);
@@ -136,7 +129,16 @@
   opacity: 1;
 }
 
-.fz-input-money select {
+.inputMoneyCurrency input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.inputMoneyCurrency input:focus {
+  border-right-color: var(--border);
+}
+
+.inputMoney select {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -151,11 +153,11 @@
   user-select: none;
 }
 
-.fz-input-money:has(input:focus) select {
+.inputMoney:has(input:focus) select {
   border-color: var(--info);
 }
 
-.fz-input-money select:disabled {
+.inputMoney select:disabled {
   background: var(--background);
   background-color: var(--background);
   cursor: not-allowed;
@@ -163,31 +165,31 @@
 }
 
 /* RADIO */
-.fz-input-radio-container {
+.inputRadioContainer {
   display: flex;
   flex: 1;
   flex-direction: column;
   gap: 0.6rem;
 }
 
-.fz-input-radio {
+.inputRadio {
   display: flex;
   flex: 1;
   gap: 0.6rem;
 }
 
-.fz-input-radio-vertical {
+.inputRadioVertical {
   flex-direction: column;
 }
 
-.fz-input-radio label {
+.inputRadio label {
   align-items: center;
   display: flex;
   gap: 0.4rem;
   flex: 1;
 }
 
-.fz-input-radio-option {
+.inputRadioOption {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -200,12 +202,12 @@
   width: 16px;
 }
 
-.fz-input-radio-option:hover {
+.inputRadioOption:hover {
   cursor: pointer;
   transition: 200ms;
 }
 
-.fz-input-radio label:has(input:checked) .fz-input-radio-option {
+.inputRadio label:has(input:checked) .inputRadioOption {
   align-items: center;
   border: 1px solid var(--info);
   color: var(--info);
@@ -214,7 +216,7 @@
   transition: 200ms;
 }
 
-.fz-input-radio label:has(input:checked) .fz-input-radio-option::after {
+.inputRadio label:has(input:checked) .inputRadioOption::after {
   background: var(--info);
   background-color: var(--info);
   border-radius: 100%;
@@ -225,14 +227,14 @@
   width: 10px;
 }
 
-.fz-input-radio label input[type="radio"] {
+.inputRadio label input[type="radio"] {
   appearance: none;
   display: none;
   margin: 0;
   padding: 0;
 }
 
-.fz-input-radio label span {
+.inputRadio label span {
   color: var(--font);
   cursor: pointer;
   font-size: var(--text-small);
@@ -241,31 +243,31 @@
 }
 
 /* CHECK */
-.fz-input-check-container {
+.inputCheckContainer {
   display: flex;
   flex: 1;
   flex-direction: column;
   gap: 0.6rem;
 }
 
-.fz-input-check {
+.inputCheck {
   display: flex;
   flex: 1;
   gap: 0.6rem;
 }
 
-.fz-input-check-vertical {
+.inputCheckVertical {
   flex-direction: column;
 }
 
-.fz-input-check label {
+.inputCheck label {
   align-items: center;
   display: flex;
   gap: 0.4rem;
   flex: 1;
 }
 
-.fz-input-check-option {
+.inputCheckOption {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -278,12 +280,12 @@
   width: 16px;
 }
 
-.fz-input-check-option:hover {
+.inputCheckOption:hover {
   cursor: pointer;
   transition: 200ms;
 }
 
-.fz-input-check label:has(input:checked) .fz-input-check-option {
+.inputCheck label:has(input:checked) .inputCheckOption {
   align-items: center;
   border: 1px solid var(--info);
   color: var(--info);
@@ -292,7 +294,7 @@
   transition: 200ms;
 }
 
-.fz-input-check label:has(input:checked) .fz-input-check-option::after {
+.inputCheck label:has(input:checked) .inputCheckOption::after {
   background: var(--info);
   background-color: var(--info);
   border-radius: 2px;
@@ -303,14 +305,14 @@
   width: 10px;
 }
 
-.fz-input-check label input[type="checkbox"] {
+.inputCheck label input[type="checkbox"] {
   appearance: none;
   display: none;
   margin: 0;
   padding: 0;
 }
 
-.fz-input-check label span {
+.inputCheck label span {
   color: var(--font);
   cursor: pointer;
   font-size: var(--text-small);
@@ -319,20 +321,20 @@
 }
 
 /* FILE */
-.fz-input-file {
+.inputFile {
   display: flex;
   flex: 1;
   overflow: hidden;
 }
 
-.fz-input-file input {
+.inputFile input {
   appearance: none;
   display: none;
   margin: 0;
   padding: 0;
 }
 
-.fz-input-file button {
+.inputFile button {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -344,13 +346,13 @@
   padding: 0 0.6rem;
 }
 
-.fz-input-file button:disabled {
+.inputFile button:disabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   cursor: not-allowed;
 }
 
-.fz-input-file-info {
+.inputFileInfo {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -368,13 +370,13 @@
   padding: 0 0.6rem;
 }
 
-.fz-input-file-info-disabled {
+.inputFileInfoDisabled {
   background: var(--background) !important;
   background-color: var(--background) !important;
   cursor: not-allowed;
 }
 
-.fz-input-file-info span {
+.inputFileInfo span {
   color: var(--font-light);
   font-size: var(--text-small);
   font-weight: 400;

@@ -3,7 +3,6 @@ import { Toaster, ToasterProps } from "sonner";
 // icons
 import {
   Info,
-  Spinner,
   Warning,
   CheckCircle,
   WarningOctagon,
@@ -17,18 +16,16 @@ const toastIcons = {
   info: <Info weight="fill" size={24} />,
   warning: <Warning weight="fill" size={24} />,
   error: <WarningOctagon weight="fill" size={24} />,
-  loading: <Spinner weight="fill" size={24} />,
 };
 
 const toastOptions = {
   unstyled: true,
   classNames: {
-    toast: "fz-toast",
-    error: "fz-toast-error",
-    success: "fz-toast-success",
-    warning: "fz-toast-warn",
-    info: "fz-toast-info",
-    message: "fz-toast-message",
+    toast: "toast",
+    success: "toastSuccess",
+    info: "toastSecondary",
+    warning: "toastWarn",
+    error: "toastDanger",
   },
 };
 

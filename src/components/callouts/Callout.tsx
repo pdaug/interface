@@ -4,10 +4,10 @@ import { IconWeight, Icon as PhosphorIcons } from "@phosphor-icons/react";
 import "./Callout.css";
 
 export const CalloutCategoriesList = [
-  "primary",
-  "secondary",
-  "danger",
-  "warn",
+  "Primary",
+  "Secondary",
+  "Danger",
+  "Warn",
 ] as const;
 
 export type CalloutCategories = (typeof CalloutCategoriesList)[number];
@@ -30,7 +30,7 @@ const Callout = function ({
   IconWeight,
 }: CalloutProps) {
   return (
-    <div id={id} className={`fz-callout fz-callout-${category}`}>
+    <div id={id} className={`callout callout${category}`}>
       <div>{Icon && <Icon weight={IconWeight} size={IconSize} />}</div>
       <span>{text}</span>
     </div>

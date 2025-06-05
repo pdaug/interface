@@ -17,7 +17,7 @@ export type BreadcrumbProps = {
 
 const Breadcrumb = function ({ links }: BreadcrumbProps) {
   return (
-    <div className="fz-breadcrumb">
+    <div className="breadcrumb">
       {links?.map(function ({ id, label, url, target }, index) {
         return (
           <React.Fragment key={id}>

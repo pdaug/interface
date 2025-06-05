@@ -1,4 +1,4 @@
-.fz-avatar {
+.avatar {
   align-items: center;
   aspect-ratio: 1 / 1;
   background: var(--border-light);
@@ -12,7 +12,7 @@
   overflow: hidden;
 }
 
-.fz-avatar img {
+.avatar img {
   aspect-ratio: 1 / 1;
   height: 100%;
   object-fit: cover;
@@ -20,16 +20,16 @@
   width: 100%;
 }
 
-.fz-avatar svg {
+.avatar svg {
   color: var(--font-light);
 }
 
-.fz-avatar span {
+.avatar span {
   color: var(--font-light);
   font-weight: bold;
   user-select: none;
 }
 
-.fz-avatar-circle {
+.avatarCircle {
   border-radius: 100% !important;
 }

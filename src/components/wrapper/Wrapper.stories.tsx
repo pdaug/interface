@@ -32,7 +32,7 @@ export const WithFooter: StoryObj<typeof Wrapper> = {
     actions: [
       {
         text: "Edit",
-        category: "secondary",
+        category: "Secondary",
         onClick: () => alert("Edit clicked!"),
       },
     ],
@@ -82,12 +82,12 @@ export const WithActions: StoryObj<typeof Wrapper> = {
     ),
     actions: [
       {
-        category: "secondary",
+        category: "Secondary",
         text: "Edit",
         onClick: () => alert("Edit clicked!"),
       },
       {
-        category: "danger",
+        category: "Danger",
         text: "Delete",
         onClick: () => alert("Delete clicked!"),
       },
@@ -109,7 +109,7 @@ export const Full: StoryObj<typeof Wrapper> = {
     onConfirm: () => alert("Confirm clicked!"),
     actions: [
       {
-        category: "neutral",
+        category: "Neutral",
         text: "Help",
         onClick: () => alert("Help clicked!"),
       },

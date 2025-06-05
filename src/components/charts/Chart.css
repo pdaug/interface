@@ -5,7 +5,7 @@ path,
   outline: none !important;
 }
 
-.fz-chart-tooltip {
+.chartTooltip {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -17,18 +17,18 @@ path,
   min-width: 150px;
 }
 
-.fz-chart-tooltip-title {
+.chartTooltipTitle {
   font-size: var(--text-paragraph);
   font-weight: 500;
 }
 
-.fz-chart-tooltip-content {
+.chartTooltipContent {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
 
-.fz-chart-tooltip-payload {
+.chartTooltipPayload {
   align-items: center;
   display: flex;
   gap: 0.4rem;
@@ -36,13 +36,13 @@ path,
   line-height: 1;
 }
 
-.fz-chart-tooltip-payload-square {
+.chartTooltipPayloadColor {
   border-radius: var(--rounded);
   height: 12px;
   width: 12px;
 }
 
-.fz-chart-tooltip-payload-name {
+.chartTooltipPayloadName {
   flex: 1;
   text-transform: capitalize;
 }

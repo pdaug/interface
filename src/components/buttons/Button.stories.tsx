@@ -23,7 +23,7 @@ export default {
 export const Default: StoryObj<typeof Button> = {
   args: {
     text: "Default",
-    category: "primary",
+    category: "Primary",
   },
 };
 
@@ -47,7 +47,7 @@ export const All: StoryObj<typeof Button> = {
 export const WithLeftIcon: StoryObj<typeof Button> = {
   args: {
     text: "Add",
-    category: "primary",
+    category: "Primary",
     Icon: Plus,
     IconSize: 16,
     IconWeight: "regular",
@@ -58,7 +58,7 @@ export const WithLeftIcon: StoryObj<typeof Button> = {
 export const WithRightIcon: StoryObj<typeof Button> = {
   args: {
     text: "Delete",
-    category: "danger",
+    category: "Danger",
     Icon: Trash,
     IconSize: 16,
     IconWeight: "regular",

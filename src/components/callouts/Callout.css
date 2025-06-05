@@ -1,4 +1,4 @@
-.fz-callout {
+.callout {
   align-items: center;
   border-radius: var(--rounded);
   cursor: default;
@@ -10,25 +10,25 @@
   width: 100%;
 }
 
-.fz-callout-primary {
+.calloutPrimary {
   background: var(--success-light);
   background-color: var(--success-light);
   color: var(--success-dark);
 }
 
-.fz-callout-secondary {
+.calloutSecondary {
   background: var(--info-light);
   background-color: var(--info-light);
   color: var(--info-dark);
 }
 
-.fz-callout-warn {
+.calloutWarn {
   background: var(--warn-light);
   background-color: var(--warn-light);
   color: var(--warn-dark);
 }
 
-.fz-callout-danger {
+.calloutDanger {
   background: var(--danger-light);
   background-color: var(--danger-light);
   font-weight: bold;

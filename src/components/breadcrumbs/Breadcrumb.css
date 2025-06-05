@@ -1,19 +1,19 @@
-.fz-breadcrumb {
+.breadcrumb {
   align-items: center;
   display: flex;
   justify-content: center;
   gap: 0.6rem;
 }
 
-.fz-breadcrumb span,
-.fz-breadcrumb svg {
+.breadcrumb span,
+.breadcrumb svg {
   fill: var(--font-light);
   color: var(--font-light);
   font-weight: 500;
   opacity: 0.6;
 }
 
-.fz-breadcrumb a {
+.breadcrumb a {
   color: var(--font);
   font-size: var(--text-small);
   font-weight: 400;
@@ -21,13 +21,13 @@
   text-decoration: none;
 }
 
-.fz-breadcrumb a:hover {
+.breadcrumb a:hover {
   color: var(--font-dark);
   filter: brightness(0.8);
   transition: 200ms;
 }
 
-.fz-breadcrumb a:active {
+.breadcrumb a:active {
   color: var(--font-light);
   transition: 200ms;
 }

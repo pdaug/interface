@@ -30,7 +30,7 @@ const columns: TableColumn = {
     handler: function (data) {
       return (
         <Badge
-          category={data.status ? "primary" : "danger"}
+          category={data.status ? "Primary" : "Danger"}
           value={data.status ? "Active" : "Disabled"}
         />
       );

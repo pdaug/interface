@@ -1,4 +1,4 @@
-.fz-wrapper {
+.wrapper {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -8,7 +8,7 @@
   overflow: hidden;
 }
 
-.fz-wrapper-header {
+.wrapperHeader {
   border-bottom: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -16,25 +16,25 @@
   padding: 0.6rem 1rem;
 }
 
-.fz-wrapper-header-title {
+.wrapperHeaderTitle {
   font-size: var(--text-highlight);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.fz-wrapper-header-description {
+.wrapperHeaderDescription {
   color: var(--font-light);
   font-size: var(--text-small);
   line-height: 1.2;
   text-align: justify;
 }
 
-.fz-wrapper-content {
+.wrapperContent {
   padding: 1rem;
 }
 
-.fz-wrapper-footer {
+.wrapperFooter {
   background: var(--background);
   background-color: var(--background);
   border-top: 1px solid var(--border);

@@ -1,4 +1,4 @@
-.fz-stats {
+.stats {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -11,7 +11,7 @@
   overflow: hidden;
 }
 
-.fz-stats-head {
+.statsHead {
   display: flex;
   font-size: var(--text-small);
   gap: 1rem;
@@ -20,22 +20,22 @@
   padding-bottom: 0;
 }
 
-.fz-stats-head-title {
+.statsHeadTitle {
   flex: 1;
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;
 }
 
-.fz-stats-head-metric-up {
+.statsHeadMetricUp {
   color: var(--success);
 }
 
-.fz-stats-head-metric-down {
+.statsHeadMetricDown {
   color: var(--danger);
 }
 
-.fz-stats-body {
+.statsBody {
   font-size: var(--text-title);
   padding: 1.4rem;
   padding-top: 0;

@@ -51,9 +51,9 @@ const Pagination = function ({
   };
 
   return (
-    <div className="fz-pagination">
+    <div className="pagination">
       {data && (
-        <div className="fz-pagination-data">
+        <div className="paginationData">
           <span>Mostrando</span>
           <b>{pageCurrent}</b>
           <span>de</span>
@@ -63,18 +63,18 @@ const Pagination = function ({
           <span>items</span>
         </div>
       )}
-      <div className="fz-pagination-buttons">
+      <div className="paginationButtons">
         <button
           onClick={GoPageStart}
           disabled={pageCurrent === 1}
-          className="fz-pagination-button-left"
+          className="paginationButtonLeft"
         >
           <CaretLeft />
         </button>
         {pageCurrent === pageTotal && (
           <button
             onClick={() => GoPage(2, "sub")}
-            className={`fz-pagination-button-center`}
+            className={`paginationButtonCenter`}
           >
             {pageCurrent - 2}
           </button>
@@ -83,21 +83,19 @@ const Pagination = function ({
           <button
             onClick={GoPageBack}
             disabled={pageCurrent - 1 <= 0}
-            className={`fz-pagination-button-center`}
+            className={`paginationButtonCenter`}
           >
             {pageCurrent - 1}
           </button>
         )}
-        <button
-          className={`fz-pagination-button-center fz-pagination-button-selected`}
-        >
+        <button className={`paginationButtonCenter paginationButtonSelected`}>
           {pageCurrent}
         </button>
         {pageCurrent + 1 <= pageTotal && (
           <button
             onClick={GoPageNext}
             disabled={pageCurrent + 1 > pageTotal}
-            className={`fz-pagination-button-center`}
+            className={`paginationButtonCenter`}
           >
             {pageCurrent + 1}
           </button>
@@ -105,7 +103,7 @@ const Pagination = function ({
         {pageCurrent - 1 === 0 && (
           <button
             onClick={() => GoPage(2, "add")}
-            className={`fz-pagination-button-center`}
+            className={`paginationButtonCenter`}
           >
             {pageCurrent + 2}
           </button>
@@ -113,7 +111,7 @@ const Pagination = function ({
         <button
           onClick={GoPageEnd}
           disabled={pageCurrent === pageTotal}
-          className="fz-pagination-button-right"
+          className="paginationButtonRight"
         >
           <CaretRight />
         </button>

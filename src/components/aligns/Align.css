@@ -1,8 +1,8 @@
-.fz-vertical {
+.alignVertical {
   display: flex;
   flex-direction: column;
 }
 
-.fz-horizontal {
+.alignHorizontal {
   display: flex;
 }

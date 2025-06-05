@@ -40,15 +40,12 @@ const Input = function ({
   helper,
 }: InputProps) {
   return (
-    <div className="fz-input">
-      <div
-        className="fz-input-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="input">
+      <div className="inputHeader" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         <span style={{ opacity: helper ? 1 : 0 }}>{helper || ""}</span>
       </div>
-      <div className="fz-input-content">
+      <div className="inputContent">
         <input
           id={id}
           name={name}
@@ -106,15 +103,13 @@ function InputCheck<T extends string[] | boolean>({
   const option = options?.[0];
   const isMultiple = Array.isArray(value);
   return isMultiple ? (
-    <div className="fz-input-check-container">
+    <div className="inputCheckContainer">
       {label && <label htmlFor={id}>{label}</label>}
-      <div
-        className={`fz-input-check ${!horizontal ? "fz-input-check-vertical" : ""}`}
-      >
+      <div className={`inputCheck ${!horizontal ? "inputCheckVertical" : ""}`}>
         {options.map((option) => (
           <label htmlFor={option.id} key={option.id}>
-            <div className="fz-input-check-option-content">
-              <div className="fz-input-check-option" />
+            <div className="inputCheckOptionContent">
+              <div className="inputCheckOption" />
             </div>
             <input
               type="checkbox"
@@ -138,14 +133,12 @@ function InputCheck<T extends string[] | boolean>({
       </div>
     </div>
   ) : (
-    <div className="fz-input-check-container">
+    <div className="inputCheckContainer">
       {label && <label htmlFor={id}>{label}</label>}
-      <div
-        className={`fz-input-check ${!horizontal ? "fz-input-check-vertical" : ""}`}
-      >
+      <div className={`inputCheck ${!horizontal ? "inputCheckVertical" : ""}`}>
         <label htmlFor={option.id}>
-          <div className="fz-input-check-option-content">
-            <div className="fz-input-check-option" />
+          <div className="inputCheckOptionContent">
+            <div className="inputCheckOption" />
           </div>
           <input
             type="checkbox"
@@ -192,15 +185,12 @@ const InputFile = function ({
   helper,
 }: InputFileProps) {
   return (
-    <div className="fz-input">
-      <div
-        className="fz-input-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="input">
+      <div className="inputHeader" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <label htmlFor={id} className="fz-input-file">
+      <label htmlFor={id} className="inputFile">
         <button disabled={disabled}>{mimetype || "Choose file"}</button>
         <input
           id={id}
@@ -213,7 +203,7 @@ const InputFile = function ({
           onChange={onChange}
         />
         <div
-          className={`fz-input-file-info ${disabled ? "fz-input-file-info-disabled" : ""}`}
+          className={`inputFileInfo ${disabled ? "inputFileInfoDisabled" : ""}`}
         >
           <span>
             {value instanceof File && value.name
@@ -266,15 +256,12 @@ const InputMask = function ({
 }: InputMaskProps) {
   const inputRef = withMask(mask);
   return (
-    <div className="fz-input">
-      <div
-        className="fz-input-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="input">
+      <div className="inputHeader" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fz-input-content">
+      <div className="inputContent">
         <input
           id={id}
           name={name}
@@ -324,17 +311,12 @@ const InputMoney = function ({
   onChange,
 }: InputMoneyProps) {
   return (
-    <div className="fz-input">
-      <div
-        className="fz-input-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="input">
+      <div className="inputHeader" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div
-        className={`fz-input-money ${currency ? "fz-input-money-currency" : ""}`}
-      >
+      <div className={`inputMoney ${currency ? "inputMoneyCurrency" : ""}`}>
         <input
           id={id}
           type="text"
@@ -419,16 +401,14 @@ const InputRadio = function ({
   onChange,
 }: InputRadioProps) {
   return (
-    <div className="fz-input-radio-container">
+    <div className="inputRadioContainer">
       {label && <label htmlFor={id}>{label}</label>}
-      <div
-        className={`fz-input-radio ${horizontal ? "" : "fz-input-radio-vertical"}`}
-      >
+      <div className={`inputRadio ${horizontal ? "" : "inputRadioVertical"}`}>
         {options?.map(function (option, index) {
           return (
             <label htmlFor={option.id} key={`${option.id}${index}`}>
-              <div className="fz-input-radio-option-content">
-                <div className="fz-input-radio-option"></div>
+              <div className="inputRadioOptionContent">
+                <div className="inputRadioOption"></div>
               </div>
               <input
                 name={name}
@@ -501,15 +481,12 @@ const InputSelect = function ({
     return;
   });
   return (
-    <div className="fz-input">
-      <div
-        className="fz-input-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="input">
+      <div className="inputHeader" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fz-input-content">
+      <div className="inputContent">
         <select
           id={id}
           name={name}
@@ -596,15 +573,12 @@ const InputText = function ({
   resize,
 }: InputTextProps) {
   return (
-    <div className="fz-input">
-      <div
-        className="fz-input-header"
-        data-required={String(Boolean(required))}
-      >
+    <div className="input">
+      <div className="inputHeader" data-required={String(Boolean(required))}>
         <label htmlFor={id}>{label}</label>
         {helper && <span>{helper}</span>}
       </div>
-      <div className="fz-input-content">
+      <div className="inputContent">
         <textarea
           id={id}
           name={name}

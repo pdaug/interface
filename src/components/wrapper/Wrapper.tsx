@@ -28,21 +28,21 @@ const Wrapper = function ({
   actions,
 }: WrapperProps) {
   return (
-    <div className="fz-wrapper">
+    <div className="wrapper">
       {title && (
-        <div className="fz-wrapper-header">
-          <div className="fz-wrapper-header-title">{title}</div>
+        <div className="wrapperHeader">
+          <div className="wrapperHeaderTitle">{title}</div>
           {description && (
-            <div className="fz-wrapper-header-description">{description}</div>
+            <div className="wrapperHeaderDescription">{description}</div>
           )}
         </div>
       )}
-      <div className="fz-wrapper-content">{children}</div>
+      <div className="wrapperContent">{children}</div>
       {(onCancel || onConfirm || actions?.length) && (
-        <div className="fz-wrapper-footer">
+        <div className="wrapperFooter">
           {onCancel && (
             <Button
-              category="neutral"
+              category="Neutral"
               onClick={onCancel}
               text={onCancelLabel || "Cancel"}
             />
@@ -53,7 +53,7 @@ const Wrapper = function ({
             })}
           {onConfirm && (
             <Button
-              category="primary"
+              category="Primary"
               text={onConfirmLabel || "Confirm"}
               onClick={onConfirm}
             />

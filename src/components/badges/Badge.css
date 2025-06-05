@@ -1,4 +1,4 @@
-.fz-badge {
+.badge {
   -webkit-appearance: none;
   -moz-appearance: none;
   align-items: center;
@@ -15,44 +15,44 @@
   padding: 2px 0.8rem;
 }
 
-.fz-badge::-ms-expand {
+.badge::-ms-expand {
   display: none;
 }
 
-.fz-badge span,
-.fz-badge option {
+.badge span,
+.badge option {
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.fz-badge-primary {
+.badgePrimary {
   background: var(--success-light);
   background-color: var(--success-light);
   color: var(--success-dark);
 }
 
-.fz-badge-secondary {
+.badgeSecondary {
   background: var(--info-light);
   background-color: var(--info-light);
   color: var(--info-dark);
 }
 
-.fz-badge-warn {
+.badgeWarn {
   background: var(--warn-light);
   background-color: var(--warn-light);
   color: var(--warn-dark);
 }
 
-.fz-badge-danger {
+.badgeDanger {
   background: var(--danger-light);
   background-color: var(--danger-light);
   font-weight: bold;
   color: var(--danger-dark);
 }
 
-.fz-badge-neutral {
+.badgeNeutral {
   background: var(--background);
   background-color: var(--background);
   color: var(--font-light);

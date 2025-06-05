@@ -47,10 +47,10 @@ const Table = function ({
     ? rowsId.every((id) => selected.includes(id))
     : false;
   return (
-    <div className={`fz-table ${border ? "fz-table-border" : ""}`}>
-      <div className="fz-table-head">
-        <div className="fz-table-head-row">
-          <div style={{ maxWidth: 32 }} className="fz-table-head-data">
+    <div className={`table ${border ? "tableBorder" : ""}`}>
+      <div className="tableHead">
+        <div className="tableHeadRow">
+          <div style={{ maxWidth: 32 }} className="tableHeadData">
             <InputCheck
               value={isSelectedRowsId}
               onChange={function () {
@@ -73,27 +73,27 @@ const Table = function ({
           ) {
             return (
               <div
-                className="fz-table-head-data"
+                className="tableHeadData"
+                key={`${columnKey}-${index}`}
                 style={{ maxWidth: columnValue?.maxWidth }}
-                key={`table-head-data-${columnKey}-${index}`}
               >
                 {columnValue.label}
               </div>
             );
           })}
           {options && (
-            <div style={{ maxWidth: 32 }} className="fz-table-head-data"></div>
+            <div style={{ maxWidth: 32 }} className="tableHeadData"></div>
           )}
         </div>
       </div>
-      <div className="fz-table-body">
+      <div className="tableBody">
         {data?.map(function (row, indexRow) {
           return (
             <div
-              className={`fz-table-body-row ${selected?.includes(row.id) ? "fz-table-body-row-selected" : ""}`}
-              key={`table-body-row-${row.id}-${indexRow}`}
+              key={`${row.id}-${indexRow}`}
+              className={`tableBodyRow ${selected?.includes(row.id) ? "tableBodyRowSelected" : ""}`}
             >
-              <div style={{ maxWidth: 32 }} className="fz-table-body-data">
+              <div style={{ maxWidth: 32 }} className="tableBodyData">
                 <InputCheck
                   value={selected || []}
                   onChange={setSelected}
@@ -116,9 +116,9 @@ const Table = function ({
                   : rowData;
                 return (
                   <div
-                    className={"fz-table-body-data"}
+                    className="tableBodyData"
                     style={{ maxWidth: columnValue?.maxWidth }}
-                    key={`table-body-row-data-${row.id}-${columnKey}-${indexColumn}`}
+                    key={`${row.id}-${columnKey}-${indexColumn}`}
                   >
                     {columnValue.tooltip ? (
                       <Tooltip content={columnValue.tooltip}>
@@ -131,7 +131,7 @@ const Table = function ({
                 );
               })}
               {options && (
-                <div style={{ maxWidth: 32 }} className="fz-table-body-data">
+                <div style={{ maxWidth: 32 }} className="tableBodyData">
                   <Dropdown values={options}>
                     <div style={{ cursor: "pointer" }}>
                       <DotsThreeOutline weight="fill" />

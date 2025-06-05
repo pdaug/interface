@@ -29,28 +29,28 @@ export default {
 
 export const Primary: StoryObj<CalloutProps> = {
   args: {
-    category: "primary",
+    category: "Primary",
     Icon: CheckCircle,
   },
 };
 
 export const Secondary: StoryObj<CalloutProps> = {
   args: {
-    category: "secondary",
+    category: "Secondary",
     Icon: Info,
   },
 };
 
 export const Warn: StoryObj<CalloutProps> = {
   args: {
-    category: "warn",
+    category: "Warn",
     Icon: Warning,
   },
 };
 
 export const Danger: StoryObj<CalloutProps> = {
   args: {
-    category: "danger",
+    category: "Danger",
     Icon: WarningOctagon,
   },
 };

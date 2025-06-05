@@ -26,22 +26,18 @@ import "./Chart.css";
 
 const ChartTooltip = function (props: TooltipProps<string, string>) {
   return (
-    <div className="fz-chart-tooltip">
-      <div className="fz-chart-tooltip-title">{props.label}</div>
-      <div className="fz-chart-tooltip-content">
+    <div className="chartTooltip">
+      <div className="chartTooltipTitle">{props.label}</div>
+      <div className="chartTooltipContent">
         {props?.payload?.map(function (payload, index) {
           return (
-            <div className="fz-chart-tooltip-payload" key={`payload-${index}`}>
+            <div className="chartTooltipPayload" key={`payload-${index}`}>
               <div
                 style={{ background: payload?.stroke || payload?.fill }}
-                className="fz-chart-tooltip-payload-square"
+                className="chartTooltipPayloadColor"
               ></div>
-              <div className="fz-chart-tooltip-payload-name">
-                {payload?.name}
-              </div>
-              <div className="fz-chart-tooltip-payload-value">
-                {payload?.value}
-              </div>
+              <div className="chartTooltipPayloadName">{payload?.name}</div>
+              <div className="chartTooltipPayloadValue">{payload?.value}</div>
             </div>
           );
         })}

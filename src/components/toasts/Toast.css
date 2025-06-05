@@ -1,4 +1,4 @@
-.fz-toast {
+.toast {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -13,39 +13,39 @@
   width: 100%;
 }
 
-.fz-toast-success {
+.toastSuccess {
   background: var(--success);
   background-color: var(--success);
   border-color: var(--success-dark);
   color: white;
 }
 
-.fz-toast-info {
+.toastSecondary {
   background: var(--info);
   background-color: var(--info);
   border-color: var(--info-dark);
   color: white;
 }
 
-.fz-toast-error {
+.toastDanger {
   background: var(--danger);
   background-color: var(--danger);
   border-color: var(--danger-dark);
   color: white;
 }
 
-.fz-toast-warn {
+.toastWarn {
   background: var(--warn);
   background-color: var(--warn);
   border-color: var(--warn-dark);
   color: white;
 }
 
-.fz-toast * {
+.toast * {
   font-size: 0.8rem;
 }
 
-.fz-toast [data-close-button="true"] {
+.toast [data-close-button="true"] {
   align-items: center;
   background: white;
   border: 1px solid var(--border);
@@ -63,13 +63,13 @@
   width: 24px;
 }
 
-.fz-toast [data-close-button="true"] * {
+.toast [data-close-button="true"] * {
   color: var(--font);
   fill: var(--font);
 }
 
 @media only screen and (max-width: 768px) and (orientation: portrait) {
-  .fz-toast {
+  .toast {
     width: 60vw;
   }
 }

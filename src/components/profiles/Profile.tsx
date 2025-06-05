@@ -26,7 +26,7 @@ const Profile = function ({
   return (
     <div
       style={styles}
-      className={`fz-profile ${border ? "fz-profile-border" : ""} ${padding ? "fz-profile-padding" : ""}`}
+      className={`profile ${border ? "profileBorder" : ""} ${padding ? "profilePadding" : ""}`}
     >
       <div>
         <Avatar
@@ -37,10 +37,10 @@ const Profile = function ({
           Icon={User}
         />
       </div>
-      <div className="fz-profile-data">
-        <div className="fz-profile-data-name">{name}</div>
+      <div className="profileData">
+        <div className="profileDataName">{name}</div>
         {description && (
-          <div className="fz-profile-data-description">{description}</div>
+          <div className="profileDataDescription">{description}</div>
         )}
       </div>
     </div>

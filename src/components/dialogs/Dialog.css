@@ -1,4 +1,4 @@
-.fz-dialog {
+.dialog {
   align-items: center;
   background: var(--modal);
   background-color: var(--modal);
@@ -18,21 +18,21 @@
   visibility: hidden;
 }
 
-.fz-dialog.open {
+.dialogOpen {
   opacity: 1;
   pointer-events: auto;
   transition: 200ms;
   visibility: visible;
 }
 
-.fz-dialog-container {
+.dialogContainer {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
   border-radius: var(--rounded);
   overflow: hidden;
   width: 35rem;
-  
+
   opacity: 0;
   transform: scale(50%);
   pointer-events: none;
@@ -40,7 +40,7 @@
   visibility: hidden;
 }
 
-.fz-dialog-container.open {
+.dialogContainerOpen {
   opacity: 1;
   transform: scale(100%);
   pointer-events: auto;
@@ -48,7 +48,7 @@
   visibility: visible;
 }
 
-.fz-dialog-content {
+.dialogContent {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
@@ -56,7 +56,7 @@
   padding: 1rem;
 }
 
-.fz-dialog-title {
+.dialogTitle {
   align-items: center;
   display: flex;
   gap: 0.4rem;
@@ -64,19 +64,19 @@
   font-weight: bold;
 }
 
-.fz-dialog-title span {
+.dialogTitle span {
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.fz-dialog-description {
+.dialogDescription {
   font-size: var(--text-small);
   text-align: justify;
 }
 
-.fz-dialog-footer {
+.dialogFooter {
   background: var(--background);
   background-color: var(--background);
   border-top: 1px solid var(--border);
@@ -87,7 +87,7 @@
 }
 
 @media only screen and (max-width: 768px) and (orientation: portrait) {
-  .fz-dialog-container {
+  .dialogContainer {
     margin: 0 1rem !important;
     width: 100% !important;
   }

@@ -1,8 +1,8 @@
-.fz-dropdown {
+.dropdown {
   position: relative;
 }
 
-.fz-dropdown-content {
+.dropdownContent {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
@@ -21,18 +21,20 @@
   opacity: 0;
   transform: translateY(-8px);
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
   visibility: hidden;
 }
 
-.fz-dropdown-content.open {
+.dropdownContentOpen {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
   visibility: visible;
 }
 
-.fz-dropdown-content-option {
+.dropdownContentOption {
   align-items: center;
   background: var(--foreground);
   background-color: var(--foreground);
@@ -46,14 +48,14 @@
   transition: 200ms;
 }
 
-.fz-dropdown-content-option:not(:disabled):hover {
+.dropdownContentOption:not(:disabled):hover {
   background: var(--background);
   background-color: var(--background);
   cursor: pointer;
   transition: 200ms;
 }
 
-.fz-dropdown-content-option:disabled {
+.dropdownContentOption:disabled {
   color: var(--font-light);
   cursor: not-allowed;
   opacity: 0.6;

@@ -1,4 +1,4 @@
-.fz-button {
+.button {
   align-items: center;
   border-radius: var(--rounded);
   box-shadow: var(--shadow);
@@ -12,73 +12,73 @@
   transition: 0.2s;
 }
 
-.fz-button:not(:disabled):hover {
+.button:not(:disabled):hover {
   opacity: 0.8;
   transition: 0.2s;
 }
 
-.fz-button:not(:disabled):active {
+.button:not(:disabled):active {
   filter: brightness(110%);
   transform: scale(95%);
   transition: 0.2s;
 }
 
-.fz-button:disabled {
+.button:disabled {
   filter: saturate(90%);
   opacity: 0.6;
   cursor: not-allowed !important;
   transition: 0.2s;
 }
 
-.fz-button span {
+.button span {
   overflow: hidden;
   text-overflow: ellipsis;
   user-select: none;
   white-space: nowrap;
 }
 
-.fz-button-primary {
+.buttonPrimary {
   background: var(--success);
   background-color: var(--success);
   border: 1px solid var(--success-dark);
   color: var(--background);
 }
 
-.fz-button-secondary {
+.buttonSecondary {
   background: var(--info);
   background-color: var(--info);
   border: 1px solid var(--info-dark);
   color: var(--background);
 }
 
-.fz-button-danger {
+.buttonDanger {
   background: var(--danger);
   background-color: var(--danger);
   border: 1px solid var(--danger-dark);
   color: var(--background);
 }
 
-.fz-button-warn {
+.buttonWarn {
   background: var(--warn);
   background-color: var(--warn);
   border: 1px solid var(--warn-dark);
   color: var(--background);
 }
 
-.fz-button-neutral {
+.buttonNeutral {
   background: var(--foreground);
   background-color: var(--foreground);
   border: 1px solid var(--border);
   color: var(--font);
 }
 
-.fz-button-neutral:disabled {
+.buttonNeutral:disabled {
   background: var(--border);
   background-color: var(--border);
 }
 
-.fz-button-primary *,
-.fz-button-secondary *,
-.fz-button-danger * {
+.buttonPrimary *,
+.buttonSecondary *,
+.buttonDanger * {
   color: var(--background);
 }

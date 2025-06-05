@@ -1,4 +1,4 @@
-.fz-profile {
+.profile {
   align-items: center;
   border-radius: var(--rounded);
   display: flex;
@@ -6,52 +6,28 @@
   overflow: hidden;
 }
 
-.fz-profile-padding {
+.profilePadding {
   padding: 0.4rem 0.6rem;
 }
 
-.fz-profile-border {
+.profileBorder {
   border: 1px solid var(--border);
 }
 
-.fz-profile-photo {
-  align-items: center;
-  background: var(--border-light);
-  background: var(--border-light);
-  border-radius: 100%;
-  display: flex;
-  justify-content: center;
-  height: 32px;
-  overflow: hidden;
-  width: 32px;
-}
-
-.fz-profile-photo svg {
-  fill: var(--font-light);
-  color: var(--font-light);
-}
-
-.fz-profile-photo img {
-  aspect-ratio: 1 / 1;
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
-}
-
-.fz-profile-data {
+.profileData {
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.fz-profile-data-name {
+.profileDataName {
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.fz-profile-data-description {
+.profileDataDescription {
   color: var(--font-light);
   font-size: var(--text-small);
   overflow: hidden;
