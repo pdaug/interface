@@ -1,12 +1,18 @@
-import type { StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
 import Breadcrumb from "./Breadcrumb";
+import { Center } from "../aligns/Align";
 
 export default {
   title: "Components/Breadcrumb",
   component: Breadcrumb,
   tags: ["autodocs"],
-};
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
+} as Meta;
 
 export const Default: StoryObj<typeof Breadcrumb> = {
   args: {

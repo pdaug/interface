@@ -4,13 +4,19 @@ import {
   CheckCircle,
   WarningOctagon,
 } from "@phosphor-icons/react";
-import type { StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
+import { Center } from "../aligns/Align";
 import Callout, { CalloutCategoriesList, CalloutProps } from "./Callout";
 
 export default {
   title: "Components/Callout",
   component: Callout,
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
   tags: ["autodocs"],
   args: {
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas et ligula sit amet tortor dapibus tempus ac et augue.",
@@ -25,7 +31,7 @@ export default {
       control: false,
     },
   },
-};
+} as Meta;
 
 export const Primary: StoryObj<CalloutProps> = {
   args: {

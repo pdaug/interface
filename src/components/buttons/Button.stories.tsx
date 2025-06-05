@@ -1,13 +1,18 @@
-import type { StoryObj } from "@storybook/react";
 import { Plus, Trash } from "@phosphor-icons/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
-import { Horizontal } from "../aligns/Align";
+import { Center, Horizontal } from "../aligns/Align";
 import Button, { ButtonCategories, ButtonCategoriesList } from "./Button";
 
 export default {
   title: "Components/Button",
   component: Button,
   tags: ["autodocs"],
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
   argTypes: {
     category: {
       control: "select",
@@ -18,7 +23,7 @@ export default {
     },
     onClick: { action: "clicked" },
   },
-};
+} as Meta;
 
 export const Default: StoryObj<typeof Button> = {
   args: {

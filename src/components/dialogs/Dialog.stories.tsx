@@ -1,5 +1,5 @@
 import { Trash } from "@phosphor-icons/react";
-import type { StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
 // components
 import {
@@ -8,20 +8,21 @@ import {
   DialogProvider,
   DialogContextProps,
 } from "./Dialog";
+import { Center } from "../aligns/Align";
 import Button, { ButtonCategories } from "../buttons/Button";
 
 export default {
   title: "Components/Dialog",
   tags: ["autodocs"],
-  decorators: [
-    (Story: () => React.JSX.Element) => (
-      <DialogProvider>
+  decorators: (Story) => (
+    <DialogProvider>
+      <Center>
         <Story />
         <DialogElement />
-      </DialogProvider>
-    ),
-  ],
-};
+      </Center>
+    </DialogProvider>
+  ),
+} as Meta;
 
 const Template = (
   dialogProps: {
@@ -51,9 +52,9 @@ export const Primary: StoryObj = {
   render: () =>
     Template({
       buttonText: "Dialog Primary",
-      buttonCategory: "primary",
+      buttonCategory: "Primary",
       title: "Título",
-      category: "primary",
+      category: "Primary",
       description: "Descrição do diálogo primário",
       confirmText: "Confirmar",
       onConfirm: () => null,
@@ -64,9 +65,9 @@ export const Secondary: StoryObj = {
   render: () =>
     Template({
       buttonText: "Dialog Secondary",
-      buttonCategory: "secondary",
+      buttonCategory: "Secondary",
       title: "Informação Importante",
-      category: "secondary",
+      category: "Secondary",
       description:
         "Este é um diálogo de categoria secundária para confirmações gerais.",
       confirmText: "Entendi",
@@ -78,9 +79,9 @@ export const Warn: StoryObj = {
   render: () =>
     Template({
       buttonText: "Dialog Warning",
-      buttonCategory: "warn",
+      buttonCategory: "Warn",
       title: "Atenção!",
-      category: "warn",
+      category: "Warn",
       description: "Você tem certeza que deseja continuar?",
       confirmText: "Sim, continuar",
       onConfirm: () => null,
@@ -91,10 +92,10 @@ export const Danger: StoryObj = {
   render: () =>
     Template({
       buttonText: "Dialog Danger",
-      buttonCategory: "danger",
+      buttonCategory: "Danger",
       Icon: Trash,
       title: "Excluir item?",
-      category: "danger",
+      category: "Danger",
       description: "Essa ação não poderá ser desfeita.",
       confirmText: "Deletar",
       confirmIcon: Trash,

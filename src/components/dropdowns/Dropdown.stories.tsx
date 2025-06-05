@@ -1,16 +1,21 @@
-import type { StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { Clipboard, CopySimple, Trash } from "@phosphor-icons/react";
 
 // components
 import Dropdown from "./Dropdown";
 import Button from "../buttons/Button";
-import { Horizontal } from "../aligns/Align";
+import { Center, Horizontal } from "../aligns/Align";
 
 export default {
   title: "Components/Dropdown",
   component: Dropdown,
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
   tags: ["autodocs"],
-};
+} as Meta;
 
 export const Default: StoryObj<typeof Dropdown> = {
   render: () => {

@@ -1,16 +1,21 @@
+import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import Badge from "../badges/Badge";
 import Profile from "../profiles/Profile";
 import Table, { TableColumn } from "./Table";
-import { useState } from "react";
+import { Center } from "../aligns/Align";
 
-const meta: Meta<typeof Table> = {
+export default {
   title: "Components/Table",
+  component: Table,
   tags: ["autodocs"],
-};
-
-export default meta;
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
+} as Meta;
 
 const users: {
   [key: number]: { name: string; description: string; photo: string };

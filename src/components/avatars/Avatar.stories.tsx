@@ -1,11 +1,17 @@
 import { Rocket } from "@phosphor-icons/react";
-import type { StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
 import Avatar from "./Avatar";
+import { Center } from "../aligns/Align";
 
 export default {
   title: "Components/Avatar",
   component: Avatar,
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
   tags: ["autodocs"],
   argTypes: {
     size: { control: { type: "number", min: 1, max: 10 } },
@@ -14,7 +20,7 @@ export default {
     label: { control: "text" },
     Icon: { control: false },
   },
-};
+} as Meta;
 
 export const Default: StoryObj<typeof Avatar> = {
   args: {

@@ -15,6 +15,7 @@ export type WrapperProps = {
   onConfirm?: () => void;
   onConfirmLabel?: string;
   actions?: ButtonProps[];
+  styles?: React.CSSProperties;
 };
 
 const Wrapper = function ({
@@ -26,9 +27,10 @@ const Wrapper = function ({
   onConfirm,
   onConfirmLabel,
   actions,
+  styles,
 }: WrapperProps) {
   return (
-    <div className="wrapper">
+    <div className="wrapper" style={styles}>
       {title && (
         <div className="wrapperHeader">
           <div className="wrapperHeaderTitle">{title}</div>

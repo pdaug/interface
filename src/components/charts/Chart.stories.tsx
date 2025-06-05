@@ -1,13 +1,18 @@
-import type { StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
 import Wrapper from "../wrapper/Wrapper";
-import { Horizontal } from "../aligns/Align";
+import { Center, Horizontal } from "../aligns/Align";
 import { ChartBar, ChartLine, ChartPie } from "./Chart";
 
 export default {
   title: "Components/Chart",
   tags: ["autodocs"],
-};
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
+} as Meta;
 
 export const Line: StoryObj = {
   render: () => {

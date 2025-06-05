@@ -1,7 +1,7 @@
 import type { StoryObj } from "@storybook/react";
 
 import Button from "../buttons/Button";
-import { Horizontal, Vertical } from "./Align";
+import { Center, Horizontal, Vertical } from "./Align";
 
 export default {
   title: "Components/Align",
@@ -10,22 +10,26 @@ export default {
 
 export const AlignVertical: StoryObj = {
   render: () => (
-    <Vertical internal={1}>
-      <Button category="Primary" text="1" />
-      <Button category="Primary" text="2" />
-      <Button category="Primary" text="3" />
-      <Button category="Primary" text="4" />
-    </Vertical>
+    <Center>
+      <Vertical internal={1}>
+        <Button category="Primary" text="1" />
+        <Button category="Primary" text="2" />
+        <Button category="Primary" text="3" />
+        <Button category="Primary" text="4" />
+      </Vertical>
+    </Center>
   ),
 };
 
 export const AlignHorizontal: StoryObj = {
   render: () => (
-    <Horizontal internal={1}>
-      <Button category="Primary" text="1" />
-      <Button category="Primary" text="2" />
-      <Button category="Primary" text="3" />
-      <Button category="Primary" text="4" />
-    </Horizontal>
+    <Center>
+      <Horizontal internal={1}>
+        <Button category="Primary" text="1" />
+        <Button category="Primary" text="2" />
+        <Button category="Primary" text="3" />
+        <Button category="Primary" text="4" />
+      </Horizontal>
+    </Center>
   ),
 };

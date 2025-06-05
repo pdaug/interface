@@ -1,13 +1,18 @@
-import type { StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
 import Stats, { StatsProps } from "./Stats";
-import { Horizontal } from "../aligns/Align";
+import { Center, Horizontal } from "../aligns/Align";
 
 export default {
   title: "Components/Stats",
   component: Stats,
   tags: ["autodocs"],
-};
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
+} as Meta;
 
 export const Default: StoryObj<StatsProps> = {
   args: {

@@ -2,14 +2,18 @@ import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import Pagination from "./Pagination";
-import { Vertical } from "../aligns/Align";
+import { Center, Vertical } from "../aligns/Align";
 
-const meta: Meta<typeof Pagination> = {
+export default {
   title: "Components/Pagination",
   tags: ["autodocs"],
-};
-
-export default meta;
+  component: Pagination,
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
+} as Meta;
 
 export const Default: StoryObj = {
   render: () => {

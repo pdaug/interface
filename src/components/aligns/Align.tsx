@@ -1,6 +1,14 @@
 import "./Align.css";
 
-export type AlignProps = {
+export type AlignCenterProps = {
+  children: React.ReactNode;
+};
+
+const Center = function ({ children }: AlignCenterProps) {
+  return <div className="alignCenter">{children}</div>;
+};
+
+export type AlignElementProps = {
   external?: number;
   internal?: number;
   styles?: React.CSSProperties;
@@ -12,7 +20,7 @@ const Vertical = function ({
   internal,
   styles,
   children,
-}: AlignProps) {
+}: AlignElementProps) {
   const style = { gap: `${internal}rem`, margin: `${external}rem`, ...styles };
   return (
     <div className="alignVertical" style={style}>
@@ -26,7 +34,7 @@ const Horizontal = function ({
   internal,
   styles,
   children,
-}: AlignProps) {
+}: AlignElementProps) {
   const style = { gap: `${internal}rem`, margin: `${external}rem`, ...styles };
   return (
     <div className="alignHorizontal" style={style}>
@@ -35,4 +43,4 @@ const Horizontal = function ({
   );
 };
 
-export { Vertical, Horizontal };
+export { Center, Vertical, Horizontal };

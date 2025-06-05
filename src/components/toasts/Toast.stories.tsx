@@ -1,15 +1,21 @@
-import React from "react";
 import { toast } from "sonner";
+import { Meta } from "@storybook/react";
 
 import { ToastElement } from "./Toast";
-import { Horizontal } from "../aligns/Align";
+import { Center, Horizontal } from "../aligns/Align";
 import Button, { ButtonCategories } from "../buttons/Button";
 
 export default {
   title: "components/Toast",
   component: ToastElement,
   tags: ["autodocs"],
-};
+  decorators: (Story) => (
+    <Center>
+      <ToastElement />
+      <Story />
+    </Center>
+  ),
+} as Meta;
 
 type toastTypes = "success" | "info" | "warning" | "error" | "message";
 
@@ -23,24 +29,21 @@ const toasts = [
 
 export const All = () => {
   return (
-    <React.Fragment>
-      <ToastElement />
-      <Horizontal internal={1} styles={{ width: "30rem" }}>
-        {toasts.map(function ({ category, name }) {
-          return (
-            <Button
-              key={category}
-              category={category as ButtonCategories}
-              text={category}
-              onClick={() =>
-                toast[name as toastTypes](
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                )
-              }
-            />
-          );
-        })}
-      </Horizontal>
-    </React.Fragment>
+    <Horizontal internal={1} styles={{ width: "30rem" }}>
+      {toasts.map(function ({ category, name }) {
+        return (
+          <Button
+            key={category}
+            category={category as ButtonCategories}
+            text={category}
+            onClick={() =>
+              toast[name as toastTypes](
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              )
+            }
+          />
+        );
+      })}
+    </Horizontal>
   );
 };

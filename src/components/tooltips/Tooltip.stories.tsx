@@ -1,14 +1,19 @@
-import type { StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
 import Button from "../buttons/Button";
-import { Horizontal } from "../aligns/Align";
+import { Center, Horizontal } from "../aligns/Align";
 import Tooltip, { TooltipPlacement } from "./Tooltip";
 
 export default {
   title: "Components/Tooltip",
   component: Tooltip,
   tags: ["autodocs"],
-};
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
+} as Meta;
 
 export const Default: StoryObj<typeof Tooltip> = {
   render: () => (

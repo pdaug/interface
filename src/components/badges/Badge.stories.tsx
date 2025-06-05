@@ -1,12 +1,17 @@
 import { useState } from "react";
-import type { StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
-import { Horizontal } from "../aligns/Align";
+import { Center, Horizontal } from "../aligns/Align";
 import Badge, { BadgeCategoriesList } from "./Badge";
 
 export default {
   title: "Components/Badge",
   component: Badge,
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
   tags: ["autodocs"],
   argTypes: {
     category: {
@@ -14,7 +19,7 @@ export default {
       options: BadgeCategoriesList,
     },
   },
-};
+} as Meta;
 
 export const Default: StoryObj<typeof Badge> = {
   args: {

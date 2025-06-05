@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
 import {
   Input,
@@ -11,12 +11,17 @@ import {
   InputSelect,
   InputText,
 } from "./Input";
-import { Vertical } from "../aligns/Align";
+import { Center, Vertical } from "../aligns/Align";
 
 export default {
   title: "Components/Input",
   tags: ["autodocs"],
-};
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
+} as Meta;
 
 export const Text: StoryObj = {
   render: () => {

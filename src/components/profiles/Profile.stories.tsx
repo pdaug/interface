@@ -1,10 +1,16 @@
-import type { StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
 import Profile from "./Profile";
+import { Center } from "../aligns/Align";
 
 export default {
   title: "Components/Profile",
   component: Profile,
+  decorators: (Story) => (
+    <Center>
+      <Story />
+    </Center>
+  ),
   tags: ["autodocs"],
   argTypes: {
     name: { control: "text" },
@@ -14,7 +20,7 @@ export default {
     border: { control: "boolean" },
     padding: { control: "boolean" },
   },
-};
+} as Meta;
 
 export const Default: StoryObj<typeof Profile> = {
   args: {
