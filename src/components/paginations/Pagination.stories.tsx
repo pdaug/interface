@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+
 import Pagination from "./Pagination";
 import { Vertical } from "../aligns/Align";
 
@@ -14,7 +15,7 @@ export const Default: StoryObj = {
   render: () => {
     const [page, setPage] = useState(1);
     return (
-      <Vertical internal={1} styles={{ width: "30rem" }}>
+      <Vertical internal={1}>
         <Pagination
           pageCurrent={page}
           pageSize={10}

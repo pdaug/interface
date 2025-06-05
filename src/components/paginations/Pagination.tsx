@@ -88,7 +88,7 @@ const Pagination = function ({
             {pageCurrent - 1}
           </button>
         )}
-        <button className={`paginationButtonCenter paginationButtonSelected`}>
+        <button className={`paginationButtonCenter paginationButtonsSelected`}>
           {pageCurrent}
         </button>
         {pageCurrent + 1 <= pageTotal && (
