@@ -18,7 +18,7 @@ export default {
 export const Default: StoryObj<typeof Tooltip> = {
   render: () => (
     <Tooltip content="Tooltip message">
-      <Button text="Hover me" category="Primary" />
+      <Button text="Hover me" category="Success" />
     </Tooltip>
   ),
 };

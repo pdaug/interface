@@ -7,27 +7,27 @@
 
 .breadcrumb span,
 .breadcrumb svg {
-  fill: var(--font-light);
-  color: var(--font-light);
+  fill: var(--textLight);
+  color: var(--textLight);
   font-weight: 500;
   opacity: 0.6;
 }
 
 .breadcrumb a {
-  color: var(--font);
-  font-size: var(--text-small);
+  color: var(--textColor);
+  font-size: var(--textSmall);
   font-weight: 400;
   transition: 200ms;
   text-decoration: none;
 }
 
 .breadcrumb a:hover {
-  color: var(--font-dark);
+  color: var(--textDark);
   filter: brightness(0.8);
   transition: 200ms;
 }
 
 .breadcrumb a:active {
-  color: var(--font-light);
+  color: var(--textLight);
   transition: 200ms;
 }

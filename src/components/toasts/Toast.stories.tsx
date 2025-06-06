@@ -20,9 +20,9 @@ export default {
 type toastTypes = "success" | "info" | "warning" | "error" | "message";
 
 const toasts = [
-  { category: "Primary", name: "success" },
-  { category: "Secondary", name: "info" },
-  { category: "Warn", name: "warning" },
+  { category: "Success", name: "success" },
+  { category: "Info", name: "info" },
+  { category: "Warning", name: "warning" },
   { category: "Danger", name: "error" },
   { category: "Neutral", name: "message" },
 ];
@@ -34,8 +34,8 @@ export const All = () => {
         return (
           <Button
             key={category}
-            category={category as ButtonCategories}
             text={category}
+            category={category as ButtonCategories}
             onClick={() =>
               toast[name as toastTypes](
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

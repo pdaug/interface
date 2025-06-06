@@ -1,15 +1,15 @@
 .wrapper {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--rounded);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
   box-shadow: var(--shadow);
   flex: 1;
   overflow: hidden;
 }
 
 .wrapperHeader {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--borderColor);
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -17,15 +17,15 @@
 }
 
 .wrapperHeaderTitle {
-  font-size: var(--text-highlight);
+  font-size: var(--textHighlight);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .wrapperHeaderDescription {
-  color: var(--font-light);
-  font-size: var(--text-small);
+  color: var(--textLight);
+  font-size: var(--textSmall);
   line-height: 1.2;
   text-align: justify;
 }
@@ -35,9 +35,9 @@
 }
 
 .wrapperFooter {
-  background: var(--background);
-  background-color: var(--background);
-  border-top: 1px solid var(--border);
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
+  border-top: 1px solid var(--borderColor);
   display: flex;
   gap: 0.6rem;
   justify-content: flex-end;

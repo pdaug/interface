@@ -1,7 +1,7 @@
 .dialog {
   align-items: center;
-  background: var(--modal);
-  background-color: var(--modal);
+  background: var(--backgroundModal);
+  background-color: var(--backgroundModal);
   box-shadow: var(--shadow);
   display: flex;
   height: 100vh;
@@ -26,10 +26,10 @@
 }
 
 .dialogContainer {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--rounded);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
   overflow: hidden;
   width: 35rem;
 
@@ -60,7 +60,7 @@
   align-items: center;
   display: flex;
   gap: 0.4rem;
-  font-size: var(--text-subtitle);
+  font-size: var(--textSubtitle);
   font-weight: bold;
 }
 
@@ -72,14 +72,14 @@
 }
 
 .dialogDescription {
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   text-align: justify;
 }
 
 .dialogFooter {
-  background: var(--background);
-  background-color: var(--background);
-  border-top: 1px solid var(--border);
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
+  border-top: 1px solid var(--borderColor);
   display: flex;
   gap: 1rem;
   justify-content: flex-end;

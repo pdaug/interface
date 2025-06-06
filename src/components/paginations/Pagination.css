@@ -6,13 +6,13 @@
 
 .paginationData {
   display: flex;
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   flex: 1;
   gap: 0.2rem;
 }
 
 .paginationData span {
-  color: var(--font-light);
+  color: var(--textLight);
 }
 
 .paginationData b {
@@ -25,9 +25,9 @@
 }
 
 .paginationButtons button {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
   height: 2rem;
   line-height: 1;
   overflow: hidden;
@@ -39,22 +39,22 @@
 }
 
 .paginationButtons button:disabled {
-  background: var(--background) !important;
-  background-color: var(--background) !important;
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
   cursor: not-allowed;
 }
 
 .paginationButtonsSelected {
-  background: var(--info) !important;
-  background-color: var(--info) !important;
-  border-color: var(--info-dark) !important;
+  background: var(--infoColor) !important;
+  background-color: var(--infoColor) !important;
+  border-color: var(--infoDark) !important;
   color: white;
   cursor: default !important;
 }
 
 .paginationButtonLeft {
-  border-top-left-radius: var(--rounded);
-  border-bottom-left-radius: var(--rounded);
+  border-top-left-radius: var(--borderRadius);
+  border-bottom-left-radius: var(--borderRadius);
 }
 
 .paginationButtonCenter {
@@ -63,6 +63,6 @@
 }
 
 .paginationButtonRight {
-  border-top-right-radius: var(--rounded);
-  border-bottom-right-radius: var(--rounded);
+  border-top-right-radius: var(--borderRadius);
+  border-bottom-right-radius: var(--borderRadius);
 }

@@ -48,30 +48,32 @@ const Template = (
   );
 };
 
-export const Primary: StoryObj = {
+export const Success: StoryObj = {
   render: () =>
     Template({
-      buttonText: "Dialog Primary",
-      buttonCategory: "Primary",
-      title: "Título",
-      category: "Primary",
-      description: "Descrição do diálogo primário",
-      confirmText: "Confirmar",
+      buttonText: "Dialog Success",
+      buttonCategory: "Success",
+      title: "Title",
+      category: "Success",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras venenatis metus est, finibus dignissim ex bibendum quis. ",
+      confirmText: "Confirm",
       onConfirm: () => null,
     }),
 };
 
-export const Secondary: StoryObj = {
+export const Info: StoryObj = {
   render: () =>
     Template({
-      buttonText: "Dialog Secondary",
-      buttonCategory: "Secondary",
-      title: "Informação Importante",
-      category: "Secondary",
+      buttonText: "Dialog Info",
+      buttonCategory: "Info",
+      title: "Title",
+      category: "Info",
       description:
-        "Este é um diálogo de categoria secundária para confirmações gerais.",
-      confirmText: "Entendi",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras venenatis metus est, finibus dignissim ex bibendum quis. ",
+      confirmText: "Ok",
       onConfirm: () => null,
+      cancelText: "Close",
     }),
 };
 
@@ -79,12 +81,14 @@ export const Warn: StoryObj = {
   render: () =>
     Template({
       buttonText: "Dialog Warning",
-      buttonCategory: "Warn",
-      title: "Atenção!",
-      category: "Warn",
-      description: "Você tem certeza que deseja continuar?",
-      confirmText: "Sim, continuar",
+      buttonCategory: "Warning",
+      title: "Title",
+      category: "Warning",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras venenatis metus est, finibus dignissim ex bibendum quis. ",
+      confirmText: "I agree",
       onConfirm: () => null,
+      cancelText: "Don't agree",
     }),
 };
 
@@ -94,10 +98,12 @@ export const Danger: StoryObj = {
       buttonText: "Dialog Danger",
       buttonCategory: "Danger",
       Icon: Trash,
-      title: "Excluir item?",
+      title: "Title",
       category: "Danger",
-      description: "Essa ação não poderá ser desfeita.",
-      confirmText: "Deletar",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras venenatis metus est, finibus dignissim ex bibendum quis. ",
+      confirmText: "Delete",
+      cancelText: "No",
       confirmIcon: Trash,
       onConfirm: () => null,
     }),

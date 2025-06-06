@@ -8,6 +8,10 @@ export default {
   tags: ["autodocs"],
 };
 
+export const AlignCenter: StoryObj = {
+  render: () => <Center>Text</Center>,
+};
+
 export const AlignVertical: StoryObj = {
   render: () => (
     <Center>

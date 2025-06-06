@@ -25,7 +25,7 @@ export const Default: StoryObj<typeof Badge> = {
   args: {
     id: "default-badge",
     value: "Default",
-    category: "Primary",
+    category: "Success",
   },
 };
 
@@ -59,7 +59,7 @@ export const WithOptions: StoryObj<typeof Badge> = {
   args: {
     id: "badge-with-options",
     value: "opt1",
-    category: "Secondary",
+    category: "Info",
     options: [
       { id: "1", value: "opt1", label: "Option 1" },
       { id: "2", value: "opt2", label: "Option 2" },

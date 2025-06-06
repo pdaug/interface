@@ -5,10 +5,10 @@ import { IconWeight, Icon as PhosphorIcons } from "@phosphor-icons/react";
 import "./Button.css";
 
 export const ButtonCategoriesList = [
-  "Primary",
-  "Secondary",
+  "Success",
+  "Info",
+  "Warning",
   "Danger",
-  "Warn",
   "Neutral",
 ] as const;
 

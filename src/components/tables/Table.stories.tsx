@@ -35,7 +35,7 @@ const columns: TableColumn = {
     handler: function (data) {
       return (
         <Badge
-          category={data.status ? "Primary" : "Danger"}
+          category={data.status ? "Success" : "Danger"}
           value={data.status ? "Active" : "Disabled"}
         />
       );

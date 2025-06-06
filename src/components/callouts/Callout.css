@@ -1,36 +1,36 @@
 .callout {
   align-items: center;
-  border-radius: var(--rounded);
+  border-radius: var(--borderRadius);
   cursor: default;
   display: flex;
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   gap: 0.6rem;
   overflow: hidden;
   padding: 0.6rem 1rem;
   width: 100%;
 }
 
-.calloutPrimary {
-  background: var(--success-light);
-  background-color: var(--success-light);
-  color: var(--success-dark);
+.calloutSuccess {
+  background: var(--successLight);
+  background-color: var(--successLight);
+  color: var(--successDark);
 }
 
-.calloutSecondary {
-  background: var(--info-light);
-  background-color: var(--info-light);
-  color: var(--info-dark);
+.calloutInfo {
+  background: var(--infoLight);
+  background-color: var(--infoLight);
+  color: var(--infoDark);
 }
 
-.calloutWarn {
-  background: var(--warn-light);
-  background-color: var(--warn-light);
-  color: var(--warn-dark);
+.calloutWarning {
+  background: var(--warningLight);
+  background-color: var(--warningLight);
+  color: var(--warningDark);
 }
 
 .calloutDanger {
-  background: var(--danger-light);
-  background-color: var(--danger-light);
+  background: var(--dangerLight);
+  background-color: var(--dangerLight);
   font-weight: bold;
-  color: var(--danger-dark);
+  color: var(--dangerDark);
 }

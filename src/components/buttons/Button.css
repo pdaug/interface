@@ -1,11 +1,15 @@
 .button {
   align-items: center;
-  border-radius: var(--rounded);
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
   box-shadow: var(--shadow);
+  color: var(--textColor);
   cursor: pointer;
   display: flex;
   gap: 0.4rem;
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   min-height: 32px;
   overflow: hidden;
   padding: 6px 1rem;
@@ -37,48 +41,42 @@
   white-space: nowrap;
 }
 
-.buttonPrimary {
-  background: var(--success);
-  background-color: var(--success);
-  border: 1px solid var(--success-dark);
-  color: var(--background);
+.buttonSuccess {
+  background: var(--successColor);
+  background-color: var(--successColor);
+  border: 1px solid var(--successDark);
+  color: var(--foregroundColor);
 }
 
-.buttonSecondary {
-  background: var(--info);
-  background-color: var(--info);
-  border: 1px solid var(--info-dark);
-  color: var(--background);
+.buttonInfo {
+  background: var(--infoColor);
+  background-color: var(--infoColor);
+  border: 1px solid var(--infoDark);
+  color: var(--foregroundColor);
+}
+
+.buttonWarning {
+  background: var(--warningColor);
+  background-color: var(--warningColor);
+  border: 1px solid var(--warningDark);
+  color: var(--foregroundColor);
 }
 
 .buttonDanger {
-  background: var(--danger);
-  background-color: var(--danger);
-  border: 1px solid var(--danger-dark);
-  color: var(--background);
-}
-
-.buttonWarn {
-  background: var(--warn);
-  background-color: var(--warn);
-  border: 1px solid var(--warn-dark);
-  color: var(--background);
+  background: var(--dangerColor);
+  background-color: var(--dangerColor);
+  border: 1px solid var(--dangerDark);
+  color: var(--foregroundColor);
 }
 
 .buttonNeutral {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  color: var(--font);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  color: var(--textColor);
 }
 
 .buttonNeutral:disabled {
-  background: var(--border);
-  background-color: var(--border);
-}
-
-.buttonPrimary *,
-.buttonSecondary *,
-.buttonDanger * {
-  color: var(--background);
+  background: var(--borderColor);
+  background-color: var(--borderColor);
 }

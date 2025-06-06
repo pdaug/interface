@@ -6,10 +6,10 @@ path,
 }
 
 .chartTooltip {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--rounded);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -18,7 +18,7 @@ path,
 }
 
 .chartTooltipTitle {
-  font-size: var(--text-paragraph);
+  font-size: var(--textRegular);
   font-weight: 500;
 }
 
@@ -32,12 +32,12 @@ path,
   align-items: center;
   display: flex;
   gap: 0.4rem;
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   line-height: 1;
 }
 
 .chartTooltipPayloadColor {
-  border-radius: var(--rounded);
+  border-radius: var(--borderRadius);
   height: 12px;
   width: 12px;
 }

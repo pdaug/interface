@@ -2,10 +2,10 @@
 import "./Badge.css";
 
 export const BadgeCategoriesList = [
-  "Primary",
-  "Secondary",
+  "Success",
+  "Info",
+  "Warning",
   "Danger",
-  "Warn",
   "Neutral",
 ] as const;
 

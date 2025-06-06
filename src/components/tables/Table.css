@@ -1,8 +1,8 @@
 .table {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--rounded);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
   border-style: none;
   box-shadow: none;
   flex: 1;
@@ -15,17 +15,17 @@
 }
 
 .tableBorder .tableHead {
-  background: var(--background);
-  background-color: var(--background);
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
 }
 
 .tableHeadRow {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--borderColor);
   display: flex;
 }
 
 .tableHeadData {
-  font-size: var(--text-paragraph);
+  font-size: var(--textRegular);
   font-weight: 600;
   flex: 1;
   padding: 0.6rem 0.4rem;
@@ -37,16 +37,16 @@
 }
 
 .tableBodyRow:not(:last-child) {
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--borderLight);
 }
 
 .tableBodyRowSelected {
-  background: var(--background);
-  background-color: var(--background);
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
 }
 
 .tableBodyData {
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   font-weight: 400;
   flex: 1;
   overflow: hidden;

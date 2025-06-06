@@ -22,6 +22,7 @@ export type DialogContextProps = {
   confirmText: string;
   onConfirm: () => void;
   Icon?: PhosphorIcon;
+  cancelText?: string;
   onCancel?: () => void;
 };
 
@@ -43,7 +44,7 @@ export const DialogProvider = function ({ children }: DialogProviderProps) {
     title: "",
     description: "",
     confirmText: "Confirmar",
-    category: "Primary",
+    category: "Success",
     onConfirm: function () {
       return;
     },
@@ -122,11 +123,11 @@ export const DialogElement = function () {
           </div>
           <div className="dialogDescription">{dialogProps.description}</div>
         </div>
-        <div className="dialodFooter">
+        <div className="dialogFooter">
           <Button
             type="button"
-            text="Cancel"
             category="Neutral"
+            text={dialogProps.cancelText || "Cancel"}
             onClick={dialogProps?.onCancel || CloseDialog}
           />
           <Button

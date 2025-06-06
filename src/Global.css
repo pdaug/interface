@@ -1,44 +1,43 @@
 :root {
-  --success-light: #d3edd9;
-  --success: #22c55e;
-  --success-dark: #059669;
+  --successLight: #d3edd9;
+  --successColor: #22c55e;
+  --successDark: #059669;
 
-  --warn-light: #fff3cc;
-  --warn: #fb923c;
-  --warn-dark: #d37528;
+  --infoLight: #d3eef2;
+  --infoColor: #0ea5e9;
+  --infoDark: #197ca8;
 
-  --info-light: #d3eef2;
-  --info: #0ea5e9;
-  --info-dark: #197ca8;
+  --warningLight: #fff3cc;
+  --warningColor: #fb923c;
+  --warningDark: #d37528;
 
-  --danger-light: #fad7da;
-  --danger: #ef4444;
-  --danger-dark: #b52a2a;
+  --dangerLight: #fad7da;
+  --dangerColor: #ef4444;
+  --dangerDark: #b52a2a;
 
-  --background: #fafafa;
-  --foreground: white;
+  --backgroundColor: #fafafa;
+  --backgroundModal: rgba(40, 40, 40, 0.4);
+  --foregroundColor: white;
 
-  --border-light: #ebebeb;
-  --border: #dedede;
-  --border-dark: #bebebe;
+  --borderRadius: 4px;
 
-  --font-light: #666;
-  --font: #334155;
-  --font-dark: #222;
-
-  --modal: rgba(40, 40, 40, 0.4);
+  --borderLight: #ebebeb;
+  --borderColor: #dedede;
+  --borderDark: #bebebe;
 
   --shadow: 2px 2px 8px rgba(200, 200, 200, 0.2);
 
-  --rounded: 4px;
+  --textLight: #666;
+  --textColor: #334155;
+  --textDark: #222;
 
-  --text-small: 0.875rem;
-  --text-paragraph: 1rem;
-  --text-highlight: 1.2rem;
-  --text-subtitle: 1.5rem;
-  --text-title: 2rem;
+  --textSmall: 0.875rem;
+  --textRegular: 1rem;
+  --textHighlight: 1.2rem;
+  --textSubtitle: 1.5rem;
+  --textTitle: 2rem;
 
-  --mobile-width: 768px;
+  --mobileWidth: 768px;
 }
 
 *,
@@ -48,40 +47,40 @@ button {
 }
 
 ::-webkit-scrollbar {
-  background: var(--background);
-  background-color: var(--background);
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
   height: 0.6rem;
   width: 0.6rem;
 }
 
 ::-webkit-scrollbar-track {
   box-sizing: content-box;
-  border: 1px solid var(--border);
+  border: 1px solid var(--borderColor);
 }
 
 ::-webkit-scrollbar-track,
 ::-webkit-scrollbar-corner {
-  background: var(--background);
-  background-color: var(--background);
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
-  background-color: var(--border);
+  background: var(--borderColor);
+  background-color: var(--borderColor);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--border-dark);
-  background-color: var(--border-dark);
+  background: var(--borderDark);
+  background-color: var(--borderDark);
   cursor: grab;
 }
 
 body {
-  background: var(--background);
-  background-color: var(--background);
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
   margin: 0;
 }
 
 input {
-  color: var(--font);
+  color: var(--textColor);
 }

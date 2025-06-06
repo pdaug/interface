@@ -28,7 +28,7 @@ export default {
 export const Default: StoryObj<typeof Button> = {
   args: {
     text: "Default",
-    category: "Primary",
+    category: "Success",
   },
 };
 
@@ -52,7 +52,7 @@ export const All: StoryObj<typeof Button> = {
 export const WithLeftIcon: StoryObj<typeof Button> = {
   args: {
     text: "Add",
-    category: "Primary",
+    category: "Success",
     Icon: Plus,
     IconSize: 16,
     IconWeight: "regular",

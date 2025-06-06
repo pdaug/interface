@@ -1,6 +1,6 @@
 .profile {
   align-items: center;
-  border-radius: var(--rounded);
+  border-radius: var(--borderRadius);
   display: flex;
   gap: 0.6rem;
   overflow: hidden;
@@ -11,7 +11,7 @@
 }
 
 .profileBorder {
-  border: 1px solid var(--border);
+  border: 1px solid var(--borderColor);
 }
 
 .profileData {
@@ -28,8 +28,8 @@
 }
 
 .profileDataDescription {
-  color: var(--font-light);
-  font-size: var(--text-small);
+  color: var(--textLight);
+  font-size: var(--textSmall);
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;

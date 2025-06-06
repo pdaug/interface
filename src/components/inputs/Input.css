@@ -14,22 +14,22 @@
 
 .inputHeader[data-required="true"] label::before {
   content: "*";
-  color: var(--danger);
-  font-size: var(--text-small);
+  color: var(--dangerColor);
+  font-size: var(--textSmall);
   line-height: 1;
   padding-right: 0.2rem;
 }
 
 .input label {
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   font-weight: 400;
   line-height: 1;
   flex: 1;
 }
 
 .inputHeader span {
-  color: var(--danger);
-  font-size: var(--text-small);
+  color: var(--dangerColor);
+  font-size: var(--textSmall);
   font-weight: 400;
   line-height: 1;
   transition: 600ms;
@@ -45,13 +45,13 @@
 .inputContent select,
 .inputContent textarea {
   appearance: none;
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--rounded);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
   box-sizing: border-box;
-  color: var(--font);
-  font-size: var(--text-small);
+  color: var(--textColor);
+  font-size: var(--textSmall);
   flex: 1;
   height: 2rem;
   margin: 0;
@@ -69,7 +69,7 @@
 .inputContent input:focus,
 .inputContent select:focus,
 .inputContent textarea:focus {
-  border-color: var(--info);
+  border-color: var(--infoColor);
   outline: none;
   transition: 200ms;
 }
@@ -77,17 +77,17 @@
 .inputContent input:disabled,
 .inputContent select:disabled,
 .inputContent textarea:disabled {
-  background: var(--background) !important;
-  background-color: var(--background) !important;
-  color: var(--font-light);
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
+  color: var(--textLight);
   cursor: not-allowed;
   opacity: 1;
 }
 
 .inputContent input:read-only {
-  background: var(--background) !important;
-  background-color: var(--background) !important;
-  color: var(--font-light);
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
+  color: var(--textLight);
 }
 
 /* MONEY */
@@ -96,35 +96,35 @@
 }
 
 .inputMoney input {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--rounded);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
   box-sizing: border-box;
   flex: 1;
   line-height: 1;
   height: 2rem;
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   outline: none;
   overflow: hidden;
   padding: 0 0.6rem;
 }
 
 .inputMoney input:focus {
-  border-color: var(--info);
+  border-color: var(--infoColor);
   outline: none;
 }
 
 .inputMoney input:read-only {
-  background: var(--background) !important;
-  background-color: var(--background) !important;
-  color: var(--font-light);
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
+  color: var(--textLight);
 }
 
 .inputMoney input:disabled {
-  background: var(--background) !important;
-  background-color: var(--background) !important;
-  color: var(--font-light);
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
+  color: var(--textLight);
   cursor: not-allowed;
   opacity: 1;
 }
@@ -135,17 +135,17 @@
 }
 
 .inputMoneyCurrency input:focus {
-  border-right-color: var(--border);
+  border-right-color: var(--borderColor);
 }
 
 .inputMoney select {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
   border-left: none;
-  border-top-right-radius: var(--rounded);
-  border-bottom-right-radius: var(--rounded);
-  color: var(--font);
+  border-top-right-radius: var(--borderRadius);
+  border-bottom-right-radius: var(--borderRadius);
+  color: var(--textColor);
   height: 2rem;
   line-height: 1;
   outline: none;
@@ -154,12 +154,12 @@
 }
 
 .inputMoney:has(input:focus) select {
-  border-color: var(--info);
+  border-color: var(--infoColor);
 }
 
 .inputMoney select:disabled {
-  background: var(--background);
-  background-color: var(--background);
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
   cursor: not-allowed;
   opacity: 1;
 }
@@ -191,9 +191,9 @@
 
 .inputRadioOption {
   align-items: center;
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
   border-radius: 100%;
   display: flex;
   justify-content: center;
@@ -209,16 +209,16 @@
 
 .inputRadio label:has(input:checked) .inputRadioOption {
   align-items: center;
-  border: 1px solid var(--info);
-  color: var(--info);
+  border: 1px solid var(--infoColor);
+  color: var(--infoColor);
   display: flex;
   justify-content: center;
   transition: 200ms;
 }
 
 .inputRadio label:has(input:checked) .inputRadioOption::after {
-  background: var(--info);
-  background-color: var(--info);
+  background: var(--infoColor);
+  background-color: var(--infoColor);
   border-radius: 100%;
   content: "";
   height: 10px;
@@ -235,9 +235,9 @@
 }
 
 .inputRadio label span {
-  color: var(--font);
+  color: var(--textColor);
   cursor: pointer;
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   font-weight: 400;
   line-height: 1;
 }
@@ -269,10 +269,10 @@
 
 .inputCheckOption {
   align-items: center;
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--rounded);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
   display: flex;
   justify-content: center;
   height: 16px;
@@ -287,16 +287,16 @@
 
 .inputCheck label:has(input:checked) .inputCheckOption {
   align-items: center;
-  border: 1px solid var(--info);
-  color: var(--info);
+  border: 1px solid var(--infoColor);
+  color: var(--infoColor);
   display: flex;
   justify-content: center;
   transition: 200ms;
 }
 
 .inputCheck label:has(input:checked) .inputCheckOption::after {
-  background: var(--info);
-  background-color: var(--info);
+  background: var(--infoColor);
+  background-color: var(--infoColor);
   border-radius: 2px;
   content: "";
   height: 10px;
@@ -313,9 +313,9 @@
 }
 
 .inputCheck label span {
-  color: var(--font);
+  color: var(--textColor);
   cursor: pointer;
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   font-weight: 400;
   line-height: 1;
 }
@@ -335,35 +335,35 @@
 }
 
 .inputFile button {
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
-  border-top-left-radius: var(--rounded);
-  border-bottom-left-radius: var(--rounded);
-  color: var(--font);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-top-left-radius: var(--borderRadius);
+  border-bottom-left-radius: var(--borderRadius);
+  color: var(--textColor);
   height: 32px;
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   padding: 0 0.6rem;
 }
 
 .inputFile button:disabled {
-  background: var(--background) !important;
-  background-color: var(--background) !important;
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
   cursor: not-allowed;
 }
 
 .inputFileInfo {
   align-items: center;
-  background: var(--foreground);
-  background-color: var(--foreground);
-  border: 1px solid var(--border);
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
   border-left: none;
-  border-top-right-radius: var(--rounded);
-  border-bottom-right-radius: var(--rounded);
+  border-top-right-radius: var(--borderRadius);
+  border-bottom-right-radius: var(--borderRadius);
   box-sizing: border-box;
-  color: var(--font-light);
+  color: var(--textLight);
   display: flex;
-  font-size: var(--text-small);
+  font-size: var(--textSmall);
   flex: 1;
   height: 32px;
   overflow: hidden;
@@ -371,14 +371,14 @@
 }
 
 .inputFileInfoDisabled {
-  background: var(--background) !important;
-  background-color: var(--background) !important;
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
   cursor: not-allowed;
 }
 
 .inputFileInfo span {
-  color: var(--font-light);
-  font-size: var(--text-small);
+  color: var(--textLight);
+  font-size: var(--textSmall);
   font-weight: 400;
   line-height: 1.5;
   overflow: hidden;

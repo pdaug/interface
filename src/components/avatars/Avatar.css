@@ -1,11 +1,11 @@
 .avatar {
   align-items: center;
   aspect-ratio: 1 / 1;
-  background: var(--border-light);
-  background-color: var(--border-light);
-  border: 1px solid var(--border);
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
+  border: 1px solid var(--borderColor);
   box-shadow: var(--shadow);
-  border-radius: var(--rounded);
+  border-radius: var(--borderRadius);
   cursor: default;
   display: flex;
   justify-content: center;
@@ -21,11 +21,11 @@
 }
 
 .avatar svg {
-  color: var(--font-light);
+  color: var(--textLight);
 }
 
 .avatar span {
-  color: var(--font-light);
+  color: var(--textLight);
   font-weight: bold;
   user-select: none;
 }
