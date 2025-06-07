@@ -5,6 +5,7 @@ import {
   Input,
   InputCheck,
   InputFile,
+  InputInterval,
   InputMask,
   InputMoney,
   InputRadio,
@@ -120,6 +121,40 @@ export const Password = () => {
         value={value}
         placeholder="**********"
         onChange={(e) => setValue(e.target.value)}
+      />
+    </Vertical>
+  );
+};
+
+export const Interval = () => {
+  const [value, setValue] = useState<[string, string]>([
+    "2025-01-01",
+    "2025-01-28",
+  ]);
+  return (
+    <Vertical internal={1} styles={{ width: "30rem" }}>
+      <InputInterval
+        value={value}
+        label="Input Interval"
+        onChange={(newValue) => setValue(newValue)}
+      />
+      <InputInterval
+        required
+        value={value}
+        label="Input Interval Required"
+        onChange={(newValue) => setValue(newValue)}
+      />
+      <InputInterval
+        readOnly
+        value={value}
+        label="Input Interval Read Only"
+        onChange={(newValue) => setValue(newValue)}
+      />
+      <InputInterval
+        disabled
+        value={value}
+        label="Input Interval Disabled"
+        onChange={(newValue) => setValue(newValue)}
       />
     </Vertical>
   );

@@ -386,3 +386,87 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* INTERVAL */
+.inputInterval {
+  display: flex;
+  flex: 1;
+}
+
+.inputInterval input[type="date"]::-webkit-inner-spin-button,
+.inputInterval input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.inputInterval input {
+  appearance: none;
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
+  box-sizing: border-box;
+  color: var(--textColor);
+  font-size: var(--textSmall);
+  flex: 1;
+  height: 2rem;
+  min-width: 60px;
+  margin: 0;
+  line-height: 1;
+  overflow: hidden;
+  padding: 0 0.8rem;
+  transition: 200ms;
+}
+
+.inputInterval input:nth-child(1) {
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.inputInterval div {
+  align-items: center;
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border-top: 1px solid var(--borderColor);
+  border-bottom: 1px solid var(--borderColor);
+  display: flex;
+  font-size: var(--textSmall);
+  line-height: 1;
+  padding: 0 0.2rem;
+}
+
+.inputInterval div[data-disabled="true"],
+.inputInterval div[data-readonly="true"] {
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
+  color: var(--textLight);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.inputInterval input:nth-child(3) {
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.inputInterval input:focus {
+  border-color: var(--infoColor);
+  outline: none;
+  transition: 200ms;
+}
+
+.inputInterval input:disabled {
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
+  color: var(--textLight);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.inputInterval input:read-only {
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
+  color: var(--textLight);
+}

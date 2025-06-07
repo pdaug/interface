@@ -24,54 +24,67 @@ export const Default: StoryObj = {
       username: "",
       password: "",
     });
+    const OnSubmit = function (event: React.FormEvent) {
+      event.preventDefault();
+      return;
+    };
     return (
-      <Wrapper
-        styles={{ maxWidth: "35rem" }}
-        actions={[
-          {
-            category: "Neutral",
-            text: "Forgot Password",
-            onClick: function () {
-              toast.message("Forgot Password!");
-              return;
+      <form onSubmit={OnSubmit}>
+        <Wrapper
+          styles={{ maxWidth: "35rem" }}
+          actions={[
+            {
+              type: "button",
+              category: "Neutral",
+              text: "Forgot Password",
+              onClick: function () {
+                toast.message("Forgot Password!");
+                return;
+              },
             },
-          },
-          {
-            category: "Primary",
-            text: "Login",
-            onClick: function () {
-              toast.success("Login!");
-              return;
+            {
+              type: "submit",
+              category: "Success",
+              text: "Login",
             },
-          },
-        ]}
-      >
-        <Vertical internal={1}>
-          <Horizontal styles={{ flex: 1, justifyContent: "center" }}>
-            <img src="https://placehold.co/400x200" alt="logo" />
-          </Horizontal>
-          <Input
-            required
-            label="Username"
-            placeholder="John Doe"
-            value={form.username}
-            onChange={function (event) {
-              setForm({ ...form, username: event.currentTarget?.value || "" });
-              return;
-            }}
-          />
-          <Input
-            required
-            label="Password"
-            placeholder="********"
-            value={form.username}
-            onChange={function (event) {
-              setForm({ ...form, username: event.currentTarget?.value || "" });
-              return;
-            }}
-          />
-        </Vertical>
-      </Wrapper>
+          ]}
+        >
+          <Vertical internal={1}>
+            <Horizontal styles={{ flex: 1, justifyContent: "center" }}>
+              <img src="https://placehold.co/400x200" alt="logo" />
+            </Horizontal>
+            <Input
+              required
+              id="login_username"
+              name="username"
+              label="Username"
+              placeholder="John Doe"
+              value={form.username}
+              onChange={function (event) {
+                const newForm = { ...form };
+                newForm.username = event.currentTarget?.value || "";
+                setForm(newForm);
+                return;
+              }}
+            />
+            <Input
+              required
+              id="login_password"
+              name="password"
+              type="password"
+              label="Password"
+              placeholder="********"
+              value={form.password}
+              onChange={function (event) {
+                const newForm = { ...form };
+                newForm.password = event.currentTarget?.value || "";
+                setForm(newForm);
+                return;
+              }}
+            />
+          </Vertical>
+        </Wrapper>
+      </form>
     );
   },
 };

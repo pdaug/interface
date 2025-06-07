@@ -222,6 +222,73 @@ const InputFile = function ({
   );
 };
 
+export type InputIntervalProps = {
+  id?: string;
+  label: string;
+  helper?: string;
+  name?: string;
+  value: [string, string];
+  disabled?: boolean;
+  required?: boolean;
+  readOnly?: boolean;
+  onChange?: (value: [string, string]) => void;
+};
+
+const InputInterval = function ({
+  id,
+  label,
+  helper,
+  value,
+  name,
+  disabled,
+  required,
+  readOnly,
+  onChange,
+}: InputIntervalProps) {
+  return (
+    <div className="input">
+      <div className="inputHeader" data-required={String(Boolean(required))}>
+        <label htmlFor={id}>{label}</label>
+        {helper && <span>{helper}</span>}
+      </div>
+      <div className="inputInterval">
+        <input
+          id={id}
+          required
+          type="date"
+          name={name}
+          value={value[0]}
+          disabled={disabled}
+          readOnly={readOnly}
+          onChange={function (event) {
+            onChange?.([event.currentTarget?.value || "", value[1]]);
+            return;
+          }}
+        />
+        <div
+          data-disabled={String(Boolean(disabled))}
+          data-readonly={String(Boolean(readOnly))}
+        >
+          -
+        </div>
+        <input
+          required
+          type="date"
+          id={`${id}-1`}
+          value={value[1]}
+          name={`${name}-1`}
+          disabled={disabled}
+          readOnly={readOnly}
+          onChange={function (event) {
+            onChange?.([value[0], event.currentTarget?.value || ""]);
+            return;
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
 export type InputMaskProps = {
   id?: string;
   label: string;
@@ -602,6 +669,7 @@ export {
   Input,
   InputCheck,
   InputFile,
+  InputInterval,
   InputMask,
   InputMoney,
   InputRadio,
