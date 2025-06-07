@@ -4,35 +4,55 @@ import { Clipboard, CopySimple, Trash } from "@phosphor-icons/react";
 // components
 import Dropdown from "./Dropdown";
 import Button from "../buttons/Button";
-import { Center, Horizontal } from "../aligns/Align";
+import { Horizontal, Vertical } from "../aligns/Align";
 
 export default {
   title: "Components/Dropdown",
   component: Dropdown,
-  decorators: (Story) => (
-    <Center>
-      <Story />
-    </Center>
-  ),
   tags: ["autodocs"],
 } as Meta;
 
 export const Default: StoryObj<typeof Dropdown> = {
   render: () => {
+    const dropdown = (
+      <Dropdown
+        values={[
+          {
+            id: "1",
+            label: "Paste",
+            onClick: () => alert(`Paste clicked!`),
+          },
+        ]}
+      >
+        <Button category="Neutral" text="Dropdown" />
+      </Dropdown>
+    );
     return (
-      <Horizontal internal={1}>
-        <Dropdown
-          values={[
-            {
-              id: "1",
-              label: "Paste",
-              onClick: () => alert(`Paste clicked!`),
-            },
-          ]}
-        >
-          <Button category="Neutral" text="Dropdown" />
-        </Dropdown>
-      </Horizontal>
+      <Vertical styles={{ height: "100vh" }}>
+        <Horizontal>
+          {dropdown}
+          <div style={{ flex: 1 }}></div>
+          {dropdown}
+          <div style={{ flex: 1 }}></div>
+          {dropdown}
+        </Horizontal>
+        <div style={{ flex: 1 }}></div>
+        <Horizontal>
+          {dropdown}
+          <div style={{ flex: 1 }}></div>
+          {dropdown}
+          <div style={{ flex: 1 }}></div>
+          {dropdown}
+        </Horizontal>
+        <div style={{ flex: 1 }}></div>
+        <Horizontal>
+          {dropdown}
+          <div style={{ flex: 1 }}></div>
+          {dropdown}
+          <div style={{ flex: 1 }}></div>
+          {dropdown}
+        </Horizontal>
+      </Vertical>
     );
   },
 };

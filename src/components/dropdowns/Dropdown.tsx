@@ -19,6 +19,8 @@ export type DropdownProps = {
 
 const Dropdown = function ({ children, values }: DropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const dropdownContentRef = useRef<HTMLDivElement | null>(null);
 
@@ -32,13 +34,17 @@ const Dropdown = function ({ children, values }: DropdownProps) {
       if (!dropdownOpen || !dropdownContentRef.current) return;
       const dropdownEl = dropdownContentRef.current;
       const rect = dropdownEl.getBoundingClientRect();
+      const styles = getComputedStyle(dropdownEl);
       if (rect.right > window.innerWidth) {
         dropdownEl.style.left = "auto";
         dropdownEl.style.right = "0";
       }
       if (rect.bottom > window.innerHeight) {
+        const position = (wrapperRef.current?.offsetHeight || 0) + rect.height;
+        const margin =
+          parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
         dropdownEl.style.top = "auto";
-        dropdownEl.style.bottom = "100%";
+        dropdownEl.style.bottom = `${position - margin}px`;
       }
       return;
     },
@@ -66,7 +72,9 @@ const Dropdown = function ({ children, values }: DropdownProps) {
 
   return (
     <div ref={dropdownRef} className="dropdown">
-      <div onClick={ToggleDropdown}>{children}</div>
+      <div ref={wrapperRef} onClick={ToggleDropdown}>
+        {children}
+      </div>
       <div
         ref={dropdownContentRef}
         className={`dropdownContent ${dropdownOpen ? "dropdownContentOpen" : ""}`}
