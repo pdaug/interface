@@ -1,5 +1,11 @@
+import {
+  Bank,
+  CaretDown,
+  GearSix,
+  IdentificationCard,
+  Package,
+} from "@phosphor-icons/react";
 import { Meta } from "@storybook/react";
-import { CaretDown, GearSix } from "@phosphor-icons/react";
 
 import Sidebar from "./Sidebar";
 
@@ -34,6 +40,73 @@ export const Default = () => {
           ],
         },
       }}
+      menu={[
+        {
+          id: "financial",
+          name: "Financial",
+          Icon: Bank,
+          items: [
+            {
+              id: "dashboard",
+              label: "Dashboard",
+            },
+            {
+              id: "orders",
+              label: "Orders",
+            },
+            {
+              id: "inflow",
+              label: "Inflow",
+            },
+            {
+              id: "outflow",
+              label: "Outflow",
+            },
+            {
+              id: "operation_statement",
+              label: "Operation Statement",
+            },
+          ],
+        },
+        {
+          id: "administrative",
+          name: "Administrative",
+          Icon: IdentificationCard,
+          items: [
+            {
+              id: "customers",
+              label: "Customers",
+            },
+            {
+              id: "employees",
+              label: "Employees",
+            },
+            {
+              id: "suppliers",
+              label: "Suppliers",
+            },
+          ],
+        },
+        {
+          id: "operational",
+          name: "Operational",
+          Icon: Package,
+          items: [
+            {
+              id: "products",
+              label: "Products",
+            },
+            {
+              id: "services",
+              label: "Services",
+            },
+            {
+              id: "vehicles",
+              label: "Vehicles",
+            },
+          ],
+        },
+      ]}
       footer={{
         padding: true,
         name: "User John Doe",

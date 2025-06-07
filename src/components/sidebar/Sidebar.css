@@ -10,7 +10,7 @@
 }
 
 .sidebarContainer {
-  padding: 0.6rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -18,106 +18,43 @@
   overflow: hidden;
 }
 
-.sidebarHeader {
-  align-items: center;
-  display: flex;
-  padding: 0.6rem;
-  gap: 0.6rem;
-}
-
-.sidebarHeader:hover {
-  background: var(--backgroundColor);
-  background-color: var(--backgroundColor);
-  border-radius: var(--borderRadius);
-}
-
-.sidebarHeaderImage {
-  align-items: center;
-  background: var(--backgroundColor);
-  background-color: var(--backgroundColor);
-  border: 1px solid var(--borderColor);
-  border-radius: var(--borderRadius);
-  display: flex;
-  justify-content: center;
-  height: 32px;
-  overflow: hidden;
-  width: 32px;
-}
-
-.sidebarHeaderImage svg {
-  color: var(--textLight);
-  fill: var(--textLight);
-}
-
-.sidebarHeaderInfo {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 0.2rem;
-  overflow: hidden;
-}
-
-.sidebarHeaderInfoCompany {
-  font-size: var(--textRegular);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.sidebarHeaderInfoWorkspace {
-  color: var(--textLight);
-  font-size: var(--textSmall);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .sidebarMenu {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  gap: 0.4rem;
+  overflow-y: auto;
 }
 
-.sidebarFooter {
-  align-items: center;
-  display: flex;
-  padding: 0.6rem;
-  gap: 0.6rem;
-}
-
-.sidebarFooter:hover {
-  background: var(--backgroundColor);
-  background-color: var(--backgroundColor);
-  border-radius: var(--borderRadius);
-}
-
-.sidebarFooterPhoto {
-  align-items: center;
-  background: var(--backgroundColor);
-  background-color: var(--backgroundColor);
-  border: 1px solid var(--borderColor);
-  border-radius: var(--borderRadius);
-  display: flex;
-  justify-content: center;
-  height: 32px;
-  overflow: hidden;
-  width: 32px;
-}
-
-.sidebarFooterPhoto svg {
-  color: var(--textLight);
-  fill: var(--textLight);
-}
-
-.sidebarFooterName {
+.sidebarMenuGroup {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  gap: 0.2rem;
-  overflow: hidden;
+  gap: 0.4rem;
 }
 
-.sidebarFooterName span {
+.sidebarMenuName {
+  align-items: center;
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.4rem 0;
+}
+
+.sidebarMenuContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sidebarMenuItem {
+  color: var(--textLight);
   font-size: var(--textSmall);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  padding: 0.4rem 1rem;
+}
+
+.sidebarMenuItem:hover {
+  background: var(--borderLight);
+  background-color: var(--borderLight);
+  border-radius: var(--borderRadius);
+  cursor: pointer;
+  transition: 200ms;
 }
