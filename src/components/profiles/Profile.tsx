@@ -1,8 +1,9 @@
-import { User } from "@phosphor-icons/react";
+import { Icon } from "@phosphor-icons/react";
 
 // styles
 import "./Profile.css";
 import Avatar from "../avatars/Avatar";
+import Dropdown, { DropdownProps } from "../dropdowns/Dropdown";
 
 export type ProfileProps = {
   name: string;
@@ -10,18 +11,25 @@ export type ProfileProps = {
   description?: string;
   photo?: string;
   photoSize?: number;
+  photoCircle?: boolean;
+  photoIcon?: Icon;
   padding?: boolean;
   styles?: React.CSSProperties;
+  dropdown?: DropdownProps;
+  dropdownChildren?: React.ReactElement;
 };
 
 const Profile = function ({
   border,
+  padding = true,
   photo,
   photoSize = 4,
+  photoCircle = false,
+  photoIcon,
   name,
   description,
-  padding = true,
   styles,
+  dropdown,
 }: ProfileProps) {
   return (
     <div
@@ -31,10 +39,10 @@ const Profile = function ({
       <div>
         <Avatar
           label={name}
-          size={photoSize}
           photo={photo}
-          circle
-          Icon={User}
+          size={photoSize}
+          Icon={photoIcon}
+          circle={photoCircle}
         />
       </div>
       <div className="profileData">
@@ -43,6 +51,11 @@ const Profile = function ({
           <div className="profileDataDescription">{description}</div>
         )}
       </div>
+      {dropdown && (
+        <div className="profileDropdown">
+          <Dropdown {...dropdown} />
+        </div>
+      )}
     </div>
   );
 };

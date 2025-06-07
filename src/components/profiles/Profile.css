@@ -3,11 +3,12 @@
   border-radius: var(--borderRadius);
   display: flex;
   gap: 0.6rem;
+  flex: 1;
   overflow: hidden;
 }
 
 .profilePadding {
-  padding: 0.4rem 0.6rem;
+  padding: 0.6rem;
 }
 
 .profileBorder {
@@ -16,6 +17,7 @@
 
 .profileData {
   display: flex;
+  flex: 1;
   flex-direction: column;
   overflow: hidden;
 }
