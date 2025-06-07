@@ -16,6 +16,13 @@
   transition: 0.2s;
 }
 
+.buttonOnlyIcon {
+  justify-content: center;
+  aspect-ratio: 1;
+  line-height: 1;
+  padding: 6px;
+}
+
 .button:not(:disabled):hover {
   opacity: 0.8;
   transition: 0.2s;

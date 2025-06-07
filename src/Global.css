@@ -84,3 +84,11 @@ body {
 input {
   color: var(--textColor);
 }
+
+a {
+  color: var(--infoColor);
+}
+
+.cursor {
+  cursor: pointer;
+}

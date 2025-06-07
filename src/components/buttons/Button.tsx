@@ -31,6 +31,7 @@ export type ButtonProps = {
   style?: React.CSSProperties;
   type?: ButtonType;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onlyIcon?: boolean;
 };
 
 const Button = function ({
@@ -46,6 +47,7 @@ const Button = function ({
   style,
   onClick,
   disabled,
+  onlyIcon,
 }: ButtonProps) {
   return (
     <button
@@ -55,7 +57,7 @@ const Button = function ({
       style={style}
       onClick={onClick}
       disabled={disabled}
-      className={`button button${category}`}
+      className={`button button${category} ${onlyIcon ? "buttonOnlyIcon" : ""}`}
     >
       {Icon && IconPosition === "left" && (
         <Icon weight={IconWeight} size={IconSize} />
