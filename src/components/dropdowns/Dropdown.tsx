@@ -34,17 +34,15 @@ const Dropdown = function ({ children, values }: DropdownProps) {
       if (!dropdownOpen || !dropdownContentRef.current) return;
       const dropdownEl = dropdownContentRef.current;
       const rect = dropdownEl.getBoundingClientRect();
-      const styles = getComputedStyle(dropdownEl);
       if (rect.right > window.innerWidth) {
         dropdownEl.style.left = "auto";
         dropdownEl.style.right = "0";
       }
       if (rect.bottom > window.innerHeight) {
-        const position = (wrapperRef.current?.offsetHeight || 0) + rect.height;
-        const margin =
-          parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
+        const wrapper = wrapperRef.current?.firstElementChild;
+        const wrapperRect = wrapper?.getBoundingClientRect();
         dropdownEl.style.top = "auto";
-        dropdownEl.style.bottom = `${position - margin}px`;
+        dropdownEl.style.bottom = `${window.innerHeight - (wrapperRect?.top || 0)}px`;
       }
       return;
     },
