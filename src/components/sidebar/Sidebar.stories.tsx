@@ -1,10 +1,12 @@
 import {
-  Bank,
-  CaretDown,
+  Cube,
+  Table,
   GearSix,
-  IdentificationCard,
-  Package,
+  CaretDown,
+  Paperclip,
+  SuitcaseSimple,
 } from "@phosphor-icons/react";
+import { useState } from "react";
 import { Meta } from "@storybook/react";
 
 import Sidebar from "./Sidebar";
@@ -16,10 +18,106 @@ export default {
 } as Meta;
 
 export const Default = () => {
+  const [path, setPath] = useState("dashboard");
   return (
     <Sidebar
+      path={path}
+      menu={[
+        {
+          id: "dashboard",
+          label: "Dashboard",
+          onClick: () => setPath("dashboard"),
+        },
+        {
+          id: "orders",
+          label: "Orders",
+          onClick: () => setPath("orders"),
+        },
+        {
+          id: "inflow",
+          label: "Inflow",
+          onClick: () => setPath("inflow"),
+        },
+        {
+          id: "outflow",
+          label: "Outflow",
+          onClick: () => setPath("outflow"),
+        },
+        {
+          id: "statements",
+          label: "Statements",
+          onClick: () => setPath("statements"),
+        },
+      ]}
+    />
+  );
+};
+
+export const WithHeader = () => {
+  const [path, setPath] = useState("dashboard");
+  return (
+    <Sidebar
+      path={path}
       header={{
-        padding: true,
+        padding: false,
+        name: "Company Name",
+        description: "Workspace Selected",
+        dropdown: {
+          children: (
+            <div className="cursor">
+              <CaretDown />
+            </div>
+          ),
+          values: [
+            {
+              id: "workspace_1",
+              label: "Workspace 1",
+            },
+            {
+              id: "workspace_2",
+              label: "Workspace 2",
+            },
+          ],
+        },
+      }}
+      menu={[
+        {
+          id: "dashboard",
+          label: "Dashboard",
+          onClick: () => setPath("dashboard"),
+        },
+        {
+          id: "orders",
+          label: "Orders",
+          onClick: () => setPath("orders"),
+        },
+        {
+          id: "inflow",
+          label: "Inflow",
+          onClick: () => setPath("inflow"),
+        },
+        {
+          id: "outflow",
+          label: "Outflow",
+          onClick: () => setPath("outflow"),
+        },
+        {
+          id: "statements",
+          label: "Statements",
+          onClick: () => setPath("statements"),
+        },
+      ]}
+    />
+  );
+};
+
+export const All = () => {
+  const [path, setPath] = useState("dashboard");
+  return (
+    <Sidebar
+      path={path}
+      header={{
+        padding: false,
         name: "Company Name",
         description: "Workspace Selected",
         dropdown: {
@@ -44,72 +142,101 @@ export const Default = () => {
         {
           id: "financial",
           name: "Financial",
-          Icon: Bank,
+          Icon: Table,
           items: [
             {
               id: "dashboard",
               label: "Dashboard",
+              onClick: () => setPath("dashboard"),
             },
             {
               id: "orders",
               label: "Orders",
+              onClick: () => setPath("orders"),
             },
             {
               id: "inflow",
               label: "Inflow",
+              onClick: () => setPath("inflow"),
             },
             {
               id: "outflow",
               label: "Outflow",
+              onClick: () => setPath("outflow"),
             },
             {
-              id: "operation_statement",
-              label: "Operation Statement",
+              id: "statements",
+              label: "Statements",
+              onClick: () => setPath("statements"),
             },
           ],
         },
         {
           id: "administrative",
           name: "Administrative",
-          Icon: IdentificationCard,
+          Icon: SuitcaseSimple,
           items: [
             {
               id: "customers",
               label: "Customers",
-            },
-            {
-              id: "employees",
-              label: "Employees",
+              onClick: () => setPath("customers"),
             },
             {
               id: "suppliers",
               label: "Suppliers",
+              onClick: () => setPath("suppliers"),
+            },
+            {
+              id: "employees",
+              label: "Employees",
+              onClick: () => setPath("employees"),
             },
           ],
         },
         {
           id: "operational",
           name: "Operational",
-          Icon: Package,
+          Icon: Cube,
           items: [
             {
               id: "products",
               label: "Products",
+              onClick: () => setPath("products"),
             },
             {
               id: "services",
               label: "Services",
+              onClick: () => setPath("services"),
             },
             {
               id: "vehicles",
               label: "Vehicles",
+              onClick: () => setPath("vehicles"),
+            },
+          ],
+        },
+        {
+          id: "tools",
+          name: "Tools",
+          Icon: Paperclip,
+          items: [
+            {
+              id: "documents",
+              label: "Documents",
+              onClick: () => setPath("documents"),
+            },
+            {
+              id: "schedules",
+              label: "Schedules",
+              onClick: () => setPath("schedules"),
             },
           ],
         },
       ]}
       footer={{
-        padding: true,
-        name: "User John Doe",
+        padding: false,
+        name: "",
+        description: "John Doe",
         photoCircle: true,
         dropdown: {
           children: (
@@ -118,6 +245,10 @@ export const Default = () => {
             </div>
           ),
           values: [
+            {
+              id: "settings",
+              label: "Settings",
+            },
             {
               id: "sign_out",
               label: "Sign Out",

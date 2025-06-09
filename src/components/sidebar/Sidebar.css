@@ -34,7 +34,9 @@
 
 .sidebarMenuName {
   align-items: center;
+  color: var(--textLight);
   display: flex;
+  font-size: var(--textSmall);
   gap: 0.4rem;
   padding: 0.4rem 0;
 }
@@ -46,15 +48,27 @@
 }
 
 .sidebarMenuItem {
-  color: var(--textLight);
-  font-size: var(--textSmall);
+  align-items: center;
+  color: var(--textColor);
+  font-size: var(--textRegular);
+  display: flex;
+  gap: 0.4rem;
   padding: 0.4rem 1rem;
+  transition: 200ms;
 }
 
 .sidebarMenuItem:hover {
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
+  border-radius: var(--borderRadius);
+  cursor: pointer;
+  transition: 200ms;
+}
+
+.sidebarMenuItemSelected {
   background: var(--borderLight);
   background-color: var(--borderLight);
   border-radius: var(--borderRadius);
-  cursor: pointer;
+  color: var(--textColor) !important;
   transition: 200ms;
 }

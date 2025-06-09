@@ -72,7 +72,7 @@
 }
 
 .dialogDescription {
-  font-size: var(--textSmall);
+  font-size: var(--textRegular);
   text-align: justify;
 }
 

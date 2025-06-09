@@ -10,7 +10,7 @@
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  font-size: var(--textSmall);
+  font-size: var(--textRegular);
   gap: 0.4rem;
   margin: 4px 0;
   padding: 6px;

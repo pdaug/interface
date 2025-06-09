@@ -15,12 +15,12 @@ export default {
   title: "Components/Dialog",
   tags: ["autodocs"],
   decorators: (Story) => (
-    <DialogProvider>
-      <Center>
+    <Center>
+      <DialogProvider>
         <Story />
         <DialogElement />
-      </Center>
-    </DialogProvider>
+      </DialogProvider>
+    </Center>
   ),
 } as Meta;
 

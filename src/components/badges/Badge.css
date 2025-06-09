@@ -8,7 +8,7 @@
   border-radius: var(--borderRadius);
   cursor: default;
   display: flex;
-  font-size: var(--textSmall);
+  font-size: var(--textRegular);
   justify-content: center;
   overflow: hidden;
   outline: none;
@@ -48,7 +48,6 @@
 .badgeDanger {
   background: var(--dangerLight);
   background-color: var(--dangerLight);
-  font-weight: bold;
   color: var(--dangerDark);
 }
 

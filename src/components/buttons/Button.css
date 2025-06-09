@@ -9,7 +9,7 @@
   cursor: pointer;
   display: flex;
   gap: 0.4rem;
-  font-size: var(--textSmall);
+  font-size: var(--textRegular);
   min-height: 32px;
   overflow: hidden;
   padding: 6px 1rem;
@@ -35,7 +35,7 @@
 }
 
 .button:disabled {
-  filter: saturate(90%);
+  filter: saturate(80%);
   opacity: 0.6;
   cursor: not-allowed !important;
   transition: 0.2s;

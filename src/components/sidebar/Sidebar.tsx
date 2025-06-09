@@ -6,54 +6,70 @@ import "./Sidebar.css";
 // components
 import Profile, { ProfileProps } from "../profiles/Profile";
 
-export type SidebarMenu = {
+export type SidebarMenuItem = {
+  Icon?: IconPhosphor;
   id: string;
-  name: string;
-  Icon: IconPhosphor;
-  items: {
-    id: string;
-    label: string;
-    onClick?: () => void;
-  }[];
-}[];
-
-export type SidebarProps = {
-  header: ProfileProps;
-  menu: SidebarMenu;
-  footer: ProfileProps;
+  label: string;
+  onClick?: () => void;
 };
 
-const Sidebar = function ({ header, menu, footer }: SidebarProps) {
+export type SidebarMenu =
+  | {
+      id: string;
+      name: string;
+      Icon?: IconPhosphor;
+      items: SidebarMenuItem[];
+    }[]
+  | SidebarMenuItem[];
+
+export type SidebarProps = {
+  path: string;
+  header?: ProfileProps;
+  menu: SidebarMenu;
+  footer?: ProfileProps;
+};
+
+const Sidebar = function ({ path, header, menu, footer }: SidebarProps) {
   return (
     <div className="sidebar">
       <div className="sidebarContainer">
-        <Profile {...header} />
+        {header && <Profile {...header} />}
         <div className="sidebarMenu">
-          {menu?.map(function (menuGroup) {
-            return (
-              <div className="sidebarMenuGroup" key={menuGroup.id}>
+          {menu?.map(function (groupOrItem) {
+            return "items" in groupOrItem ? (
+              <div className="sidebarMenuGroup" key={groupOrItem.id}>
                 <div className="sidebarMenuName">
-                  <menuGroup.Icon size={20} />
-                  <span>{menuGroup.name}</span>
+                  {groupOrItem.Icon && <groupOrItem.Icon size={20} />}
+                  <span>{groupOrItem.name}</span>
                 </div>
                 <div className="sidebarMenuContent">
-                  {menuGroup?.items?.map(function (item) {
+                  {groupOrItem?.items?.map(function (item) {
                     return (
                       <div
                         key={item.id}
                         onClick={item?.onClick}
-                        className="sidebarMenuItem"
+                        className={`sidebarMenuItem ${path === item.id ? "sidebarMenuItemSelected" : ""}`}
                       >
-                        {item.label}
+                        {item.Icon && <item.Icon size={16} />}
+                        <span>{item.label}</span>
                       </div>
                     );
                   })}
                 </div>
               </div>
+            ) : (
+              <div
+                key={groupOrItem.id}
+                onClick={groupOrItem?.onClick}
+                className={`sidebarMenuItem ${path === groupOrItem.id ? "sidebarMenuItemSelected" : ""}`}
+              >
+                {groupOrItem.Icon && <groupOrItem.Icon size={16} />}
+                <span>{groupOrItem.label}</span>
+              </div>
             );
           })}
         </div>
-        <Profile {...footer} />
+        {footer && <Profile {...footer} />}
       </div>
     </div>
   );

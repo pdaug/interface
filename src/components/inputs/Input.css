@@ -51,7 +51,7 @@
   border-radius: var(--borderRadius);
   box-sizing: border-box;
   color: var(--textColor);
-  font-size: var(--textSmall);
+  font-size: var(--textRegular);
   flex: 1;
   height: 2rem;
   margin: 0;
@@ -104,7 +104,7 @@
   flex: 1;
   line-height: 1;
   height: 2rem;
-  font-size: var(--textSmall);
+  font-size: var(--textRegular);
   outline: none;
   overflow: hidden;
   padding: 0 0.6rem;
@@ -342,7 +342,7 @@
   border-bottom-left-radius: var(--borderRadius);
   color: var(--textColor);
   height: 32px;
-  font-size: var(--textSmall);
+  font-size: var(--textRegular);
   padding: 0 0.6rem;
 }
 
@@ -415,6 +415,7 @@
   line-height: 1;
   overflow: hidden;
   padding: 0 0.8rem;
+  text-align: center;
   transition: 200ms;
 }
 
@@ -424,28 +425,7 @@
   border-bottom-right-radius: 0;
 }
 
-.inputInterval div {
-  align-items: center;
-  background: var(--foregroundColor);
-  background-color: var(--foregroundColor);
-  border-top: 1px solid var(--borderColor);
-  border-bottom: 1px solid var(--borderColor);
-  display: flex;
-  font-size: var(--textSmall);
-  line-height: 1;
-  padding: 0 0.2rem;
-}
-
-.inputInterval div[data-disabled="true"],
-.inputInterval div[data-readonly="true"] {
-  background: var(--backgroundColor) !important;
-  background-color: var(--backgroundColor) !important;
-  color: var(--textLight);
-  cursor: not-allowed;
-  opacity: 1;
-}
-
-.inputInterval input:nth-child(3) {
+.inputInterval input:nth-child(2) {
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;

@@ -37,7 +37,7 @@ const IconCategory = {
 
 export const All: StoryObj<CalloutProps> = {
   render: (args: CalloutProps) => (
-    <Vertical internal={1}>
+    <Vertical internal={1} styles={{ maxWidth: "35rem" }}>
       {CalloutCategoriesList.map(function (category) {
         return (
           <Callout

@@ -265,12 +265,6 @@ const InputInterval = function ({
             return;
           }}
         />
-        <div
-          data-disabled={String(Boolean(disabled))}
-          data-readonly={String(Boolean(readOnly))}
-        >
-          -
-        </div>
         <input
           required
           type="date"

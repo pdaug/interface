@@ -31,10 +31,10 @@
   --textColor: #334155;
   --textDark: #222;
 
-  --textSmall: 0.875rem;
+  --textSmall: 0.8rem;
   --textRegular: 1rem;
   --textHighlight: 1.2rem;
-  --textSubtitle: 1.5rem;
+  --textSubtitle: 1.6rem;
   --textTitle: 2rem;
 
   --mobileWidth: 768px;
@@ -44,6 +44,11 @@
 input,
 button {
   font-family: "Lato", sans-serif;
+}
+
+html {
+  font-size: 11pt;
+  scroll-behavior: smooth;
 }
 
 ::-webkit-scrollbar {

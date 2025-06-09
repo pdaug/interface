@@ -3,7 +3,7 @@
   border-radius: var(--borderRadius);
   cursor: default;
   display: flex;
-  font-size: var(--textSmall);
+  font-size: var(--textRegular);
   gap: 0.6rem;
   overflow: hidden;
   padding: 0.6rem 1rem;
