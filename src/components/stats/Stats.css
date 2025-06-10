@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 1rem;
   overflow: hidden;
 }
 
@@ -36,9 +35,8 @@
 }
 
 .statsBody {
-  font-size: var(--textTitle);
-  padding: 1.4rem;
-  padding-top: 0;
+  font-size: var(--textSubtitle);
+  padding: 1rem;
   overflow: hidden;
   text-wrap: nowrap;
   text-overflow: ellipsis;

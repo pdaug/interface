@@ -5,8 +5,8 @@ export type StatsStatus = "Up" | "Down";
 
 export type StatsProps = {
   title: string;
-  metric: number;
-  metricStatus: StatsStatus;
+  metric?: number;
+  metricStatus?: StatsStatus;
   metricLocale?: Intl.LocalesArgument;
   metricOptions?: Intl.NumberFormatOptions;
   value: number;
@@ -26,10 +26,9 @@ const Stats = function ({
   valueLocale,
   valueOptions,
 }: StatsProps) {
-  const metricFormatted = new Intl.NumberFormat(
-    metricLocale,
-    metricOptions,
-  ).format(metric);
+  const metricFormatted = metric
+    ? new Intl.NumberFormat(metricLocale, metricOptions).format(metric)
+    : "";
 
   const valueFormatted = new Intl.NumberFormat(
     valueLocale,
@@ -40,10 +39,12 @@ const Stats = function ({
     <div className="stats">
       <div className="statsHead">
         <div className="statsHeadTitle">{title}</div>
-        <div className={`statsHeadMetric statsHeadMetric${metricStatus}`}>
-          {metricStatus === "Up" ? "+" : "-"}
-          {metricFormatted}
-        </div>
+        {metricFormatted && (
+          <div className={`statsHeadMetric statsHeadMetric${metricStatus}`}>
+            {metricStatus ? (metricStatus === "Up" ? "+" : "-") : ""}
+            {metricFormatted}
+          </div>
+        )}
       </div>
       <div className="statsBody">
         {valueFormatted} {valueUnit}

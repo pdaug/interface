@@ -247,10 +247,12 @@ const InputInterval = function ({
 }: InputIntervalProps) {
   return (
     <div className="input">
-      <div className="inputHeader" data-required={String(Boolean(required))}>
-        <label htmlFor={id}>{label}</label>
-        {helper && <span>{helper}</span>}
-      </div>
+      {(label || helper) && (
+        <div className="inputHeader" data-required={String(Boolean(required))}>
+          <label htmlFor={id}>{label}</label>
+          {helper && <span>{helper}</span>}
+        </div>
+      )}
       <div className="inputInterval">
         <input
           id={id}

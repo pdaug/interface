@@ -53,6 +53,51 @@ export const Default = () => {
   );
 };
 
+export const Group = () => {
+  const [path, setPath] = useState("dashboard");
+  return (
+    <Sidebar
+      path={path}
+      menu={[
+        {
+          id: "financial",
+          name: "Financial",
+          Icon: Table,
+          items: [
+            {
+              id: "dashboard",
+              label: "Dashboard",
+              onClick: () => setPath("dashboard"),
+            },
+            {
+              id: "orders",
+              label: "Orders",
+              onClick: () => setPath("orders"),
+            },
+          ],
+        },
+        {
+          id: "administrative",
+          name: "Administrative",
+          Icon: SuitcaseSimple,
+          items: [
+            {
+              id: "customers",
+              label: "Customers",
+              onClick: () => setPath("customers"),
+            },
+            {
+              id: "suppliers",
+              label: "Suppliers",
+              onClick: () => setPath("suppliers"),
+            },
+          ],
+        },
+      ]}
+    />
+  );
+};
+
 export const WithHeader = () => {
   const [path, setPath] = useState("dashboard");
   return (
@@ -107,6 +152,65 @@ export const WithHeader = () => {
           onClick: () => setPath("statements"),
         },
       ]}
+    />
+  );
+};
+
+export const WithFooter = () => {
+  const [path, setPath] = useState("dashboard");
+  return (
+    <Sidebar
+      path={path}
+      menu={[
+        {
+          id: "dashboard",
+          label: "Dashboard",
+          onClick: () => setPath("dashboard"),
+        },
+        {
+          id: "orders",
+          label: "Orders",
+          onClick: () => setPath("orders"),
+        },
+        {
+          id: "inflow",
+          label: "Inflow",
+          onClick: () => setPath("inflow"),
+        },
+        {
+          id: "outflow",
+          label: "Outflow",
+          onClick: () => setPath("outflow"),
+        },
+        {
+          id: "statements",
+          label: "Statements",
+          onClick: () => setPath("statements"),
+        },
+      ]}
+      footer={{
+        padding: false,
+        name: "",
+        description: "John Doe",
+        photoCircle: true,
+        dropdown: {
+          children: (
+            <div className="cursor">
+              <GearSix />
+            </div>
+          ),
+          values: [
+            {
+              id: "settings",
+              label: "Settings",
+            },
+            {
+              id: "sign_out",
+              label: "Sign Out",
+            },
+          ],
+        },
+      }}
     />
   );
 };
