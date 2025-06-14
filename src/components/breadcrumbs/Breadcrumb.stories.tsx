@@ -18,7 +18,7 @@ export const Default: StoryObj<typeof Breadcrumb> = {
   args: {
     links: [
       { id: "home", label: "Home", url: "/" },
-      { id: "financial", label: "Financial", url: "/financial" },
+      { id: "financial", label: "Financial" },
     ],
   },
 };
@@ -29,11 +29,7 @@ export const WithMultiples: StoryObj<typeof Breadcrumb> = {
       { id: "home", label: "Home", url: "/" },
       { id: "corporation", label: "Corporation", url: "/corporation" },
       { id: "workspace", label: "Workspace", url: "/corporation/workspace" },
-      {
-        id: "users",
-        label: "Users",
-        url: "/corporation/workspace/users",
-      },
+      { id: "users", label: "Users" },
     ],
   },
 };
@@ -41,7 +37,8 @@ export const WithMultiples: StoryObj<typeof Breadcrumb> = {
 export const WithExternalLink: StoryObj<typeof Breadcrumb> = {
   args: {
     links: [
-      { id: "home", label: "Home", url: "/" },
+      { id: "settings", label: "Settings", url: "/settings" },
+      { id: "externals", label: "Externals", url: "/externals" },
       {
         id: "api",
         label: "API",

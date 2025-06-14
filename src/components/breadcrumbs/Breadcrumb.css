@@ -5,7 +5,6 @@
   gap: 0.6rem;
 }
 
-.breadcrumb span,
 .breadcrumb svg {
   fill: var(--textLight);
   color: var(--textLight);
@@ -14,7 +13,7 @@
 }
 
 .breadcrumb a {
-  color: var(--textColor);
+  color: var(--infoColor);
   font-size: var(--textRegular);
   font-weight: 400;
   transition: 200ms;
@@ -22,12 +21,18 @@
 }
 
 .breadcrumb a:hover {
-  color: var(--textDark);
   filter: brightness(0.8);
   transition: 200ms;
 }
 
 .breadcrumb a:active {
-  color: var(--textLight);
+  filter: brightness(0.6);
   transition: 200ms;
+}
+
+.breadcrumb span {
+  color: var(--textColor);
+  font-size: var(--textRegular);
+  font-weight: 400;
+  text-decoration: none;
 }

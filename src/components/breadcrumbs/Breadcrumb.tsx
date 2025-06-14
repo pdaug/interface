@@ -7,8 +7,9 @@ import "./Breadcrumb.css";
 export type BreadcrumbLinks = {
   id: string;
   label: string;
-  url: string;
+  url?: string;
   target?: React.HTMLAttributeAnchorTarget;
+  styles?: React.CSSProperties;
 }[];
 
 export type BreadcrumbProps = {
@@ -18,14 +19,18 @@ export type BreadcrumbProps = {
 const Breadcrumb = function ({ links }: BreadcrumbProps) {
   return (
     <div className="breadcrumb">
-      {links?.map(function ({ id, label, url, target }, index) {
+      {links?.map(function ({ id, label, url, target, styles }, index) {
         return (
           <React.Fragment key={id}>
             {index != 0 && links.length != index && <CaretRight />}
             <div id={id}>
-              <a href={url} target={target}>
-                {label}
-              </a>
+              {url ? (
+                <a href={url} style={styles} target={target}>
+                  {label}
+                </a>
+              ) : (
+                <span style={styles}>{label}</span>
+              )}
             </div>
           </React.Fragment>
         );
