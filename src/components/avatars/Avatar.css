@@ -12,6 +12,12 @@
   overflow: hidden;
 }
 
+.avatarPrimary {
+  outline-style: solid;
+  outline-color: var(--successColor);
+  outline-offset: 2px;
+}
+
 .avatar img {
   aspect-ratio: 1 / 1;
   height: 100%;

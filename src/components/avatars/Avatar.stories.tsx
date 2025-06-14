@@ -37,6 +37,15 @@ export const WithCircle: StoryObj<typeof Avatar> = {
   },
 };
 
+export const WithIcon: StoryObj<typeof Avatar> = {
+  args: {
+    label: "Icon",
+    size: 8,
+    circle: true,
+    Icon: Rocket,
+  },
+};
+
 export const WithPhoto: StoryObj<typeof Avatar> = {
   args: {
     label: "Photo",
@@ -46,11 +55,12 @@ export const WithPhoto: StoryObj<typeof Avatar> = {
   },
 };
 
-export const WithIcon: StoryObj<typeof Avatar> = {
+export const WithStatus: StoryObj<typeof Avatar> = {
   args: {
-    label: "Icon",
+    label: "Photo",
     size: 8,
     circle: true,
-    Icon: Rocket,
+    photo: "https://i.pravatar.cc/100?img=3",
+    status: "Primary",
   },
 };
