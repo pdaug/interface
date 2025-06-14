@@ -24,6 +24,7 @@ export const Default: StoryObj<StatsProps> = {
     value: 42500,
     valueLocale: "en",
     valueOptions: { style: "currency", currency: "USD" },
+    styles: { maxWidth: "30rem" },
   },
 };
 
@@ -38,11 +39,12 @@ export const Down: StoryObj<StatsProps> = {
     valueUnit: "cars",
     valueLocale: "en",
     valueOptions: { maximumFractionDigits: 0 },
+    styles: { maxWidth: "30rem" },
   },
 };
 
 export const Grouped = () => (
-  <Horizontal internal={1} styles={{ width: "30rem" }}>
+  <Horizontal internal={1} styles={{ width: "45rem" }}>
     <Stats
       title="Inflow Ccash"
       metric={12.5}

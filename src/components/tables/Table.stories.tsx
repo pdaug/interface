@@ -120,12 +120,29 @@ export const Default: StoryObj = {
         data={data}
         selected={selected}
         setSelected={setSelected}
+        styles={{ maxWidth: "60rem" }}
       />
     );
   },
 };
 
 export const WithBorder: StoryObj = {
+  render: () => {
+    const [selected, setSelected] = useState<string[]>([]);
+    return (
+      <Table
+        border
+        columns={columns}
+        data={data}
+        selected={selected}
+        setSelected={setSelected}
+        styles={{ maxWidth: "60rem" }}
+      />
+    );
+  },
+};
+
+export const WithOptions: StoryObj = {
   render: () => {
     const [selected, setSelected] = useState<string[]>([]);
     return (
@@ -152,6 +169,7 @@ export const WithBorder: StoryObj = {
             disabled: true,
           },
         ]}
+        styles={{ maxWidth: "60rem" }}
       />
     );
   },

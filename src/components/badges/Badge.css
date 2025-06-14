@@ -8,7 +8,7 @@
   border-radius: var(--borderRadius);
   cursor: default;
   display: flex;
-  font-size: var(--textRegular);
+  font-size: var(--textSmall);
   justify-content: center;
   overflow: hidden;
   outline: none;

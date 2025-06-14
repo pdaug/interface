@@ -32,6 +32,7 @@ export type TableProps = {
   selected?: string[];
   setSelected?: React.Dispatch<React.SetStateAction<string[]>>;
   options?: DropdownValues;
+  styles?: React.CSSProperties;
 };
 
 const Table = function ({
@@ -41,13 +42,14 @@ const Table = function ({
   selected,
   setSelected,
   options,
+  styles,
 }: TableProps) {
   const rowsId = data.map((item) => item.id);
   const isSelectedRowsId = selected
     ? rowsId.every((id) => selected.includes(id))
     : false;
   return (
-    <div className={`table ${border ? "tableBorder" : ""}`}>
+    <div style={styles} className={`table ${border ? "tableBorder" : ""}`}>
       <div className="tableHead">
         <div className="tableHeadRow">
           <div style={{ maxWidth: 32 }} className="tableHeadData">

@@ -13,6 +13,7 @@ export type StatsProps = {
   valueUnit?: string;
   valueLocale?: Intl.LocalesArgument;
   valueOptions?: Intl.NumberFormatOptions;
+  styles?: React.CSSProperties;
 };
 
 const Stats = function ({
@@ -25,6 +26,7 @@ const Stats = function ({
   valueUnit,
   valueLocale,
   valueOptions,
+  styles,
 }: StatsProps) {
   const metricFormatted = metric
     ? new Intl.NumberFormat(metricLocale, metricOptions).format(metric)
@@ -36,7 +38,7 @@ const Stats = function ({
   ).format(value);
 
   return (
-    <div className="stats">
+    <div className="stats" style={styles}>
       <div className="statsHead">
         <div className="statsHeadTitle">{title}</div>
         {metricFormatted && (
