@@ -2,7 +2,7 @@ import { toast } from "sonner";
 import { Meta } from "@storybook/react";
 
 import { ToastElement } from "./Toast";
-import { Center, Horizontal } from "../aligns/Align";
+import { Center, Vertical } from "../aligns/Align";
 import Button, { ButtonCategories } from "../buttons/Button";
 
 export default {
@@ -29,7 +29,7 @@ const toasts = [
 
 export const All = () => {
   return (
-    <Horizontal internal={1} styles={{ width: "30rem" }}>
+    <Vertical internal={1}>
       {toasts.map(function ({ category, name }) {
         return (
           <Button
@@ -44,6 +44,6 @@ export const All = () => {
           />
         );
       })}
-    </Horizontal>
+    </Vertical>
   );
 };

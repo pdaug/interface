@@ -35,7 +35,7 @@ export const Light: StoryObj<typeof Tooltip> = {
             content={`Tooltip ${placement}`}
             placement={placement as TooltipPlacement}
           >
-            <Button text={placement} category="Neutral" />
+            <Button text={placement} category="Success" />
           </Tooltip>
         ))}
       </Horizontal>
@@ -55,7 +55,7 @@ export const Dark: StoryObj<typeof Tooltip> = {
             content={`Tooltip ${placement}`}
             placement={placement as TooltipPlacement}
           >
-            <Button text={placement} category="Neutral" />
+            <Button text={placement} category="Success" />
           </Tooltip>
         ))}
       </Horizontal>

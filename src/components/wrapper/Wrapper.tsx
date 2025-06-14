@@ -55,7 +55,7 @@ const Wrapper = function ({
             })}
           {onConfirm && (
             <Button
-              category="Primary"
+              category="Success"
               text={onConfirmLabel || "Confirm"}
               onClick={onConfirm}
             />

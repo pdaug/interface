@@ -8,11 +8,13 @@
   color: var(--textColor);
   cursor: pointer;
   display: flex;
-  gap: 0.4rem;
   font-size: var(--textRegular);
+  gap: 0.4rem;
+  justify-content: center;
   min-height: 32px;
   overflow: hidden;
   padding: 6px 1rem;
+  text-align: center;
   transition: 0.2s;
 }
 
