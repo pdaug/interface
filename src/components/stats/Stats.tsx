@@ -1,9 +1,12 @@
+import { Icon as IconPhosphor } from "@phosphor-icons/react";
+
 // styles
 import "./Stats.css";
 
 export type StatsStatus = "Up" | "Down";
 
 export type StatsProps = {
+  Icon?: IconPhosphor;
   title: string;
   metric?: number;
   metricStatus?: StatsStatus;
@@ -13,10 +16,12 @@ export type StatsProps = {
   valueUnit?: string;
   valueLocale?: Intl.LocalesArgument;
   valueOptions?: Intl.NumberFormatOptions;
+  footer?: string;
   styles?: React.CSSProperties;
 };
 
 const Stats = function ({
+  Icon,
   title,
   metric,
   metricStatus,
@@ -26,6 +31,7 @@ const Stats = function ({
   valueUnit,
   valueLocale,
   valueOptions,
+  footer,
   styles,
 }: StatsProps) {
   const metricFormatted = metric
@@ -39,17 +45,29 @@ const Stats = function ({
 
   return (
     <div className="stats" style={styles}>
-      <div className="statsHead">
-        <div className="statsHeadTitle">{title}</div>
-        {metricFormatted && (
-          <div className={`statsHeadMetric statsHeadMetric${metricStatus}`}>
-            {metricStatus ? (metricStatus === "Up" ? "+" : "-") : ""}
-            {metricFormatted}
+      {Icon && (
+        <div className="statsIcon">
+          <Icon size={24} />
+        </div>
+      )}
+      <div className="statsContainer">
+        <div className="statsHead">
+          <div className="statsHeadTitle">{title}</div>
+          {metricFormatted && (
+            <div className={`statsHeadMetric statsHeadMetric${metricStatus}`}>
+              {metricStatus ? (metricStatus === "Up" ? "+" : "-") : ""}
+              {metricFormatted}
+            </div>
+          )}
+        </div>
+        <div className="statsBody">
+          {valueFormatted} {valueUnit}
+        </div>
+        {footer && (
+          <div className="statsFooter">
+            <div>{footer}</div>
           </div>
         )}
-      </div>
-      <div className="statsBody">
-        {valueFormatted} {valueUnit}
       </div>
     </div>
   );

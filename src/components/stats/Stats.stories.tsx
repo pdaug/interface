@@ -1,3 +1,4 @@
+import { Money } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import Stats, { StatsProps } from "./Stats";
@@ -39,6 +40,33 @@ export const Down: StoryObj<StatsProps> = {
     valueUnit: "cars",
     valueLocale: "en",
     valueOptions: { maximumFractionDigits: 0 },
+    styles: { maxWidth: "30rem" },
+  },
+};
+
+export const WithFooter: StoryObj<StatsProps> = {
+  args: {
+    title: "Speed Car",
+    value: 78,
+    valueUnit: "km/h",
+    valueOptions: { maximumFractionDigits: 0 },
+    footer: "This is a speed average last week",
+    styles: { maxWidth: "30rem" },
+  },
+};
+
+export const WithIcon: StoryObj<StatsProps> = {
+  args: {
+    Icon: Money,
+    title: "Spends",
+    metric: 0.145,
+    metricStatus: "Down",
+    metricLocale: "en",
+    metricOptions: { style: "percent", minimumFractionDigits: 2 },
+    value: 1000,
+    valueLocale: "en",
+    valueOptions: { style: "currency", currency: "USD" },
+    footer: "All spends last month",
     styles: { maxWidth: "30rem" },
   },
 };
