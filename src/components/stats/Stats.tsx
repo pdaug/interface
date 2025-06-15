@@ -65,7 +65,7 @@ const Stats = function ({
         </div>
         {footer && (
           <div className="statsFooter">
-            <div>{footer}</div>
+            <span>{footer}</span>
           </div>
         )}
       </div>

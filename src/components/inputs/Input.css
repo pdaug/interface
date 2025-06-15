@@ -39,12 +39,12 @@
   display: flex;
   position: relative;
   flex: 1;
+  overflow: hidden;
 }
 
 .inputContent input,
 .inputContent select,
 .inputContent textarea {
-  appearance: none;
   background: var(--foregroundColor);
   background-color: var(--foregroundColor);
   border: 1px solid var(--borderColor);
@@ -53,10 +53,9 @@
   color: var(--textColor);
   font-size: var(--textRegular);
   flex: 1;
-  height: 2rem;
   margin: 0;
   line-height: 1;
-  padding: 0 0.8rem;
+  padding: 6px 1rem;
   transition: 200ms;
 }
 
@@ -103,11 +102,10 @@
   box-sizing: border-box;
   flex: 1;
   line-height: 1;
-  height: 2rem;
   font-size: var(--textRegular);
   outline: none;
   overflow: hidden;
-  padding: 0 0.6rem;
+  padding: 6px 1rem;
 }
 
 .inputMoney input:focus {
@@ -145,11 +143,11 @@
   border-left: none;
   border-top-right-radius: var(--borderRadius);
   border-bottom-right-radius: var(--borderRadius);
+  box-sizing: border-box;
   color: var(--textColor);
-  height: 2rem;
   line-height: 1;
   outline: none;
-  padding: 0 0.6rem;
+  padding: 6px 1rem;
   user-select: none;
 }
 
@@ -340,10 +338,10 @@
   border: 1px solid var(--borderColor);
   border-top-left-radius: var(--borderRadius);
   border-bottom-left-radius: var(--borderRadius);
+  box-sizing: border-box;
   color: var(--textColor);
-  height: 32px;
   font-size: var(--textRegular);
-  padding: 0 0.6rem;
+  padding: 6px 1rem;
 }
 
 .inputFile button:disabled {
@@ -365,9 +363,8 @@
   display: flex;
   font-size: var(--textSmall);
   flex: 1;
-  height: 32px;
   overflow: hidden;
-  padding: 0 0.6rem;
+  padding: 6px 1rem;
 }
 
 .inputFileInfoDisabled {
@@ -393,12 +390,6 @@
   flex: 1;
 }
 
-.inputInterval input[type="date"]::-webkit-inner-spin-button,
-.inputInterval input[type="date"]::-webkit-calendar-picker-indicator {
-  display: none;
-  -webkit-appearance: none;
-}
-
 .inputInterval input {
   appearance: none;
   background: var(--foregroundColor);
@@ -407,14 +398,13 @@
   border-radius: var(--borderRadius);
   box-sizing: border-box;
   color: var(--textColor);
-  font-size: var(--textSmall);
+  font-size: var(--textRegular);
   flex: 1;
-  height: 2rem;
   min-width: 60px;
   margin: 0;
   line-height: 1;
   overflow: hidden;
-  padding: 0 0.8rem;
+  padding: 6px 1rem;
   text-align: center;
   transition: 200ms;
 }
@@ -432,9 +422,7 @@
 }
 
 .inputInterval input:focus {
-  border-color: var(--infoColor);
   outline: none;
-  transition: 200ms;
 }
 
 .inputInterval input:disabled {

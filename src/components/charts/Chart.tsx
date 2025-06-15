@@ -94,17 +94,19 @@ const ChartLine = function ({
   axisYProps,
 }: ChartLineProps) {
   return (
-    <ResponsiveContainer width={width} height={height}>
-      <LineChart data={data} margin={margin} layout={layout}>
-        <CartesianGrid {...gridProps} />
-        <XAxis {...axisXProps} />
-        <YAxis {...axisYProps} />
-        <Tooltip content={<ChartTooltip />} cursor={{ stroke: "#dedede" }} />
-        {lines?.map(function (lineProps, index) {
-          return <Line key={`chart-line-${index}`} {...lineProps} />;
-        })}
-      </LineChart>
-    </ResponsiveContainer>
+    <div className="chartContainer">
+      <ResponsiveContainer width={width} minWidth={320} height={height}>
+        <LineChart data={data} margin={margin} layout={layout}>
+          <CartesianGrid {...gridProps} />
+          <XAxis {...axisXProps} />
+          <YAxis {...axisYProps} />
+          <Tooltip content={<ChartTooltip />} cursor={{ stroke: "#dedede" }} />
+          {lines?.map(function (lineProps, index) {
+            return <Line key={`chart-line-${index}`} {...lineProps} />;
+          })}
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
 };
 

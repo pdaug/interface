@@ -1,3 +1,8 @@
+.chartContainer {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
 g,
 path,
 .recharts-pie-sector,

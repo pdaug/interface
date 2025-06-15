@@ -104,7 +104,6 @@ export const WithHeader = () => {
     <Sidebar
       path={path}
       header={{
-        padding: false,
         name: "Company Name",
         description: "Workspace Selected",
         dropdown: {
@@ -189,7 +188,6 @@ export const WithFooter = () => {
         },
       ]}
       footer={{
-        padding: false,
         name: "",
         description: "John Doe",
         photoCircle: true,
@@ -221,7 +219,6 @@ export const All = () => {
     <Sidebar
       path={path}
       header={{
-        padding: false,
         name: "Company Name",
         description: "Workspace Selected",
         dropdown: {
@@ -338,7 +335,6 @@ export const All = () => {
         },
       ]}
       footer={{
-        padding: false,
         name: "",
         description: "John Doe",
         photoCircle: true,

@@ -41,10 +41,12 @@ const Input = function ({
 }: InputProps) {
   return (
     <div className="input">
-      <div className="inputHeader" data-required={String(Boolean(required))}>
-        <label htmlFor={id}>{label}</label>
-        <span style={{ opacity: helper ? 1 : 0 }}>{helper || ""}</span>
-      </div>
+      {label && (
+        <div className="inputHeader" data-required={String(Boolean(required))}>
+          <label htmlFor={id}>{label}</label>
+          <span style={{ opacity: helper ? 1 : 0 }}>{helper || ""}</span>
+        </div>
+      )}
       <div className="inputContent">
         <input
           id={id}
@@ -545,10 +547,12 @@ const InputSelect = function ({
   });
   return (
     <div className="input">
-      <div className="inputHeader" data-required={String(Boolean(required))}>
-        <label htmlFor={id}>{label}</label>
-        {helper && <span>{helper}</span>}
-      </div>
+      {label && (
+        <div className="inputHeader" data-required={String(Boolean(required))}>
+          <label htmlFor={id}>{label}</label>
+          {helper && <span>{helper}</span>}
+        </div>
+      )}
       <div className="inputContent">
         <select
           id={id}

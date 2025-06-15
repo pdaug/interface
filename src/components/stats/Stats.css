@@ -26,6 +26,7 @@
   flex: 1;
   flex-direction: column;
   gap: 0.4rem;
+  overflow: hidden;
 }
 
 .statsHead,
@@ -34,6 +35,13 @@
   font-size: var(--textSmall);
   gap: 1rem;
   overflow: hidden;
+}
+
+.statsFooter span {
+  color: var(--textLight);
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
 }
 
 .statsHeadTitle {

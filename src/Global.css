@@ -60,7 +60,6 @@ html {
 
 ::-webkit-scrollbar-track {
   box-sizing: content-box;
-  border: 1px solid var(--borderColor);
 }
 
 ::-webkit-scrollbar-track,
@@ -70,13 +69,13 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--borderColor);
-  background-color: var(--borderColor);
+  background: var(--borderLight);
+  background-color: var(--borderLight);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--borderDark);
-  background-color: var(--borderDark);
+  background: var(--borderColor);
+  background-color: var(--borderColor);
   cursor: grab;
 }
 

@@ -5,6 +5,7 @@
   border: 1px solid var(--borderColor);
   border-radius: var(--borderRadius);
   box-shadow: var(--shadow);
+  box-sizing: border-box;
   color: var(--textColor);
   cursor: pointer;
   display: flex;
