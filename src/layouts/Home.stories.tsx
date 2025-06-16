@@ -21,7 +21,7 @@ import { Horizontal, Vertical } from "../components/aligns/Align";
 import { InputSelect, InputInterval } from "../components/inputs/Input";
 
 const meta: Meta = {
-  title: "Layout/Home",
+  title: "Layout/Dashboard",
   tags: ["autodocs"],
 };
 
@@ -29,7 +29,7 @@ export default meta;
 
 export const Default: StoryObj = {
   render: () => {
-    const [path, setPath] = useState("");
+    const [path, setPath] = useState("dashboard");
     return (
       <Horizontal styles={{ height: "100vh" }}>
         <Sidebar

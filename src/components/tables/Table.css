@@ -6,12 +6,12 @@
   border-style: none;
   box-shadow: none;
   flex: 1;
-  overflow: hidden;
 }
 
 .tableBorder {
   border-style: solid !important;
   box-shadow: var(--shadow) !important;
+  overflow: hidden;
 }
 
 .tableBorder .tableHead {
@@ -20,6 +20,7 @@
 }
 
 .tableHeadRow {
+  align-items: center;
   border-bottom: 1px solid var(--borderColor);
   display: flex;
 }

@@ -54,6 +54,7 @@
   font-size: var(--textRegular);
   flex: 1;
   margin: 0;
+  min-width: 60px;
   line-height: 1;
   padding: 6px 1rem;
   transition: 200ms;

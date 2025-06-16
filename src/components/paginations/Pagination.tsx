@@ -4,7 +4,7 @@ import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import "./Pagination.css";
 
 export type PaginationProps = {
-  data?: boolean;
+  display?: boolean;
   pageCurrent: number;
   pageSize: number;
   itemsTotal: number;
@@ -12,7 +12,7 @@ export type PaginationProps = {
 };
 
 const Pagination = function ({
-  data,
+  display,
   pageCurrent,
   pageSize = 10,
   itemsTotal,
@@ -52,7 +52,7 @@ const Pagination = function ({
 
   return (
     <div className="pagination">
-      {data && (
+      {display && (
         <div className="paginationData">
           <span>Mostrando</span>
           <b>{pageCurrent}</b>
