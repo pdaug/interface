@@ -229,7 +229,7 @@ export const Default: StoryObj = {
             <Button category="Neutral" text="Exportar" />
             <Button category="Neutral" text="" Icon={QuestionMark} onlyIcon />
           </Horizontal>
-          <Vertical>
+          <Vertical internal={1} styles={{ flex: 1 }}>
             <Table
               border
               data={[
