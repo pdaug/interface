@@ -16,11 +16,11 @@ import Button, { ButtonCategories } from "../buttons/Button";
 export type DialogContextProps = {
   open: boolean;
   title: string;
-  description: string;
+  description: string | React.ReactNode;
   category: ButtonCategories;
   confirmIcon?: PhosphorIcon;
-  confirmText: string;
-  onConfirm: () => void;
+  confirmText?: string;
+  onConfirm?: () => void;
   Icon?: PhosphorIcon;
   cancelText?: string;
   onCancel?: () => void;
@@ -130,13 +130,15 @@ export const DialogElement = function () {
             text={dialogProps.cancelText || "Cancel"}
             onClick={dialogProps?.onCancel || CloseDialog}
           />
-          <Button
-            type="submit"
-            Icon={dialogProps.confirmIcon}
-            text={dialogProps.confirmText}
-            category={dialogProps.category}
-            onClick={dialogProps.onConfirm}
-          />
+          {dialogProps.confirmText && (
+            <Button
+              type="submit"
+              Icon={dialogProps.confirmIcon}
+              text={dialogProps.confirmText}
+              category={dialogProps.category}
+              onClick={dialogProps.onConfirm}
+            />
+          )}
         </div>
       </div>
     </div>

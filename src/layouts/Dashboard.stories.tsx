@@ -11,6 +11,11 @@ import {
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 
+import {
+  useDialog,
+  DialogElement,
+  DialogProvider,
+} from "../components/dialogs/Dialog";
 import Stats from "../components/stats/Stats";
 import Button from "../components/buttons/Button";
 import Wrapper from "../components/wrapper/Wrapper";
@@ -23,12 +28,20 @@ import { InputSelect, InputInterval } from "../components/inputs/Input";
 const meta: Meta = {
   title: "Layout/Dashboard",
   tags: ["autodocs"],
+  decorators: (Story) => (
+    <DialogProvider>
+      <Story />
+      <DialogElement />
+    </DialogProvider>
+  ),
 };
 
 export default meta;
 
 export const Default: StoryObj = {
   render: () => {
+    const { OpenDialog } = useDialog();
+
     const [path, setPath] = useState("dashboard");
     return (
       <Horizontal styles={{ height: "100vh" }}>
@@ -182,6 +195,7 @@ export const Default: StoryObj = {
           </Horizontal>
           <Horizontal internal={1}>
             <InputSelect
+              styles={{ maxWidth: "10rem" }}
               label=""
               empty=""
               value="general"
@@ -203,14 +217,14 @@ export const Default: StoryObj = {
                 },
               ]}
             />
-            <InputInterval label="" value={["2025-01-01", "2025-02-02"]} />
+            <InputInterval
+              label=""
+              styles={{ maxWidth: "20rem" }}
+              value={["2025-01-01", "2025-02-02"]}
+            />
             <div style={{ flex: 1 }}></div>
             <Dropdown
               values={[
-                {
-                  id: "pdf",
-                  label: "Arquivo PDF",
-                },
                 {
                   id: "xlsx",
                   label: "Planilha XSL",
@@ -227,7 +241,27 @@ export const Default: StoryObj = {
             >
               <Button category="Neutral" text="Baixar" Icon={DownloadSimple} />
             </Dropdown>
-            <Button category="Neutral" text="" Icon={QuestionMark} onlyIcon />
+            <Button
+              onClick={() =>
+                OpenDialog({
+                  category: "Info",
+                  title: "Título",
+                  description: (
+                    <iframe
+                      width="100%"
+                      height="315"
+                      title="YouTube video player"
+                      src="https://www.youtube.com/embed/q7vKnhTSoK8?si=gQf4QNmMqIEeRg_G"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    ></iframe>
+                  ),
+                })
+              }
+              category="Neutral"
+              text=""
+              Icon={QuestionMark}
+              onlyIcon
+            />
           </Horizontal>
           <Horizontal internal={1}>
             <Stats

@@ -230,6 +230,7 @@ export type InputIntervalProps = {
   helper?: string;
   name?: string;
   value: [string, string];
+  styles?: React.CSSProperties;
   disabled?: boolean;
   required?: boolean;
   readOnly?: boolean;
@@ -242,13 +243,14 @@ const InputInterval = function ({
   helper,
   value,
   name,
+  styles,
   disabled,
   required,
   readOnly,
   onChange,
 }: InputIntervalProps) {
   return (
-    <div className="input">
+    <div className="input" style={styles}>
       {(label || helper) && (
         <div className="inputHeader" data-required={String(Boolean(required))}>
           <label htmlFor={id}>{label}</label>
@@ -515,6 +517,7 @@ export type InputSelectProps = {
   name?: string;
   required?: boolean;
   helper?: string;
+  styles?: React.CSSProperties;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 };
 
@@ -528,6 +531,7 @@ const InputSelect = function ({
   disabled,
   required,
   helper,
+  styles,
   onChange,
 }: InputSelectProps) {
   const optionsGroupped: { [groupName: string]: InputSelectOptions[] } = {
@@ -546,7 +550,7 @@ const InputSelect = function ({
     return;
   });
   return (
-    <div className="input">
+    <div className="input" style={styles}>
       {label && (
         <div className="inputHeader" data-required={String(Boolean(required))}>
           <label htmlFor={id}>{label}</label>

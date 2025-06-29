@@ -1,14 +1,12 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
 
 // styles
 import "./Global.css";
 
-const container = document.getElementById("fz");
+// routes
+import Routes from "./s";
+
+const container = document.getElementById("interface");
 const root = createRoot(container as HTMLElement);
 
-root.render(
-  <React.Fragment>
-    <h1>hello</h1>
-  </React.Fragment>,
-);
+root.render(Routes);

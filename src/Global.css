@@ -51,6 +51,11 @@ html {
   scroll-behavior: smooth;
 }
 
+iframe {
+  border: none;
+  border-radius: var(--borderRadius);
+}
+
 ::-webkit-scrollbar {
   background: var(--backgroundColor);
   background-color: var(--backgroundColor);

@@ -21,6 +21,7 @@ export default {
 export const Default: StoryObj = {
   render: () => {
     const [form, setForm] = useState({
+      instance: "",
       username: "",
       password: "",
     });
@@ -36,7 +37,7 @@ export const Default: StoryObj = {
             {
               type: "button",
               category: "Neutral",
-              text: "Forgot Password",
+              text: "Esqueci a senha",
               onClick: function () {
                 toast.message("Forgot Password!");
                 return;
@@ -45,7 +46,7 @@ export const Default: StoryObj = {
             {
               type: "submit",
               category: "Success",
-              text: "Login",
+              text: "Entrar",
             },
           ]}
         >
@@ -55,10 +56,24 @@ export const Default: StoryObj = {
             </Horizontal>
             <Input
               required
+              id="login_instance"
+              name="instance"
+              label="Instância"
+              placeholder="fulano"
+              value={form.instance}
+              onChange={function (event) {
+                const newForm = { ...form };
+                newForm.instance = event.currentTarget?.value || "";
+                setForm(newForm);
+                return;
+              }}
+            />
+            <Input
+              required
               id="login_username"
               name="username"
-              label="Username"
-              placeholder="John Doe"
+              label="Usuário"
+              placeholder="123.456.789-10"
               value={form.username}
               onChange={function (event) {
                 const newForm = { ...form };
@@ -72,7 +87,7 @@ export const Default: StoryObj = {
               id="login_password"
               name="password"
               type="password"
-              label="Password"
+              label="Senha"
               placeholder="********"
               value={form.password}
               onChange={function (event) {

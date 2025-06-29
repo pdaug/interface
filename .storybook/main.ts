@@ -16,7 +16,7 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {
       viteConfig: {
-        base: "/components/",
+        base: "/interface/",
       },
     },
   },
