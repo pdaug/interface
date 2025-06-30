@@ -17,11 +17,13 @@
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
     "@tippyjs/react": "^4.2.6",
+    "axios": "^1.10.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^6.30.1",
     "recharts": "^2.15.3",
     "sonner": "^2.0.3",
+    "use-debounce": "^10.0.5",
     "use-mask-input": "^3.4.2"
   },
   "devDependencies": {

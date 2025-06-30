@@ -1,0 +1,15 @@
+export type ApiResponseResult =
+  | null
+  | string
+  | Record<string, unknown>
+  | Record<string, unknown>[];
+
+export type ApiResponse<T> = {
+  state: "success" | "error";
+  server: string;
+  version: number;
+  path: string;
+  method: string;
+  timestamp: number;
+  result: T;
+};
