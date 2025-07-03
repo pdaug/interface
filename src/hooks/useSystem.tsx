@@ -4,14 +4,17 @@ import { persist } from "zustand/middleware";
 // types
 import { TypeUser } from "../types/User";
 import { TypeInstance } from "../types/Instance";
+import { TypeWorkspace } from "../types/Workspace";
 
 type SystemState = {
   token: string | null;
   user: TypeUser | null;
   instance: TypeInstance | null;
+  workspaces: TypeWorkspace[];
   saveToken: (token: string) => void;
   saveUser: (user: TypeUser) => void;
   saveInstance: (instance: TypeInstance) => void;
+  saveWorkspaces: (workspaces: TypeWorkspace[]) => void;
   clear: () => void;
 };
 
@@ -22,6 +25,7 @@ const useSystem = create<SystemState>()(
         token: null,
         user: null,
         instance: null,
+        workspaces: [],
       };
       const saveToken = function (token: string) {
         set({ token });
@@ -35,6 +39,10 @@ const useSystem = create<SystemState>()(
         set({ instance });
         return;
       };
+      const saveWorkspaces = function (workspaces: TypeWorkspace[]) {
+        set({ workspaces });
+        return;
+      };
       const clear = function () {
         set({ ...initial });
         return;
@@ -44,6 +52,7 @@ const useSystem = create<SystemState>()(
         saveToken,
         saveUser,
         saveInstance,
+        saveWorkspaces,
         clear,
       };
     },
@@ -54,6 +63,7 @@ const useSystem = create<SystemState>()(
           token: state.token,
           user: state.user,
           instance: state.instance,
+          workspaces: state.workspaces,
         };
       },
     },

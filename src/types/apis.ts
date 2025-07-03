@@ -13,3 +13,13 @@ export type ApiResponse<T> = {
   timestamp: number;
   result: T;
 };
+
+export type ApiResponsePaginate<T> = {
+  items: T[];
+  pagination: {
+    total: number;
+    pageSize: number;
+    pageCurrent: number;
+    pageTotal: number;
+  };
+};

@@ -1,8 +1,8 @@
 // apis
-import { apiBase } from ".";
+import { ApiBase } from ".";
 
 // types
-import { ApiResponse } from "../types/apis";
+import { ApiResponse } from "../types/Apis";
 
 const Login = function <T>(
   instance: string,
@@ -10,7 +10,7 @@ const Login = function <T>(
 ) {
   const headers = { "X-Instance": instance };
   const config = { headers };
-  return apiBase.post<ApiResponse<T>>("/login", data, config);
+  return ApiBase.post<ApiResponse<T>>("/login", data, config);
 };
 
 export default Login;

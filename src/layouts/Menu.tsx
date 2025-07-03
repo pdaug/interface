@@ -41,7 +41,7 @@ const MenuOptions = [
 const Menu = function () {
   const t = useTranslate();
   const navigate = useNavigate();
-  const { user, instance, clear } = useSystem();
+  const { user, instance, workspaces, clear } = useSystem();
 
   if (!instance || !user) return;
 
@@ -56,16 +56,12 @@ const Menu = function () {
           <CaretDown />
         </div>
       ),
-      values: [
-        {
-          id: "workspace_1",
-          label: "{{workspace.name}}",
-        },
-        {
-          id: "workspace_2",
-          label: "{{workspace.name}}",
-        },
-      ],
+      values: workspaces?.map(function (workspace) {
+        return {
+          id: workspace.id,
+          label: workspace.name,
+        };
+      }),
     },
   };
 

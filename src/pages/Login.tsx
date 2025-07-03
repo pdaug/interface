@@ -12,6 +12,8 @@ import Schema from "../utils/Schema";
 // types
 import { TypeUser } from "../types/User";
 import { TypeInstance } from "../types/Instance";
+import { TypeWorkspace } from "../types/Workspace";
+import { ApiResponsePaginate } from "../types/Apis";
 
 // hooks
 import useSystem from "../hooks/useSystem";
@@ -26,8 +28,15 @@ import { Center, Horizontal, Vertical } from "../components/aligns/Align";
 const Login = function () {
   const t = useTranslate();
   const navigate = useNavigate();
-  const { token, user, instance, saveToken, saveUser, saveInstance } =
-    useSystem();
+  const {
+    token,
+    user,
+    instance,
+    saveToken,
+    saveUser,
+    saveInstance,
+    saveWorkspaces,
+  } = useSystem();
 
   const [form, setForm] = useState({
     instance: "",
@@ -47,9 +56,11 @@ const Login = function () {
       const host = window.location.hostname;
       const parts = host.split(".");
       const subdomain = parts?.[0];
-      const response = await apis.Instance.search<TypeInstance>(subdomain);
-      if (!response.data?.result) return;
-      saveInstance(response.data.result);
+      if (subdomain && parts.length >= 3) {
+        const response = await apis.Instance.search<TypeInstance>(subdomain);
+        if (!response.data?.result) return;
+        saveInstance(response.data.result);
+      }
       return;
     } catch (err) {
       console.error("[src/pages/Login.tsx]", err);
@@ -61,6 +72,7 @@ const Login = function () {
   const OnSubmit = async function (event: React.FormEvent) {
     event.preventDefault();
     try {
+      // fetch instance
       const responseInstance = await apis.Instance.search<TypeInstance>(
         form.instance,
       );
@@ -69,6 +81,7 @@ const Login = function () {
         return;
       }
       saveInstance(responseInstance.data?.result);
+      // fetch login
       const responseLogin = await apis.Login<{ user: TypeUser; token: string }>(
         form.instance,
         {
@@ -82,6 +95,11 @@ const Login = function () {
       }
       saveToken(responseLogin.data.result.token);
       saveUser(responseLogin.data.result.user);
+      // fetch workspace
+      const responseWorkspace = await apis.Workspace.list<
+        ApiResponsePaginate<TypeWorkspace>
+      >(responseLogin.data.result.token, form.instance);
+      saveWorkspaces(responseWorkspace?.data?.result?.items);
       toast.success(t.login.success);
       navigate("/f/dashboard");
       return;

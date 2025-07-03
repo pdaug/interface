@@ -1,8 +1,8 @@
 // apis
-import { apiBase } from ".";
+import { ApiBase } from ".";
 
 // types
-import { ApiResponse } from "../types/apis";
+import { ApiResponse } from "../types/Apis";
 
 const Session = {
   new: function <T>(
@@ -15,7 +15,7 @@ const Session = {
       "X-Instance": instance,
     };
     const config = { headers };
-    return apiBase.post<ApiResponse<T>>("/session", data, config);
+    return ApiBase.post<ApiResponse<T>>("/session", data, config);
   },
   user: function <T>(
     instance: string,
@@ -27,7 +27,7 @@ const Session = {
       "X-Instance": instance,
     };
     const config = { headers };
-    return apiBase.get<ApiResponse<T>>(`/session/user/${data.userId}`, config);
+    return ApiBase.get<ApiResponse<T>>(`/session/user/${data.userId}`, config);
   },
   check: function <T>(
     instance: string,
@@ -39,7 +39,7 @@ const Session = {
       "X-Instance": instance,
     };
     const config = { headers };
-    return apiBase.get<ApiResponse<T>>(`/session/check/${data.token}`, config);
+    return ApiBase.get<ApiResponse<T>>(`/session/check/${data.token}`, config);
   },
 };
 
