@@ -1,17 +1,17 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type SystemData = Record<string, unknown>;
+// types
+import { TypeUser } from "../types/User";
+import { TypeInstance } from "../types/Instance";
 
 type SystemState = {
-  module: string;
   token: string | null;
-  user: SystemData | null;
-  instance: SystemData | null;
-  openModule: (module: string) => void;
+  user: TypeUser | null;
+  instance: TypeInstance | null;
   saveToken: (token: string) => void;
-  saveUser: (user: SystemData) => void;
-  saveInstance: (instance: SystemData) => void;
+  saveUser: (user: TypeUser) => void;
+  saveInstance: (instance: TypeInstance) => void;
   clear: () => void;
 };
 
@@ -19,24 +19,19 @@ const useSystem = create<SystemState>()(
   persist(
     function (set) {
       const initial = {
-        module: "dashboard",
         token: null,
         user: null,
         instance: null,
-      };
-      const openModule = function (module: string) {
-        set({ module });
-        return;
       };
       const saveToken = function (token: string) {
         set({ token });
         return;
       };
-      const saveUser = function (user: SystemData) {
+      const saveUser = function (user: TypeUser) {
         set({ user });
         return;
       };
-      const saveInstance = function (instance: SystemData) {
+      const saveInstance = function (instance: TypeInstance) {
         set({ instance });
         return;
       };
@@ -46,7 +41,6 @@ const useSystem = create<SystemState>()(
       };
       return {
         ...initial,
-        openModule,
         saveToken,
         saveUser,
         saveInstance,
@@ -57,7 +51,6 @@ const useSystem = create<SystemState>()(
       name: "storage",
       partialize: function (state) {
         return {
-          module: state.module,
           token: state.token,
           user: state.user,
           instance: state.instance,

@@ -21,8 +21,8 @@ export const Default = () => {
   const [path, setPath] = useState("dashboard");
   return (
     <Sidebar
-      path={path}
-      menu={[
+      selected={path}
+      options={[
         {
           id: "dashboard",
           label: "Dashboard",
@@ -57,8 +57,8 @@ export const Group = () => {
   const [path, setPath] = useState("dashboard");
   return (
     <Sidebar
-      path={path}
-      menu={[
+      selected={path}
+      options={[
         {
           id: "financial",
           name: "Financial",
@@ -102,7 +102,7 @@ export const WithHeader = () => {
   const [path, setPath] = useState("dashboard");
   return (
     <Sidebar
-      path={path}
+      selected={path}
       header={{
         name: "Company Name",
         description: "Workspace Selected",
@@ -124,7 +124,7 @@ export const WithHeader = () => {
           ],
         },
       }}
-      menu={[
+      options={[
         {
           id: "dashboard",
           label: "Dashboard",
@@ -159,8 +159,8 @@ export const WithFooter = () => {
   const [path, setPath] = useState("dashboard");
   return (
     <Sidebar
-      path={path}
-      menu={[
+      selected={path}
+      options={[
         {
           id: "dashboard",
           label: "Dashboard",
@@ -217,7 +217,7 @@ export const All = () => {
   const [path, setPath] = useState("dashboard");
   return (
     <Sidebar
-      path={path}
+      selected={path}
       header={{
         name: "Company Name",
         description: "Workspace Selected",
@@ -239,7 +239,7 @@ export const All = () => {
           ],
         },
       }}
-      menu={[
+      options={[
         {
           id: "financial",
           name: "Financial",

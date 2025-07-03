@@ -9,6 +9,10 @@ import apis from "../apis";
 // utils
 import Schema from "../utils/Schema";
 
+// types
+import { TypeUser } from "../types/User";
+import { TypeInstance } from "../types/Instance";
+
 // hooks
 import useSystem from "../hooks/useSystem";
 import useTranslate from "../hooks/useTranslate";
@@ -31,18 +35,19 @@ const Login = function () {
     password: "",
   });
 
+  // redirect
   useEffect(function () {
     if (token && user) navigate("/f/dashboard");
     return;
   }, []);
 
+  // fetch instance by subdomain
   useEffectAsync(async function () {
     try {
       const host = window.location.hostname;
       const parts = host.split(".");
       const subdomain = parts?.[0];
-      const response =
-        await apis.Instance.search<Record<string, unknown>>(subdomain);
+      const response = await apis.Instance.search<TypeInstance>(subdomain);
       if (!response.data?.result) return;
       saveInstance(response.data.result);
       return;
@@ -52,18 +57,19 @@ const Login = function () {
     }
   }, []);
 
+  // to log in
   const OnSubmit = async function (event: React.FormEvent) {
     event.preventDefault();
     try {
-      const responseInstance = await apis.Instance.search<
-        Record<string, unknown>
-      >(form.instance);
+      const responseInstance = await apis.Instance.search<TypeInstance>(
+        form.instance,
+      );
       if (!responseInstance?.data?.result) {
         toast.error(t.login.instance_no_exist);
         return;
       }
       saveInstance(responseInstance.data?.result);
-      const responseLogin = await apis.Login<Record<string, unknown>>(
+      const responseLogin = await apis.Login<{ user: TypeUser; token: string }>(
         form.instance,
         {
           login: form.username,
@@ -74,8 +80,8 @@ const Login = function () {
         toast.error(t.login.invalid_credentials);
         return;
       }
-      saveToken(responseLogin.data.result.token as string);
-      saveUser(responseLogin.data.result.user as Record<string, unknown>);
+      saveToken(responseLogin.data.result.token);
+      saveUser(responseLogin.data.result.user);
       toast.success(t.login.success);
       navigate("/f/dashboard");
       return;

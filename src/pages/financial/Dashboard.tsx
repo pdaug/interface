@@ -2,14 +2,14 @@ import React from "react";
 import { QuestionMark, DownloadSimple } from "@phosphor-icons/react";
 
 // components
-import Stats from "../components/stats/Stats";
-import Button from "../components/buttons/Button";
-import Wrapper from "../components/wrapper/Wrapper";
-import { ChartLine } from "../components/charts/Chart";
-import Dropdown from "../components/dropdowns/Dropdown";
-import { Horizontal } from "../components/aligns/Align";
-import { useDialog } from "../components/dialogs/Dialog";
-import { InputInterval, InputSelect } from "../components/inputs/Input";
+import Stats from "../../components/stats/Stats";
+import Button from "../../components/buttons/Button";
+import Wrapper from "../../components/wrapper/Wrapper";
+import { ChartLine } from "../../components/charts/Chart";
+import Dropdown from "../../components/dropdowns/Dropdown";
+import { Horizontal } from "../../components/aligns/Align";
+import { useDialog } from "../../components/dialogs/Dialog";
+import { InputInterval, InputSelect } from "../../components/inputs/Input";
 
 const Dashboard = function () {
   const { OpenDialog } = useDialog();

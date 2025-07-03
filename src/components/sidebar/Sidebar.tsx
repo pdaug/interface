@@ -13,7 +13,7 @@ export type SidebarMenuItem = {
   onClick?: () => void;
 };
 
-export type SidebarMenu =
+export type SidebarOptions =
   | {
       id: string;
       name: string;
@@ -23,19 +23,19 @@ export type SidebarMenu =
   | SidebarMenuItem[];
 
 export type SidebarProps = {
-  path: string;
+  selected: string;
   header?: ProfileProps;
-  menu: SidebarMenu;
+  options: SidebarOptions;
   footer?: ProfileProps;
 };
 
-const Sidebar = function ({ path, header, menu, footer }: SidebarProps) {
+const Sidebar = function ({ selected, header, options, footer }: SidebarProps) {
   return (
     <div className="sidebar">
       <div className="sidebarContainer">
         {header && <Profile {...header} />}
         <div className="sidebarMenu">
-          {menu?.map(function (groupOrItem) {
+          {options?.map(function (groupOrItem) {
             return "items" in groupOrItem ? (
               <div className="sidebarMenuGroup" key={groupOrItem.id}>
                 <div className="sidebarMenuName">
@@ -48,7 +48,7 @@ const Sidebar = function ({ path, header, menu, footer }: SidebarProps) {
                       <div
                         key={item.id}
                         onClick={item?.onClick}
-                        className={`sidebarMenuItem ${path === item.id ? "sidebarMenuItemSelected" : ""}`}
+                        className={`sidebarMenuItem ${selected === item.id ? "sidebarMenuItemSelected" : ""}`}
                       >
                         {item.Icon && <item.Icon size={16} />}
                         <span>{item.label}</span>
@@ -61,7 +61,7 @@ const Sidebar = function ({ path, header, menu, footer }: SidebarProps) {
               <div
                 key={groupOrItem.id}
                 onClick={groupOrItem?.onClick}
-                className={`sidebarMenuItem ${path === groupOrItem.id ? "sidebarMenuItemSelected" : ""}`}
+                className={`sidebarMenuItem ${selected === groupOrItem.id ? "sidebarMenuItemSelected" : ""}`}
               >
                 {groupOrItem.Icon && <groupOrItem.Icon size={16} />}
                 <span>{groupOrItem.label}</span>
