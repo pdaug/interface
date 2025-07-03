@@ -1,16 +1,17 @@
 import { toast } from "sonner";
-import { AxiosError } from "axios";
-import { useDebounce } from "use-debounce";
 import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 // apis
 import apis from "../apis";
 
+// utils
+import Schema from "../utils/Schema";
+
 // hooks
-import useAuth from "../hooks/useAuth";
-import { useSession } from "../hooks/useSession";
+import useSystem from "../hooks/useSystem";
 import useTranslate from "../hooks/useTranslate";
-import { useInstance } from "../hooks/useInstance";
 
 // components
 import { Input } from "../components/inputs/Input";
@@ -18,10 +19,9 @@ import Wrapper from "../components/wrapper/Wrapper";
 import { Center, Horizontal, Vertical } from "../components/aligns/Align";
 
 const Login = function () {
-  useAuth();
   const t = useTranslate();
-  const { saveToken, saveUser } = useSession();
-  const { instance, saveInstance } = useInstance();
+  const navigate = useNavigate();
+  const { token, user, saveToken, saveUser } = useSystem();
 
   const [form, setForm] = useState({
     instance: "",
@@ -29,32 +29,10 @@ const Login = function () {
     password: "",
   });
 
-  const [instanceDebounced] = useDebounce(form.instance, 500);
-
-  // fetch instance
-  useEffect(
-    function () {
-      if (!instanceDebounced) {
-        saveInstance(null);
-        return;
-      }
-      apis.Instance.search<Record<string, unknown>>(instanceDebounced)
-        .then(function (response) {
-          if (!response || !response?.data || !response.data?.result) {
-            saveInstance(null);
-            return;
-          }
-          saveInstance(response.data.result);
-          return;
-        })
-        .catch(function (err) {
-          console.error("[src/pages/Login.tsx]", err);
-          return;
-        });
-      return;
-    },
-    [instanceDebounced],
-  );
+  useEffect(function () {
+    if (token && user) navigate("/f/dashboard");
+    return;
+  }, []);
 
   const OnSubmit = async function (event: React.FormEvent) {
     event.preventDefault();
@@ -69,19 +47,18 @@ const Login = function () {
       if (!response || !response?.data || !response.data?.result) return;
       saveToken(response.data.result.token as string);
       saveUser(response.data.result.user as Record<string, unknown>);
+      toast.success(t.login.success);
+      navigate("/f/dashboard");
       return;
     } catch (err) {
       if (err instanceof AxiosError) {
-        console.error(
-          "[src/pages/Login.tsx]",
-          err.response?.data.result.message,
-        );
+        console.error("[src/pages/Login.tsx]", err.response?.data.result);
         if (err.response?.data?.result?.message === "invalid_credentials")
           toast.error(t.login.invalid_credentials);
         if (err.response?.data?.result?.message === "instance_no_exist")
           toast.error(t.login.instance_no_exist);
         if (err.response?.data?.result?.message === "schema_incorrect")
-          toast.error(t.login.schema_incorrect);
+          Schema(err.response.data.result.err);
         return;
       }
       console.error("[src/pages/Login.tsx]", err);

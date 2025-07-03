@@ -74,13 +74,13 @@ export const InstanceProvider = function ({
 
   // restore instance stored
   useEffect(function () {
-    const instanceStored = localStorage.getItem("instance");
+    const instanceStored = sessionStorage.getItem("instance");
     if (instanceStored) setInstance(JSON.parse(instanceStored));
   }, []);
 
   // to save instance
   const saveInstance = function (instaceData: InstanceData | null) {
-    localStorage.setItem("instance", JSON.stringify(instaceData));
+    sessionStorage.setItem("instance", JSON.stringify(instaceData));
     setInstance(instaceData);
     return;
   };
