@@ -12,6 +12,7 @@ import Schema from "../utils/Schema";
 // hooks
 import useSystem from "../hooks/useSystem";
 import useTranslate from "../hooks/useTranslate";
+import useEffectAsync from "../hooks/useEffectAsync";
 
 // components
 import { Input } from "../components/inputs/Input";
@@ -21,7 +22,8 @@ import { Center, Horizontal, Vertical } from "../components/aligns/Align";
 const Login = function () {
   const t = useTranslate();
   const navigate = useNavigate();
-  const { token, user, saveToken, saveUser } = useSystem();
+  const { token, user, instance, saveToken, saveUser, saveInstance } =
+    useSystem();
 
   const [form, setForm] = useState({
     instance: "",
@@ -34,19 +36,46 @@ const Login = function () {
     return;
   }, []);
 
+  useEffectAsync(async function () {
+    try {
+      const host = window.location.hostname;
+      const parts = host.split(".");
+      const subdomain = parts?.[0];
+      const response =
+        await apis.Instance.search<Record<string, unknown>>(subdomain);
+      if (!response.data?.result) return;
+      saveInstance(response.data.result);
+      return;
+    } catch (err) {
+      console.error("[src/pages/Login.tsx]", err);
+      return;
+    }
+  }, []);
+
   const OnSubmit = async function (event: React.FormEvent) {
     event.preventDefault();
     try {
-      const response = await apis.Login<Record<string, unknown>>(
+      const responseInstance = await apis.Instance.search<
+        Record<string, unknown>
+      >(form.instance);
+      if (!responseInstance?.data?.result) {
+        toast.error(t.login.instance_no_exist);
+        return;
+      }
+      saveInstance(responseInstance.data?.result);
+      const responseLogin = await apis.Login<Record<string, unknown>>(
         form.instance,
         {
           login: form.username,
           password: form.password,
         },
       );
-      if (!response || !response?.data || !response.data?.result) return;
-      saveToken(response.data.result.token as string);
-      saveUser(response.data.result.user as Record<string, unknown>);
+      if (!responseLogin?.data?.result) {
+        toast.error(t.login.invalid_credentials);
+        return;
+      }
+      saveToken(responseLogin.data.result.token as string);
+      saveUser(responseLogin.data.result.user as Record<string, unknown>);
       toast.success(t.login.success);
       navigate("/f/dashboard");
       return;

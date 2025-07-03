@@ -12,7 +12,20 @@ import { Horizontal, Vertical } from "../components/aligns/Align";
 
 const Container = function () {
   const navigate = useNavigate();
-  const { token, user } = useSystem();
+  const { instance, token, user } = useSystem();
+
+  useEffect(function () {
+    if (!instance) return;
+    const link: HTMLLinkElement =
+      document.querySelector("link[rel*='icon']") ||
+      document.createElement("link");
+    link.type = "image/x-icon";
+    link.rel = "shortcut icon";
+    link.href = instance.favicon as string;
+    document.title = instance.companyName as string;
+    document.head.appendChild(link);
+    return;
+  }, []);
 
   useEffect(function () {
     if (!user || !token) navigate("/");

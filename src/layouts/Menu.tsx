@@ -6,7 +6,6 @@ import {
   CaretDown,
   SuitcaseSimple,
 } from "@phosphor-icons/react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // hooks
@@ -17,12 +16,11 @@ import Sidebar from "../components/sidebar/Sidebar";
 
 const Menu = function () {
   const navigate = useNavigate();
-  const { clear } = useSystem();
-  const [path, setPath] = useState("dashboard");
+  const { module, clear, openModule } = useSystem();
 
   return (
     <Sidebar
-      path={path}
+      path={module}
       header={{
         name: "Company Name",
         description: "Workspace Selected",
@@ -53,27 +51,47 @@ const Menu = function () {
             {
               id: "dashboard",
               label: "Dashboard",
-              onClick: () => setPath("dashboard"),
+              onClick: () => {
+                openModule("dashboard");
+                navigate("/f/dashboard");
+                return;
+              },
             },
             {
               id: "orders",
               label: "Orders",
-              onClick: () => setPath("orders"),
+              onClick: () => {
+                openModule("orders");
+                navigate("/f/orders");
+                return;
+              },
             },
             {
               id: "inflow",
               label: "Inflow",
-              onClick: () => setPath("inflow"),
+              onClick: () => {
+                openModule("inflow");
+                navigate("/f/inflow");
+                return;
+              },
             },
             {
               id: "outflow",
               label: "Outflow",
-              onClick: () => setPath("outflow"),
+              onClick: () => {
+                openModule("outflow");
+                navigate("/f/outflow");
+                return;
+              },
             },
             {
               id: "statements",
               label: "Statements",
-              onClick: () => setPath("statements"),
+              onClick: () => {
+                openModule("statements");
+                navigate("/f/statements");
+                return;
+              },
             },
           ],
         },
@@ -85,17 +103,17 @@ const Menu = function () {
             {
               id: "customers",
               label: "Customers",
-              onClick: () => setPath("customers"),
+              onClick: () => openModule("customers"),
             },
             {
               id: "suppliers",
               label: "Suppliers",
-              onClick: () => setPath("suppliers"),
+              onClick: () => openModule("suppliers"),
             },
             {
               id: "employees",
               label: "Employees",
-              onClick: () => setPath("employees"),
+              onClick: () => openModule("employees"),
             },
           ],
         },
@@ -107,17 +125,17 @@ const Menu = function () {
             {
               id: "products",
               label: "Products",
-              onClick: () => setPath("products"),
+              onClick: () => openModule("products"),
             },
             {
               id: "services",
               label: "Services",
-              onClick: () => setPath("services"),
+              onClick: () => openModule("services"),
             },
             {
               id: "vehicles",
               label: "Vehicles",
-              onClick: () => setPath("vehicles"),
+              onClick: () => openModule("vehicles"),
             },
           ],
         },
@@ -129,12 +147,12 @@ const Menu = function () {
             {
               id: "documents",
               label: "Documents",
-              onClick: () => setPath("documents"),
+              onClick: () => openModule("documents"),
             },
             {
               id: "schedules",
               label: "Schedules",
-              onClick: () => setPath("schedules"),
+              onClick: () => openModule("schedules"),
             },
           ],
         },
