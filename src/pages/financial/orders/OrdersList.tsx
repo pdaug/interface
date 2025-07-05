@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Plus, QuestionMark } from "@phosphor-icons/react";
 
 // components
@@ -10,29 +11,37 @@ import Pagination from "../../../components/paginations/Pagination";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import { InputInterval, InputSelect } from "../../../components/inputs/Input";
 
-const OrdersList = function () {
-  const user: {
-    [key: number]: {
-      name: string;
-      description: string;
-      photo: string;
-    };
-  } = {
-    123: {
-      name: "Edward Cullen",
-      description: "Product Designer",
-      photo: "https://randomuser.me/api/portraits/men/75.jpg",
-    },
+const user: {
+  [key: number]: {
+    name: string;
+    description: string;
+    photo: string;
   };
+} = {
+  123: {
+    name: "Edward Cullen",
+    description: "Product Designer",
+    photo: "https://randomuser.me/api/portraits/men/75.jpg",
+  },
+};
+
+const OrdersList = function () {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<string[]>([]);
+
   return (
     <React.Fragment>
       <Horizontal>
         <h1>Pedidos</h1>
       </Horizontal>
-      <Horizontal internal={1}>
-        <Button category="Success" text="Novo Pedido" Icon={Plus} />
+      <Horizontal internal={1} styles={{ overflow: "hidden" }}>
+        <Button
+          category="Success"
+          text="Novo Pedido"
+          Icon={Plus}
+          onClick={() => navigate("/f/orders/inspect")}
+        />
         <div>
           <InputSelect
             label=""

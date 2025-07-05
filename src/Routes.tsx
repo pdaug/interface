@@ -14,6 +14,7 @@ import Dashboard from "./pages/financial/Dashboard";
 import OrdersList from "./pages/financial/orders/OrdersList";
 import OrdersEdit from "./pages/financial/orders/OrdersEdit";
 import ErrorPage from "./pages/ErrorPage";
+import WorkspaceList from "./pages/workspaces/WorkspaceList";
 
 const Router = createBrowserRouter([
   {
@@ -38,7 +39,28 @@ const Router = createBrowserRouter([
             Component: OrdersList,
           },
           {
-            path: "edit/:id",
+            path: "inspect",
+            Component: OrdersEdit,
+          },
+          {
+            path: "inspect/:id",
+            Component: OrdersEdit,
+          },
+        ],
+      },
+      {
+        path: "workspaces",
+        children: [
+          {
+            index: true,
+            Component: WorkspaceList,
+          },
+          {
+            path: "inspect",
+            Component: OrdersEdit,
+          },
+          {
+            path: "inspect/:id",
             Component: OrdersEdit,
           },
         ],

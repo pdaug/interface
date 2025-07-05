@@ -92,6 +92,11 @@ const Menu = function () {
       ),
       values: [
         {
+          id: "workspaces",
+          label: t.menu.workspaces,
+          onClick: () => navigate("/f/workspaces"),
+        },
+        {
           id: "integrations",
           label: t.menu.integrations,
           onClick: () => navigate("/f/integrations"),

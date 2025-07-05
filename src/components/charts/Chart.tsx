@@ -102,7 +102,13 @@ const ChartLine = function ({
           <YAxis {...axisYProps} />
           <Tooltip content={<ChartTooltip />} cursor={{ stroke: "#dedede" }} />
           {lines?.map(function (lineProps, index) {
-            return <Line key={`chart-line-${index}`} {...lineProps} />;
+            return (
+              <Line
+                key={`chart-line-${index}`}
+                {...lineProps}
+                strokeDasharray="none"
+              />
+            );
           })}
         </LineChart>
       </ResponsiveContainer>

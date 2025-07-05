@@ -11,10 +11,12 @@ type SystemState = {
   user: TypeUser | null;
   instance: TypeInstance | null;
   workspaces: TypeWorkspace[];
+  workspaceId: string | null;
   saveToken: (token: string) => void;
   saveUser: (user: TypeUser) => void;
   saveInstance: (instance: TypeInstance) => void;
   saveWorkspaces: (workspaces: TypeWorkspace[]) => void;
+  selectWorkspace: (workspaceId: string) => void;
   clear: () => void;
 };
 
@@ -26,6 +28,7 @@ const useSystem = create<SystemState>()(
         user: null,
         instance: null,
         workspaces: [],
+        workspaceId: null,
       };
       const saveToken = function (token: string) {
         set({ token });
@@ -43,6 +46,10 @@ const useSystem = create<SystemState>()(
         set({ workspaces });
         return;
       };
+      const selectWorkspace = function (workspaceId: string) {
+        set({ workspaceId });
+        return;
+      };
       const clear = function () {
         set({ ...initial });
         return;
@@ -53,6 +60,7 @@ const useSystem = create<SystemState>()(
         saveUser,
         saveInstance,
         saveWorkspaces,
+        selectWorkspace,
         clear,
       };
     },

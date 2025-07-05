@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const useEffectAsync = function (
+const useAsync = function (
   effect: () => Promise<void>,
   deps: React.DependencyList,
 ) {
@@ -10,7 +10,7 @@ const useEffectAsync = function (
       try {
         await effect();
       } catch (error) {
-        if (isActive) console.error("[src/hooks/useEffectAsync.tsx]", error);
+        if (isActive) console.error("[src/hooks/useAsync.tsx]", error);
       }
     };
     runEffect();
@@ -22,4 +22,4 @@ const useEffectAsync = function (
   return;
 };
 
-export default useEffectAsync;
+export default useAsync;

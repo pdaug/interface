@@ -16,9 +16,9 @@ import { TypeWorkspace } from "../types/Workspace";
 import { ApiResponsePaginate } from "../types/Apis";
 
 // hooks
+import useAsync from "../hooks/useAsync";
 import useSystem from "../hooks/useSystem";
 import useTranslate from "../hooks/useTranslate";
-import useEffectAsync from "../hooks/useEffectAsync";
 
 // components
 import { Input } from "../components/inputs/Input";
@@ -51,7 +51,7 @@ const Login = function () {
   }, []);
 
   // fetch instance by subdomain
-  useEffectAsync(async function () {
+  useAsync(async function () {
     try {
       const host = window.location.hostname;
       const parts = host.split(".");
