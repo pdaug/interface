@@ -31,11 +31,11 @@
   --textColor: #334155;
   --textDark: #222;
 
-  --textSmall: 0.8rem;
+  --textSmall: 0.875rem;
   --textRegular: 1rem;
   --textHighlight: 1.2rem;
-  --textSubtitle: 1.6rem;
-  --textTitle: 2rem;
+  --textSubtitle: 1.4rem;
+  --textTitle: 1.8rem;
 
   --mobileWidth: 768px;
 }
@@ -47,7 +47,7 @@ button {
 }
 
 html {
-  font-size: 11pt;
+  font-size: 12pt;
   scroll-behavior: smooth;
 }
 

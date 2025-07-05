@@ -5,7 +5,7 @@ import Container from "./layouts/Container";
 
 // components
 import { ToastElement } from "./components/toasts/Toast";
-import { DialogProvider } from "./components/dialogs/Dialog";
+import { DialogElement, DialogProvider } from "./components/dialogs/Dialog";
 
 // pages
 import Login from "./pages/Login";
@@ -15,6 +15,7 @@ import OrdersList from "./pages/financial/orders/OrdersList";
 import OrdersEdit from "./pages/financial/orders/OrdersEdit";
 import ErrorPage from "./pages/ErrorPage";
 import WorkspaceList from "./pages/workspaces/WorkspaceList";
+import WorkspaceInspect from "./pages/workspaces/WorkspaceInspect";
 
 const Router = createBrowserRouter([
   {
@@ -57,11 +58,11 @@ const Router = createBrowserRouter([
           },
           {
             path: "inspect",
-            Component: OrdersEdit,
+            Component: WorkspaceInspect,
           },
           {
             path: "inspect/:id",
-            Component: OrdersEdit,
+            Component: WorkspaceInspect,
           },
         ],
       },
@@ -76,6 +77,7 @@ const Router = createBrowserRouter([
 const Routes = (
   <DialogProvider>
     <ToastElement />
+    <DialogElement />
     <RouterProvider router={Router} />
   </DialogProvider>
 );

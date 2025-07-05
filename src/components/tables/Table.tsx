@@ -3,8 +3,12 @@ import { DotsThreeOutline } from "@phosphor-icons/react";
 // styles
 import "./Table.css";
 
+// hooks
+import useTranslate from "../../hooks/useTranslate";
+
 // components
 import Tooltip from "../tooltips/Tooltip";
+import { Horizontal } from "../aligns/Align";
 import { InputCheck } from "../inputs/Input";
 import Dropdown, { DropdownValues } from "../dropdowns/Dropdown";
 
@@ -33,6 +37,7 @@ export type TableProps = {
   setSelected?: React.Dispatch<React.SetStateAction<string[]>>;
   options?: DropdownValues;
   styles?: React.CSSProperties;
+  loading?: boolean;
 };
 
 const Table = function ({
@@ -43,11 +48,15 @@ const Table = function ({
   setSelected,
   options,
   styles,
+  loading,
 }: TableProps) {
+  const t = useTranslate();
+
   const rowsId = data.map((item) => item.id);
   const isSelectedRowsId = selected
     ? rowsId.every((id) => selected.includes(id))
     : false;
+
   return (
     <div style={styles} className={`table ${border ? "tableBorder" : ""}`}>
       <div className="tableHead">
@@ -88,63 +97,69 @@ const Table = function ({
           )}
         </div>
       </div>
-      <div className="tableBody">
-        {data?.map(function (row, indexRow) {
-          return (
-            <div
-              key={`${row.id}-${indexRow}`}
-              className={`tableBodyRow ${selected?.includes(row.id) ? "tableBodyRowSelected" : ""}`}
-            >
-              <div style={{ maxWidth: 32 }} className="tableBodyData">
-                <InputCheck
-                  value={selected || []}
-                  onChange={setSelected}
-                  options={[
-                    {
-                      id: row.id,
-                      value: row.id,
-                      label: "",
-                    },
-                  ]}
-                />
-              </div>
-              {Object.entries(columns)?.map(function (
-                [columnKey, columnValue],
-                indexColumn,
-              ) {
-                const rowData = row?.[columnKey];
-                const rowDataValue = columnValue.handler
-                  ? columnValue.handler(row, indexRow)
-                  : rowData;
-                return (
-                  <div
-                    className="tableBodyData"
-                    style={{ maxWidth: columnValue?.maxWidth }}
-                    key={`${row.id}-${columnKey}-${indexColumn}`}
-                  >
-                    {columnValue.tooltip ? (
-                      <Tooltip content={columnValue.tooltip}>
-                        {rowDataValue}
-                      </Tooltip>
-                    ) : (
-                      rowDataValue
-                    )}
-                  </div>
-                );
-              })}
-              {options && (
+      {loading ? (
+        <Horizontal external={1} styles={{ justifyContent: "center" }}>
+          {t.components.loading}...
+        </Horizontal>
+      ) : (
+        <div className="tableBody">
+          {data?.map(function (row, indexRow) {
+            return (
+              <div
+                key={`${row.id}-${indexRow}`}
+                className={`tableBodyRow ${selected?.includes(row.id) ? "tableBodyRowSelected" : ""}`}
+              >
                 <div style={{ maxWidth: 32 }} className="tableBodyData">
-                  <Dropdown values={options}>
-                    <div style={{ cursor: "pointer" }}>
-                      <DotsThreeOutline weight="fill" />
-                    </div>
-                  </Dropdown>
+                  <InputCheck
+                    value={selected || []}
+                    onChange={setSelected}
+                    options={[
+                      {
+                        id: row.id,
+                        value: row.id,
+                        label: "",
+                      },
+                    ]}
+                  />
                 </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                {Object.entries(columns)?.map(function (
+                  [columnKey, columnValue],
+                  indexColumn,
+                ) {
+                  const rowData = row?.[columnKey];
+                  const rowDataValue = columnValue.handler
+                    ? columnValue.handler(row, indexRow)
+                    : rowData;
+                  return (
+                    <div
+                      className="tableBodyData"
+                      style={{ maxWidth: columnValue?.maxWidth }}
+                      key={`${row.id}-${columnKey}-${indexColumn}`}
+                    >
+                      {columnValue.tooltip ? (
+                        <Tooltip content={columnValue.tooltip}>
+                          {rowDataValue}
+                        </Tooltip>
+                      ) : (
+                        rowDataValue
+                      )}
+                    </div>
+                  );
+                })}
+                {options && (
+                  <div style={{ maxWidth: 32 }} className="tableBodyData">
+                    <Dropdown values={options} data={row}>
+                      <div style={{ cursor: "pointer" }}>
+                        <DotsThreeOutline weight="fill" />
+                      </div>
+                    </Dropdown>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

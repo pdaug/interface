@@ -41,12 +41,8 @@ const Pagination = function ({
   };
 
   const GoPage = function (value: number, operation: "add" | "sub") {
-    if (operation === "add") {
-      setPage(pageCurrent + value);
-    }
-    if (operation === "sub") {
-      setPage(pageCurrent - value);
-    }
+    if (operation === "add") setPage(pageCurrent + value);
+    if (operation === "sub") setPage(pageCurrent - value);
     return;
   };
 
@@ -71,7 +67,7 @@ const Pagination = function ({
         >
           <CaretLeft />
         </button>
-        {pageCurrent === pageTotal && (
+        {pageCurrent === pageTotal && pageCurrent - 2 > 0 && (
           <button
             onClick={() => GoPage(2, "sub")}
             className={`paginationButtonCenter`}
@@ -100,7 +96,7 @@ const Pagination = function ({
             {pageCurrent + 1}
           </button>
         )}
-        {pageCurrent - 1 === 0 && (
+        {pageCurrent - 1 === 0 && pageCurrent + 2 <= pageTotal && (
           <button
             onClick={() => GoPage(2, "add")}
             className={`paginationButtonCenter`}

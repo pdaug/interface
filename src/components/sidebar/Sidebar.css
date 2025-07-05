@@ -49,7 +49,7 @@
 .sidebarMenuItem {
   align-items: center;
   color: var(--textColor);
-  font-size: var(--textRegular);
+  font-size: var(--textSmall);
   display: flex;
   gap: 0.4rem;
   padding: 0.4rem 1rem;

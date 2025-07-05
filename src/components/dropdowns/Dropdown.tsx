@@ -9,15 +9,19 @@ export type DropdownValues = {
   label: string;
   disabled?: boolean;
   Icon?: PhosphorIcons;
-  onClick?: React.EventHandler<React.MouseEvent<HTMLButtonElement>>;
+  onClick?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    data?: unknown,
+  ) => void;
 }[];
 
 export type DropdownProps = {
   values: DropdownValues;
   children: React.ReactElement;
+  data?: unknown;
 };
 
-const Dropdown = function ({ children, values }: DropdownProps) {
+const Dropdown = function ({ children, values, data }: DropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -81,7 +85,7 @@ const Dropdown = function ({ children, values }: DropdownProps) {
           const onClickWithClose = function (
             event: React.MouseEvent<HTMLButtonElement>,
           ) {
-            onClick?.(event);
+            onClick?.(event, data);
             setDropdownOpen(false);
             return;
           };

@@ -15,8 +15,9 @@
 .inputHeader[data-required="true"] label::before {
   content: "*";
   color: var(--dangerColor);
-  font-size: var(--textSmall);
-  line-height: 1;
+  font-size: var(--textRegular);
+  font-weight: bold;
+  line-height: 0.6;
   padding-right: 0.2rem;
 }
 

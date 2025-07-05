@@ -1,3 +1,4 @@
+import React from "react";
 import { IconWeight, Icon as PhosphorIcons } from "@phosphor-icons/react";
 
 // styles
@@ -19,6 +20,7 @@ export type CalloutProps = {
   Icon?: PhosphorIcons;
   IconWeight?: IconWeight;
   IconSize?: number;
+  styles?: React.CSSProperties;
 };
 
 const Callout = function ({
@@ -28,9 +30,10 @@ const Callout = function ({
   Icon,
   IconSize,
   IconWeight,
+  styles,
 }: CalloutProps) {
   return (
-    <div id={id} className={`callout callout${category}`}>
+    <div id={id} className={`callout callout${category}`} style={styles}>
       <div>{Icon && <Icon weight={IconWeight} size={IconSize} />}</div>
       <span>{text}</span>
     </div>

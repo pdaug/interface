@@ -6,6 +6,10 @@ import { Plus, QuestionMark } from "@phosphor-icons/react";
 // apis
 import apis from "../../apis";
 
+// types
+import { TypeWorkspace } from "../../types/Workspace";
+import { ApiResponsePaginate } from "../../types/Apis";
+
 // hooks
 import useAsync from "../../hooks/useAsync";
 import useSystem from "../../hooks/useSystem";
@@ -14,22 +18,21 @@ import useTranslate from "../../hooks/useTranslate";
 // components
 import Badge from "../../components/badges/Badge";
 import Button from "../../components/buttons/Button";
+import { useDialog } from "../../components/dialogs/Dialog";
 import { InputInterval } from "../../components/inputs/Input";
 import Table, { TableData } from "../../components/tables/Table";
 import Pagination from "../../components/paginations/Pagination";
 import { Horizontal, Vertical } from "../../components/aligns/Align";
 
-// types
-import { TypeWorkspace } from "../../types/Workspace";
-import { ApiResponsePaginate } from "../../types/Apis";
-
 const WorkspaceList = function () {
   const t = useTranslate();
   const navigate = useNavigate();
+  const { OpenDialog } = useDialog();
   const { token, instance } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
   const [workspaces, setWorkspaces] = useState<TypeWorkspace[]>([]);
 
@@ -39,6 +42,7 @@ const WorkspaceList = function () {
   // fetch instance by subdomain
   useAsync(async function () {
     if (!token || !instance) return;
+    setLoading(true);
     try {
       const response = await apis.Workspace.list<
         ApiResponsePaginate<TypeWorkspace>
@@ -50,6 +54,8 @@ const WorkspaceList = function () {
     } catch (err) {
       console.error("[src/pages/workspaces/WorkspaceList.tsx]", err);
       return;
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -63,7 +69,7 @@ const WorkspaceList = function () {
           Icon={Plus}
           category="Success"
           text={t.workspace.new}
-          onClick={() => navigate("/f/workspace/inspect")}
+          onClick={() => navigate("/f/workspaces/inspect")}
         />
         <div>
           <InputInterval label="" value={[lastWeek, today]} />
@@ -71,14 +77,48 @@ const WorkspaceList = function () {
         <div style={{ flex: 1 }}></div>
         <Button category="Neutral" text="Importar" />
         <Button category="Neutral" text="Exportar" />
-        <Button category="Neutral" text="" Icon={QuestionMark} onlyIcon />
+
+        <Button
+          text=""
+          onlyIcon
+          category="Neutral"
+          Icon={QuestionMark}
+          onClick={function () {
+            OpenDialog({
+              category: "Success",
+              title: "eae",
+              description: "oi",
+            });
+            return;
+          }}
+        />
       </Horizontal>
       <Vertical internal={1} styles={{ flex: 1 }}>
         <Table
           border
+          loading={loading}
           selected={selected}
           setSelected={setSelected}
           data={workspaces as TableData[]}
+          options={[
+            {
+              id: "edit",
+              label: "edit",
+              onClick: function (_, data) {
+                if (data && typeof data === "object" && "id" in data)
+                  navigate(`/f/workspaces/inspect/${data.id}`);
+                return;
+              },
+            },
+            {
+              id: "delete",
+              label: "delete",
+              onClick: function (_, data) {
+                console.log(data);
+                return;
+              },
+            },
+          ]}
           columns={{
             status: {
               label: "Status",
@@ -96,7 +136,14 @@ const WorkspaceList = function () {
             },
             name: { label: t.workspace.name },
             description: { label: t.workspace.description },
-            category: { label: t.workspace.category },
+            category: {
+              label: t.workspace.category,
+              handler: function (data) {
+                const categoryTranslated =
+                  t.workspace[data.category as keyof typeof t.workspace];
+                return categoryTranslated;
+              },
+            },
             createdAt: {
               label: t.workspace.created_at,
               handler: function (data) {

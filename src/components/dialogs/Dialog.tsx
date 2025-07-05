@@ -10,6 +10,9 @@ import { Icon as PhosphorIcon } from "@phosphor-icons/react";
 // styles
 import "./Dialog.css";
 
+// hooks
+import useTranslate from "../../hooks/useTranslate";
+
 // components
 import Button, { ButtonCategories } from "../buttons/Button";
 
@@ -88,6 +91,7 @@ export const useDialog = function () {
 };
 
 export const DialogElement = function () {
+  const t = useTranslate();
   const { dialogProps, CloseDialog } = useDialog();
   const dialogContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -127,7 +131,7 @@ export const DialogElement = function () {
           <Button
             type="button"
             category="Neutral"
-            text={dialogProps.cancelText || "Cancel"}
+            text={dialogProps.cancelText || t.components.cancel}
             onClick={dialogProps?.onCancel || CloseDialog}
           />
           {dialogProps.confirmText && (

@@ -67,7 +67,7 @@ const Container = function () {
     <Horizontal styles={{ height: "100vh" }}>
       <Menu />
       <Vertical
-        internal={2}
+        internal={1}
         styles={{ padding: "1rem", flex: 1, overflowY: "scroll" }}
       >
         {user && token ? <Outlet /> : <Navigate to="/" />}
