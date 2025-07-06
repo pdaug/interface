@@ -9,8 +9,7 @@ const Schema = function (err: string[]): void {
   for (const item of err) {
     const splitted = item.split(".");
     const module = splitted[0];
-    const moduleTranslated =
-      t.modules[module as keyof typeof t.modules] || module;
+    const moduleTranslated = t.menu[module as keyof typeof t.menu] || module;
     const path = splitted.slice(1, -1).join(".");
     const stack = splitted[splitted.length - 1];
     const stackTranslated = t.stacks[stack as keyof typeof t.stacks] || stack;

@@ -94,6 +94,10 @@ input {
   color: var(--textColor);
 }
 
+h1 {
+  font-size: var(--textTitle);
+}
+
 h1,
 h2,
 h3,

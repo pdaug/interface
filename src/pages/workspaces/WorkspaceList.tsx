@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import React, { useState } from "react";
 import { format, subWeeks } from "date-fns";
 import { useNavigate } from "react-router-dom";
@@ -64,36 +65,44 @@ const WorkspaceList = function () {
       <Horizontal>
         <h1>{t.workspace.workspaces}</h1>
       </Horizontal>
-      <Horizontal internal={1} styles={{ overflow: "hidden" }}>
-        <Button
-          Icon={Plus}
-          category="Success"
-          text={t.workspace.new}
-          onClick={() => navigate("/f/workspaces/inspect")}
-        />
-        <div>
+      <Horizontal internal={1} styles={{ justifyContent: "space-between" }}>
+        <Horizontal internal={1}>
+          <Button
+            Icon={Plus}
+            category="Success"
+            text={t.workspace.new}
+            onClick={() => navigate("/f/workspaces/inspect")}
+          />
           <InputInterval label="" value={[lastWeek, today]} />
-        </div>
-        <div style={{ flex: 1 }}></div>
-        <Button category="Neutral" text="Importar" />
-        <Button category="Neutral" text="Exportar" />
-
-        <Button
-          text=""
-          onlyIcon
-          category="Neutral"
-          Icon={QuestionMark}
-          onClick={function () {
-            OpenDialog({
-              category: "Success",
-              title: "eae",
-              description: "oi",
-            });
-            return;
-          }}
-        />
+        </Horizontal>
+        <Horizontal internal={1}>
+          <Button category="Neutral" text={t.components.import} />
+          <Button category="Neutral" text={t.components.export} />
+          <Button
+            text=""
+            onlyIcon
+            category="Neutral"
+            Icon={QuestionMark}
+            onClick={function () {
+              OpenDialog({
+                category: "Success",
+                title: "Ajuda",
+                description: (
+                  <iframe
+                    height="315"
+                    title="YouTube video player"
+                    style={{ border: "none", width: "100%" }}
+                    src="https://www.youtube.com/embed/L-yA7-puosA?si=VM5G3X9R4Os7m9SK"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  ></iframe>
+                ),
+              });
+              return;
+            }}
+          />
+        </Horizontal>
       </Horizontal>
-      <Vertical internal={1} styles={{ flex: 1 }}>
+      <Vertical internal={1}>
         <Table
           border
           loading={loading}
@@ -103,7 +112,7 @@ const WorkspaceList = function () {
           options={[
             {
               id: "edit",
-              label: "edit",
+              label: t.components.edit,
               onClick: function (_, data) {
                 if (data && typeof data === "object" && "id" in data)
                   navigate(`/f/workspaces/inspect/${data.id}`);
@@ -112,10 +121,31 @@ const WorkspaceList = function () {
             },
             {
               id: "delete",
-              label: "delete",
-              onClick: function (_, data) {
-                console.log(data);
-                return;
+              label: t.components.delete,
+              onClick: async function (_, data) {
+                if (!token || !instance) return;
+                if (!data || typeof data !== "object" || !("id" in data))
+                  return;
+                try {
+                  const response = await apis.Workspace.delete(
+                    token,
+                    instance.name,
+                    data.id as string,
+                  );
+                  if (!response.data?.result) {
+                    toast.warning(t.toast.error_delete);
+                    return;
+                  }
+                  toast.success(t.toast.success_delete);
+                  return;
+                } catch (err) {
+                  toast.error(t.toast.error_delete);
+                  console.error(
+                    "[src/pages/workspaces/WorkspaceList.tsx]",
+                    err,
+                  );
+                  return;
+                }
               },
             },
           ]}
@@ -135,7 +165,17 @@ const WorkspaceList = function () {
               },
             },
             name: { label: t.workspace.name },
-            description: { label: t.workspace.description },
+            description: {
+              label: t.workspace.description,
+              handler: function (data) {
+                if (data.description) return data.description as string;
+                return (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.components.no_description}
+                  </i>
+                );
+              },
+            },
             category: {
               label: t.workspace.category,
               handler: function (data) {

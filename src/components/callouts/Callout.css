@@ -12,24 +12,27 @@
 .calloutSuccess {
   background: var(--successLight);
   background-color: var(--successLight);
+  border: 1px solid #aaccbb;
   color: var(--successDark);
 }
 
 .calloutInfo {
   background: var(--infoLight);
   background-color: var(--infoLight);
+  border: 1px solid #aaccdd;
   color: var(--infoDark);
 }
 
 .calloutWarning {
   background: var(--warningLight);
   background-color: var(--warningLight);
+  border: 1px solid #ddccaa;
   color: var(--warningDark);
 }
 
 .calloutDanger {
   background: var(--dangerLight);
   background-color: var(--dangerLight);
-  font-weight: bold;
+  border: 1px solid #eebbbb;
   color: var(--dangerDark);
 }

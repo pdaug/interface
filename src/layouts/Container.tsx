@@ -21,6 +21,7 @@ const Container = function () {
   const navigate = useNavigate();
   const { user, token, instance, clear } = useSystem();
 
+  // change style
   useEffect(function () {
     if (!instance) return;
     const link: HTMLLinkElement =
@@ -39,29 +40,44 @@ const Container = function () {
     return;
   }, []);
 
-  useEffect(function () {
-    if (!instance || !token) return;
-    apis.Session.check<Record<string, unknown>>(instance.name, token, { token })
-      .then(function (response) {
-        if (!response.data?.result?.id) {
-          clear();
-          toast(t.error.session_expired);
-          navigate("/");
-        }
-        return;
+  // checker session
+  useEffect(
+    function () {
+      console.log("Checker session");
+      if (!instance || !token) return;
+      apis.Session.check<Record<string, unknown>>(instance.name, token, {
+        token,
       })
-      .catch(function (err) {
-        if (err instanceof AxiosError) {
-          clear();
-          toast(t.error.session_expired);
-          navigate("/");
+        .then(function (response) {
+          if (!response.data?.result?.id) {
+            clear();
+            toast.error(t.error.session_expired);
+            navigate("/");
+          }
+          if (
+            typeof response.data.result.expiresAt === "string" &&
+            new Date(response.data.result.expiresAt) < new Date()
+          ) {
+            clear();
+            toast.error(t.error.session_expired);
+            navigate("/");
+          }
           return;
-        }
-        console.error("[src/layouts/Container.tsx]", err);
-        return;
-      });
-    return;
-  }, []);
+        })
+        .catch(function (err) {
+          if (err instanceof AxiosError) {
+            clear();
+            toast.error(t.error.session_expired);
+            navigate("/");
+            return;
+          }
+          console.error("[src/layouts/Container.tsx]", err);
+          return;
+        });
+      return;
+    },
+    [location.pathname],
+  );
 
   return (
     <Horizontal styles={{ height: "100vh" }}>

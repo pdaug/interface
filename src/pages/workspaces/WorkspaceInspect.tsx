@@ -1,9 +1,14 @@
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { Asterisk } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // apis
 import apis from "../../apis";
+
+// utils
+import Schema from "../../utils/Schema";
 
 // types
 import { TypeWorkspace } from "../../types/Workspace";
@@ -76,13 +81,32 @@ const WorkspaceInspect = function () {
           id,
           form,
         );
-        console.log(response.data);
+        if (!response.data?.result) toast.warning(t.toast.warning_edit);
+        if (response.data.state === "success") {
+          toast.success(t.toast.success_edit);
+          navigate("/f/workspaces");
+        }
         return;
       }
       const response = await apis.Workspace.create(token, instance.name, form);
-      console.log(response.data);
+      if (!response.data?.result) toast.warning(t.toast.warning_create);
+      if (response.data.state === "success") {
+        toast.success(t.toast.success_create);
+        navigate("/f/workspaces");
+      }
       return;
     } catch (err) {
+      if (err instanceof AxiosError) {
+        console.error(
+          "[src/pages/workspaces/WorkspaceInspect.tsx]",
+          err.response?.data.result,
+        );
+        if (err.response?.data?.result?.message === "schema_incorrect")
+          Schema(err.response.data.result.err);
+        return;
+      }
+      if (isEditing && id) toast.error(t.toast.error_edit);
+      else toast.error(t.toast.error_create);
       console.error("[src/pages/workspaces/WorkspaceInspect.tsx]", err);
       return;
     }
@@ -104,7 +128,7 @@ const WorkspaceInspect = function () {
                 required
                 name="status"
                 id="workspace_status"
-                empty={t.workspace.empty}
+                empty={t.components.no_option}
                 value={String(form.status)}
                 disabled={loading && isEditing}
                 label={t.workspace.status_label}
@@ -148,8 +172,8 @@ const WorkspaceInspect = function () {
                 required
                 name="category"
                 id="workspace_category"
-                empty={t.workspace.empty}
                 label={t.workspace.category}
+                empty={t.components.no_option}
                 disabled={loading && isEditing}
                 value={form?.category || "departments"}
                 options={WorkspaceCategoryOptions.map(function (option) {
@@ -187,7 +211,7 @@ const WorkspaceInspect = function () {
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
               <Button
                 category="Neutral"
-                text={t.workspace.cancel}
+                text={t.components.cancel}
                 onClick={function () {
                   navigate("/f/workspaces");
                   return;
@@ -196,7 +220,7 @@ const WorkspaceInspect = function () {
               <Button
                 category="Success"
                 onClick={onSubmit}
-                text={isEditing ? t.workspace.edit : t.workspace.save}
+                text={isEditing ? t.components.edit : t.components.save}
               />
             </Horizontal>
           </Vertical>
@@ -204,7 +228,7 @@ const WorkspaceInspect = function () {
       </div>
       <Callout
         Icon={Asterisk}
-        category="Danger"
+        category="Info"
         text={t.error.required_fields}
         styles={{ fontSize: "var(--textSmall)" }}
       />

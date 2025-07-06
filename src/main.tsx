@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 
 // styles
-import "./Global.css";
+import "./main.css";
 
 // routes
 import Routes from "./Routes";
