@@ -12,10 +12,11 @@ import apis from "../../apis";
 import Schema from "../../utils/Schema";
 
 // types
-import { TypeWorkspace } from "../../types/Workspace";
+import { TypeAccount } from "../../types/Account";
 
 // assets
-import { WorkspaceCategoryOptions } from "../../assets/Workspaces";
+import { BanksSafely } from "../../assets/Banks";
+import { MaskDocument1, MaskDocument2 } from "../../assets/Mask";
 
 // hooks
 import useAsync from "../../hooks/useAsync";
@@ -27,7 +28,7 @@ import Button from "../../components/buttons/Button";
 import Wrapper from "../../components/wrapper/Wrapper";
 import Callout from "../../components/callouts/Callout";
 import { Horizontal, Vertical } from "../../components/aligns/Align";
-import { Input, InputSelect, InputText } from "../../components/inputs/Input";
+import { Input, InputMask, InputSelect } from "../../components/inputs/Input";
 
 const AccountInspect = function () {
   const t = useTranslate();
@@ -36,24 +37,35 @@ const AccountInspect = function () {
   const { token, instance, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState<Partial<TypeWorkspace>>({
+  const [form, setForm] = useState<Partial<TypeAccount>>({
     status: true,
     name: "",
-    description: "",
-    category: "departments",
+    isCoorporate: false,
+    holder: "",
+    holderDocument1: "",
+    holderDocument2: "",
+    bankCode: "",
+    bankName: "",
+    bankAgency: "",
+    bankAccount: "",
   });
 
-  // fetch workspace
+  // fetch account
   useAsync(async function () {
     if (!id) return;
     setLoading(true);
     try {
-      const response = await apis.Workspace.get(token, instance.name, id);
+      const response = await apis.Account.get(
+        token,
+        instance.name,
+        id,
+        workspaceId,
+      );
       if (!response.data?.result) return;
       setForm(response.data.result);
       return;
     } catch (err) {
-      console.error("[src/pages/workspaces/WorkspaceInspect.tsx]", err);
+      console.error("[src/pages/accounts/AccountInspect.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -61,33 +73,34 @@ const AccountInspect = function () {
   }, []);
 
   const onSubmit = async function () {
-    if (!instance || !token) return;
     try {
       // is editing
       if (id) {
-        if (workspaceId === id && !form.status) {
-          toast.error(t.workspace.not_change_status);
-          return;
-        }
-        const response = await apis.Workspace.update(
+        const response = await apis.Account.update(
           token,
           instance.name,
           id,
           form,
+          workspaceId,
         );
         if (!response.data?.result) toast.warning(t.toast.warning_edit);
         if (response.data.state === "success") {
           toast.success(t.toast.success_edit);
-          navigate("/f/workspaces");
+          navigate("/f/accounts");
         }
         return;
       }
       // is creating
-      const response = await apis.Workspace.create(token, instance.name, form);
+      const response = await apis.Account.create(
+        token,
+        instance.name,
+        form,
+        workspaceId,
+      );
       if (!response.data?.result) toast.warning(t.toast.warning_create);
       if (response.data.state === "success") {
         toast.success(t.toast.success_create);
-        navigate("/f/workspaces");
+        navigate("/f/accounts");
       }
       return;
     } catch (err) {
@@ -99,7 +112,7 @@ const AccountInspect = function () {
       }
       if (id) toast.error(t.toast.error_edit);
       else toast.error(t.toast.error_create);
-      console.error("[src/pages/workspaces/WorkspaceInspect.tsx]", err);
+      console.error("[src/pages/accounts/AccountInspect.tsx]", err);
       return;
     }
   };
@@ -107,23 +120,23 @@ const AccountInspect = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.workspace.workspaces}</h1>
+        <h1>{t.accounts.accounts}</h1>
       </Horizontal>
       <div>
         <Wrapper
-          title={id ? t.workspace.title_edit : t.workspace.title_create}
-          description={t.workspace.subtitle}
+          title={id ? t.accounts.title_edit : t.accounts.title_create}
+          description={t.accounts.subtitle}
         >
           <Vertical internal={1}>
             <Horizontal internal={1}>
               <InputSelect
                 required
                 name="status"
-                id="workspace_status"
+                id="account_status"
                 empty={t.stacks.no_option}
                 value={String(form.status)}
+                label={t.components.status}
                 disabled={loading && Boolean(id)}
-                label={t.workspace.status_label}
                 options={[
                   {
                     id: "true",
@@ -148,11 +161,11 @@ const AccountInspect = function () {
                 max={32}
                 required
                 name="name"
-                id="workspace_name"
+                id="account_name"
                 value={form?.name || ""}
-                label={t.workspace.name}
+                label={t.accounts.name}
                 disabled={loading && Boolean(id)}
-                placeholder={t.workspace.name_placeholder}
+                placeholder={t.accounts.name_placeholder}
                 onChange={function (event) {
                   const newForm = { ...form };
                   newForm.name = event.currentTarget?.value || "";
@@ -161,40 +174,151 @@ const AccountInspect = function () {
                 }}
               />
               <InputSelect
-                required
-                name="category"
-                id="workspace_category"
-                label={t.components.category}
+                name="isCoorporate"
+                id="account_is_coorporate"
                 empty={t.stacks.no_option}
+                label={t.accounts.is_coorporate}
                 disabled={loading && Boolean(id)}
-                value={form?.category || "departments"}
-                options={WorkspaceCategoryOptions.map(function (option) {
-                  return {
-                    id: option,
-                    value: option,
-                    text: t.workspace[option as keyof typeof t.workspace],
-                  };
-                })}
+                value={String(form?.isCoorporate)}
+                options={[
+                  {
+                    id: "true",
+                    value: "true",
+                    text: t.accounts.corporate,
+                  },
+                  {
+                    id: "false",
+                    value: "false",
+                    text: t.accounts.personal,
+                  },
+                ]}
                 onChange={function (event) {
                   const newForm = { ...form };
-                  newForm.category = event.currentTarget?.value || "";
+                  newForm.isCoorporate = event.currentTarget?.value === "true";
                   setForm(newForm);
                   return;
                 }}
               />
             </Horizontal>
-            <Horizontal>
-              <InputText
-                max={256}
-                name="description"
-                id="workspace_description"
-                value={form?.description || ""}
-                label={t.components.description}
+            <Horizontal internal={1}>
+              <Input
+                min={1}
+                max={32}
+                required
+                name="holder"
+                id="account_holder"
+                value={form?.holder || ""}
+                label={t.accounts.holder}
                 disabled={loading && Boolean(id)}
-                placeholder={t.workspace.description_placeholder}
+                placeholder={t.accounts.holder_placeholder}
                 onChange={function (event) {
                   const newForm = { ...form };
-                  newForm.description = event.currentTarget?.value || "";
+                  newForm.holder = event.currentTarget?.value || "";
+                  setForm(newForm);
+                  return;
+                }}
+              />
+              <InputMask
+                required
+                mask={MaskDocument1}
+                name="holderDocument1"
+                id="account_holder_document_1"
+                disabled={loading && Boolean(id)}
+                value={form?.holderDocument1 || ""}
+                label={t.accounts.holder_document_1}
+                placeholder={t.accounts.holder_document_placeholder}
+                onChange={function (event) {
+                  const newForm = { ...form };
+                  newForm.holderDocument1 = event.currentTarget?.value || "";
+                  setForm(newForm);
+                  return;
+                }}
+              />
+              <InputMask
+                mask={MaskDocument2}
+                name="holderDocument2"
+                id="account_holder_document_2"
+                disabled={loading && Boolean(id)}
+                value={form?.holderDocument2 || ""}
+                label={t.accounts.holder_document_2}
+                placeholder={t.accounts.holder_document_placeholder}
+                onChange={function (event) {
+                  const newForm = { ...form };
+                  newForm.holderDocument2 = event.currentTarget?.value || "";
+                  setForm(newForm);
+                  return;
+                }}
+              />
+            </Horizontal>
+            <Horizontal internal={1}>
+              <Input
+                readOnly
+                name="bankCode"
+                placeholder="123"
+                id="account_bank_code"
+                label={t.accounts.bank_code}
+                value={form?.bankCode || ""}
+                onChange={function () {
+                  return;
+                }}
+              />
+              <InputSelect
+                required
+                name="bankName"
+                id="account_bank_name"
+                empty={t.stacks.no_option}
+                label={t.accounts.bank_name}
+                value={form?.bankCode || ""}
+                disabled={loading && Boolean(id)}
+                options={BanksSafely.map(function (bank) {
+                  return {
+                    id: bank.code,
+                    value: bank.code,
+                    text: bank.name,
+                  };
+                })}
+                onChange={function (event) {
+                  const newForm = { ...form };
+                  const bankCode = event.currentTarget?.value || "";
+                  newForm.bankCode = bankCode;
+                  newForm.bankName =
+                    BanksSafely.find(function (bank) {
+                      return bank.code === bankCode;
+                    })?.name || "no_bank_name";
+                  setForm(newForm);
+                  return;
+                }}
+              />
+              <Input
+                min={1}
+                max={16}
+                required
+                name="bankAgency"
+                id="account_bank_agency"
+                value={form?.bankAgency || ""}
+                label={t.accounts.bank_agency}
+                disabled={loading && Boolean(id)}
+                placeholder={t.accounts.bank_number_placeholder}
+                onChange={function (event) {
+                  const newForm = { ...form };
+                  newForm.bankAgency = event.currentTarget?.value || "";
+                  setForm(newForm);
+                  return;
+                }}
+              />
+              <Input
+                min={1}
+                max={16}
+                required
+                name="bankAccount"
+                id="account_bank_account"
+                value={form?.bankAccount || ""}
+                label={t.accounts.bank_account}
+                disabled={loading && Boolean(id)}
+                placeholder={t.accounts.bank_number_placeholder}
+                onChange={function (event) {
+                  const newForm = { ...form };
+                  newForm.bankAccount = event.currentTarget?.value || "";
                   setForm(newForm);
                   return;
                 }}
@@ -253,7 +377,7 @@ const AccountInspect = function () {
                 category="Neutral"
                 text={t.components.cancel}
                 onClick={function () {
-                  navigate("/f/workspaces");
+                  navigate("/f/accounts");
                   return;
                 }}
               />

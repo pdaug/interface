@@ -69,6 +69,7 @@ const IntegrationsHome = function () {
                   width={integrationLogoSize}
                   alt="integration_mailersend"
                   src="/integrations/mailersend.png"
+                  style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
                   {t.integrations.mailersend}
@@ -105,6 +106,7 @@ const IntegrationsHome = function () {
                   width={integrationLogoSize}
                   alt="integration_twilio"
                   src="/integrations/twilio.png"
+                  style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
                   {t.integrations.twilio}
@@ -142,6 +144,7 @@ const IntegrationsHome = function () {
                   width={integrationLogoSize}
                   alt="integration_stripe"
                   src="/integrations/stripe.png"
+                  style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
                   {t.integrations.stripe}
@@ -180,6 +183,7 @@ const IntegrationsHome = function () {
                   width={integrationLogoSize}
                   alt="integration_openai"
                   src="/integrations/openai.png"
+                  style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
                   {t.integrations.openai}

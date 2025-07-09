@@ -9,7 +9,7 @@ import { Plus, QuestionMark } from "@phosphor-icons/react";
 import apis from "../../apis";
 
 // types
-import { TypeWorkspace } from "../../types/Workspace";
+import { TypeAccount } from "../../types/Account";
 import { ApiResponsePaginate } from "../../types/Apis";
 
 // hooks
@@ -33,57 +33,60 @@ const AccountList = function () {
   const t = useTranslate();
   const navigate = useNavigate();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { token, instance, workspaceId, saveWorkspaces } = useSystem();
+  const { token, instance, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
-  const [workspaces, setWorkspaces] = useState<TypeWorkspace[]>([]);
+  const [accounts, setAccounts] = useState<TypeAccount[]>([]);
 
   const [searchDebounced] = useDebounce(search, 500);
 
-  const FetchWorkspace = async function () {
-    if (!token || !instance) return;
+  const FetchAccounts = async function () {
     setLoading(true);
     try {
-      const response = await apis.Workspace.list<
-        ApiResponsePaginate<TypeWorkspace>
-      >(token, instance.name, {
-        pageSize,
-        pageCurrent: page,
-        searchField: "name",
-        search: searchDebounced,
-      });
+      const response = await apis.Account.list<
+        ApiResponsePaginate<TypeAccount>
+      >(
+        token,
+        instance.name,
+        {
+          pageSize,
+          pageCurrent: page,
+          searchField: "name",
+          search: searchDebounced,
+        },
+        workspaceId,
+      );
       if (!response.data?.result?.items) return;
-      setWorkspaces(response.data.result.items);
-      saveWorkspaces(response.data.result.items);
+      setAccounts(response.data.result.items);
       setTotal(response.data.result.pagination.total);
       return;
     } catch (err) {
-      console.error("[src/pages/workspaces/WorkspaceList.tsx]", err);
+      console.error("[src/pages/accounts/AccountList.tsx]", err);
       return;
     } finally {
       setLoading(false);
     }
   };
 
-  // fetch workspace
-  useAsync(FetchWorkspace, [page, searchDebounced]);
+  // fetch accounts
+  useAsync(FetchAccounts, [page, searchDebounced, workspaceId]);
 
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.workspace.workspaces}</h1>
+        <h1>{t.accounts.accounts}</h1>
       </Horizontal>
       <Horizontal internal={1} styles={{ justifyContent: "space-between" }}>
         <Horizontal internal={1}>
           <Button
             Icon={Plus}
             category="Success"
-            text={t.workspace.new}
-            onClick={() => navigate("/f/workspaces/inspect")}
+            text={t.accounts.new}
+            onClick={() => navigate("/f/accounts/inspect")}
           />
           <Input
             label=""
@@ -129,24 +132,23 @@ const AccountList = function () {
           loading={loading}
           selected={selected}
           setSelected={setSelected}
-          data={workspaces as TableData[]}
+          data={accounts as TableData[]}
           options={[
             {
               id: "edit",
               label: t.components.edit,
-              onClick: function (_: unknown, data: Record<string, unknown>) {
-                if (data) navigate(`/f/workspaces/inspect/${data.id}`);
+              onClick: function (_: React.MouseEvent, data: unknown) {
+                if (data && typeof data === "object" && "id" in data)
+                  navigate(`/f/accounts/inspect/${data.id}`);
                 return;
               },
             },
             {
               id: "delete",
               label: t.components.delete,
-              onClick: async function (
-                _: unknown,
-                data: Record<string, unknown>,
-              ) {
-                if (!data) return;
+              onClick: async function (_: React.MouseEvent, data: unknown) {
+                if (!data || typeof data !== "object" || !("id" in data))
+                  return;
                 if (workspaceId === data.id) {
                   toast.error(t.workspace.not_delete);
                   return;
@@ -169,7 +171,7 @@ const AccountList = function () {
                       }
                       toast.success(t.toast.success_delete);
                       CloseDialog();
-                      await FetchWorkspace();
+                      await FetchAccounts();
                       return;
                     } catch (err) {
                       toast.error(t.toast.error_delete);
@@ -186,7 +188,7 @@ const AccountList = function () {
           ]}
           columns={{
             status: {
-              label: "Status",
+              label: t.components.status,
               maxWidth: "96px",
               handler: function (data) {
                 return (
@@ -199,26 +201,28 @@ const AccountList = function () {
                 );
               },
             },
-            name: { label: t.workspace.name },
-            description: {
-              label: t.components.description,
+            isCoorporate: {
+              label: t.accounts.is_coorporate,
+              maxWidth: "96px",
               handler: function (data) {
-                if (data.description) return data.description as string;
                 return (
-                  <i style={{ color: "var(--textLight)" }}>
-                    {t.stacks.no_description}
-                  </i>
+                  <Badge
+                    category={data.isCoorporate ? "Info" : "Warning"}
+                    value={
+                      data.isCoorporate
+                        ? t.accounts.corporate
+                        : t.accounts.personal
+                    }
+                  />
                 );
               },
             },
-            category: {
-              label: t.components.category,
-              handler: function (data) {
-                const categoryTranslated =
-                  t.workspace[data.category as keyof typeof t.workspace];
-                return categoryTranslated;
-              },
-            },
+            name: { label: t.accounts.name },
+            holder: { label: t.accounts.holder },
+            bankName: { label: t.accounts.bank_name },
+            bankAgency: { label: t.accounts.bank_agency },
+            bankAccount: { label: t.accounts.bank_account },
+
             createdAt: {
               label: t.components.created_at,
               handler: function (data) {

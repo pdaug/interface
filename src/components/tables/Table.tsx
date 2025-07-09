@@ -10,7 +10,7 @@ import useTranslate from "../../hooks/useTranslate";
 import Tooltip from "../tooltips/Tooltip";
 import { Horizontal } from "../aligns/Align";
 import { InputCheck } from "../inputs/Input";
-import Dropdown, { DropdownValues } from "../dropdowns/Dropdown";
+import Dropdown, { DropdownValue } from "../dropdowns/Dropdown";
 
 export type TableColumn = {
   [key: string]: {
@@ -35,7 +35,7 @@ export type TableProps = {
   border?: boolean;
   selected?: string[];
   setSelected?: React.Dispatch<React.SetStateAction<string[]>>;
-  options?: DropdownValues;
+  options?: DropdownValue[];
   styles?: React.CSSProperties;
   loading?: boolean;
 };
@@ -108,7 +108,7 @@ const Table = function ({
         </Horizontal>
       ) : data.length === 0 ? (
         <Horizontal external={1} styles={{ justifyContent: "center" }}>
-          {t.components.no_items}
+          {t.stacks.no_items}
         </Horizontal>
       ) : (
         <div className="tableBody">

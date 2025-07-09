@@ -61,7 +61,6 @@ const WorkspaceInspect = function () {
   }, []);
 
   const onSubmit = async function () {
-    if (!instance || !token) return;
     try {
       // is editing
       if (id) {
@@ -122,8 +121,8 @@ const WorkspaceInspect = function () {
                 id="workspace_status"
                 empty={t.stacks.no_option}
                 value={String(form.status)}
+                label={t.components.status}
                 disabled={loading && Boolean(id)}
-                label={t.workspace.status_label}
                 options={[
                   {
                     id: "true",

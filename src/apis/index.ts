@@ -20,10 +20,12 @@ export const ApiCrud = function (path: string) {
       Authorization: string,
       instance: string,
       data: unknown,
+      workspaceId?: string,
     ) {
       const headers = {
         Authorization,
         "X-Instance": instance,
+        "X-Workspace": workspaceId,
       };
       const config = { headers };
       return ApiBase.post<ApiResponse<T>>(`/${path}`, data, config);
@@ -37,18 +39,26 @@ export const ApiCrud = function (path: string) {
         search?: string;
         searchField?: string;
       },
+      workspaceId?: string,
     ) {
       const headers = {
         Authorization,
         "X-Instance": instance,
+        "X-Workspace": workspaceId,
       };
       const config: AxiosRequestConfig = { headers, params };
       return ApiBase.get<ApiResponse<T>>(`/${path}`, config);
     },
-    get: function <T>(Authorization: string, instance: string, id: string) {
+    get: function <T>(
+      Authorization: string,
+      instance: string,
+      id: string,
+      workspaceId?: string,
+    ) {
       const headers = {
         Authorization,
         "X-Instance": instance,
+        "X-Workspace": workspaceId,
       };
       const config = { headers };
       return ApiBase.get<ApiResponse<T>>(`/${path}/${id}`, config);
@@ -58,18 +68,26 @@ export const ApiCrud = function (path: string) {
       instance: string,
       id: string,
       data: unknown,
+      workspaceId?: string,
     ) {
       const headers = {
         Authorization,
         "X-Instance": instance,
+        "X-Workspace": workspaceId,
       };
       const config = { headers };
       return ApiBase.put<ApiResponse<T>>(`/${path}/${id}`, data, config);
     },
-    delete: function <T>(Authorization: string, instance: string, id: string) {
+    delete: function <T>(
+      Authorization: string,
+      instance: string,
+      id: string,
+      workspaceId?: string,
+    ) {
       const headers = {
         Authorization,
         "X-Instance": instance,
+        "X-Workspace": workspaceId,
       };
       const config = { headers };
       return ApiBase.delete<ApiResponse<T>>(`/${path}/${id}`, config);
@@ -84,4 +102,5 @@ export default {
   Settings,
   User: ApiCrud("user"),
   Workspace: ApiCrud("workspace"),
+  Account: ApiCrud("account"),
 };

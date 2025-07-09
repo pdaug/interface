@@ -47,8 +47,7 @@ const WorkspaceList = function () {
   const today = format(new Date(), "yyyy-MM-dd");
   const lastWeek = format(subWeeks(new Date(), 1), "yyyy-MM-dd");
 
-  const FetchWorkspace = async function () {
-    if (!token || !instance) return;
+  const FetchWorkspaces = async function () {
     setLoading(true);
     try {
       const response = await apis.Workspace.list<
@@ -73,7 +72,7 @@ const WorkspaceList = function () {
   };
 
   // fetch workspace
-  useAsync(FetchWorkspace, [page, searchDebounced]);
+  useAsync(FetchWorkspaces, [page, searchDebounced]);
 
   return (
     <React.Fragment>
@@ -140,19 +139,18 @@ const WorkspaceList = function () {
             {
               id: "edit",
               label: t.components.edit,
-              onClick: function (_: unknown, data: Record<string, unknown>) {
-                if (data) navigate(`/f/workspaces/inspect/${data.id}`);
+              onClick: function (_: React.MouseEvent, data: unknown) {
+                if (data && typeof data === "object" && "id" in data)
+                  navigate(`/f/workspaces/inspect/${data.id}`);
                 return;
               },
             },
             {
               id: "delete",
               label: t.components.delete,
-              onClick: async function (
-                _: unknown,
-                data: Record<string, unknown>,
-              ) {
-                if (!data) return;
+              onClick: async function (_: React.MouseEvent, data: unknown) {
+                if (!data || typeof data !== "object" || !("id" in data))
+                  return;
                 if (workspaceId === data.id) {
                   toast.error(t.workspace.not_delete);
                   return;
@@ -175,7 +173,7 @@ const WorkspaceList = function () {
                       }
                       toast.success(t.toast.success_delete);
                       CloseDialog();
-                      await FetchWorkspace();
+                      await FetchWorkspaces();
                       return;
                     } catch (err) {
                       toast.error(t.toast.error_delete);
@@ -192,7 +190,7 @@ const WorkspaceList = function () {
           ]}
           columns={{
             status: {
-              label: "Status",
+              label: t.components.status,
               maxWidth: "96px",
               handler: function (data) {
                 return (
