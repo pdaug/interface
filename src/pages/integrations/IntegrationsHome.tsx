@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "sonner";
 import { GearSix, QuestionMark } from "@phosphor-icons/react";
 
 // hooks
@@ -10,7 +11,6 @@ import Button from "../../components/buttons/Button";
 import Wrapper from "../../components/wrapper/Wrapper";
 import { useDialog } from "../../components/dialogs/Dialog";
 import { Horizontal, Vertical } from "../../components/aligns/Align";
-import { toast } from "sonner";
 
 const integrationLogoSize = 42;
 
@@ -23,8 +23,7 @@ const IntegrationsHome = function () {
       <Horizontal>
         <h1>{t.integrations.integrations}</h1>
       </Horizontal>
-      <Horizontal internal={1} styles={{ justifyContent: "space-between" }}>
-        <div className="flex1"></div>
+      <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
         <Horizontal internal={1}>
           <Button
             text={t.components.help}

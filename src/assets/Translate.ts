@@ -90,6 +90,9 @@ const TranslatePt = {
     title_create: "Crie uma nova conta",
     subtitle: "Preencha os campos abaixo para criar ou editar a conta",
   },
+  settings: {
+    settings: "Configurações",
+  },
   pages: {
     error: "Erro",
     error_description: "Houve um erro ao acessar esta página",
@@ -263,6 +266,9 @@ const TranslateEn = {
     title_edit: "Edit the account",
     title_create: "Create a new account",
     subtitle: "Fill the below fields to create or edit the account",
+  },
+  settings: {
+    settings: "Settings",
   },
   pages: {
     error: "Error",

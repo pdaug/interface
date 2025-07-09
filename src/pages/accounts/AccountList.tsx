@@ -149,10 +149,6 @@ const AccountList = function () {
               onClick: async function (_: React.MouseEvent, data: unknown) {
                 if (!data || typeof data !== "object" || !("id" in data))
                   return;
-                if (workspaceId === data.id) {
-                  toast.error(t.workspace.not_delete);
-                  return;
-                }
                 OpenDialog({
                   category: "Success",
                   title: t.dialog.title_delete,
@@ -160,10 +156,11 @@ const AccountList = function () {
                   confirmText: t.components.confirm,
                   onConfirm: async function () {
                     try {
-                      const response = await apis.Workspace.delete(
+                      const response = await apis.Account.delete(
                         token,
                         instance.name,
                         data.id as string,
+                        workspaceId,
                       );
                       if (!response.data?.result) {
                         toast.warning(t.toast.error_delete);
@@ -176,7 +173,7 @@ const AccountList = function () {
                     } catch (err) {
                       toast.error(t.toast.error_delete);
                       console.error(
-                        "[src/pages/workspaces/WorkspaceList.tsx]",
+                        "[src/pages/accounts/AccountList.tsx]",
                         err,
                       );
                       return;
@@ -222,7 +219,6 @@ const AccountList = function () {
             bankName: { label: t.accounts.bank_name },
             bankAgency: { label: t.accounts.bank_agency },
             bankAccount: { label: t.accounts.bank_account },
-
             createdAt: {
               label: t.components.created_at,
               handler: function (data) {

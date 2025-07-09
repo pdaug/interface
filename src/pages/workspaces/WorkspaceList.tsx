@@ -1,7 +1,7 @@
 import { toast } from "sonner";
+import { format } from "date-fns";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
-import { format, subWeeks } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { Plus, QuestionMark } from "@phosphor-icons/react";
 
@@ -20,12 +20,12 @@ import useTranslate from "../../hooks/useTranslate";
 // components
 import Badge from "../../components/badges/Badge";
 import Button from "../../components/buttons/Button";
+import { Input } from "../../components/inputs/Input";
 import Tooltip from "../../components/tooltips/Tooltip";
 import { useDialog } from "../../components/dialogs/Dialog";
 import Table, { TableData } from "../../components/tables/Table";
 import Pagination from "../../components/paginations/Pagination";
 import { Horizontal, Vertical } from "../../components/aligns/Align";
-import { Input, InputInterval } from "../../components/inputs/Input";
 
 const pageSize = 10;
 
@@ -43,9 +43,6 @@ const WorkspaceList = function () {
   const [workspaces, setWorkspaces] = useState<TypeWorkspace[]>([]);
 
   const [searchDebounced] = useDebounce(search, 500);
-
-  const today = format(new Date(), "yyyy-MM-dd");
-  const lastWeek = format(subWeeks(new Date(), 1), "yyyy-MM-dd");
 
   const FetchWorkspaces = async function () {
     setLoading(true);
@@ -87,7 +84,6 @@ const WorkspaceList = function () {
             text={t.workspace.new}
             onClick={() => navigate("/f/workspaces/inspect")}
           />
-          <InputInterval label="" value={[lastWeek, today]} />
           <Input
             label=""
             value={search}
@@ -99,8 +95,6 @@ const WorkspaceList = function () {
           />
         </Horizontal>
         <Horizontal internal={1}>
-          <Button category="Neutral" text={t.components.import} />
-          <Button category="Neutral" text={t.components.export} />
           <Tooltip content={t.components.help}>
             <Button
               text=""
