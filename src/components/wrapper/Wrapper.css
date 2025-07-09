@@ -4,6 +4,8 @@
   border: 1px solid var(--borderColor);
   border-radius: var(--borderRadius);
   box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
   flex: 1;
   overflow: hidden;
 }
@@ -31,6 +33,7 @@
 }
 
 .wrapperContent {
+  flex: 1;
   padding: 1rem;
 }
 

@@ -10,12 +10,11 @@ import { DialogElement, DialogProvider } from "./components/dialogs/Dialog";
 // pages
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
-import Dashboard from "./pages/financial/Dashboard";
-import OrdersList from "./pages/financial/orders/OrdersList";
-import OrdersEdit from "./pages/financial/orders/OrdersEdit";
 import ErrorPage from "./pages/ErrorPage";
-import WorkspaceList from "./pages/workspaces/WorkspaceList";
-import WorkspaceInspect from "./pages/workspaces/WorkspaceInspect";
+import workspaces from "./pages/workspaces";
+import financial from "./pages/financial";
+import integrations from "./pages/integrations";
+import accounts from "./pages/accounts";
 
 const Router = createBrowserRouter([
   {
@@ -27,46 +26,7 @@ const Router = createBrowserRouter([
     path: "f",
     element: <Container />,
     errorElement: <ErrorPage />,
-    children: [
-      {
-        path: "dashboard",
-        Component: Dashboard,
-      },
-      {
-        path: "orders",
-        children: [
-          {
-            index: true,
-            Component: OrdersList,
-          },
-          {
-            path: "inspect",
-            Component: OrdersEdit,
-          },
-          {
-            path: "inspect/:id",
-            Component: OrdersEdit,
-          },
-        ],
-      },
-      {
-        path: "workspaces",
-        children: [
-          {
-            index: true,
-            Component: WorkspaceList,
-          },
-          {
-            path: "inspect",
-            Component: WorkspaceInspect,
-          },
-          {
-            path: "inspect/:id",
-            Component: WorkspaceInspect,
-          },
-        ],
-      },
-    ],
+    children: [accounts, financial, workspaces, integrations],
   },
   {
     path: "*",

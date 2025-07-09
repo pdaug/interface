@@ -1,6 +1,6 @@
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // apis
@@ -49,7 +49,7 @@ const Login = function () {
     const hasToken = token && typeof token === "string" && token.length === 36;
     const hasUser =
       user && typeof user === "object" && Object.keys(user).length;
-    if (hasToken && hasUser) navigate("/f/dashboard");
+    if (hasToken && hasUser) navigate("/f");
     return;
   }, []);
 
@@ -115,9 +115,9 @@ const Login = function () {
       if (err instanceof AxiosError) {
         console.error("[src/pages/Login.tsx]", err.response?.data.result);
         if (err.response?.data?.result?.message === "invalid_credentials")
-          toast.error(t.login.invalid_credentials);
+          toast.error(t.stacks.wrong_credentials);
         if (err.response?.data?.result?.message === "instance_no_exist")
-          toast.error(t.login.instance_no_exist);
+          toast.error(t.stacks.no_instance);
         if (err.response?.data?.result?.message === "schema_incorrect")
           Schema(err.response.data.result.err);
         return;

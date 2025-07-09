@@ -19,8 +19,6 @@ const Menu = function () {
   const { user, instance, workspaces, workspaceId, clear, selectWorkspace } =
     useSystem();
 
-  const selected = location.pathname.replace("/f/", "");
-
   const workspaceOptions = workspaces
     ?.map(function (workspace) {
       if (!workspace.status) return;
@@ -60,9 +58,9 @@ const Menu = function () {
       Icon: option.icon,
       items: option.items.map(function (item) {
         return {
-          id: item,
+          id: `/f/${option.id}/${item}`,
           label: t.menu[item as keyof typeof t.menu],
-          onClick: () => navigate(`/f/${item}`),
+          onClick: () => navigate(`/f/${option.id}/${item}`),
         };
       }),
     };
@@ -114,7 +112,7 @@ const Menu = function () {
 
   return (
     <Sidebar
-      selected={selected}
+      selected={location.pathname}
       header={header}
       options={options}
       footer={footer}

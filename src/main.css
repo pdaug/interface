@@ -128,3 +128,7 @@ code {
 .cursor {
   cursor: pointer;
 }
+
+.flex1 {
+  flex: 1;
+}
