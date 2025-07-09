@@ -33,7 +33,7 @@ const WorkspaceList = function () {
   const t = useTranslate();
   const navigate = useNavigate();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { token, instance, saveWorkspaces } = useSystem();
+  const { token, instance, workspaceId, saveWorkspaces } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -140,19 +140,23 @@ const WorkspaceList = function () {
             {
               id: "edit",
               label: t.components.edit,
-              onClick: function (_: unknown, data: unknown) {
-                if (data && typeof data === "object" && "id" in data)
-                  navigate(`/f/workspaces/inspect/${data.id}`);
+              onClick: function (_: unknown, data: Record<string, unknown>) {
+                if (data) navigate(`/f/workspaces/inspect/${data.id}`);
                 return;
               },
             },
             {
               id: "delete",
               label: t.components.delete,
-              onClick: async function (_: unknown, data: unknown) {
-                if (!token || !instance) return;
-                if (!data || typeof data !== "object" || !("id" in data))
+              onClick: async function (
+                _: unknown,
+                data: Record<string, unknown>,
+              ) {
+                if (!data) return;
+                if (workspaceId === data.id) {
+                  toast.error(t.workspace.not_delete);
                   return;
+                }
                 OpenDialog({
                   category: "Success",
                   title: t.dialog.title_delete,

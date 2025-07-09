@@ -14,8 +14,8 @@ import useTranslate from "../hooks/useTranslate";
 
 // components
 import { useDialog } from "../components/dialogs/Dialog";
-import { InputSelect } from "../components/inputs/Input";
 import { Horizontal, Vertical } from "../components/aligns/Align";
+import { InputSelect, InputSelectOptions } from "../components/inputs/Input";
 
 const Container = function () {
   const {
@@ -39,6 +39,17 @@ const Container = function () {
   if (invalidUser || invalidToken) return <Navigate to="/" />;
 
   // select workspace
+  const workspaceOptions = workspaces
+    ?.map(function (workspace) {
+      if (!workspace.status) return;
+      return {
+        id: workspace.id,
+        value: workspace.id,
+        text: workspace.name,
+      };
+    })
+    ?.filter(Boolean);
+
   useEffect(
     function () {
       if (workspaceId) {
@@ -55,13 +66,7 @@ const Container = function () {
             id="container_workspace_id"
             empty={t.stacks.no_option}
             label={t.workspace.workspaces}
-            options={workspaces.map(function (workspace) {
-              return {
-                id: workspace.id,
-                value: workspace.id,
-                text: workspace.name,
-              };
-            })}
+            options={workspaceOptions as InputSelectOptions[]}
             onChange={function (event) {
               selectWorkspace(event.currentTarget.value || "");
               return;

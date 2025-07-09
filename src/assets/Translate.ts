@@ -51,6 +51,8 @@ const TranslatePt = {
     operations: "Operações",
     departments: "Departamentos",
     subsidiaries: "Subsidiárias",
+    not_change_status: "Não é permitido desativar a organização selecionada",
+    not_delete: "Não é permitido deletar a organização selecionada",
   },
   pages: {
     error: "Erro",
@@ -185,6 +187,8 @@ const TranslateEn = {
     operations: "Operations",
     departments: "Departments",
     subsidiaries: "Subdidiaries",
+    not_change_status: "Not allowed disabled selected workspace",
+    not_delete: "Not allowed delete selected workspace",
   },
   pages: {
     error: "Error",

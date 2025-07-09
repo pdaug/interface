@@ -1,13 +1,9 @@
-import {
-  Cube,
-  Table,
-  Wrench,
-  GearSix,
-  CaretDown,
-  SuitcaseSimple,
-} from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { GearSix, CaretDown } from "@phosphor-icons/react";
+
+// assets
+import { MenuOptions } from "../assets/Menu";
 
 // hooks
 import useSystem from "../hooks/useSystem";
@@ -17,40 +13,15 @@ import useTranslate from "../hooks/useTranslate";
 import Sidebar from "../components/sidebar/Sidebar";
 import { DropdownValue } from "../components/dropdowns/Dropdown";
 
-const MenuOptions = [
-  {
-    id: "financial",
-    icon: Table,
-    items: ["dashboard", "orders", "inflows", "outflows", "statements"],
-  },
-  {
-    id: "administrative",
-    icon: SuitcaseSimple,
-    items: ["customers", "suppliers", "employees"],
-  },
-  {
-    id: "operational",
-    icon: Cube,
-    items: ["products", "services", "vehicles"],
-  },
-  {
-    id: "tools",
-    icon: Wrench,
-    items: ["documents", "schedules"],
-  },
-];
-
 const Menu = function () {
   const t = useTranslate();
   const navigate = useNavigate();
   const { user, instance, workspaces, workspaceId, clear, selectWorkspace } =
     useSystem();
 
-  if (!instance || !user) return;
-
   const selected = location.pathname.replace("/f/", "");
 
-  const headerValues = workspaces
+  const workspaceOptions = workspaces
     ?.map(function (workspace) {
       if (!workspace.status) return;
       return {
@@ -78,7 +49,7 @@ const Menu = function () {
           <CaretDown />
         </div>
       ),
-      values: headerValues as [],
+      values: workspaceOptions as DropdownValue[],
     },
   };
 

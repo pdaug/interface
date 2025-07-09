@@ -33,7 +33,7 @@ const WorkspaceInspect = function () {
   const t = useTranslate();
   const { id } = useParams();
   const navigate = useNavigate();
-  const { token, instance } = useSystem();
+  const { token, instance, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeWorkspace>>({
@@ -65,6 +65,10 @@ const WorkspaceInspect = function () {
     try {
       // is editing
       if (id) {
+        if (workspaceId === id && !form.status) {
+          toast.error(t.workspace.not_change_status);
+          return;
+        }
         const response = await apis.Workspace.update(
           token,
           instance.name,
@@ -264,7 +268,7 @@ const WorkspaceInspect = function () {
       </div>
       <Callout
         Icon={Asterisk}
-        category="Info"
+        category="Warning"
         text={t.stacks.required_fields}
         styles={{ fontSize: "var(--textSmall)" }}
       />
