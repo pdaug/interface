@@ -15,14 +15,13 @@ const NotFound = function () {
     <Center>
       <div>
         <Wrapper
-          title={t.not_found.title}
-          description={t.not_found.description}
+          title={t.pages.not_found}
           styles={{ width: "35rem" }}
           actions={[
             {
               type: "button",
               category: "Neutral",
-              text: t.not_found.back,
+              text: t.components.back,
               onClick: function () {
                 navigate("/");
                 return;
@@ -30,7 +29,7 @@ const NotFound = function () {
             },
           ]}
         >
-          <div>{t.not_found.text}</div>
+          <div>{t.pages.not_found_description}</div>
         </Wrapper>
       </div>
     </Center>

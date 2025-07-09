@@ -6,6 +6,7 @@ import {
   CaretDown,
   SuitcaseSimple,
 } from "@phosphor-icons/react";
+import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 // hooks
@@ -14,6 +15,7 @@ import useTranslate from "../hooks/useTranslate";
 
 // components
 import Sidebar from "../components/sidebar/Sidebar";
+import { DropdownValue } from "../components/dropdowns/Dropdown";
 
 const MenuOptions = [
   {
@@ -41,27 +43,42 @@ const MenuOptions = [
 const Menu = function () {
   const t = useTranslate();
   const navigate = useNavigate();
-  const { user, instance, workspaces, clear } = useSystem();
+  const { user, instance, workspaces, workspaceId, clear, selectWorkspace } =
+    useSystem();
 
   if (!instance || !user) return;
 
   const selected = location.pathname.replace("/f/", "");
 
+  const headerValues = workspaces
+    ?.map(function (workspace) {
+      if (!workspace.status) return;
+      return {
+        id: workspace.id,
+        label: workspace.name,
+        onClick: function () {
+          selectWorkspace(workspace.id);
+          toast.success(t.toast.success_workspace);
+          return;
+        },
+      } as DropdownValue;
+    })
+    ?.filter(Boolean);
+
   const header = {
     name: instance?.companyName,
-    description: instance?.paymentPlan || "standard",
+    description:
+      workspaces?.find(function (workspace) {
+        if (!workspace.status) return;
+        return workspaceId == workspace?.id;
+      })?.name || "no_workspace",
     dropdown: {
       children: (
         <div className="cursor">
           <CaretDown />
         </div>
       ),
-      values: workspaces?.map(function (workspace) {
-        return {
-          id: workspace.id,
-          label: workspace.name,
-        };
-      }),
+      values: headerValues as [],
     },
   };
 

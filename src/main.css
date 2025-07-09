@@ -113,6 +113,18 @@ a {
   color: var(--infoColor);
 }
 
+code {
+  background: var(--textDark);
+  background-color: var(--textDark);
+  border-radius: var(--borderRadius);
+  color: var(--borderDark);
+  display: flex;
+  font-family: monospace;
+  font-size: var(--textSmall);
+  flex: 1;
+  padding: 0.4rem 0.8rem;
+}
+
 .cursor {
   cursor: pointer;
 }

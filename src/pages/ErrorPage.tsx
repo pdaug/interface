@@ -18,14 +18,13 @@ const ErrorPage = function () {
     <Center>
       <div>
         <Wrapper
-          title={t.error.title}
-          description={t.error.description}
+          title={t.pages.error}
           styles={{ width: "35rem" }}
           actions={[
             {
               type: "button",
               category: "Neutral",
-              text: t.error.back,
+              text: t.components.back,
               onClick: function () {
                 navigate("/");
                 return;
@@ -33,9 +32,13 @@ const ErrorPage = function () {
             },
           ]}
         >
-          <div>
-            {error instanceof Error ? error?.message : "no message error"}
-          </div>
+          {error instanceof Error ? (
+            <code>
+              {error.name}: {error.message}
+            </code>
+          ) : (
+            "no message error"
+          )}
         </Wrapper>
       </div>
     </Center>

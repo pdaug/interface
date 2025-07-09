@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 // types
 import { ApiResponse } from "../types/Apis";
@@ -28,12 +28,21 @@ export const ApiCrud = function (path: string) {
       const config = { headers };
       return ApiBase.post<ApiResponse<T>>(`/${path}`, data, config);
     },
-    list: function <T>(Authorization: string, instance: string) {
+    list: function <T>(
+      Authorization: string,
+      instance: string,
+      params?: {
+        pageSize?: number;
+        pageCurrent?: number;
+        search?: string;
+        searchField?: string;
+      },
+    ) {
       const headers = {
         Authorization,
         "X-Instance": instance,
       };
-      const config = { headers };
+      const config: AxiosRequestConfig = { headers, params };
       return ApiBase.get<ApiResponse<T>>(`/${path}`, config);
     },
     get: function <T>(Authorization: string, instance: string, id: string) {

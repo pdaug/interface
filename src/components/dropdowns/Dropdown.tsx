@@ -4,19 +4,21 @@ import { Icon as PhosphorIcons } from "@phosphor-icons/react";
 // styles
 import "./Dropdown.css";
 
-export type DropdownValues = {
+export type DropdownValue = {
   id: string;
   label: string;
   disabled?: boolean;
   Icon?: PhosphorIcons;
-  onClick?: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    data?: unknown,
-  ) => void;
-}[];
+  onClick?:
+    | (() => void)
+    | ((
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+        data?: unknown,
+      ) => void);
+};
 
 export type DropdownProps = {
-  values: DropdownValues;
+  values: DropdownValue[];
   children: React.ReactElement;
   data?: unknown;
 };

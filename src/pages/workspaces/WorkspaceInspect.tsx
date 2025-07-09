@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { format } from "date-fns";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { Asterisk } from "@phosphor-icons/react";
@@ -13,6 +14,9 @@ import Schema from "../../utils/Schema";
 // types
 import { TypeWorkspace } from "../../types/Workspace";
 
+// assets
+import { WorkspaceCategoryOptions } from "../../assets/Workspaces";
+
 // hooks
 import useAsync from "../../hooks/useAsync";
 import useSystem from "../../hooks/useSystem";
@@ -25,27 +29,11 @@ import Callout from "../../components/callouts/Callout";
 import { Horizontal, Vertical } from "../../components/aligns/Align";
 import { Input, InputSelect, InputText } from "../../components/inputs/Input";
 
-export const WorkspaceCategoryOptions = [
-  "units",
-  "teams",
-  "offices",
-  "centers",
-  "agencies",
-  "branches",
-  "sections",
-  "divisions",
-  "operations",
-  "departments",
-  "subsidiaries",
-];
-
 const WorkspaceInspect = function () {
   const t = useTranslate();
   const { id } = useParams();
   const navigate = useNavigate();
   const { token, instance } = useSystem();
-
-  const isEditing = Boolean(id);
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeWorkspace>>({
@@ -55,8 +43,9 @@ const WorkspaceInspect = function () {
     category: "departments",
   });
 
+  // fetch workspace
   useAsync(async function () {
-    if (!isEditing || !instance || !token || !id) return;
+    if (!id) return;
     setLoading(true);
     try {
       const response = await apis.Workspace.get(token, instance.name, id);
@@ -74,7 +63,8 @@ const WorkspaceInspect = function () {
   const onSubmit = async function () {
     if (!instance || !token) return;
     try {
-      if (isEditing && id) {
+      // is editing
+      if (id) {
         const response = await apis.Workspace.update(
           token,
           instance.name,
@@ -88,6 +78,7 @@ const WorkspaceInspect = function () {
         }
         return;
       }
+      // is creating
       const response = await apis.Workspace.create(token, instance.name, form);
       if (!response.data?.result) toast.warning(t.toast.warning_create);
       if (response.data.state === "success") {
@@ -97,15 +88,12 @@ const WorkspaceInspect = function () {
       return;
     } catch (err) {
       if (err instanceof AxiosError) {
-        console.error(
-          "[src/pages/workspaces/WorkspaceInspect.tsx]",
-          err.response?.data.result,
-        );
-        if (err.response?.data?.result?.message === "schema_incorrect")
+        if (err.response?.data?.result?.message === "schema_incorrect") {
           Schema(err.response.data.result.err);
-        return;
+          return;
+        }
       }
-      if (isEditing && id) toast.error(t.toast.error_edit);
+      if (id) toast.error(t.toast.error_edit);
       else toast.error(t.toast.error_create);
       console.error("[src/pages/workspaces/WorkspaceInspect.tsx]", err);
       return;
@@ -119,7 +107,7 @@ const WorkspaceInspect = function () {
       </Horizontal>
       <div>
         <Wrapper
-          title={isEditing ? t.workspace.title_edit : t.workspace.title_create}
+          title={id ? t.workspace.title_edit : t.workspace.title_create}
           description={t.workspace.subtitle}
         >
           <Vertical internal={1}>
@@ -128,20 +116,20 @@ const WorkspaceInspect = function () {
                 required
                 name="status"
                 id="workspace_status"
-                empty={t.components.no_option}
+                empty={t.stacks.no_option}
                 value={String(form.status)}
-                disabled={loading && isEditing}
+                disabled={loading && Boolean(id)}
                 label={t.workspace.status_label}
                 options={[
                   {
                     id: "true",
                     value: "true",
-                    text: t.workspace.active,
+                    text: t.components.active,
                   },
                   {
                     id: "false",
                     value: "false",
-                    text: t.workspace.inactive,
+                    text: t.components.inactive,
                   },
                 ]}
                 onChange={function (event) {
@@ -159,7 +147,7 @@ const WorkspaceInspect = function () {
                 id="workspace_name"
                 value={form?.name || ""}
                 label={t.workspace.name}
-                disabled={loading && isEditing}
+                disabled={loading && Boolean(id)}
                 placeholder={t.workspace.name_placeholder}
                 onChange={function (event) {
                   const newForm = { ...form };
@@ -172,9 +160,9 @@ const WorkspaceInspect = function () {
                 required
                 name="category"
                 id="workspace_category"
-                label={t.workspace.category}
-                empty={t.components.no_option}
-                disabled={loading && isEditing}
+                label={t.components.category}
+                empty={t.stacks.no_option}
+                disabled={loading && Boolean(id)}
                 value={form?.category || "departments"}
                 options={WorkspaceCategoryOptions.map(function (option) {
                   return {
@@ -197,8 +185,8 @@ const WorkspaceInspect = function () {
                 name="description"
                 id="workspace_description"
                 value={form?.description || ""}
-                label={t.workspace.description}
-                disabled={loading && isEditing}
+                label={t.components.description}
+                disabled={loading && Boolean(id)}
                 placeholder={t.workspace.description_placeholder}
                 onChange={function (event) {
                   const newForm = { ...form };
@@ -208,6 +196,54 @@ const WorkspaceInspect = function () {
                 }}
               />
             </Horizontal>
+            {Boolean(id) && (
+              <Horizontal internal={1}>
+                <Input
+                  readOnly
+                  placeholder=""
+                  name="createdAt"
+                  id="workspace_created_at"
+                  label={t.components.created_at}
+                  value={format(
+                    new Date(form?.createdAt || 0),
+                    "dd/MM/yyyy HH:mm:ss",
+                  )}
+                  onChange={function () {
+                    return;
+                  }}
+                />
+                <Input
+                  readOnly
+                  placeholder=""
+                  name="updatedAt"
+                  id="workspace_updated_at"
+                  label={t.components.updated_at}
+                  value={
+                    form?.updatedAt
+                      ? format(new Date(form?.updatedAt), "dd/MM/yyyy HH:mm:ss")
+                      : "-"
+                  }
+                  onChange={function () {
+                    return;
+                  }}
+                />
+                <Input
+                  readOnly
+                  placeholder=""
+                  name="deletedAt"
+                  id="workspace_deleted_at"
+                  label={t.components.deletedAt}
+                  value={
+                    form?.deletedAt
+                      ? format(new Date(form?.deletedAt), "dd/MM/yyyy HH:mm:ss")
+                      : "-"
+                  }
+                  onChange={function () {
+                    return;
+                  }}
+                />
+              </Horizontal>
+            )}
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
               <Button
                 category="Neutral"
@@ -220,7 +256,7 @@ const WorkspaceInspect = function () {
               <Button
                 category="Success"
                 onClick={onSubmit}
-                text={isEditing ? t.components.edit : t.components.save}
+                text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>
           </Vertical>
@@ -229,7 +265,7 @@ const WorkspaceInspect = function () {
       <Callout
         Icon={Asterisk}
         category="Info"
-        text={t.error.required_fields}
+        text={t.stacks.required_fields}
         styles={{ fontSize: "var(--textSmall)" }}
       />
     </React.Fragment>

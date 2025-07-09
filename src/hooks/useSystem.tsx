@@ -7,11 +7,11 @@ import { TypeInstance } from "../types/Instance";
 import { TypeWorkspace } from "../types/Workspace";
 
 type SystemState = {
-  token: string | null;
-  user: TypeUser | null;
-  instance: TypeInstance | null;
+  token: string;
+  user: TypeUser;
+  instance: TypeInstance;
   workspaces: TypeWorkspace[];
-  workspaceId: string | null;
+  workspaceId: string;
   saveToken: (token: string) => void;
   saveUser: (user: TypeUser) => void;
   saveInstance: (instance: TypeInstance) => void;
@@ -24,11 +24,11 @@ const useSystem = create<SystemState>()(
   persist(
     function (set) {
       const initial = {
-        token: null,
-        user: null,
-        instance: null,
+        token: "",
+        user: {} as TypeUser,
+        instance: {} as TypeInstance,
         workspaces: [],
-        workspaceId: null,
+        workspaceId: "",
       };
       const saveToken = function (token: string) {
         set({ token });
@@ -72,6 +72,7 @@ const useSystem = create<SystemState>()(
           user: state.user,
           instance: state.instance,
           workspaces: state.workspaces,
+          workspaceId: state.workspaceId,
         };
       },
     },

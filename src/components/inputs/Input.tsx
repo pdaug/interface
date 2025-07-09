@@ -129,7 +129,7 @@ function InputCheck<T extends string[] | boolean>({
                 onChange(updated as T);
               }}
             />
-            <span>{option.label}</span>
+            {label && <span>{option.label}</span>}
           </label>
         ))}
       </div>

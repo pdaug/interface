@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 import React, { useState } from "react";
+import { useDebounce } from "use-debounce";
 import { format, subWeeks } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { Plus, QuestionMark } from "@phosphor-icons/react";
@@ -19,37 +20,48 @@ import useTranslate from "../../hooks/useTranslate";
 // components
 import Badge from "../../components/badges/Badge";
 import Button from "../../components/buttons/Button";
+import Tooltip from "../../components/tooltips/Tooltip";
 import { useDialog } from "../../components/dialogs/Dialog";
-import { InputInterval } from "../../components/inputs/Input";
 import Table, { TableData } from "../../components/tables/Table";
 import Pagination from "../../components/paginations/Pagination";
 import { Horizontal, Vertical } from "../../components/aligns/Align";
+import { Input, InputInterval } from "../../components/inputs/Input";
+
+const pageSize = 10;
 
 const WorkspaceList = function () {
   const t = useTranslate();
   const navigate = useNavigate();
-  const { OpenDialog } = useDialog();
-  const { token, instance } = useSystem();
+  const { OpenDialog, CloseDialog } = useDialog();
+  const { token, instance, saveWorkspaces } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
+  const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
   const [workspaces, setWorkspaces] = useState<TypeWorkspace[]>([]);
 
+  const [searchDebounced] = useDebounce(search, 500);
+
   const today = format(new Date(), "yyyy-MM-dd");
   const lastWeek = format(subWeeks(new Date(), 1), "yyyy-MM-dd");
 
-  // fetch instance by subdomain
-  useAsync(async function () {
+  const FetchWorkspace = async function () {
     if (!token || !instance) return;
     setLoading(true);
     try {
       const response = await apis.Workspace.list<
         ApiResponsePaginate<TypeWorkspace>
-      >(token, instance.name);
+      >(token, instance.name, {
+        pageSize,
+        pageCurrent: page,
+        searchField: "name",
+        search: searchDebounced,
+      });
       if (!response.data?.result?.items) return;
       setWorkspaces(response.data.result.items);
+      saveWorkspaces(response.data.result.items);
       setTotal(response.data.result.pagination.total);
       return;
     } catch (err) {
@@ -58,7 +70,10 @@ const WorkspaceList = function () {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
+
+  // fetch workspace
+  useAsync(FetchWorkspace, [page, searchDebounced]);
 
   return (
     <React.Fragment>
@@ -74,32 +89,44 @@ const WorkspaceList = function () {
             onClick={() => navigate("/f/workspaces/inspect")}
           />
           <InputInterval label="" value={[lastWeek, today]} />
+          <Input
+            label=""
+            value={search}
+            placeholder={t.components.search}
+            onChange={function (event) {
+              setSearch(event.currentTarget?.value || "");
+              return;
+            }}
+          />
         </Horizontal>
         <Horizontal internal={1}>
           <Button category="Neutral" text={t.components.import} />
           <Button category="Neutral" text={t.components.export} />
-          <Button
-            text=""
-            onlyIcon
-            category="Neutral"
-            Icon={QuestionMark}
-            onClick={function () {
-              OpenDialog({
-                category: "Success",
-                title: "Ajuda",
-                description: (
-                  <iframe
-                    height="315"
-                    title="YouTube video player"
-                    style={{ border: "none", width: "100%" }}
-                    src="https://www.youtube.com/embed/L-yA7-puosA?si=VM5G3X9R4Os7m9SK"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  ></iframe>
-                ),
-              });
-              return;
-            }}
-          />
+          <Tooltip content={t.components.help}>
+            <Button
+              text=""
+              onlyIcon
+              category="Neutral"
+              Icon={QuestionMark}
+              onClick={function () {
+                OpenDialog({
+                  width: 700,
+                  category: "Success",
+                  title: t.components.help,
+                  cancelText: t.components.close,
+                  description: (
+                    <iframe
+                      height={400}
+                      style={{ border: "none", width: "100%" }}
+                      src="https://www.youtube.com/embed/L-yA7-puosA"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    />
+                  ),
+                });
+                return;
+              }}
+            />
+          </Tooltip>
         </Horizontal>
       </Horizontal>
       <Vertical internal={1}>
@@ -113,7 +140,7 @@ const WorkspaceList = function () {
             {
               id: "edit",
               label: t.components.edit,
-              onClick: function (_, data) {
+              onClick: function (_: unknown, data: unknown) {
                 if (data && typeof data === "object" && "id" in data)
                   navigate(`/f/workspaces/inspect/${data.id}`);
                 return;
@@ -122,30 +149,40 @@ const WorkspaceList = function () {
             {
               id: "delete",
               label: t.components.delete,
-              onClick: async function (_, data) {
+              onClick: async function (_: unknown, data: unknown) {
                 if (!token || !instance) return;
                 if (!data || typeof data !== "object" || !("id" in data))
                   return;
-                try {
-                  const response = await apis.Workspace.delete(
-                    token,
-                    instance.name,
-                    data.id as string,
-                  );
-                  if (!response.data?.result) {
-                    toast.warning(t.toast.error_delete);
-                    return;
-                  }
-                  toast.success(t.toast.success_delete);
-                  return;
-                } catch (err) {
-                  toast.error(t.toast.error_delete);
-                  console.error(
-                    "[src/pages/workspaces/WorkspaceList.tsx]",
-                    err,
-                  );
-                  return;
-                }
+                OpenDialog({
+                  category: "Success",
+                  title: t.dialog.title_delete,
+                  description: t.dialog.description_delete,
+                  confirmText: t.components.confirm,
+                  onConfirm: async function () {
+                    try {
+                      const response = await apis.Workspace.delete(
+                        token,
+                        instance.name,
+                        data.id as string,
+                      );
+                      if (!response.data?.result) {
+                        toast.warning(t.toast.error_delete);
+                        return;
+                      }
+                      toast.success(t.toast.success_delete);
+                      CloseDialog();
+                      await FetchWorkspace();
+                      return;
+                    } catch (err) {
+                      toast.error(t.toast.error_delete);
+                      console.error(
+                        "[src/pages/workspaces/WorkspaceList.tsx]",
+                        err,
+                      );
+                      return;
+                    }
+                  },
+                });
               },
             },
           ]}
@@ -158,7 +195,7 @@ const WorkspaceList = function () {
                   <Badge
                     category={data.status ? "Success" : "Danger"}
                     value={
-                      data.status ? t.workspace.active : t.workspace.inactive
+                      data.status ? t.components.active : t.components.inactive
                     }
                   />
                 );
@@ -166,18 +203,18 @@ const WorkspaceList = function () {
             },
             name: { label: t.workspace.name },
             description: {
-              label: t.workspace.description,
+              label: t.components.description,
               handler: function (data) {
                 if (data.description) return data.description as string;
                 return (
                   <i style={{ color: "var(--textLight)" }}>
-                    {t.components.no_description}
+                    {t.stacks.no_description}
                   </i>
                 );
               },
             },
             category: {
-              label: t.workspace.category,
+              label: t.components.category,
               handler: function (data) {
                 const categoryTranslated =
                   t.workspace[data.category as keyof typeof t.workspace];
@@ -185,7 +222,7 @@ const WorkspaceList = function () {
               },
             },
             createdAt: {
-              label: t.workspace.created_at,
+              label: t.components.created_at,
               handler: function (data) {
                 const dateFormatted = format(
                   new Date(data.createdAt as string),
@@ -201,7 +238,7 @@ const WorkspaceList = function () {
           pageCurrent={page}
           setPage={setPage}
           itemsTotal={total}
-          pageSize={10}
+          pageSize={pageSize}
         />
       </Vertical>
     </React.Fragment>

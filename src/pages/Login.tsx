@@ -26,8 +26,6 @@ import Wrapper from "../components/wrapper/Wrapper";
 import { Center, Horizontal, Vertical } from "../components/aligns/Align";
 
 const Login = function () {
-  const t = useTranslate();
-  const navigate = useNavigate();
   const {
     token,
     user,
@@ -37,6 +35,8 @@ const Login = function () {
     saveInstance,
     saveWorkspaces,
   } = useSystem();
+  const t = useTranslate();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     instance: "",
@@ -44,9 +44,12 @@ const Login = function () {
     password: "",
   });
 
-  // redirect
+  // redirect if logged
   useEffect(function () {
-    if (token && user) navigate("/f/dashboard");
+    const hasToken = token && typeof token === "string" && token.length === 36;
+    const hasUser =
+      user && typeof user === "object" && Object.keys(user).length;
+    if (hasToken && hasUser) navigate("/f/dashboard");
     return;
   }, []);
 
@@ -61,14 +64,11 @@ const Login = function () {
         if (!response.data?.result) return;
         saveInstance(response.data.result);
       }
-      return;
     } catch (err) {
       console.error("[src/pages/Login.tsx]", err);
-      return;
     }
   }, []);
 
-  // to log in
   const OnSubmit = async function (event: React.FormEvent) {
     event.preventDefault();
     try {
@@ -77,10 +77,11 @@ const Login = function () {
         form.instance,
       );
       if (!responseInstance?.data?.result) {
-        toast.error(t.login.instance_no_exist);
+        toast.error(t.stacks.no_instance);
         return;
       }
       saveInstance(responseInstance.data?.result);
+
       // fetch login
       const responseLogin = await apis.Login<{ user: TypeUser; token: string }>(
         form.instance,
@@ -90,17 +91,24 @@ const Login = function () {
         },
       );
       if (!responseLogin?.data?.result) {
-        toast.error(t.login.invalid_credentials);
+        toast.error(t.stacks.wrong_credentials);
         return;
       }
-      saveToken(responseLogin.data.result.token);
-      saveUser(responseLogin.data.result.user);
+
       // fetch workspace
       const responseWorkspace = await apis.Workspace.list<
         ApiResponsePaginate<TypeWorkspace>
       >(responseLogin.data.result.token, form.instance);
+      if (!responseWorkspace?.data?.result?.items?.length) {
+        toast.error(t.stacks.no_workspace);
+        return;
+      }
+
+      saveToken(responseLogin.data.result.token);
+      saveUser(responseLogin.data.result.user);
       saveWorkspaces(responseWorkspace?.data?.result?.items);
-      toast.success(t.login.success);
+
+      toast.success(t.toast.success_login);
       navigate("/f/dashboard");
       return;
     } catch (err) {
@@ -142,22 +150,22 @@ const Login = function () {
           ]}
         >
           <Vertical internal={1}>
-            {instance && (
+            {instance && instance.logoLarge && (
               <Horizontal styles={{ justifyContent: "center" }}>
                 <img
-                  style={{ height: "6rem" }}
-                  src={instance.logoLarge as string}
                   alt="logo large"
+                  style={{ height: "6rem" }}
+                  src={instance.logoLarge}
                 />
               </Horizontal>
             )}
             <Input
               required
-              id="login_instance"
               name="instance"
-              label={t.login.instance}
+              id="login_instance"
               placeholder="johndoe"
               value={form.instance}
+              label={t.login.instance}
               onChange={function (event) {
                 const newForm = { ...form };
                 newForm.instance = event.currentTarget?.value || "";
@@ -167,11 +175,11 @@ const Login = function () {
             />
             <Input
               required
-              id="login_username"
               name="username"
+              id="login_username"
+              value={form.username}
               label={t.login.username}
               placeholder="johndoe@mail.com"
-              value={form.username}
               onChange={function (event) {
                 const newForm = { ...form };
                 newForm.username = event.currentTarget?.value || "";
@@ -181,12 +189,12 @@ const Login = function () {
             />
             <Input
               required
-              id="login_password"
               name="password"
               type="password"
-              label={t.login.password}
+              id="login_password"
               placeholder="********"
               value={form.password}
+              label={t.login.password}
               onChange={function (event) {
                 const newForm = { ...form };
                 newForm.password = event.currentTarget?.value || "";

@@ -53,15 +53,16 @@ const Table = function ({
   const t = useTranslate();
 
   const rowsId = data.map((item) => item.id);
-  const isSelectedRowsId = selected
-    ? rowsId.every((id) => selected.includes(id))
-    : false;
+  const isSelectedRowsId =
+    selected && !loading && data.length
+      ? rowsId.every((id) => selected.includes(id))
+      : false;
 
   return (
     <div style={styles} className={`table ${border ? "tableBorder" : ""}`}>
       <div className="tableHead">
         <div className="tableHeadRow">
-          <div style={{ maxWidth: 32 }} className="tableHeadData">
+          <div style={{ maxWidth: "min-content" }} className="tableHeadData">
             <InputCheck
               value={isSelectedRowsId}
               onChange={function () {
@@ -93,13 +94,21 @@ const Table = function ({
             );
           })}
           {options && (
-            <div style={{ maxWidth: 32 }} className="tableHeadData"></div>
+            <div className="tableHeadData" style={{ maxWidth: "min-content" }}>
+              <div style={{ opacity: 0 }}>
+                <DotsThreeOutline weight="fill" />
+              </div>
+            </div>
           )}
         </div>
       </div>
       {loading ? (
         <Horizontal external={1} styles={{ justifyContent: "center" }}>
           {t.components.loading}...
+        </Horizontal>
+      ) : data.length === 0 ? (
+        <Horizontal external={1} styles={{ justifyContent: "center" }}>
+          {t.components.no_items}
         </Horizontal>
       ) : (
         <div className="tableBody">
@@ -109,7 +118,10 @@ const Table = function ({
                 key={`${row.id}-${indexRow}`}
                 className={`tableBodyRow ${selected?.includes(row.id) ? "tableBodyRowSelected" : ""}`}
               >
-                <div style={{ maxWidth: 32 }} className="tableBodyData">
+                <div
+                  className="tableBodyData"
+                  style={{ maxWidth: "min-content" }}
+                >
                   <InputCheck
                     value={selected || []}
                     onChange={setSelected}
@@ -147,7 +159,10 @@ const Table = function ({
                   );
                 })}
                 {options && (
-                  <div style={{ maxWidth: 32 }} className="tableBodyData">
+                  <div
+                    style={{ maxWidth: "min-content" }}
+                    className="tableBodyData"
+                  >
                     <Dropdown values={options} data={row}>
                       <div style={{ cursor: "pointer" }}>
                         <DotsThreeOutline weight="fill" />

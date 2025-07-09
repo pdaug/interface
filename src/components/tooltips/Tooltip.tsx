@@ -19,7 +19,7 @@ export type TooltipProps = {
 
 const Tooltip = function ({
   content,
-  theme = "light",
+  theme = "dark",
   placement = "top",
   children,
 }: TooltipProps) {

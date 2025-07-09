@@ -19,7 +19,7 @@ import Button, { ButtonCategories } from "../buttons/Button";
 export type DialogContextProps = {
   open: boolean;
   title: string;
-  description: string | React.ReactNode;
+  description: string | React.JSX.Element | (() => React.JSX.Element);
   category: ButtonCategories;
   confirmIcon?: PhosphorIcon;
   confirmText?: string;
@@ -27,6 +27,7 @@ export type DialogContextProps = {
   Icon?: PhosphorIcon;
   cancelText?: string;
   onCancel?: () => void;
+  width?: number | string;
 };
 
 export type DialogContextType = {
@@ -118,6 +119,7 @@ export const DialogElement = function () {
     <div className={`dialog ${dialogProps?.open ? "dialogOpen" : ""}`}>
       <div
         ref={dialogContainerRef}
+        style={{ width: dialogProps?.width || "35rem" }}
         className={`dialogContainer ${dialogProps?.open ? "dialogContainerOpen" : ""}`}
       >
         <div className="dialogContent">
@@ -125,7 +127,13 @@ export const DialogElement = function () {
             {dialogProps.Icon && <dialogProps.Icon />}
             <span>{dialogProps.title}</span>
           </div>
-          <div className="dialogDescription">{dialogProps.description}</div>
+          <div className="dialogDescription">
+            {typeof dialogProps.description === "function" ? (
+              <dialogProps.description />
+            ) : (
+              dialogProps.description
+            )}
+          </div>
         </div>
         <div className="dialogFooter">
           <Button
