@@ -109,7 +109,7 @@ const Login = function () {
       saveWorkspaces(responseWorkspace?.data?.result?.items);
 
       toast.success(t.toast.success_login);
-      navigate("/f/dashboard");
+      navigate("/f");
       return;
     } catch (err) {
       if (err instanceof AxiosError) {
