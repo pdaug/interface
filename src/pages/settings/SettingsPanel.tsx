@@ -40,6 +40,9 @@ const SettingsPanel = function () {
   const t = useTranslate();
   const { instance } = useSystem();
 
+  const [logoTemp, setLogoTemp] = useState<File | null>(null);
+  const [faviconTemp, setFaviconTemp] = useState<File | null>(null);
+  const [logoLargeTemp, setLogoLargeTemp] = useState<File | null>(null);
   const [form, setForm] = useState<Partial<TypeSettings>>({
     companyName: "",
     companyDocument: "",
@@ -180,19 +183,14 @@ const SettingsPanel = function () {
                   label={t.components.datetime}
                   options={[
                     {
-                      id: "dd/MM/yyyy",
-                      value: "dd/MM/yyyy",
-                      text: "dd/MM/yyyy",
+                      id: "dd/MM/yyyy HH:mm:ss",
+                      value: "dd/MM/yyyy HH:mm:ss",
+                      text: t.components["dd/MM/yyyy HH:mm:ss"],
                     },
                     {
-                      id: "MM/dd/yyyy",
-                      value: "MM/dd/yyyy",
-                      text: "MM/dd/yyyy",
-                    },
-                    {
-                      id: "yyyy-MM-dd",
-                      value: "yyyy-MM-dd",
-                      text: "yyyy-MM-dd",
+                      id: "yyyy-MM-dd HH:mm:ss",
+                      value: "yyyy-MM-dd HH:mm:ss",
+                      text: t.components["yyyy-MM-dd HH:mm:ss"],
                     },
                   ]}
                   onChange={function (event) {
@@ -217,6 +215,16 @@ const SettingsPanel = function () {
                       value: "USD",
                       text: "Dollar (USD)",
                     },
+                    {
+                      id: "EUR",
+                      value: "EUR",
+                      text: "EURO (EUR)",
+                    },
+                    {
+                      id: "BTC",
+                      value: "BTC",
+                      text: "BITCOIN (BTC)",
+                    },
                   ]}
                   onChange={function (event) {
                     return;
@@ -232,27 +240,36 @@ const SettingsPanel = function () {
           >
             <Vertical internal={1}>
               <Horizontal internal={1}>
-                <InputFile label="Ola" accept="image" />
-                <InputSelect
-                  required
-                  name="status"
-                  id="workspace_status"
-                  empty={t.stacks.no_option}
-                  value={""}
-                  label={t.components.status}
-                  options={[
-                    {
-                      id: "true",
-                      value: "true",
-                      text: t.components.active,
-                    },
-                    {
-                      id: "false",
-                      value: "false",
-                      text: t.components.inactive,
-                    },
-                  ]}
-                  onChange={function () {
+                <InputFile
+                  name="logo"
+                  value={logoTemp}
+                  label={t.settings.logo}
+                  id="settings_company_logo"
+                  accept="image/png, image/jpg"
+                  onChange={function (event) {
+                    setLogoTemp(event.currentTarget.files?.[0] || null);
+                    return;
+                  }}
+                />
+                <InputFile
+                  name="logoLarge"
+                  value={logoLargeTemp}
+                  label={t.settings.logoLarge}
+                  accept="image/png, image/jpg"
+                  id="settings_company_logo_large"
+                  onChange={function (event) {
+                    setLogoLargeTemp(event.currentTarget.files?.[0] || null);
+                    return;
+                  }}
+                />
+                <InputFile
+                  name="favicon"
+                  value={faviconTemp}
+                  label={t.settings.favicon}
+                  id="settings_company_favicon"
+                  accept="image/png, image/svg, imagem/x-icon"
+                  onChange={function (event) {
+                    setFaviconTemp(event.currentTarget.files?.[0] || null);
                     return;
                   }}
                 />

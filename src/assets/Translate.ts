@@ -126,6 +126,9 @@ const TranslatePt = {
     address_city: "Cidade",
     address_city_placeholder: "Ex. Cores",
     address_state: "Estado",
+    logo: "Logo",
+    logoLarge: "Logo grande",
+    favicon: "Favicon",
     // options
     industry: "Indústria",
     commerce: "Comércio",
@@ -177,6 +180,10 @@ const TranslatePt = {
     theme: "Tema",
     light: "Claro",
     dark: "Escuro",
+    datetime: "Data e hora",
+    currency: "Moeda",
+    "dd/MM/yyyy HH:mm:ss": "dia/mês/ano hora:minuto:segundo",
+    "yyyy-MM-dd HH:mm:ss": "ano-mês-dia hora:minuto:segundo",
     // buttons
     help: "Obtenha ajuda",
     edit: "Editar",
@@ -356,6 +363,9 @@ const TranslateEn = {
     address_city: "City",
     address_city_placeholder: "e.g. Colors",
     address_state: "State",
+    logo: "Logo",
+    logoLarge: "Logo large",
+    favicon: "Favicon",
     // options
     industry: "Industry",
     commerce: "Commerce",
@@ -407,6 +417,10 @@ const TranslateEn = {
     theme: "Theme",
     light: "Light",
     dark: "Dark",
+    datetime: "Date and time",
+    currency: "Currency",
+    "dd/MM/yyyy HH:mm:ss": "day/month/year hour:minute:second",
+    "yyyy-MM-dd HH:mm:ss": "year-month-day hour:minute:second",
     // buttons
     help: "Get help",
     edit: "Edit",
