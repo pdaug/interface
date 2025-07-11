@@ -74,17 +74,16 @@ const IntegrationsHome = function () {
                   {t.integrations.mailersend}
                 </div>
               </Horizontal>
-
-              <div
-                style={{
-                  color: "var(--textLight)",
-                  fontSize: "var(--textSmall)",
-                }}
-              >
-                {t.integrations.mailersend_description}
-              </div>
-              <Horizontal>
+              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
                 <Badge category="Warning" value={t.integrations.wip} />
+                <div
+                  style={{
+                    color: "var(--textLight)",
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {t.integrations.mailersend_description}
+                </div>
               </Horizontal>
             </Vertical>
           </Wrapper>
@@ -111,16 +110,16 @@ const IntegrationsHome = function () {
                   {t.integrations.twilio}
                 </div>
               </Horizontal>
-              <div
-                style={{
-                  color: "var(--textLight)",
-                  fontSize: "var(--textSmall)",
-                }}
-              >
-                {t.integrations.twilio_description}
-              </div>
-              <Horizontal>
+              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
                 <Badge category="Warning" value={t.integrations.wip} />
+                <div
+                  style={{
+                    color: "var(--textLight)",
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {t.integrations.twilio_description}
+                </div>
               </Horizontal>
             </Vertical>
           </Wrapper>
@@ -149,16 +148,16 @@ const IntegrationsHome = function () {
                   {t.integrations.stripe}
                 </div>
               </Horizontal>
-              <div
-                style={{
-                  color: "var(--textLight)",
-                  fontSize: "var(--textSmall)",
-                }}
-              >
-                {t.integrations.stripe_description}
-              </div>
-              <Horizontal>
+              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
                 <Badge category="Warning" value={t.integrations.wip} />
+                <div
+                  style={{
+                    color: "var(--textLight)",
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {t.integrations.stripe_description}
+                </div>
               </Horizontal>
             </Vertical>
           </Wrapper>
@@ -188,14 +187,17 @@ const IntegrationsHome = function () {
                   {t.integrations.openai}
                 </div>
               </Horizontal>
-              <div
-                style={{
-                  color: "var(--textLight)",
-                  fontSize: "var(--textSmall)",
-                }}
-              >
-                {t.integrations.openai_description}
-              </div>
+              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+                <Badge category="Info" value={t.integrations.beta} />
+                <div
+                  style={{
+                    color: "var(--textLight)",
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {t.integrations.openai_description}
+                </div>
+              </Horizontal>
             </Vertical>
           </Wrapper>
         </Horizontal>

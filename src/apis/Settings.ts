@@ -5,10 +5,10 @@ import { ApiBase } from ".";
 import { ApiResponse } from "../types/Apis";
 
 const Settings = {
-  get: function <T>(instance: string, data: unknown) {
+  get: function <T>(instance: string) {
     const headers = { "X-Instance": instance };
     const config = { headers };
-    return ApiBase.post<ApiResponse<T>>("/settings", data, config);
+    return ApiBase.get<ApiResponse<T>>("/settings", config);
   },
   set: function <T>(Authorization: string, instance: string, data: unknown) {
     const headers = {

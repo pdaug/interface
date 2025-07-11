@@ -204,7 +204,7 @@ const AccountList = function () {
               handler: function (data) {
                 return (
                   <Badge
-                    category={data.isCoorporate ? "Info" : "Warning"}
+                    category={data.isCoorporate ? "Neutral" : "Neutral"}
                     value={
                       data.isCoorporate
                         ? t.accounts.corporate
