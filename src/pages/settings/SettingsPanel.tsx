@@ -91,6 +91,9 @@ const SettingsPanel = function () {
       </Horizontal>
       <div>
         <Vertical internal={1}>
+          <Wrapper title={form.companyName} description={form.companyEmail}>
+            {form.companyWebsite}
+          </Wrapper>
           <Wrapper
             title={t.settings.title_preferences}
             description={t.settings.subtitle_preferences}
