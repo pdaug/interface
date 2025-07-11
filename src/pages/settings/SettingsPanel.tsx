@@ -7,15 +7,16 @@ import apis from "../../apis";
 // types
 import {
   TypeSettings,
-  TypeSettingsLanguage,
   TypeSettingsTheme,
+  TypeSettingsLanguage,
 } from "../../types/Settings";
 
 // assets
 import {
+  SettingsTimezone,
+  SettingsCurrencies,
   SettingsAddressState,
   SettingsCompanyActivities,
-  SettingsTimezone,
 } from "../../assets/Settings";
 import { MaskPhone } from "../../assets/Mask";
 
@@ -25,16 +26,17 @@ import useSystem from "../../hooks/useSystem";
 import useTranslate from "../../hooks/useTranslate";
 
 // components
-import Button from "../../components/buttons/Button";
-import Wrapper from "../../components/wrapper/Wrapper";
-import Callout from "../../components/callouts/Callout";
-import { Horizontal, Vertical } from "../../components/aligns/Align";
 import {
   Input,
+  InputColor,
   InputFile,
   InputMask,
   InputSelect,
 } from "../../components/inputs/Input";
+import Button from "../../components/buttons/Button";
+import Wrapper from "../../components/wrapper/Wrapper";
+import Callout from "../../components/callouts/Callout";
+import { Horizontal, Vertical } from "../../components/aligns/Align";
 
 const SettingsPanel = function () {
   const t = useTranslate();
@@ -58,8 +60,8 @@ const SettingsPanel = function () {
     addressNeighborhood: "",
     addressCity: "",
     addressState: "",
-    colorPrimary: "",
-    colorSecondary: "",
+    colorPrimary: "#fafafa",
+    colorSecondary: "#fafafa",
     logo: "",
     logoLarge: "",
     favicon: "",
@@ -193,7 +195,7 @@ const SettingsPanel = function () {
                       text: t.components["yyyy-MM-dd HH:mm:ss"],
                     },
                   ]}
-                  onChange={function (event) {
+                  onChange={function () {
                     return;
                   }}
                 />
@@ -204,29 +206,8 @@ const SettingsPanel = function () {
                   empty={t.stacks.no_option}
                   value={form?.currency || "USD"}
                   label={t.components.currency}
-                  options={[
-                    {
-                      id: "BRL",
-                      value: "BRL",
-                      text: "Real (BRL)",
-                    },
-                    {
-                      id: "USD",
-                      value: "USD",
-                      text: "Dollar (USD)",
-                    },
-                    {
-                      id: "EUR",
-                      value: "EUR",
-                      text: "EURO (EUR)",
-                    },
-                    {
-                      id: "BTC",
-                      value: "BTC",
-                      text: "BITCOIN (BTC)",
-                    },
-                  ]}
-                  onChange={function (event) {
+                  options={SettingsCurrencies}
+                  onChange={function () {
                     return;
                   }}
                 />
@@ -239,6 +220,34 @@ const SettingsPanel = function () {
             description={t.settings.subtitle_apparence}
           >
             <Vertical internal={1}>
+              <Horizontal internal={1}>
+                <InputColor
+                  name="colorPrimary"
+                  label={t.settings.color_primary}
+                  value={form?.colorPrimary || "#fafafa"}
+                  id="settings_company_color_primary"
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.colorPrimary =
+                      event.currentTarget?.value || "#fafafa";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <InputColor
+                  name="colorSecondary"
+                  label={t.settings.color_secondary}
+                  value={form?.colorSecondary || "#fafafa"}
+                  id="settings_company_color_secondary"
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.colorSecondary =
+                      event.currentTarget?.value || "#fafafa";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
               <Horizontal internal={1}>
                 <InputFile
                   name="logo"

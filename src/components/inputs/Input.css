@@ -61,6 +61,16 @@
   transition: 200ms;
 }
 
+.inputContent input[type="color"] {
+  appearance: none !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+}
+
+.inputContent input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0 !important;
+}
+
 .inputContent textarea {
   height: auto !important;
   padding: 0.8rem !important;

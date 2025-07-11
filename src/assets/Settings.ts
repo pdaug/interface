@@ -73,3 +73,26 @@ export const SettingsTimezone = [
   { name: "America/Anchorage", offset: -9 }, // AKST
   { name: "Pacific/Honolulu", offset: -10 }, // HST
 ];
+
+export const SettingsCurrencies = [
+  {
+    id: "BRL",
+    value: "BRL",
+    text: "Real (BRL)",
+  },
+  {
+    id: "USD",
+    value: "USD",
+    text: "Dollar (USD)",
+  },
+  {
+    id: "EUR",
+    value: "EUR",
+    text: "EURO (EUR)",
+  },
+  {
+    id: "BTC",
+    value: "BTC",
+    text: "BITCOIN (BTC)",
+  },
+];

@@ -159,6 +159,53 @@ function InputCheck<T extends string[] | boolean>({
   );
 }
 
+export type InputColorProps = {
+  id?: string;
+  label: string;
+  value: string;
+  name?: string;
+  disabled?: boolean;
+  required?: boolean;
+  readOnly?: boolean;
+  helper?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+};
+
+const InputColor = function ({
+  id,
+  label,
+  value,
+  name,
+  onChange,
+  disabled,
+  required,
+  readOnly,
+  helper,
+}: InputColorProps) {
+  return (
+    <div className="input">
+      {label && (
+        <div className="inputHeader" data-required={String(Boolean(required))}>
+          <label htmlFor={id}>{label}</label>
+          <span style={{ opacity: helper ? 1 : 0 }}>{helper || ""}</span>
+        </div>
+      )}
+      <div className="inputContent">
+        <input
+          id={id}
+          name={name}
+          type="color"
+          value={value}
+          disabled={disabled}
+          required={required}
+          onChange={onChange}
+          readOnly={readOnly}
+        />
+      </div>
+    </div>
+  );
+};
+
 export type InputFileProps = {
   id?: string;
   label: string;
@@ -672,6 +719,7 @@ const InputText = function ({
 export {
   Input,
   InputCheck,
+  InputColor,
   InputFile,
   InputInterval,
   InputMask,

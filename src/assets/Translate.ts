@@ -129,6 +129,8 @@ const TranslatePt = {
     logo: "Logo",
     logoLarge: "Logo grande",
     favicon: "Favicon",
+    color_primary: "Color primária",
+    color_secondary: "Color secundaria",
     // options
     industry: "Indústria",
     commerce: "Comércio",
@@ -366,6 +368,8 @@ const TranslateEn = {
     logo: "Logo",
     logoLarge: "Logo large",
     favicon: "Favicon",
+    color_primary: "Color primary",
+    color_secondary: "Color secondary",
     // options
     industry: "Industry",
     commerce: "Commerce",

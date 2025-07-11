@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import {
   Input,
   InputCheck,
+  InputColor,
   InputFile,
   InputInterval,
   InputMask,
@@ -285,6 +286,19 @@ export const Check: StoryObj = {
       </Vertical>
     );
   },
+};
+
+export const Color = () => {
+  const [value, setValue] = useState("#ff0000");
+  return (
+    <Vertical internal={1} styles={{ width: "30rem" }}>
+      <InputColor
+        value={value}
+        label="Input Color"
+        onChange={(e) => setValue(e.target.value)}
+      />
+    </Vertical>
+  );
 };
 
 export const Radio: StoryObj = {
