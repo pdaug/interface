@@ -326,6 +326,8 @@ const SettingsPanel = function () {
                     return;
                   }}
                 />
+              </Horizontal>
+              <Horizontal internal={1}>
                 <InputMask
                   mask={MaskPhone}
                   name="companyPhone"
@@ -336,6 +338,20 @@ const SettingsPanel = function () {
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.companyPhone = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <Input
+                  type="email"
+                  name="companyEmail"
+                  id="settings_company_email"
+                  value={form?.companyEmail || ""}
+                  label={t.settings.company_email}
+                  placeholder={t.settings.company_email_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.companyEmail = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}
