@@ -163,6 +163,9 @@ const TranslatePt = {
     title_workspace: "Selecione a organização",
   },
   toast: {
+    loading: "Carregando...",
+    success_find: "O item foi encontrado com sucesso!",
+    error_find: "Houve um erro ao procurar pelo item!",
     // success
     success_login: "Logado com sucesso!",
     success_create: "O item foi criado com sucesso!",
@@ -404,6 +407,9 @@ const TranslateEn = {
     title_workspace: "Select the workspace",
   },
   toast: {
+    loading: "Loading...",
+    success_find: "Item finded with success!",
+    error_find: "There was and error finding the item!",
     // success
     success_login: "Logged with success!",
     success_create: "Item created with success!",

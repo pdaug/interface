@@ -443,17 +443,24 @@ const SettingsPanel = function () {
                     const postalCodeRaw = event.currentTarget?.value || "";
                     const postalCode = postalCodeRaw.replace(/\D/g, "");
                     newForm.addressPostalCode = postalCode;
-                    if (postalCode.length == 8) {
-                      const response = await apis.PostalCode(postalCode);
-                      newForm.addressStreet =
-                        response.data?.street || newForm.addressStreet;
-                      newForm.addressCity =
-                        response.data?.city || newForm.addressCity;
-                      newForm.addressNeighborhood =
-                        response.data?.neighborhood ||
-                        newForm.addressNeighborhood;
-                      newForm.addressState =
-                        response.data?.state || newForm.addressState;
+                    if (postalCode.length === 8) {
+                      try {
+                        const response = await apis.PostalCode(postalCode);
+                        newForm.addressStreet =
+                          response.data?.street || newForm.addressStreet;
+                        newForm.addressCity =
+                          response.data?.city || newForm.addressCity;
+                        newForm.addressNeighborhood =
+                          response.data?.neighborhood ||
+                          newForm.addressNeighborhood;
+                        newForm.addressState =
+                          response.data?.state || newForm.addressState;
+                      } catch (err) {
+                        console.error(
+                          "[src/pages/settings/SettingsPanel.tsx]",
+                          err,
+                        );
+                      }
                     }
                     setForm(newForm);
                     return;
