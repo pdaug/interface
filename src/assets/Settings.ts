@@ -48,30 +48,25 @@ export const SettingsAddressState = [
 ];
 
 export const SettingsTimezone = [
-  { name: "UTC", offset: 0 },
+  { name: "Pacific/Honolulu", offset: -10 }, // HST
+  { name: "America/Anchorage", offset: -9 }, // AKST
+  { name: "America/Los_Angeles", offset: -8 }, // PST
+  { name: "America/Denver", offset: -7 }, // MST
+  { name: "America/Chicago", offset: -6 }, // CST (EUA)
+  { name: "America/New_York", offset: -5 }, // EST
+  { name: "America/Sao_Paulo", offset: -3 }, // Brasília Time
+  { name: "Africa/Abidjan", offset: -2 }, // GMT (Ivory Coast)
+  { name: "Atlantic/Azores", offset: -1 }, // Azores Time
   { name: "Europe/London", offset: 0 }, // GMT
-  { name: "Europe/Paris", offset: 1 }, // CET
-  { name: "Europe/Berlin", offset: 1 },
-  { name: "Europe/Madrid", offset: 1 },
-  { name: "Europe/Moscow", offset: 3 }, // MSK
   { name: "Africa/Cairo", offset: 2 }, // EET
+  { name: "Europe/Paris", offset: 1 }, // CET
+  { name: "Europe/Moscow", offset: 3 }, // MSK
   { name: "Asia/Dubai", offset: 4 }, // Gulf Standard Time
   { name: "Asia/Kolkata", offset: 5.5 }, // IST (India)
   { name: "Asia/Shanghai", offset: 8 }, // CST (China)
   { name: "Asia/Tokyo", offset: 9 }, // JST
-  { name: "Asia/Seoul", offset: 9 }, // KST
   { name: "Australia/Sydney", offset: 10 }, // AEST
   { name: "Pacific/Auckland", offset: 12 }, // NZST
-  { name: "America/Sao_Paulo", offset: -3 }, // Brasília Time
-  { name: "America/Buenos_Aires", offset: -3 }, // Argentina Time
-  { name: "America/New_York", offset: -5 }, // EST
-  { name: "America/Toronto", offset: -5 }, // EST
-  { name: "America/Mexico_City", offset: -6 }, // CST (México)
-  { name: "America/Chicago", offset: -6 }, // CST (EUA)
-  { name: "America/Denver", offset: -7 }, // MST
-  { name: "America/Los_Angeles", offset: -8 }, // PST
-  { name: "America/Anchorage", offset: -9 }, // AKST
-  { name: "Pacific/Honolulu", offset: -10 }, // HST
 ];
 
 export const SettingsCurrencies = [

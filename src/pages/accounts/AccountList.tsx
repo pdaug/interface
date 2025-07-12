@@ -10,7 +10,7 @@ import apis from "../../apis";
 
 // types
 import { TypeAccount } from "../../types/Account";
-import { ApiResponsePaginate } from "../../types/Apis";
+import { ApiResponsePaginate } from "../../types/Api";
 
 // hooks
 import useAsync from "../../hooks/useAsync";

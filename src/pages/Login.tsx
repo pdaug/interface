@@ -13,7 +13,7 @@ import Schema from "../utils/Schema";
 import { TypeUser } from "../types/User";
 import { TypeInstance } from "../types/Instance";
 import { TypeWorkspace } from "../types/Workspace";
-import { ApiResponsePaginate } from "../types/Apis";
+import { ApiResponsePaginate } from "../types/Api";
 
 // hooks
 import useAsync from "../hooks/useAsync";

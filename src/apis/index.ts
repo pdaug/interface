@@ -1,13 +1,14 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 // types
-import { ApiResponse } from "../types/Apis";
+import { ApiResponse } from "../types/Api";
 
 // apis
 import Instance from "./Instance";
 import Login from "./Login";
 import Session from "./Session";
 import Settings from "./Settings";
+import PostalCode from "./PostalCode";
 
 export const ApiBase = axios.create({
   baseURL: "https://api.forzasistemas.com",
@@ -103,4 +104,5 @@ export default {
   User: ApiCrud("user"),
   Workspace: ApiCrud("workspace"),
   Account: ApiCrud("account"),
+  PostalCode,
 };

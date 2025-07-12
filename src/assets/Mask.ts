@@ -8,3 +8,5 @@ export const MaskPhone = [
   "+99 (99) 9999-9999",
   "+99 (99) 99999-9999",
 ];
+
+export const MaskPostalCode = "99999-999";

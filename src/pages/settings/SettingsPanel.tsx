@@ -1,4 +1,6 @@
+import { toast } from "sonner";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Asterisk } from "@phosphor-icons/react";
 
 // apis
@@ -18,7 +20,7 @@ import {
   SettingsAddressState,
   SettingsCompanyActivities,
 } from "../../assets/Settings";
-import { MaskPhone } from "../../assets/Mask";
+import { MaskPhone, MaskPostalCode } from "../../assets/Mask";
 
 // hooks
 import useAsync from "../../hooks/useAsync";
@@ -40,7 +42,8 @@ import { Horizontal, Vertical } from "../../components/aligns/Align";
 
 const SettingsPanel = function () {
   const t = useTranslate();
-  const { instance } = useSystem();
+  const navigate = useNavigate();
+  const { token, instance } = useSystem();
 
   const [logoTemp, setLogoTemp] = useState<File | null>(null);
   const [faviconTemp, setFaviconTemp] = useState<File | null>(null);
@@ -83,6 +86,27 @@ const SettingsPanel = function () {
   };
 
   useAsync(FetchSettings, []);
+
+  const onCancel = function () {
+    navigate("/f");
+    return;
+  };
+
+  const onSubmit = async function () {
+    try {
+      const response = await apis.Settings.set(token, instance.name, form);
+      if (!response.data?.result) {
+        toast.warning(t.toast.warning_edit);
+        return;
+      }
+      toast.success(t.toast.success_edit);
+      return;
+    } catch (err) {
+      console.error("[src/pages/settings/SettingsPanel.tsx]", err);
+      toast.error(t.toast.error_edit);
+      return;
+    }
+  };
 
   return (
     <React.Fragment>
@@ -160,7 +184,7 @@ const SettingsPanel = function () {
                   id="settings_timezone"
                   empty={t.stacks.no_option}
                   label={t.components.timezone}
-                  value={String(form?.timezone)}
+                  value={String(form?.timezone || 0)}
                   options={SettingsTimezone.map(function (timezone) {
                     return {
                       id: String(timezone.offset),
@@ -406,6 +430,35 @@ const SettingsPanel = function () {
           >
             <Vertical internal={1}>
               <Horizontal internal={1}>
+                <InputMask
+                  required
+                  mask={MaskPostalCode}
+                  name="addressPostalCode"
+                  id="settings_address_postal_code"
+                  value={form?.addressPostalCode || ""}
+                  label={t.settings.address_postal_code}
+                  placeholder={t.settings.address_postal_code_placeholder}
+                  onChange={async function (event) {
+                    const newForm = { ...form };
+                    const postalCodeRaw = event.currentTarget?.value || "";
+                    const postalCode = postalCodeRaw.replace(/\D/g, "");
+                    newForm.addressPostalCode = postalCode;
+                    if (postalCode.length == 8) {
+                      const response = await apis.PostalCode(postalCode);
+                      newForm.addressStreet =
+                        response.data?.street || newForm.addressStreet;
+                      newForm.addressCity =
+                        response.data?.city || newForm.addressCity;
+                      newForm.addressNeighborhood =
+                        response.data?.neighborhood ||
+                        newForm.addressNeighborhood;
+                      newForm.addressState =
+                        response.data?.state || newForm.addressState;
+                    }
+                    setForm(newForm);
+                    return;
+                  }}
+                />
                 <Input
                   min={4}
                   max={64}
@@ -422,6 +475,8 @@ const SettingsPanel = function () {
                     return;
                   }}
                 />
+              </Horizontal>
+              <Horizontal internal={1}>
                 <Input
                   min={1}
                   max={8}
@@ -438,8 +493,6 @@ const SettingsPanel = function () {
                     return;
                   }}
                 />
-              </Horizontal>
-              <Horizontal internal={1}>
                 <Input
                   max={32}
                   name="addressComplement"
@@ -455,23 +508,7 @@ const SettingsPanel = function () {
                     return;
                   }}
                 />
-                <Input
-                  min={4}
-                  max={16}
-                  required
-                  name="addressPostalCode"
-                  id="settings_address_postal_code"
-                  value={form?.addressPostalCode || ""}
-                  label={t.settings.address_postal_code}
-                  placeholder={t.settings.address_postal_code_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.addressPostalCode =
-                      event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
+
                 <Input
                   max={64}
                   name="addressNeighborhood"
@@ -537,8 +574,16 @@ const SettingsPanel = function () {
           />
           <Wrapper>
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
-              <Button category="Neutral" text={t.components.cancel} />
-              <Button category="Success" text={t.components.save} />
+              <Button
+                onClick={onCancel}
+                category="Neutral"
+                text={t.components.cancel}
+              />
+              <Button
+                onClick={onSubmit}
+                category="Success"
+                text={t.components.edit}
+              />
             </Horizontal>
           </Wrapper>
         </Vertical>

@@ -23,3 +23,10 @@ export type ApiResponsePaginate<T> = {
     pageTotal: number;
   };
 };
+
+export type ApiPostalCode = {
+  state: string;
+  city: string;
+  neighborhood: string;
+  street: string;
+};
