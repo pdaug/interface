@@ -52,6 +52,7 @@ const TranslatePt = {
     subsidiaries: "Subsidiárias",
     not_change_status: "Não é permitido desativar a organização selecionada",
     not_delete: "Não é permitido deletar a organização selecionada",
+    already_selected_workspace: "Essa organização já foi selecionada!",
   },
   integrations: {
     integration: "Integração",
@@ -165,7 +166,7 @@ const TranslatePt = {
   toast: {
     loading: "Carregando...",
     success_find: "O item foi encontrado com sucesso!",
-    error_find: "Houve um erro ao procurar pelo item!",
+    warning_find: "O item não foi encontrado!",
     // success
     success_login: "Logado com sucesso!",
     success_create: "O item foi criado com sucesso!",
@@ -187,10 +188,11 @@ const TranslatePt = {
     theme: "Tema",
     light: "Claro",
     dark: "Escuro",
-    datetime: "Data e hora",
+    date_format: "Formato da data",
     currency: "Moeda",
-    "dd/MM/yyyy HH:mm:ss": "dia/mês/ano hora:minuto:segundo",
-    "yyyy-MM-dd HH:mm:ss": "ano-mês-dia hora:minuto:segundo",
+    "dd/MM/yyyy": "dia/mês/ano",
+    "MM/dd/yyyy": "mês/dia/ano",
+    "yyyy-MM-dd": "ano-mês-dia",
     // buttons
     help: "Obtenha ajuda",
     edit: "Editar",
@@ -299,6 +301,7 @@ const TranslateEn = {
     subsidiaries: "Subdidiaries",
     not_change_status: "Not allowed disabled selected workspace",
     not_delete: "Not allowed delete selected workspace",
+    already_selected_workspace: "This workspace already selected!",
   },
   integrations: {
     integration: "Integration",
@@ -409,7 +412,7 @@ const TranslateEn = {
   toast: {
     loading: "Loading...",
     success_find: "Item finded with success!",
-    error_find: "There was and error finding the item!",
+    warning_find: "Item not found!",
     // success
     success_login: "Logged with success!",
     success_create: "Item created with success!",
@@ -431,10 +434,11 @@ const TranslateEn = {
     theme: "Theme",
     light: "Light",
     dark: "Dark",
-    datetime: "Date and time",
+    date_format: "Date format",
     currency: "Currency",
-    "dd/MM/yyyy HH:mm:ss": "day/month/year hour:minute:second",
-    "yyyy-MM-dd HH:mm:ss": "year-month-day hour:minute:second",
+    "dd/MM/yyyy": "day/month/year",
+    "MM/dd/yyyy": "month/day/year",
+    "yyyy-MM-dd": "year-month-day",
     // buttons
     help: "Get help",
     edit: "Edit",

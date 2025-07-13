@@ -69,6 +69,26 @@ export const SettingsTimezone = [
   { name: "Pacific/Auckland", offset: 12 }, // NZST
 ];
 
+export const SettingsTheme = ["light", "dark"] as const;
+
+export const SettingsLanguages = [
+  {
+    id: "pt",
+    value: "pt",
+    text: "Português",
+  },
+  {
+    id: "es",
+    value: "es",
+    text: "Español",
+  },
+  {
+    id: "en",
+    value: "en",
+    text: "English",
+  },
+];
+
 export const SettingsCurrencies = [
   {
     id: "BRL",

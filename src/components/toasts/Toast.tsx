@@ -4,6 +4,7 @@ import { Toaster, ToasterProps } from "sonner";
 import {
   Info,
   Warning,
+  SpinnerGap,
   CheckCircle,
   WarningOctagon,
 } from "@phosphor-icons/react";
@@ -12,6 +13,19 @@ import {
 import "./Toast.css";
 
 const toastIcons = {
+  loading: (
+    <SpinnerGap size={24}>
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        dur="1s"
+        from="0 0 0"
+        to="360 0 0"
+        repeatCount="indefinite"
+      ></animateTransform>
+    </SpinnerGap>
+  ),
   success: <CheckCircle weight="fill" size={24} />,
   info: <Info weight="fill" size={24} />,
   warning: <Warning weight="fill" size={24} />,
@@ -22,6 +36,7 @@ const toastOptions = {
   unstyled: true,
   classNames: {
     toast: "toast",
+    loading: "toast",
     success: "toastSuccess",
     info: "toastSecondary",
     warning: "toastWarn",

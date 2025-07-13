@@ -1,6 +1,10 @@
 export type TypeSettingsTheme = "light" | "dark";
 
-export type TypeSettingsLanguage = "pt_BR" | "en";
+export type TypeSettingsLanguage = "pt" | "en" | "es";
+
+export type TypeSettingsCurrency = "BRL" | "USD" | "BTC" | "EUR";
+
+export type TypeSettingsDateFormat = "yyyy-MM-dd" | "dd/MM/yyyy" | "MM/dd/yyyy";
 
 export type TypeSettings = {
   companyName: string;
@@ -23,6 +27,8 @@ export type TypeSettings = {
   logoLarge: string | null;
   favicon: string | null;
   theme: TypeSettingsTheme;
+  dateFormat: TypeSettingsDateFormat;
   language: TypeSettingsLanguage;
   timezone: number;
+  currency: TypeSettingsCurrency;
 };

@@ -1,4 +1,6 @@
-export type TypeInstance = {
+import { TypeSettings } from "./Settings";
+
+export type TypeInstance = TypeSettings & {
   id: string;
   name: string;
   status: boolean;
@@ -6,37 +8,13 @@ export type TypeInstance = {
   agreementDate: string | null;
   paymentDay: number;
   paymentValue: number;
-  paymentPlan: "standard" | "standard_ai" | "empresarial";
-  paymentTier: "monthly" | "yearly";
+  paymentPlan: "standard" | "plus" | "enterprise";
   responsibleName: string;
   responsibleDocument1: string;
   responsibleDocument2: string;
   responsiblePhone: string;
   responsibleMobile: string;
   responsibleEmail: string;
-  companyName: string;
-  companyDocument: string;
-  companyPhone: string;
-  companyMobile: string;
-  companyEmail: string;
-  companyWebsite: string;
-  companyActivity: string | null;
-  addressStreet: string;
-  addressNumber: string;
-  addressComplement: string;
-  addressPostalCode: string;
-  addressNeighborhood: string;
-  addressCity: string;
-  addressState: string;
-  colorPrimary: string;
-  colorSecondary: string;
-  logo: string | null;
-  logoLarge: string | null;
-  favicon: string | null;
-  theme: "light" | "dark";
-  language: "pt_BR" | "en";
-  timezone: number;
-  currency: "BRL" | "USD";
   limitWorkspaces: number;
   limitUsers: number;
   createdAt: string;

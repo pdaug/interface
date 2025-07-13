@@ -11,11 +11,15 @@ import {
   TypeSettings,
   TypeSettingsTheme,
   TypeSettingsLanguage,
+  TypeSettingsCurrency,
+  TypeSettingsDateFormat,
 } from "../../types/Settings";
 
 // assets
 import {
+  SettingsTheme,
   SettingsTimezone,
+  SettingsLanguages,
   SettingsCurrencies,
   SettingsAddressState,
   SettingsCompanyActivities,
@@ -30,9 +34,9 @@ import useTranslate from "../../hooks/useTranslate";
 // components
 import {
   Input,
-  InputColor,
   InputFile,
   InputMask,
+  InputColor,
   InputSelect,
 } from "../../components/inputs/Input";
 import Button from "../../components/buttons/Button";
@@ -68,9 +72,11 @@ const SettingsPanel = function () {
     logo: "",
     logoLarge: "",
     favicon: "",
+    dateFormat: "yyyy-MM-dd",
     theme: "light",
-    language: "pt_BR",
+    language: "pt",
     timezone: 0,
+    currency: "BRL",
   });
 
   const FetchSettings = async function () {
@@ -131,18 +137,15 @@ const SettingsPanel = function () {
                   value={form?.theme || "light"}
                   empty={t.stacks.no_option}
                   label={t.components.theme}
-                  options={[
-                    {
-                      id: "light",
-                      value: "light",
-                      text: t.components.light,
-                    },
-                    {
-                      id: "dark",
-                      value: "dark",
-                      text: t.components.dark,
-                    },
-                  ]}
+                  options={SettingsTheme.map(function (theme) {
+                    return {
+                      id: theme,
+                      value: theme,
+                      text: t.components[
+                        theme as (typeof SettingsTheme)[number]
+                      ],
+                    };
+                  })}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.theme = (event.currentTarget?.value ||
@@ -156,20 +159,9 @@ const SettingsPanel = function () {
                   name="theme"
                   id="settings_language"
                   empty={t.stacks.no_option}
+                  options={SettingsLanguages}
                   value={form?.language || "en"}
                   label={t.components.language}
-                  options={[
-                    {
-                      id: "pt_BR",
-                      value: "pt_BR",
-                      text: "Português",
-                    },
-                    {
-                      id: "en",
-                      value: "en",
-                      text: "English",
-                    },
-                  ]}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.language = (event.currentTarget?.value ||
@@ -205,24 +197,33 @@ const SettingsPanel = function () {
               <Horizontal internal={1}>
                 <InputSelect
                   required
-                  name="datetime"
-                  id="settings_datetime"
+                  name="dateFormat"
+                  id="settings_date_format"
                   empty={t.stacks.no_option}
-                  value={form?.datetime || "dd/MM/yyyy"}
-                  label={t.components.datetime}
+                  label={t.components.date_format}
+                  value={form?.dateFormat || "yyyy-MM-dd"}
                   options={[
                     {
-                      id: "dd/MM/yyyy HH:mm:ss",
-                      value: "dd/MM/yyyy HH:mm:ss",
-                      text: t.components["dd/MM/yyyy HH:mm:ss"],
+                      id: "dd/MM/yyyy",
+                      value: "dd/MM/yyyy",
+                      text: t.components["dd/MM/yyyy"],
                     },
                     {
-                      id: "yyyy-MM-dd HH:mm:ss",
-                      value: "yyyy-MM-dd HH:mm:ss",
-                      text: t.components["yyyy-MM-dd HH:mm:ss"],
+                      id: "MM/dd/yyyy",
+                      value: "MM/dd/yyyy",
+                      text: t.components["MM/dd/yyyy"],
+                    },
+                    {
+                      id: "yyyy-MM-dd",
+                      value: "yyyy-MM-dd",
+                      text: t.components["yyyy-MM-dd"],
                     },
                   ]}
-                  onChange={function () {
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.dateFormat = (event.currentTarget?.value ||
+                      "yyyy-MM-dd") as TypeSettingsDateFormat;
+                    setForm(newForm);
                     return;
                   }}
                 />
@@ -234,7 +235,11 @@ const SettingsPanel = function () {
                   value={form?.currency || "USD"}
                   label={t.components.currency}
                   options={SettingsCurrencies}
-                  onChange={function () {
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.currency = (event.currentTarget?.value ||
+                      "USD") as TypeSettingsCurrency;
+                    setForm(newForm);
                     return;
                   }}
                 />
@@ -444,6 +449,7 @@ const SettingsPanel = function () {
                     const postalCode = postalCodeRaw.replace(/\D/g, "");
                     newForm.addressPostalCode = postalCode;
                     if (postalCode.length === 8) {
+                      const toastId = toast.loading(t.components.loading);
                       try {
                         const response = await apis.PostalCode(postalCode);
                         newForm.addressStreet =
@@ -455,11 +461,15 @@ const SettingsPanel = function () {
                           newForm.addressNeighborhood;
                         newForm.addressState =
                           response.data?.state || newForm.addressState;
+                        toast.dismiss(toastId);
+                        toast.success(t.toast.success_find);
                       } catch (err) {
                         console.error(
                           "[src/pages/settings/SettingsPanel.tsx]",
                           err,
                         );
+                        toast.dismiss(toastId);
+                        toast.warning(t.toast.warning_find);
                       }
                     }
                     setForm(newForm);
