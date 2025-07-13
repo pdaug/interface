@@ -40,7 +40,7 @@ const Menu = function () {
 
   const header = {
     name: instance?.companyName,
-    photo: instance?.favicon || "",
+    photo: instance?.logo || "",
     description:
       workspaces?.find(function (workspace) {
         if (!workspace.status) return;

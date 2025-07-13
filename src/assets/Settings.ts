@@ -110,6 +110,11 @@ export const SettingsCurrencies = [
     text: "EUR - Euro (€)",
   },
   {
+    id: "GBP",
+    value: "GBP",
+    text: "GBP - Pound Sterling (£)",
+  },
+  {
     id: "BTC",
     value: "BTC",
     text: "BTC - Bitcoin (BTC)",

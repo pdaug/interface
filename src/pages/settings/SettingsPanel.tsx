@@ -100,14 +100,70 @@ const SettingsPanel = function () {
 
   const onSubmit = async function () {
     try {
-      const response = await apis.Settings.set(token, instance.name, form);
-      if (!response.data?.result) {
+      let logoUrl = null;
+      let faviconUrl = null;
+      let logoLargeUrl = null;
+      // upload logo temp
+      if (logoTemp) {
+        const responseUploadImage = await apis.Upload.image<string>(
+          instance.name,
+          token,
+          {
+            file: logoTemp,
+            name: "logo",
+            height: 512,
+            width: 512,
+            quality: 100,
+          },
+        );
+        logoUrl = responseUploadImage.data?.result || null;
+      }
+      // upload favicon temp
+      if (faviconTemp) {
+        const responseUploadImage = await apis.Upload.image<string>(
+          instance.name,
+          token,
+          {
+            file: faviconTemp,
+            name: "favicon",
+            height: 48,
+            width: 48,
+            quality: 100,
+          },
+        );
+        faviconUrl = responseUploadImage.data?.result || null;
+      }
+      // upload logo large temp
+      if (logoLargeTemp) {
+        const responseUploadImage = await apis.Upload.image<string>(
+          instance.name,
+          token,
+          {
+            file: logoLargeTemp,
+            name: "logoLarge",
+            height: 512,
+            width: 1024,
+            quality: 100,
+          },
+        );
+        logoLargeUrl = responseUploadImage.data?.result || null;
+      }
+      // save instance
+      form.logo = logoUrl || instance.logo;
+      form.favicon = faviconUrl || instance.favicon;
+      form.logoLarge = logoLargeUrl || instance.logoLarge;
+      const responseInstance = await apis.Settings.set(
+        token,
+        instance.name,
+        form,
+      );
+      if (!responseInstance.data?.result) {
         toast.warning(t.toast.warning_edit);
         return;
       }
       saveInstance({
         ...instance,
-        ...response.data.result,
+        ...responseInstance.data.result,
       });
       toast.success(t.toast.success_edit);
       return;
