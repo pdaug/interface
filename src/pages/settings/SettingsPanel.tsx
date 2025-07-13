@@ -47,7 +47,7 @@ import { Horizontal, Vertical } from "../../components/aligns/Align";
 const SettingsPanel = function () {
   const t = useTranslate();
   const navigate = useNavigate();
-  const { token, instance } = useSystem();
+  const { token, instance, saveInstance } = useSystem();
 
   const [logoTemp, setLogoTemp] = useState<File | null>(null);
   const [faviconTemp, setFaviconTemp] = useState<File | null>(null);
@@ -105,6 +105,10 @@ const SettingsPanel = function () {
         toast.warning(t.toast.warning_edit);
         return;
       }
+      saveInstance({
+        ...instance,
+        ...response.data.result,
+      });
       toast.success(t.toast.success_edit);
       return;
     } catch (err) {
@@ -121,9 +125,58 @@ const SettingsPanel = function () {
       </Horizontal>
       <div>
         <Vertical internal={1}>
-          <Wrapper title={form.companyName} description={form.companyEmail}>
-            {form.companyWebsite}
+          <Wrapper>
+            <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={0.4}>
+                <img
+                  width={128}
+                  height={128}
+                  style={{ borderRadius: "var(--borderRadius)" }}
+                  src={
+                    logoTemp ? URL.createObjectURL(logoTemp) : form?.logo || ""
+                  }
+                />
+              </Horizontal>
+              <Vertical internal={0.2}>
+                <div style={{ color: form.colorPrimary }}>
+                  {form.companyName}
+                </div>
+                <div
+                  style={{
+                    color: form.colorSecondary,
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {form.companyEmail}
+                </div>
+                <div
+                  style={{
+                    color: form.colorSecondary,
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {form.companyPhone}
+                </div>
+                <div
+                  style={{
+                    color: form.colorSecondary,
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {form.companyMobile}
+                </div>
+                <div
+                  style={{
+                    color: form.colorSecondary,
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {form.companyWebsite}
+                </div>
+              </Vertical>
+            </Horizontal>
           </Wrapper>
+
           <Wrapper
             title={t.settings.title_preferences}
             description={t.settings.subtitle_preferences}
@@ -283,6 +336,7 @@ const SettingsPanel = function () {
               <Horizontal internal={1}>
                 <InputFile
                   name="logo"
+                  helper="512x512"
                   value={logoTemp}
                   label={t.settings.logo}
                   id="settings_company_logo"
@@ -294,6 +348,7 @@ const SettingsPanel = function () {
                 />
                 <InputFile
                   name="logoLarge"
+                  helper="1024x512"
                   value={logoLargeTemp}
                   label={t.settings.logoLarge}
                   accept="image/png, image/jpg"
@@ -305,6 +360,7 @@ const SettingsPanel = function () {
                 />
                 <InputFile
                   name="favicon"
+                  helper="48x48"
                   value={faviconTemp}
                   label={t.settings.favicon}
                   id="settings_company_favicon"
