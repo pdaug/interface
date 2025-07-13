@@ -133,6 +133,7 @@
   background: none !important;
   background-color: none !important;
   border: none !important;
+  cursor: pointer;
   flex: 1;
   line-height: 1 !important;
   outline: none !important;
@@ -398,10 +399,18 @@
   border-top-left-radius: var(--borderRadius);
   border-bottom-left-radius: var(--borderRadius);
   box-sizing: border-box;
-  display: flex;
   color: var(--textColor);
+  cursor: pointer;
+  display: flex;
   font-size: var(--textSmall);
   padding: 6px 1rem;
+  transition: 200ms;
+}
+
+.inputFile a:hover {
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
+  transition: 200ms;
 }
 
 .inputFile a.disabled {
