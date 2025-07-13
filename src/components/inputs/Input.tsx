@@ -193,7 +193,15 @@ const InputColor = function ({
           <span style={{ opacity: helper ? 1 : 0 }}>{helper || ""}</span>
         </div>
       )}
-      <div className="inputContent">
+      <div className="inputColor">
+        <input
+          type="text"
+          value={value}
+          disabled={disabled}
+          required={required}
+          onChange={onChange}
+          readOnly={readOnly}
+        />
         <input
           id={id}
           name={name}
