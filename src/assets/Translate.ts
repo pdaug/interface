@@ -211,6 +211,8 @@ const TranslatePt = {
     user: "Usuário",
     category: "Categoria",
     description: "Descrição",
+    choose_file: "Escolha o arquivo",
+    no_file_choosen: "Nenhum arquivo escolhido",
     // dates
     created_at: "Criado em",
     updated_at: "Atualizado em",
@@ -457,6 +459,8 @@ const TranslateEn = {
     user: "User",
     category: "Category",
     description: "Description",
+    choose_file: "Choose file",
+    no_file_choosen: "No files choosen",
     // dates
     created_at: "Created at",
     updated_at: "Updated at",

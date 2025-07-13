@@ -4,6 +4,9 @@ import { withMask } from "use-mask-input";
 // styles
 import "./Input.css";
 
+// hooks
+import useTranslate from "../../hooks/useTranslate";
+
 export type InputProps = {
   id?: string;
   label: string;
@@ -211,7 +214,6 @@ export type InputFileProps = {
   label: string;
   value?: File | FileList | null;
   name?: string;
-  mimetype?: string;
   multiple?: boolean;
   disabled?: boolean;
   required?: boolean;
@@ -225,7 +227,6 @@ const InputFile = function ({
   label,
   value,
   name,
-  mimetype,
   accept,
   multiple,
   onChange,
@@ -233,6 +234,8 @@ const InputFile = function ({
   required,
   helper,
 }: InputFileProps) {
+  const t = useTranslate();
+
   return (
     <div className="input">
       <div className="inputHeader" data-required={String(Boolean(required))}>
@@ -240,7 +243,6 @@ const InputFile = function ({
         {helper && <span>{helper}</span>}
       </div>
       <label htmlFor={id} className="inputFile">
-        <button disabled={disabled}>{mimetype || "Choose file"}</button>
         <input
           id={id}
           name={name}
@@ -251,6 +253,7 @@ const InputFile = function ({
           required={required}
           onChange={onChange}
         />
+        <a className={disabled ? "disabled" : ""}>{t.components.choose_file}</a>
         <div
           className={`inputFileInfo ${disabled ? "inputFileInfoDisabled" : ""}`}
         >
@@ -263,7 +266,7 @@ const InputFile = function ({
                       return file.name;
                     })
                     ?.join(", ")
-                : "No file chosen"}
+                : t.components.no_file_choosen}
           </span>
         </div>
       </label>

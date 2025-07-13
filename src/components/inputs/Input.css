@@ -344,19 +344,21 @@
   padding: 0;
 }
 
-.inputFile button {
+.inputFile a {
+  align-items: center;
   background: var(--foregroundColor);
   background-color: var(--foregroundColor);
   border: 1px solid var(--borderColor);
   border-top-left-radius: var(--borderRadius);
   border-bottom-left-radius: var(--borderRadius);
   box-sizing: border-box;
+  display: flex;
   color: var(--textColor);
   font-size: var(--textSmall);
   padding: 6px 1rem;
 }
 
-.inputFile button:disabled {
+.inputFile a.disabled {
   background: var(--backgroundColor) !important;
   background-color: var(--backgroundColor) !important;
   cursor: not-allowed;
