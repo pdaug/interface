@@ -93,21 +93,21 @@ export const SettingsCurrencies = [
   {
     id: "BRL",
     value: "BRL",
-    text: "Real (BRL)",
+    text: "BRL - Real (R$)",
   },
   {
     id: "USD",
     value: "USD",
-    text: "Dollar (USD)",
+    text: "USD - Dollar ($)",
   },
   {
     id: "EUR",
     value: "EUR",
-    text: "EURO (EUR)",
+    text: "EUR - Euro (€)",
   },
   {
     id: "BTC",
     value: "BTC",
-    text: "BITCOIN (BTC)",
+    text: "BTC - Bitcoin (BTC)",
   },
 ];
