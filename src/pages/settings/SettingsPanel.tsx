@@ -181,58 +181,6 @@ const SettingsPanel = function () {
       </Horizontal>
       <div>
         <Vertical internal={1}>
-          <Wrapper>
-            <Horizontal internal={1} styles={{ alignItems: "center" }}>
-              <Horizontal internal={0.4}>
-                <img
-                  width={128}
-                  height={128}
-                  style={{ borderRadius: "var(--borderRadius)" }}
-                  src={
-                    logoTemp ? URL.createObjectURL(logoTemp) : form?.logo || ""
-                  }
-                />
-              </Horizontal>
-              <Vertical internal={0.2}>
-                <div style={{ color: form.colorPrimary }}>
-                  {form.companyName}
-                </div>
-                <div
-                  style={{
-                    color: form.colorSecondary,
-                    fontSize: "var(--textSmall)",
-                  }}
-                >
-                  {form.companyEmail}
-                </div>
-                <div
-                  style={{
-                    color: form.colorSecondary,
-                    fontSize: "var(--textSmall)",
-                  }}
-                >
-                  {form.companyPhone}
-                </div>
-                <div
-                  style={{
-                    color: form.colorSecondary,
-                    fontSize: "var(--textSmall)",
-                  }}
-                >
-                  {form.companyMobile}
-                </div>
-                <div
-                  style={{
-                    color: form.colorSecondary,
-                    fontSize: "var(--textSmall)",
-                  }}
-                >
-                  {form.companyWebsite}
-                </div>
-              </Vertical>
-            </Horizontal>
-          </Wrapper>
-
           <Wrapper
             title={t.settings.title_preferences}
             description={t.settings.subtitle_preferences}
@@ -360,7 +308,7 @@ const SettingsPanel = function () {
             title={t.settings.title_apparence}
             description={t.settings.subtitle_apparence}
           >
-            <Vertical internal={1}>
+            <Vertical internal={1} styles={{ flex: 1 }}>
               <Horizontal internal={1}>
                 <InputColor
                   name="colorPrimary"
@@ -392,7 +340,7 @@ const SettingsPanel = function () {
               <Horizontal internal={1}>
                 <InputFile
                   name="logo"
-                  helper="512x512"
+                  helper="512px"
                   value={logoTemp}
                   label={t.settings.logo}
                   id="settings_company_logo"
@@ -416,7 +364,7 @@ const SettingsPanel = function () {
                 />
                 <InputFile
                   name="favicon"
-                  helper="48x48"
+                  helper="48px"
                   value={faviconTemp}
                   label={t.settings.favicon}
                   id="settings_company_favicon"
@@ -426,6 +374,77 @@ const SettingsPanel = function () {
                     return;
                   }}
                 />
+              </Horizontal>
+              <Horizontal internal={1}>
+                <div
+                  className="flex1"
+                  style={{
+                    alignItems: "center",
+                    background: "var(--backgroundColor)",
+                    backgroundColor: "var(--backgroundColor)",
+                    border: "1px solid var(--borderColor)",
+                    borderRadius: "var(--borderRadius)",
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "0.4rem",
+                  }}
+                >
+                  <img
+                    height={96}
+                    width={96}
+                    src={
+                      logoTemp
+                        ? URL.createObjectURL(logoTemp)
+                        : form?.logo || ""
+                    }
+                  />
+                </div>
+                <div
+                  className="flex1"
+                  style={{
+                    alignItems: "center",
+                    background: "var(--backgroundColor)",
+                    backgroundColor: "var(--backgroundColor)",
+                    border: "1px solid var(--borderColor)",
+                    borderRadius: "var(--borderRadius)",
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "0.4rem",
+                  }}
+                >
+                  <img
+                    height={96}
+                    width={192}
+                    src={
+                      logoLargeTemp
+                        ? URL.createObjectURL(logoLargeTemp)
+                        : form?.logoLarge || ""
+                    }
+                  />
+                </div>
+                <div
+                  className="flex1"
+                  style={{
+                    alignItems: "center",
+                    background: "var(--backgroundColor)",
+                    backgroundColor: "var(--backgroundColor)",
+                    border: "1px solid var(--borderColor)",
+                    borderRadius: "var(--borderRadius)",
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "0.4rem",
+                  }}
+                >
+                  <img
+                    height={48}
+                    width={48}
+                    src={
+                      faviconTemp
+                        ? URL.createObjectURL(faviconTemp)
+                        : form?.favicon || ""
+                    }
+                  />
+                </div>
               </Horizontal>
             </Vertical>
           </Wrapper>
@@ -695,12 +714,14 @@ const SettingsPanel = function () {
               </Horizontal>
             </Vertical>
           </Wrapper>
+
           <Callout
             Icon={Asterisk}
             category="Warning"
             text={t.stacks.required_fields}
             styles={{ fontSize: "var(--textSmall)" }}
           />
+
           <Wrapper>
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
               <Button
