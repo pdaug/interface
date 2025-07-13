@@ -48,25 +48,28 @@ export const SettingsAddressState = [
 ];
 
 export const SettingsTimezone = [
-  { name: "Pacific/Honolulu", offset: -10 }, // HST
-  { name: "America/Anchorage", offset: -9 }, // AKST
-  { name: "America/Los_Angeles", offset: -8 }, // PST
-  { name: "America/Denver", offset: -7 }, // MST
-  { name: "America/Chicago", offset: -6 }, // CST (EUA)
-  { name: "America/New_York", offset: -5 }, // EST
-  { name: "America/Sao_Paulo", offset: -3 }, // Brasília Time
-  { name: "Africa/Abidjan", offset: -2 }, // GMT (Ivory Coast)
-  { name: "Atlantic/Azores", offset: -1 }, // Azores Time
-  { name: "Europe/London", offset: 0 }, // GMT
-  { name: "Africa/Cairo", offset: 2 }, // EET
-  { name: "Europe/Paris", offset: 1 }, // CET
-  { name: "Europe/Moscow", offset: 3 }, // MSK
-  { name: "Asia/Dubai", offset: 4 }, // Gulf Standard Time
-  { name: "Asia/Kolkata", offset: 5.5 }, // IST (India)
-  { name: "Asia/Shanghai", offset: 8 }, // CST (China)
-  { name: "Asia/Tokyo", offset: 9 }, // JST
-  { name: "Australia/Sydney", offset: 10 }, // AEST
-  { name: "Pacific/Auckland", offset: 12 }, // NZST
+  { name: "UTC-10 (Pacific/Honolulu)", offset: -10 },
+  { name: "UTC-09 (America/Anchorage)", offset: -9 },
+  { name: "UTC-08 (America/Los_Angeles)", offset: -8 },
+  { name: "UTC-07 (America/Denver)", offset: -7 },
+  { name: "UTC-06 (America/Chicago)", offset: -6 },
+  { name: "UTC-05 (America/New_York)", offset: -5 },
+  { name: "UTC-04 (America/Santo_Domingo)", offset: -4 },
+  { name: "UTC-03 (America/Sao_Paulo)", offset: -3 },
+  { name: "UTC-02 (America/Noronha)", offset: -2 },
+  { name: "UTC-01 (Atlantic/Azores)", offset: -1 },
+  { name: "UTC 00 (Europe/London)", offset: 0 },
+  { name: "UTC+01 (Europe/Paris)", offset: 1 },
+  { name: "UTC+02 (Africa/Cairo)", offset: 2 },
+  { name: "UTC+03 (Europe/Moscow)", offset: 3 },
+  { name: "UTC+04 (Asia/Dubai)", offset: 4 },
+  { name: "UTC+05 (Asia/Karachi)", offset: 5 },
+  { name: "UTC+06 (Asia/Dhaka)", offset: 6 },
+  { name: "UTC+07 (Asia/Bangkok)", offset: 7 },
+  { name: "UTC+08 (Asia/Shanghai)", offset: 8 },
+  { name: "UTC+09 (Asia/Tokyo)", offset: 9 },
+  { name: "UTC+10 (Australia/Sydney)", offset: 10 },
+  { name: "UTC+12 (Pacific/Auckland)", offset: 12 },
 ];
 
 export const SettingsTheme = ["light", "dark"] as const;
@@ -81,6 +84,7 @@ export const SettingsLanguages = [
     id: "es",
     value: "es",
     text: "Español",
+    disabled: true,
   },
   {
     id: "en",
