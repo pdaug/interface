@@ -4,10 +4,11 @@ import axios, { AxiosRequestConfig } from "axios";
 import { ApiResponse } from "../types/Api";
 
 // apis
-import Instance from "./Instance";
 import Login from "./Login";
+import Upload from "./Upload";
 import Session from "./Session";
 import Settings from "./Settings";
+import Instance from "./Instance";
 import PostalCode from "./PostalCode";
 
 export const ApiBase = axios.create({
@@ -105,4 +106,5 @@ export default {
   Workspace: ApiCrud("workspace"),
   Account: ApiCrud("account"),
   PostalCode,
+  Upload,
 };
