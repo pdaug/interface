@@ -16,7 +16,7 @@ import financial from "./pages/financial";
 import integrations from "./pages/integrations";
 import accounts from "./pages/accounts";
 import settings from "./pages/settings";
-import products from "./pages/operacional/products";
+import operational from "./pages/operational";
 
 const Router = createBrowserRouter([
   {
@@ -28,7 +28,14 @@ const Router = createBrowserRouter([
     path: "f",
     element: <Container />,
     errorElement: <ErrorPage />,
-    children: [accounts, financial, workspaces, integrations, settings, products],
+    children: [
+      accounts,
+      financial,
+      workspaces,
+      integrations,
+      settings,
+      operational,
+    ],
   },
   {
     path: "*",

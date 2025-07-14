@@ -2,6 +2,6 @@
 import products from "./products";
 
 export default {
-  path: "operacional",
+  path: "operational",
   children: [products],
 };

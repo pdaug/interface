@@ -1,64 +1,119 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { endOfDay, startOfDay, subMonths } from "date-fns";
 import { Plus, QuestionMark } from "@phosphor-icons/react";
 
+// hooks
+import useTranslate from "../../../hooks/useTranslate";
+
 // components
+import {
+  Input,
+  InputInterval,
+  InputSelect,
+} from "../../../components/inputs/Input";
 import Badge from "../../../components/badges/Badge";
 import Table from "../../../components/tables/Table";
 import Button from "../../../components/buttons/Button";
+import Tooltip from "../../../components/tooltips/Tooltip";
 import Profile from "../../../components/profiles/Profile";
+import { useDialog } from "../../../components/dialogs/Dialog";
 import Pagination from "../../../components/paginations/Pagination";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import { InputInterval, InputSelect } from "../../../components/inputs/Input";
 
 const ProductsList = function () {
+  const t = useTranslate();
   const navigate = useNavigate();
+  const { OpenDialog } = useDialog();
+
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<string[]>([]);
+  const [interval, setInterval] = useState({
+    start: subMonths(startOfDay(new Date()), 1),
+    end: endOfDay(new Date()),
+  });
 
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>Pedidos</h1>
+        <h1>{t.product.products}</h1>
       </Horizontal>
       <Horizontal internal={1} styles={{ overflow: "hidden" }}>
         <Button
-          category="Success"
-          text="Novo Pedido"
           Icon={Plus}
-          onClick={() => navigate("/f/orders/inspect")}
+          category="Success"
+          text={t.product.new}
+          onClick={() => navigate("/f/operational/products/inspect")}
         />
         <div>
           <InputSelect
             label=""
             empty=""
-            value="general"
+            value="all"
             options={[
               {
-                id: "inflow",
-                text: "Entradas",
-                value: "inflow",
+                id: "all",
+                value: "all",
+                text: t.components.all,
               },
               {
-                id: "outflow",
-                text: "Saídas",
-                value: "outflow",
+                id: "physical",
+                value: "physical",
+                text: t.product.physical,
               },
               {
-                id: "general",
-                text: "Geral",
-                value: "general",
+                id: "digital",
+                value: "digital",
+                text: t.product.digital,
               },
             ]}
           />
         </div>
         <div>
-          <InputInterval label="" value={["2025-01-01", "2025-02-02"]} />
+          <InputInterval
+            label=""
+            value={[
+              interval.start.toISOString().slice(0, 10),
+              interval.end.toISOString().slice(0, 10),
+            ]}
+          />
         </div>
+        <Input
+          label=""
+          value={""}
+          placeholder={t.components.search}
+          onChange={function () {
+            return;
+          }}
+        />
         <div style={{ flex: 1 }}></div>
-        <Button category="Neutral" text="Importar" />
-        <Button category="Neutral" text="Exportar" />
-        <Button category="Neutral" text="" Icon={QuestionMark} onlyIcon />
+        <Button category="Neutral" text={t.components.import} />
+        <Button category="Neutral" text={t.components.export} />
+        <Tooltip content={t.components.help}>
+          <Button
+            text=""
+            onlyIcon
+            category="Neutral"
+            Icon={QuestionMark}
+            onClick={function () {
+              OpenDialog({
+                width: 700,
+                category: "Success",
+                title: t.components.help,
+                cancelText: t.components.close,
+                description: (
+                  <iframe
+                    height={400}
+                    style={{ border: "none", width: "100%" }}
+                    src="https://www.youtube.com/embed/L-yA7-puosA"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  />
+                ),
+              });
+              return;
+            }}
+          />
+        </Tooltip>
       </Horizontal>
       <Vertical internal={1} styles={{ flex: 1 }}>
         <Table

@@ -41,6 +41,13 @@ const TranslatePt = {
     about: "Sobre",
     logout: "Sair",
   },
+  product: {
+    product: "Produto",
+    products: "Produtos",
+    new: "Novo produto",
+    physical: "Físico",
+    digital: "Digital",
+  },
   workspace: {
     workspaces: "Organizações",
     new: "Nova organização",
@@ -204,6 +211,7 @@ const TranslatePt = {
     "dd/MM/yyyy": "dia/mês/ano",
     "MM/dd/yyyy": "mês/dia/ano",
     "yyyy-MM-dd": "ano-mês-dia",
+    all: "Todos",
     // buttons
     help: "Obtenha ajuda",
     edit: "Editar",
@@ -306,6 +314,13 @@ const TranslateEn = {
     settings: "Settings",
     about: "About",
     logout: "Log out",
+  },
+  product: {
+    product: "Product",
+    products: "Products",
+    new: "New product",
+    physical: "Physical",
+    digital: "Digital",
   },
   workspace: {
     workspaces: "Workspaces",
@@ -467,6 +482,7 @@ const TranslateEn = {
     "dd/MM/yyyy": "day/month/year",
     "MM/dd/yyyy": "month/day/year",
     "yyyy-MM-dd": "year-month-day",
+    all: "All",
     // buttons
     help: "Get help",
     edit: "Edit",
