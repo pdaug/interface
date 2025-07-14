@@ -1,0 +1,20 @@
+.version {
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
+  bottom: 0.4rem;
+  font-size: 12px;
+  left: 50%;
+  opacity: 0.4;
+  padding: 2px 0.4rem;
+  position: absolute;
+  transition: 400ms;
+  transform: translateX(-50%);
+}
+
+.version:hover {
+  cursor: crosshair;
+  opacity: 1;
+  transition: 400ms;
+}

@@ -13,6 +13,7 @@ import useSystem from "../hooks/useSystem";
 import useTranslate from "../hooks/useTranslate";
 
 // components
+import Version from "../components/version/Version";
 import { useDialog } from "../components/dialogs/Dialog";
 import { Horizontal, Vertical } from "../components/aligns/Align";
 import { InputSelect, InputSelectOptions } from "../components/inputs/Input";
@@ -138,6 +139,7 @@ const Container = function () {
 
   return (
     <Horizontal styles={{ height: "100vh" }}>
+      <Version />
       <Menu />
       <Vertical
         internal={1}
