@@ -243,7 +243,6 @@ const InputFile = function ({
   helper,
 }: InputFileProps) {
   const t = useTranslate();
-
   return (
     <div className="input">
       <div className="inputHeader" data-required={String(Boolean(required))}>

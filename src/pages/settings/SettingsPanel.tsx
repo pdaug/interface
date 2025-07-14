@@ -340,37 +340,81 @@ const SettingsPanel = function () {
               <Horizontal internal={1}>
                 <InputFile
                   name="logo"
-                  helper="512px"
+                  helper="PNG 512x512"
                   value={logoTemp}
+                  accept="image/png"
                   label={t.settings.logo}
                   id="settings_company_logo"
-                  accept="image/png, image/jpg"
                   onChange={function (event) {
-                    setLogoTemp(event.currentTarget.files?.[0] || null);
+                    const file = event.currentTarget.files?.[0] || null;
+                    if (!file) return;
+                    if (file.size > 5 * 1024 * 1024) {
+                      toast.error(t.stacks.limit_image_5mb);
+                      return;
+                    }
+                    if (
+                      file.type !== "image/png" ||
+                      !file.name.includes(".png")
+                    ) {
+                      toast.error(t.stacks.wrong_file_format);
+                      return;
+                    }
+                    setLogoTemp(file);
                     return;
                   }}
                 />
                 <InputFile
                   name="logoLarge"
-                  helper="1024x512"
+                  accept="image/png"
                   value={logoLargeTemp}
+                  helper="PNG 1024x512"
                   label={t.settings.logoLarge}
-                  accept="image/png, image/jpg"
                   id="settings_company_logo_large"
                   onChange={function (event) {
-                    setLogoLargeTemp(event.currentTarget.files?.[0] || null);
+                    const file = event.currentTarget.files?.[0] || null;
+                    if (!file) return;
+                    if (file.size > 5 * 1024 * 1024) {
+                      toast.error(t.stacks.limit_image_5mb);
+                      return;
+                    }
+                    if (
+                      file.type !== "image/png" ||
+                      !file.name.includes(".png")
+                    ) {
+                      toast.error(t.stacks.wrong_file_format);
+                      return;
+                    }
+                    setLogoLargeTemp(file);
                     return;
                   }}
                 />
                 <InputFile
                   name="favicon"
-                  helper="48px"
+                  helper="48x48"
                   value={faviconTemp}
                   label={t.settings.favicon}
                   id="settings_company_favicon"
-                  accept="image/png, image/svg, imagem/x-icon"
+                  accept="image/png, image/jpg, image/svg, image/x-icon"
                   onChange={function (event) {
-                    setFaviconTemp(event.currentTarget.files?.[0] || null);
+                    const file = event.currentTarget.files?.[0] || null;
+                    if (!file) return;
+                    if (file.size > 5 * 1024 * 1024) {
+                      toast.error(t.stacks.limit_image_5mb);
+                      return;
+                    }
+                    if (
+                      ![
+                        "image/png",
+                        "image/jpg",
+                        "image/jpeg",
+                        "image/svg",
+                        "image/x-icon",
+                      ].includes(file.type)
+                    ) {
+                      toast.error(t.stacks.wrong_file_format);
+                      return;
+                    }
+                    setFaviconTemp(file);
                     return;
                   }}
                 />

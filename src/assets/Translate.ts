@@ -233,6 +233,9 @@ const TranslatePt = {
     no_integration: "Nenhuma integração encontrada",
     session_expired: "A sessão expirou",
     required_fields: "Os campos com asteriscos são obrigatórios",
+    // limit
+    wrong_file_format: "O arquivo está com o formato errado",
+    limit_image_5mb: "A imagem excede o limite de 5MB",
     // fields
     wrong_credentials: "As credenciais estão incorretas",
     incorrect_length: "Tamanho incorreto",
@@ -481,6 +484,9 @@ const TranslateEn = {
     no_integration: "No integration found",
     session_expired: "Your sessions is expired",
     required_fields: "The fields with asterics are required",
+    // file
+    wrong_file_format: "The file has the wrong format",
+    limit_image_5mb: "The image file exceeds the 5MB limit",
     // fields
     wrong_credentials: "Wrong credentials",
     incorrect_length: "Incorrect length",
