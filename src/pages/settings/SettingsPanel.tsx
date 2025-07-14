@@ -99,6 +99,7 @@ const SettingsPanel = function () {
   };
 
   const onSubmit = async function () {
+    const toastId = toast.loading(t.components.loading);
     try {
       let logoUrl = null;
       let faviconUrl = null;
@@ -159,6 +160,7 @@ const SettingsPanel = function () {
       );
       if (!responseInstance.data?.result) {
         toast.warning(t.toast.warning_edit);
+        toast.dismiss(toastId);
         return;
       }
       saveInstance({
@@ -166,12 +168,12 @@ const SettingsPanel = function () {
         ...responseInstance.data.result,
       });
       toast.success(t.toast.success_edit);
-      return;
     } catch (err) {
       console.error("[src/pages/settings/SettingsPanel.tsx]", err);
       toast.error(t.toast.error_edit);
-      return;
     }
+    toast.dismiss(toastId);
+    return;
   };
 
   return (
