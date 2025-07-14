@@ -34,6 +34,7 @@ const Login = function () {
     saveUser,
     saveInstance,
     saveWorkspaces,
+    saveVersion,
   } = useSystem();
   const t = useTranslate();
   const navigate = useNavigate();
@@ -107,6 +108,7 @@ const Login = function () {
       saveToken(responseLogin.data.result.token);
       saveUser(responseLogin.data.result.user);
       saveWorkspaces(responseWorkspace?.data?.result?.items);
+      saveVersion(responseWorkspace.data.version);
 
       toast.success(t.toast.success_login);
       navigate("/f");

@@ -1,4 +1,14 @@
 const TranslatePt = {
+  about: {
+    title: "Sobre",
+    description: "Forza Sistemas. Todos os direitos reservados.",
+    version_backend: "Versão Backend",
+    version_frontend: "Versão Frontend",
+    uptime: "Tempo em atividade",
+    website: "Website",
+    api: "API",
+    docs: "Documentação",
+  },
   login: {
     login: "Entrar",
     instance: "Instância",
@@ -28,6 +38,7 @@ const TranslatePt = {
     integrations: "Integrações",
     accounts: "Contas",
     settings: "Configurações",
+    about: "Sobre",
     logout: "Sair",
   },
   workspace: {
@@ -200,6 +211,7 @@ const TranslatePt = {
     import: "Importar",
     export: "Exportar",
     back: "Voltar",
+    open: "Abrir",
     close: "Fechar",
     cancel: "Cancelar",
     confirm: "Confirmar",
@@ -253,6 +265,16 @@ const TranslatePt = {
 };
 
 const TranslateEn = {
+  about: {
+    title: "About",
+    description: "Forza Sistemas. All rights reserved.",
+    version_backend: "Version Backend",
+    version_frontend: "Version Frontend",
+    uptime: "Uptime",
+    website: "Website",
+    api: "API",
+    docs: "Documentation",
+  },
   login: {
     login: "Log In",
     instance: "Instance",
@@ -282,6 +304,7 @@ const TranslateEn = {
     integrations: "Integrations",
     accounts: "Accounts",
     settings: "Settings",
+    about: "About",
     logout: "Log out",
   },
   workspace: {
@@ -451,6 +474,7 @@ const TranslateEn = {
     import: "Import",
     export: "Export",
     back: "Back",
+    open: "Open",
     close: "Close",
     cancel: "Cancel",
     confirm: "Confirm",
