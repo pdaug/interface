@@ -26,7 +26,7 @@ export type TableColumn = {
 
 export type TableData = {
   id: string;
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | object;
 };
 
 export type TableProps = {
@@ -148,12 +148,13 @@ const Table = function ({
                       style={{ maxWidth: columnValue?.maxWidth }}
                       key={`${row.id}-${columnKey}-${indexColumn}`}
                     >
-                      {columnValue.tooltip ? (
+                      {columnValue.tooltip &&
+                      typeof rowDataValue !== "object" ? (
                         <Tooltip content={columnValue.tooltip}>
                           {rowDataValue}
                         </Tooltip>
                       ) : (
-                        rowDataValue
+                        (rowDataValue as React.ReactNode)
                       )}
                     </div>
                   );
