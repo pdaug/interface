@@ -11,6 +11,7 @@
   position: absolute;
   transition: 400ms;
   transform: translateX(-50%);
+  z-index: 999;
 }
 
 .version:hover {
