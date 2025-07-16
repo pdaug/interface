@@ -1,12 +1,9 @@
 // pages
 import ProductsList from "./ProductsList";
 
-export default {
-  path: "products",
-  children: [
-    {
-      index: true,
-      Component: ProductsList,
-    },
-  ],
-};
+export default [
+  {
+    index: true,
+    Component: ProductsList,
+  },
+];

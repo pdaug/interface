@@ -6,28 +6,32 @@ import { Asterisk } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // apis
-import apis from "../../apis";
+import apis from "../../../apis";
 
 // utils
-import Schema from "../../utils/Schema";
+import Schema from "../../../utils/Schema";
 
 // types
-import { TypeWorkspace } from "../../types/Workspace";
+import { TypeWorkspace } from "../../../types/Workspace";
 
 // assets
-import { WorkspaceCategoryOptions } from "../../assets/Workspaces";
+import { WorkspaceCategoryOptions } from "../../../assets/Workspaces";
 
 // hooks
-import useAsync from "../../hooks/useAsync";
-import useSystem from "../../hooks/useSystem";
-import useTranslate from "../../hooks/useTranslate";
+import useAsync from "../../../hooks/useAsync";
+import useSystem from "../../../hooks/useSystem";
+import useTranslate from "../../../hooks/useTranslate";
 
 // components
-import Button from "../../components/buttons/Button";
-import Wrapper from "../../components/wrapper/Wrapper";
-import Callout from "../../components/callouts/Callout";
-import { Horizontal, Vertical } from "../../components/aligns/Align";
-import { Input, InputSelect, InputText } from "../../components/inputs/Input";
+import {
+  Input,
+  InputText,
+  InputSelect,
+} from "../../../components/inputs/Input";
+import Button from "../../../components/buttons/Button";
+import Wrapper from "../../../components/wrapper/Wrapper";
+import Callout from "../../../components/callouts/Callout";
+import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const WorkspaceInspect = function () {
   const t = useTranslate();

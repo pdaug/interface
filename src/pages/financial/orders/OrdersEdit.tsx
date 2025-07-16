@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
 // components
-import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import { Input } from "../../../components/inputs/Input";
 import Button from "../../../components/buttons/Button";
+import { Input } from "../../../components/inputs/Input";
 import Wrapper from "../../../components/wrapper/Wrapper";
+import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const OrdersEdit = function () {
   const { id } = useParams();

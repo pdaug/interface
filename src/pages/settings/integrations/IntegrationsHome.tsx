@@ -3,14 +3,14 @@ import { toast } from "sonner";
 import { GearSix, QuestionMark } from "@phosphor-icons/react";
 
 // hooks
-import useTranslate from "../../hooks/useTranslate";
+import useTranslate from "../../../hooks/useTranslate";
 
 // components
-import Badge from "../../components/badges/Badge";
-import Button from "../../components/buttons/Button";
-import Wrapper from "../../components/wrapper/Wrapper";
-import { useDialog } from "../../components/dialogs/Dialog";
-import { Horizontal, Vertical } from "../../components/aligns/Align";
+import Badge from "../../../components/badges/Badge";
+import Button from "../../../components/buttons/Button";
+import Wrapper from "../../../components/wrapper/Wrapper";
+import { useDialog } from "../../../components/dialogs/Dialog";
+import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const integrationLogoSize = 42;
 

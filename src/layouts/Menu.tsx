@@ -76,9 +76,9 @@ const Menu = function () {
       Icon: option.icon,
       items: option.items.map(function (item) {
         return {
-          id: `/f/${option.id}/${item}`,
+          id: `/f/${item}`,
           label: t.menu[item as keyof typeof t.menu],
-          onClick: () => navigate(`/f/${option.id}/${item}`),
+          onClick: () => navigate(`/f/${item}`),
         };
       }),
     };
@@ -134,11 +134,13 @@ const Menu = function () {
                         id: "api",
                         label: t.about.api,
                         url: "https://api.forzasistemas.com/",
+                        disabled: true,
                       },
                       {
                         id: "website",
                         label: t.about.website,
                         url: "https://forzasistemas.com/",
+                        disabled: true,
                       },
                       {
                         id: "docs",
@@ -151,6 +153,7 @@ const Menu = function () {
                         url: "https://stats.uptimerobot.com/qhHnk9zxJa",
                       },
                     ].map(function (item) {
+                      if (item?.disabled) return;
                       return (
                         <a
                           key={item.id}

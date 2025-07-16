@@ -6,26 +6,26 @@ import { useNavigate } from "react-router-dom";
 import { Plus, QuestionMark } from "@phosphor-icons/react";
 
 // apis
-import apis from "../../apis";
+import apis from "../../../apis";
 
 // types
-import { TypeAccount } from "../../types/Account";
-import { ApiResponsePaginate } from "../../types/Api";
+import { TypeAccount } from "../../../types/Account";
+import { ApiResponsePaginate } from "../../../types/Api";
 
 // hooks
-import useAsync from "../../hooks/useAsync";
-import useSystem from "../../hooks/useSystem";
-import useTranslate from "../../hooks/useTranslate";
+import useAsync from "../../../hooks/useAsync";
+import useSystem from "../../../hooks/useSystem";
+import useTranslate from "../../../hooks/useTranslate";
 
 // components
-import Badge from "../../components/badges/Badge";
-import Button from "../../components/buttons/Button";
-import { Input } from "../../components/inputs/Input";
-import Tooltip from "../../components/tooltips/Tooltip";
-import { useDialog } from "../../components/dialogs/Dialog";
-import Table, { TableData } from "../../components/tables/Table";
-import Pagination from "../../components/paginations/Pagination";
-import { Horizontal, Vertical } from "../../components/aligns/Align";
+import Badge from "../../../components/badges/Badge";
+import Button from "../../../components/buttons/Button";
+import { Input } from "../../../components/inputs/Input";
+import Tooltip from "../../../components/tooltips/Tooltip";
+import { useDialog } from "../../../components/dialogs/Dialog";
+import Table, { TableData } from "../../../components/tables/Table";
+import Pagination from "../../../components/paginations/Pagination";
+import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const pageSize = 10;
 

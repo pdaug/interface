@@ -11,10 +11,7 @@ import { DialogElement, DialogProvider } from "./components/dialogs/Dialog";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
-import workspaces from "./pages/workspaces";
 import financial from "./pages/financial";
-import integrations from "./pages/integrations";
-import accounts from "./pages/accounts";
 import settings from "./pages/settings";
 import operational from "./pages/operational";
 
@@ -28,14 +25,7 @@ const Router = createBrowserRouter([
     path: "f",
     element: <Container />,
     errorElement: <ErrorPage />,
-    children: [
-      accounts,
-      financial,
-      workspaces,
-      integrations,
-      settings,
-      operational,
-    ],
+    children: [...financial, ...settings, ...operational],
   },
   {
     path: "*",

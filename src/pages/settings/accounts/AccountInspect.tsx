@@ -6,29 +6,33 @@ import { Asterisk } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // apis
-import apis from "../../apis";
+import apis from "../../../apis";
 
 // utils
-import Schema from "../../utils/Schema";
+import Schema from "../../../utils/Schema";
 
 // types
-import { TypeAccount } from "../../types/Account";
+import { TypeAccount } from "../../../types/Account";
 
 // assets
-import { BanksSafely } from "../../assets/Banks";
-import { MaskDocument1, MaskDocument2 } from "../../assets/Mask";
+import { BanksSafely } from "../../../assets/Banks";
+import { MaskDocument1, MaskDocument2 } from "../../../assets/Mask";
 
 // hooks
-import useAsync from "../../hooks/useAsync";
-import useSystem from "../../hooks/useSystem";
-import useTranslate from "../../hooks/useTranslate";
+import useAsync from "../../../hooks/useAsync";
+import useSystem from "../../../hooks/useSystem";
+import useTranslate from "../../../hooks/useTranslate";
 
 // components
-import Button from "../../components/buttons/Button";
-import Wrapper from "../../components/wrapper/Wrapper";
-import Callout from "../../components/callouts/Callout";
-import { Horizontal, Vertical } from "../../components/aligns/Align";
-import { Input, InputMask, InputSelect } from "../../components/inputs/Input";
+import {
+  Input,
+  InputMask,
+  InputSelect,
+} from "../../../components/inputs/Input";
+import Button from "../../../components/buttons/Button";
+import Wrapper from "../../../components/wrapper/Wrapper";
+import Callout from "../../../components/callouts/Callout";
+import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const AccountInspect = function () {
   const t = useTranslate();

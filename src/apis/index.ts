@@ -105,6 +105,7 @@ export default {
   User: ApiCrud("user"),
   Workspace: ApiCrud("workspace"),
   Account: ApiCrud("account"),
+  Product: ApiCrud("product"),
   PostalCode,
   Upload,
 };
