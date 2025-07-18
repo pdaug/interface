@@ -637,7 +637,7 @@ const InputSelect = function ({
                 return (
                   <option
                     value={option.value}
-                    key={`${option.id}${index}`}
+                    key={`${option.id}-${index}`}
                     disabled={option.disabled}
                   >
                     {option.text}
@@ -651,7 +651,7 @@ const InputSelect = function ({
                   return (
                     <option
                       value={option.value}
-                      key={`${option.id}${index}`}
+                      key={`${option.id}-${index}`}
                       disabled={option.disabled}
                     >
                       {option.text}

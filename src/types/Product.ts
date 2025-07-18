@@ -22,7 +22,8 @@ export type TypeProduct = {
   status: boolean;
   name: string;
   description: string;
-  type: TypeProductCategory;
+  type: TypeProductType;
+  category: TypeProductCategory;
   variants: TypeProductVariants[];
 
   specificAuthor?: string | null;

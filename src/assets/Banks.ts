@@ -12,10 +12,8 @@ export const Banks = [
   { code: "041", name: "Banrisul" },
   { code: "655", name: "Banco Votorantim (BV)" },
   { code: "004", name: "Banco do Nordeste" },
-  { code: "007", name: "BNDES" },
   { code: "246", name: "Banco ABC Brasil" },
   { code: "707", name: "Banco Daycoval" },
-  { code: "623", name: "Banco PAN" },
   { code: "318", name: "Banco BMG" },
   { code: "747", name: "Banco Rabobank" },
   { code: "752", name: "Banco BNP Paribas Brasil" },
@@ -54,9 +52,7 @@ export const Banks = [
   { code: "082", name: "Banco Topázio" },
   { code: "634", name: "Banco Triângulo" },
   { code: null, name: "Banco Tricury" },
-  { code: "655", name: "Banco Volkswagen (VW)" },
   { code: "021", name: "Banestes (Banco do Espírito Santo)" },
-  { code: "756", name: "Bancoob (BANCOOB)" },
   { code: null, name: "Banco Unicard" },
   { code: null, name: "Banco Unibanco (antigo)" },
   { code: null, name: "Banco Banif" },
@@ -92,7 +88,7 @@ export const Banks = [
   { code: "735", name: "Neon" },
   { code: "290", name: "PagBank (PagSeguro)" },
   { code: "212", name: "Banco Original" },
-  { code: "237", name: "Next (Bradesco)" },
+  { code: "237-1", name: "Next (Bradesco)" },
 ];
 
 export const BanksSafely = Banks.filter(function (bank) {

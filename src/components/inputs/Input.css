@@ -96,7 +96,6 @@
   display: flex;
   position: relative;
   flex: 1;
-  overflow: hidden;
   align-items: center;
   background: var(--foregroundColor);
   background-color: var(--foregroundColor);
@@ -108,9 +107,10 @@
   font-size: var(--textSmall);
   flex: 1;
   gap: 1rem;
+  line-height: 1;
   margin: 0;
   min-width: 60px;
-  line-height: 1;
+  overflow: hidden;
   transition: 200ms;
 }
 
