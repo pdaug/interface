@@ -61,7 +61,7 @@ const WorkspaceList = function () {
       setTotal(response.data.result.pagination.total);
       return;
     } catch (err) {
-      console.error("[src/pages/workspaces/WorkspaceList.tsx]", err);
+      console.error("[src/pages/settings/workspaces/WorkspaceList.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -172,7 +172,7 @@ const WorkspaceList = function () {
                     } catch (err) {
                       toast.error(t.toast.error_delete);
                       console.error(
-                        "[src/pages/workspaces/WorkspaceList.tsx]",
+                        "[src/pages/settings/workspaces/WorkspaceList.tsx]",
                         err,
                       );
                       return;

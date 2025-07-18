@@ -1,8 +1,8 @@
 // apis
-import { ApiBase } from ".";
+import { ApiBase } from "../Base";
 
 // types
-import { ApiResponse } from "../types/Api";
+import { ApiResponse } from "../../types/Api";
 
 const Login = function <T>(
   instance: string,

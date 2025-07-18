@@ -6,9 +6,6 @@ import { useNavigate } from "react-router-dom";
 // apis
 import apis from "../apis";
 
-// utils
-import Schema from "../utils/Schema";
-
 // types
 import { TypeUser } from "../types/User";
 import { TypeInstance } from "../types/Instance";
@@ -18,6 +15,7 @@ import { ApiResponsePaginate } from "../types/Api";
 // hooks
 import useAsync from "../hooks/useAsync";
 import useSystem from "../hooks/useSystem";
+import useSchema from "../hooks/useSchema";
 import useTranslate from "../hooks/useTranslate";
 
 // components
@@ -37,6 +35,7 @@ const Login = function () {
     saveVersion,
   } = useSystem();
   const t = useTranslate();
+  const Schema = useSchema();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({

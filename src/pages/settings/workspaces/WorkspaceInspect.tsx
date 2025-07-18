@@ -8,9 +8,6 @@ import { useNavigate, useParams } from "react-router-dom";
 // apis
 import apis from "../../../apis";
 
-// utils
-import Schema from "../../../utils/Schema";
-
 // types
 import { TypeWorkspace } from "../../../types/Workspace";
 
@@ -19,6 +16,7 @@ import { WorkspaceCategoryOptions } from "../../../assets/Workspaces";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
+import useSchema from "../../../hooks/useSchema";
 import useSystem from "../../../hooks/useSystem";
 import useTranslate from "../../../hooks/useTranslate";
 
@@ -36,6 +34,7 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 const WorkspaceInspect = function () {
   const t = useTranslate();
   const { id } = useParams();
+  const Schema = useSchema();
   const navigate = useNavigate();
   const { token, instance, workspaceId } = useSystem();
 
@@ -57,7 +56,10 @@ const WorkspaceInspect = function () {
       setForm(response.data.result);
       return;
     } catch (err) {
-      console.error("[src/pages/workspaces/WorkspaceInspect.tsx]", err);
+      console.error(
+        "[src/pages/settings/workspaces/WorkspaceInspect.tsx]",
+        err,
+      );
       return;
     } finally {
       setLoading(false);
@@ -102,7 +104,10 @@ const WorkspaceInspect = function () {
       }
       if (id) toast.error(t.toast.error_edit);
       else toast.error(t.toast.error_create);
-      console.error("[src/pages/workspaces/WorkspaceInspect.tsx]", err);
+      console.error(
+        "[src/pages/settings/workspaces/WorkspaceInspect.tsx]",
+        err,
+      );
       return;
     }
   };

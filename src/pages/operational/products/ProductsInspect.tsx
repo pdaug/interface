@@ -1,8 +1,12 @@
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { Asterisk } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
+
+// apis
+import apis from "../../../apis";
 
 // assets
 import {
@@ -14,19 +18,20 @@ import {
 import {
   TypeProduct,
   TypeProductType,
-  TypeProductCategory,
-  TypeProductLicense,
   TypeProductMethod,
   TypeProductAccess,
+  TypeProductLicense,
+  TypeProductCategory,
   TypeProductCondition,
 } from "../../../types/Product";
 
 // utils
-import { GenerateId } from "../../../utils/GenerateId";
+import { GenerateIdWithLength } from "../../../utils/GenerateId";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
+import useSchema from "../../../hooks/useSchema";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -34,8 +39,8 @@ import {
   Input,
   InputText,
   InputMoney,
-  InputSelect,
   InputColor,
+  InputSelect,
 } from "../../../components/inputs/Input";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
@@ -45,6 +50,7 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 const ProductsInspect = function () {
   const t = useTranslate();
   const { id } = useParams();
+  const Schema = useSchema();
   const navigate = useNavigate();
   const { token, instance, workspaceId } = useSystem();
 
@@ -57,20 +63,86 @@ const ProductsInspect = function () {
     category: "single",
     variants: [
       {
-        id: GenerateId(),
+        id: GenerateIdWithLength(24),
         name: "",
         price: 0,
       },
     ],
+    propertyColor: "#fafafa",
+    workspaceId,
   });
 
   // fetch product
   useAsync(async function () {
-    return;
+    if (!id) return;
+    setLoading(true);
+    try {
+      const response = await apis.Product.get(
+        token,
+        instance.name,
+        id,
+        workspaceId,
+      );
+      if (!response.data?.result) return;
+      setForm(response.data.result);
+      return;
+    } catch (err) {
+      console.error(
+        "[src/pages/operational/products/ProductsInspect.tsx]",
+        err,
+      );
+      return;
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const onSubmit = async function () {
-    return;
+    try {
+      // is editing
+      if (id) {
+        const response = await apis.Product.update(
+          token,
+          instance.name,
+          id,
+          form,
+          workspaceId,
+        );
+        if (!response.data?.result) toast.warning(t.toast.warning_edit);
+        if (response.data.state === "success") {
+          toast.success(t.toast.success_edit);
+          navigate("/f/products");
+        }
+        return;
+      }
+      // is creating
+      const response = await apis.Product.create(
+        token,
+        instance.name,
+        form,
+        workspaceId,
+      );
+      if (!response.data?.result) toast.warning(t.toast.warning_create);
+      if (response.data.state === "success") {
+        toast.success(t.toast.success_create);
+        navigate("/f/products");
+      }
+      return;
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        if (err.response?.data?.result?.message === "schema_incorrect") {
+          Schema(err.response.data.result.err);
+          return;
+        }
+      }
+      if (id) toast.error(t.toast.error_edit);
+      else toast.error(t.toast.error_create);
+      console.error(
+        "[src/pages/operational/products/ProductsInspect.tsx]",
+        err,
+      );
+      return;
+    }
   };
 
   return (
@@ -299,16 +371,16 @@ const ProductsInspect = function () {
                         />
                         <InputMoney
                           required
+                          placeholder="0.00"
                           label={t.product.price}
                           name={`variant.${index}.price`}
                           disabled={loading && Boolean(id)}
                           id={`product_variant_${index}_price`}
-                          placeholder={t.product.price_placeholder}
-                          value={String(form?.variants?.[index].price || 0)}
+                          value={String(form?.variants?.[index].price)}
                           onChange={function (value) {
                             const newForm = { ...form };
                             if (!newForm?.variants?.[index]) return;
-                            newForm.variants[index].price = value || "0";
+                            newForm.variants[index].price = Number(value);
                             setForm(newForm);
                             return;
                           }}
@@ -344,7 +416,7 @@ const ProductsInspect = function () {
                       const newForm = { ...form };
                       if (!newForm?.variants) return;
                       newForm.variants.push({
-                        id: GenerateId(),
+                        id: GenerateIdWithLength(24),
                         name: "",
                         price: 0,
                       });
@@ -848,13 +920,16 @@ const ProductsInspect = function () {
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
               <Button
                 category="Neutral"
-                onClick={() => {}}
                 text={t.components.cancel}
+                onClick={function () {
+                  navigate("/f/products");
+                  return;
+                }}
               />
               <Button
                 onClick={onSubmit}
                 category="Success"
-                text={t.components.edit}
+                text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>
           </Wrapper>

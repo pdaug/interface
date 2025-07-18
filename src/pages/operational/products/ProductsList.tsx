@@ -73,7 +73,7 @@ const ProductsList = function () {
       setTotal(response.data.result.pagination.total);
       return;
     } catch (err) {
-      console.error("[src/pages/products/ProductsList.tsx]", err);
+      console.error("[src/pages/operational/products/ProductsList.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -81,7 +81,7 @@ const ProductsList = function () {
   };
 
   // fetch products
-  useAsync(FetchProducts, [page, searchDebounced]);
+  useAsync(FetchProducts, [workspaceId, page, searchDebounced]);
 
   return (
     <React.Fragment>
@@ -192,14 +192,13 @@ const ProductsList = function () {
                 );
               },
             },
-            name: { label: t.product.name },
-            description: { label: t.components.description },
             type: {
               label: t.product.type,
+              maxWidth: "96px",
               handler: function (data) {
                 return (
                   <Badge
-                    category="Neutral"
+                    category="Info"
                     value={
                       data.type === "physical"
                         ? t.product.physical
@@ -211,16 +210,29 @@ const ProductsList = function () {
             },
             category: {
               label: t.product.category,
+              maxWidth: "96px",
               handler: function (data) {
                 return (
                   <Badge
-                    category="Neutral"
+                    category="Info"
                     value={
                       data.category === "single"
                         ? t.product.single
                         : t.product.variants
                     }
                   />
+                );
+              },
+            },
+            name: { label: t.product.name },
+            description: {
+              label: t.components.description,
+              handler: function (data) {
+                if (data.description) return data.description as string;
+                return (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.stacks.no_description}
+                  </i>
                 );
               },
             },

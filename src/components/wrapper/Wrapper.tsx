@@ -61,11 +61,13 @@ const Wrapper = function ({
           </Horizontal>
         </div>
       )}
-      {!isCollapsible ? (
-        <div className="wrapperContent">{children}</div>
-      ) : (
-        <div style={{ height: 8 }}></div>
-      )}
+      <div className="wrapperContent">
+        {!isCollapsible ? (
+          <div className="wrapperContentInner">{children}</div>
+        ) : (
+          <div style={{ height: 8 }}></div>
+        )}
+      </div>
       {(onCancel || onConfirm || actions?.length) && (
         <div className="wrapperFooter">
           {onCancel && (

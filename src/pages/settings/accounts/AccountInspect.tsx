@@ -8,9 +8,6 @@ import { useNavigate, useParams } from "react-router-dom";
 // apis
 import apis from "../../../apis";
 
-// utils
-import Schema from "../../../utils/Schema";
-
 // types
 import { TypeAccount } from "../../../types/Account";
 
@@ -21,6 +18,7 @@ import { MaskDocument1, MaskDocument2 } from "../../../assets/Mask";
 // hooks
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
+import useSchema from "../../../hooks/useSchema";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -37,6 +35,7 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 const AccountInspect = function () {
   const t = useTranslate();
   const { id } = useParams();
+  const Schema = useSchema();
   const navigate = useNavigate();
   const { token, instance, workspaceId } = useSystem();
 
