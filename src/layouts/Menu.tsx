@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { GearSix, CaretDown, LinkSimple } from "@phosphor-icons/react";
+import { GearSix, CaretDown } from "@phosphor-icons/react";
 
 // assets
 import { MenuOptions } from "../assets/Menu";
@@ -167,7 +167,6 @@ const Menu = function () {
                             gap: "0.2rem",
                           }}
                         >
-                          <LinkSimple />
                           <span>{item.label}</span>
                         </a>
                       );

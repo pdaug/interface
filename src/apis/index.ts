@@ -11,6 +11,7 @@ import User from "./internal/User";
 import Workspace from "./internal/Workspace";
 import Account from "./internal/Account";
 import Product from "./internal/Product";
+import Service from "./internal/Service";
 
 export default {
   Instance,
@@ -22,5 +23,6 @@ export default {
   Account,
   Product,
   Upload,
+  Service,
   PostalCode,
 };

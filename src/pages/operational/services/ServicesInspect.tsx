@@ -7,16 +7,20 @@ import { useNavigate, useParams } from "react-router-dom";
 // apis
 import apis from "../../../apis";
 
-// types
-import { TypeWorkspace } from "../../../types/Workspace";
-
 // assets
-import { WorkspaceCategoryOptions } from "../../../assets/Workspaces";
+import { ServiceMethods, ServiceType } from "../../../assets/Services";
+
+// types
+import {
+  TypeService,
+  TypeServiceMethod,
+  TypeServiceType,
+} from "../../../types/Service";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
-import useSchema from "../../../hooks/useSchema";
 import useSystem from "../../../hooks/useSystem";
+import useSchema from "../../../hooks/useSchema";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
@@ -24,6 +28,7 @@ import useTranslate from "../../../hooks/useTranslate";
 import {
   Input,
   InputText,
+  InputMoney,
   InputSelect,
 } from "../../../components/inputs/Input";
 import Button from "../../../components/buttons/Button";
@@ -31,7 +36,7 @@ import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
-const WorkspaceInspect = function () {
+const ServicesInspect = function () {
   const t = useTranslate();
   const { id } = useParams();
   const Schema = useSchema();
@@ -40,25 +45,34 @@ const WorkspaceInspect = function () {
   const { token, instance, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState<Partial<TypeWorkspace>>({
+  const [form, setForm] = useState<Partial<TypeService>>({
     status: true,
     name: "",
     description: "",
-    category: "departments",
+    type: "physical",
+    pricingValue: 0,
+    pricingMethod: "hourly",
+    tags: [],
+    workspaceId,
   });
 
-  // fetch workspace
+  // fetch service
   useAsync(async function () {
     if (!id) return;
     setLoading(true);
     try {
-      const response = await apis.Workspace.get(token, instance.name, id);
+      const response = await apis.Service.get(
+        token,
+        instance.name,
+        id,
+        workspaceId,
+      );
       if (!response.data?.result) return;
       setForm(response.data.result);
       return;
     } catch (err) {
       console.error(
-        "[src/pages/settings/workspaces/WorkspaceInspect.tsx]",
+        "[src/pages/operational/services/ServicesInspect.tsx]",
         err,
       );
       return;
@@ -71,29 +85,31 @@ const WorkspaceInspect = function () {
     try {
       // is editing
       if (id) {
-        if (workspaceId === id && !form.status) {
-          toast.error(t.workspace.not_change_status);
-          return;
-        }
-        const response = await apis.Workspace.update(
+        const response = await apis.Service.update(
           token,
           instance.name,
           id,
           form,
+          workspaceId,
         );
         if (!response.data?.result) toast.warning(t.toast.warning_edit);
         if (response.data.state === "success") {
           toast.success(t.toast.success_edit);
-          navigate("/f/workspaces");
+          navigate("/f/services");
         }
         return;
       }
       // is creating
-      const response = await apis.Workspace.create(token, instance.name, form);
+      const response = await apis.Service.create(
+        token,
+        instance.name,
+        form,
+        workspaceId,
+      );
       if (!response.data?.result) toast.warning(t.toast.warning_create);
       if (response.data.state === "success") {
         toast.success(t.toast.success_create);
-        navigate("/f/workspaces");
+        navigate("/f/services");
       }
       return;
     } catch (err) {
@@ -106,7 +122,7 @@ const WorkspaceInspect = function () {
       if (id) toast.error(t.toast.error_edit);
       else toast.error(t.toast.error_create);
       console.error(
-        "[src/pages/settings/workspaces/WorkspaceInspect.tsx]",
+        "[src/pages/operational/services/ServicesInspect.tsx]",
         err,
       );
       return;
@@ -116,20 +132,20 @@ const WorkspaceInspect = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.workspace.workspaces}</h1>
+        <h1>{t.service.service}</h1>
       </Horizontal>
       <div>
         <Vertical internal={1}>
           <Wrapper
-            title={id ? t.workspace.title_edit : t.workspace.title_create}
-            description={t.workspace.subtitle}
+            title={id ? t.service.title_edit : t.service.title_create}
+            description={t.service.subtitle}
           >
             <Vertical internal={1}>
               <Horizontal internal={1}>
                 <InputSelect
                   required
                   name="status"
-                  id="workspace_status"
+                  id="service_status"
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
@@ -158,11 +174,11 @@ const WorkspaceInspect = function () {
                   max={32}
                   required
                   name="name"
-                  id="workspace_name"
+                  id="service_name"
                   value={form?.name || ""}
-                  label={t.workspace.name}
+                  label={t.service.name}
                   disabled={loading && Boolean(id)}
-                  placeholder={t.workspace.name_placeholder}
+                  placeholder={t.service.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.name = event.currentTarget?.value || "";
@@ -170,24 +186,65 @@ const WorkspaceInspect = function () {
                     return;
                   }}
                 />
+              </Horizontal>
+              <Horizontal internal={1}>
                 <InputSelect
                   required
-                  name="category"
-                  id="workspace_category"
-                  label={t.components.category}
+                  name="type"
+                  id="service_type"
+                  label={t.service.type}
                   empty={t.stacks.no_option}
                   disabled={loading && Boolean(id)}
-                  value={form?.category || "departments"}
-                  options={WorkspaceCategoryOptions.map(function (option) {
+                  value={form?.type || "physical"}
+                  options={ServiceType.map(function (option) {
                     return {
                       id: option,
                       value: option,
-                      text: t.workspace[option as keyof typeof t.workspace],
+                      text: t.service[option as keyof typeof t.service],
                     };
                   })}
                   onChange={function (event) {
                     const newForm = { ...form };
-                    newForm.category = event.currentTarget?.value || "";
+                    newForm.type = (event.currentTarget?.value ||
+                      "physical") as TypeServiceType;
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <InputSelect
+                  required
+                  name="pricingMethod"
+                  empty={t.stacks.no_option}
+                  id="service_pricing_method"
+                  label={t.service.pricing_method}
+                  disabled={loading && Boolean(id)}
+                  value={form?.pricingMethod || "hourly"}
+                  options={ServiceMethods.map(function (option) {
+                    return {
+                      id: option,
+                      value: option,
+                      text: t.service[option as keyof typeof t.service],
+                    };
+                  })}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.pricingMethod = (event.currentTarget?.value ||
+                      "hourly") as TypeServiceMethod;
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <InputMoney
+                  required
+                  placeholder="0.00"
+                  name="pricingValue"
+                  id="service_pricing_value"
+                  label={t.service.pricing_value}
+                  disabled={loading && Boolean(id)}
+                  value={String(form?.pricingValue)}
+                  onChange={function (value) {
+                    const newForm = { ...form };
+                    newForm.pricingValue = Number(value);
                     setForm(newForm);
                     return;
                   }}
@@ -198,11 +255,11 @@ const WorkspaceInspect = function () {
                   max={256}
                   height={4}
                   name="description"
-                  id="workspace_description"
+                  id="service_description"
                   value={form?.description || ""}
                   label={t.components.description}
                   disabled={loading && Boolean(id)}
-                  placeholder={t.workspace.description_placeholder}
+                  placeholder={t.service.description_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.description = event.currentTarget?.value || "";
@@ -217,9 +274,9 @@ const WorkspaceInspect = function () {
                     readOnly
                     placeholder=""
                     name="createdAt"
-                    id="workspace_created_at"
+                    id="service_created_at"
                     label={t.components.created_at}
-                    value={instanceDateTime(form.createdAt as string)}
+                    value={instanceDateTime(form.createdAt)}
                     onChange={function () {
                       return;
                     }}
@@ -228,12 +285,10 @@ const WorkspaceInspect = function () {
                     readOnly
                     placeholder=""
                     name="updatedAt"
-                    id="workspace_updated_at"
+                    id="service_updated_at"
                     label={t.components.updated_at}
                     value={
-                      form?.updatedAt
-                        ? instanceDateTime(form.updatedAt as string)
-                        : "-"
+                      form?.updatedAt ? instanceDateTime(form.updatedAt) : "-"
                     }
                     onChange={function () {
                       return;
@@ -243,12 +298,10 @@ const WorkspaceInspect = function () {
                     readOnly
                     placeholder=""
                     name="deletedAt"
-                    id="workspace_deleted_at"
+                    id="service_deleted_at"
                     label={t.components.deletedAt}
                     value={
-                      form?.deletedAt
-                        ? instanceDateTime(form.deletedAt as string)
-                        : "-"
+                      form?.deletedAt ? instanceDateTime(form.deletedAt) : "-"
                     }
                     onChange={function () {
                       return;
@@ -272,13 +325,13 @@ const WorkspaceInspect = function () {
                 category="Neutral"
                 text={t.components.cancel}
                 onClick={function () {
-                  navigate("/f/workspaces");
+                  navigate("/f/services");
                   return;
                 }}
               />
               <Button
-                category="Success"
                 onClick={onSubmit}
+                category="Success"
                 text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>
@@ -289,4 +342,4 @@ const WorkspaceInspect = function () {
   );
 };
 
-export default WorkspaceInspect;
+export default ServicesInspect;
