@@ -109,7 +109,9 @@ const Container = function () {
         .then(function (response) {
           // no data
           if (response.status !== 200 || !response.data?.result?.id) {
-            toast.error(t.stacks.no_token);
+            toast.error(t.toast.warning_error, {
+              description: t.stacks.no_token,
+            });
             navigate("/");
             clear();
           }
@@ -119,7 +121,9 @@ const Container = function () {
             (typeof response.data.result.expiresAt === "string" &&
               new Date(response.data.result.expiresAt) < new Date())
           ) {
-            toast.error(t.stacks.session_expired);
+            toast.error(t.toast.warning_error, {
+              description: t.stacks.session_expired,
+            });
             navigate("/");
             clear();
           }
@@ -127,7 +131,9 @@ const Container = function () {
         })
         .catch(function (err) {
           console.error("[src/layouts/Container.tsx]", err);
-          toast.error(t.stacks.session_expired);
+          toast.error(t.toast.warning_error, {
+            description: t.stacks.session_expired,
+          });
           navigate("/");
           clear();
           return;

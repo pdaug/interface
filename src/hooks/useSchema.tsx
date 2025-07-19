@@ -17,7 +17,9 @@ const useSchema = function () {
         t.stacks?.[stack as keyof typeof t.stacks] || stack;
       errors.push(`${path}: ${stackTranslated}`);
     }
-    toast.warning(errors[0]);
+    toast.warning(t.toast.warning_error, {
+      description: errors[0],
+    });
     return;
   };
 

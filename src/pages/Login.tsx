@@ -77,7 +77,9 @@ const Login = function () {
         form.instance,
       );
       if (!responseInstance?.data?.result) {
-        toast.error(t.stacks.no_instance);
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_instance,
+        });
         return;
       }
       saveInstance(responseInstance.data?.result);
@@ -91,7 +93,9 @@ const Login = function () {
         },
       );
       if (!responseLogin?.data?.result) {
-        toast.error(t.stacks.wrong_credentials);
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.wrong_credentials,
+        });
         return;
       }
 
@@ -100,7 +104,9 @@ const Login = function () {
         ApiResponsePaginate<TypeWorkspace>
       >(responseLogin.data.result.token, form.instance);
       if (!responseWorkspace?.data?.result?.items?.length) {
-        toast.error(t.stacks.no_workspace);
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_workspace,
+        });
         return;
       }
 
@@ -118,9 +124,13 @@ const Login = function () {
       if (err instanceof AxiosError) {
         console.error("[src/pages/Login.tsx]", err.response?.data.result);
         if (err.response?.data?.result?.message === "invalid_credentials")
-          toast.error(t.stacks.wrong_credentials);
+          toast.error(t.toast.warning_error, {
+            description: t.stacks.wrong_credentials,
+          });
         if (err.response?.data?.result?.message === "instance_no_exist")
-          toast.error(t.stacks.no_instance);
+          toast.error(t.toast.warning_error, {
+            description: t.stacks.no_instance,
+          });
         if (err.response?.data?.result?.message === "schema_incorrect")
           Schema(err.response.data.result.err);
         return;

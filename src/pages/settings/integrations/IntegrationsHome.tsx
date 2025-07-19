@@ -169,7 +169,9 @@ const IntegrationsHome = function () {
                 text: t.integrations.setup,
                 Icon: GearSix,
                 onClick: function () {
-                  toast.warning(t.stacks.no_integration);
+                  toast.warning(t.toast.warning_error, {
+                    description: t.stacks.no_integration,
+                  });
                   return;
                 },
               },

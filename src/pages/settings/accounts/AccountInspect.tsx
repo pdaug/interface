@@ -87,7 +87,10 @@ const AccountInspect = function () {
           form,
           workspaceId,
         );
-        if (!response.data?.result) toast.warning(t.toast.warning_edit);
+        if (!response.data?.result)
+          toast.warning(t.toast.warning_error, {
+            description: t.toast.warning_edit,
+          });
         if (response.data.state === "success") {
           toast.success(t.toast.success, {
             description: t.toast.success_edit,
@@ -103,7 +106,10 @@ const AccountInspect = function () {
         form,
         workspaceId,
       );
-      if (!response.data?.result) toast.warning(t.toast.warning_create);
+      if (!response.data?.result)
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_create,
+        });
       if (response.data.state === "success") {
         toast.success(t.toast.success, {
           description: t.toast.success_create,
@@ -118,8 +124,14 @@ const AccountInspect = function () {
           return;
         }
       }
-      if (id) toast.error(t.toast.error_edit);
-      else toast.error(t.toast.error_create);
+      if (id)
+        toast.error(t.toast.warning_error, {
+          description: t.toast.error_edit,
+        });
+      else
+        toast.error(t.toast.warning_error, {
+          description: t.toast.error_create,
+        });
       console.error("[src/pages/settings/accounts/AccountInspect.tsx]", err);
       return;
     }

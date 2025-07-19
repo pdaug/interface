@@ -159,7 +159,9 @@ const SettingsPanel = function () {
         form,
       );
       if (!responseInstance.data?.result) {
-        toast.warning(t.toast.warning_edit);
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_edit,
+        });
         toast.dismiss(toastId);
         return;
       }
@@ -172,7 +174,9 @@ const SettingsPanel = function () {
       });
     } catch (err) {
       console.error("[src/pages/settings/SettingsPanel.tsx]", err);
-      toast.error(t.toast.error_edit);
+      toast.error(t.toast.warning_error, {
+        description: t.toast.error_edit,
+      });
     }
     toast.dismiss(toastId);
     return;
@@ -353,14 +357,18 @@ const SettingsPanel = function () {
                     const file = event.currentTarget.files?.[0] || null;
                     if (!file) return;
                     if (file.size > 5 * 1024 * 1024) {
-                      toast.error(t.stacks.limit_image_5mb);
+                      toast.error(t.toast.warning_error, {
+                        description: t.stacks.limit_image_5mb,
+                      });
                       return;
                     }
                     if (
                       file.type !== "image/png" ||
                       !file.name.includes(".png")
                     ) {
-                      toast.error(t.stacks.wrong_file_format);
+                      toast.error(t.toast.warning_error, {
+                        description: t.stacks.wrong_file_format,
+                      });
                       return;
                     }
                     setLogoTemp(file);
@@ -378,14 +386,18 @@ const SettingsPanel = function () {
                     const file = event.currentTarget.files?.[0] || null;
                     if (!file) return;
                     if (file.size > 5 * 1024 * 1024) {
-                      toast.error(t.stacks.limit_image_5mb);
+                      toast.error(t.toast.warning_error, {
+                        description: t.stacks.limit_image_5mb,
+                      });
                       return;
                     }
                     if (
                       file.type !== "image/png" ||
                       !file.name.includes(".png")
                     ) {
-                      toast.error(t.stacks.wrong_file_format);
+                      toast.error(t.toast.warning_error, {
+                        description: t.stacks.wrong_file_format,
+                      });
                       return;
                     }
                     setLogoLargeTemp(file);
@@ -403,7 +415,9 @@ const SettingsPanel = function () {
                     const file = event.currentTarget.files?.[0] || null;
                     if (!file) return;
                     if (file.size > 5 * 1024 * 1024) {
-                      toast.error(t.stacks.limit_image_5mb);
+                      toast.error(t.toast.warning_error, {
+                        description: t.stacks.limit_image_5mb,
+                      });
                       return;
                     }
                     if (
@@ -415,7 +429,9 @@ const SettingsPanel = function () {
                         "image/x-icon",
                       ].includes(file.type)
                     ) {
-                      toast.error(t.stacks.wrong_file_format);
+                      toast.error(t.toast.warning_error, {
+                        description: t.stacks.wrong_file_format,
+                      });
                       return;
                     }
                     setFaviconTemp(file);
@@ -650,7 +666,9 @@ const SettingsPanel = function () {
                           err,
                         );
                         toast.dismiss(toastId);
-                        toast.warning(t.toast.warning_find);
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.warning_find,
+                        });
                       }
                     }
                     setForm(newForm);

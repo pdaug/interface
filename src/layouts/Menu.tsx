@@ -40,7 +40,9 @@ const Menu = function () {
         label: workspace.name,
         onClick: function () {
           if (workspace.id === workspaceId) {
-            toast.warning(t.workspace.already_selected_workspace);
+            toast.warning(t.toast.warning_error, {
+              description: t.workspace.already_selected_workspace,
+            });
             return;
           }
           selectWorkspace(workspace.id);

@@ -147,7 +147,9 @@ const WorkspaceList = function () {
                 if (!data || typeof data !== "object" || !("id" in data))
                   return;
                 if (workspaceId === data.id) {
-                  toast.error(t.workspace.not_delete);
+                  toast.error(t.toast.warning_error, {
+                    description: t.workspace.not_delete,
+                  });
                   return;
                 }
                 OpenDialog({
@@ -163,7 +165,9 @@ const WorkspaceList = function () {
                         data.id as string,
                       );
                       if (!response.data?.result) {
-                        toast.warning(t.toast.error_delete);
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.error_delete,
+                        });
                         return;
                       }
                       toast.success(t.toast.success, {
@@ -173,7 +177,9 @@ const WorkspaceList = function () {
                       await FetchWorkspaces();
                       return;
                     } catch (err) {
-                      toast.error(t.toast.error_delete);
+                      toast.error(t.toast.warning_error, {
+                        description: t.toast.error_delete,
+                      });
                       console.error(
                         "[src/pages/settings/workspaces/WorkspaceList.tsx]",
                         err,

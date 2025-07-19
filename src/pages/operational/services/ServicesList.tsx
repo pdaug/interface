@@ -271,7 +271,9 @@ const ServicesList = function () {
                     return;
                   }
                 }
-                toast.warning(t.toast.warning_copy);
+                toast.warning(t.toast.warning_error, {
+                  description: t.toast.warning_copy,
+                });
                 return;
               },
             },
@@ -317,7 +319,9 @@ const ServicesList = function () {
                         workspaceId,
                       );
                       if (!response.data?.result) {
-                        toast.warning(t.toast.error_delete);
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.error_delete,
+                        });
                         return;
                       }
                       toast.success(t.toast.success, {
@@ -327,7 +331,9 @@ const ServicesList = function () {
                       await FetchServices();
                       return;
                     } catch (err) {
-                      toast.error(t.toast.error_delete);
+                      toast.error(t.toast.warning_error, {
+                        description: t.toast.error_delete,
+                      });
                       console.error(
                         "[src/pages/operational/services/ServicesList.tsx]",
                         err,

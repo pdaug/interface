@@ -72,7 +72,9 @@ const WorkspaceInspect = function () {
       // is editing
       if (id) {
         if (workspaceId === id && !form.status) {
-          toast.error(t.workspace.not_change_status);
+          toast.error(t.toast.warning_error, {
+            description: t.workspace.not_change_status,
+          });
           return;
         }
         const response = await apis.Workspace.update(
@@ -81,7 +83,10 @@ const WorkspaceInspect = function () {
           id,
           form,
         );
-        if (!response.data?.result) toast.warning(t.toast.warning_edit);
+        if (!response.data?.result)
+          toast.warning(t.toast.warning_error, {
+            description: t.toast.warning_edit,
+          });
         if (response.data.state === "success") {
           toast.success(t.toast.success, {
             description: t.toast.success_edit,
@@ -92,7 +97,10 @@ const WorkspaceInspect = function () {
       }
       // is creating
       const response = await apis.Workspace.create(token, instance.name, form);
-      if (!response.data?.result) toast.warning(t.toast.warning_create);
+      if (!response.data?.result)
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_create,
+        });
       if (response.data.state === "success") {
         toast.success(t.toast.success, {
           description: t.toast.success_create,
@@ -107,8 +115,14 @@ const WorkspaceInspect = function () {
           return;
         }
       }
-      if (id) toast.error(t.toast.error_edit);
-      else toast.error(t.toast.error_create);
+      if (id)
+        toast.error(t.toast.warning_error, {
+          description: t.toast.error_edit,
+        });
+      else
+        toast.error(t.toast.warning_error, {
+          description: t.toast.error_create,
+        });
       console.error(
         "[src/pages/settings/workspaces/WorkspaceInspect.tsx]",
         err,

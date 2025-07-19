@@ -109,7 +109,10 @@ const ProductsInspect = function () {
           form,
           workspaceId,
         );
-        if (!response.data?.result) toast.warning(t.toast.warning_edit);
+        if (!response.data?.result)
+          toast.warning(t.toast.warning_error, {
+            description: t.toast.warning_edit,
+          });
         if (response.data.state === "success") {
           toast.success(t.toast.success, {
             description: t.toast.success_edit,
@@ -125,7 +128,10 @@ const ProductsInspect = function () {
         form,
         workspaceId,
       );
-      if (!response.data?.result) toast.warning(t.toast.warning_create);
+      if (!response.data?.result)
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_create,
+        });
       if (response.data.state === "success") {
         toast.success(t.toast.success, {
           description: t.toast.success_create,
@@ -140,8 +146,14 @@ const ProductsInspect = function () {
           return;
         }
       }
-      if (id) toast.error(t.toast.error_edit);
-      else toast.error(t.toast.error_create);
+      if (id)
+        toast.error(t.toast.warning_error, {
+          description: t.toast.error_edit,
+        });
+      else
+        toast.error(t.toast.warning_error, {
+          description: t.toast.error_create,
+        });
       console.error(
         "[src/pages/operational/products/ProductsInspect.tsx]",
         err,
@@ -385,7 +397,9 @@ const ProductsInspect = function () {
                         text={t.components.remove}
                         onClick={function () {
                           if (form.variants?.length === 1) {
-                            toast.warning(t.product.no_delete_all_variants);
+                            toast.warning(t.toast.warning_error, {
+                              description: t.product.no_delete_all_variants,
+                            });
                             return;
                           }
                           const newForm = { ...form };

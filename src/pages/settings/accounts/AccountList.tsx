@@ -164,7 +164,9 @@ const AccountList = function () {
                         workspaceId,
                       );
                       if (!response.data?.result) {
-                        toast.warning(t.toast.error_delete);
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.error_delete,
+                        });
                         return;
                       }
                       toast.success(t.toast.success, {
@@ -174,7 +176,9 @@ const AccountList = function () {
                       await FetchAccounts();
                       return;
                     } catch (err) {
-                      toast.error(t.toast.error_delete);
+                      toast.error(t.toast.warning_error, {
+                        description: t.toast.error_delete,
+                      });
                       console.error(
                         "[src/pages/settings/accounts/AccountInspect.tsx]",
                         err,
