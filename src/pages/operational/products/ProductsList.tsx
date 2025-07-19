@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
@@ -39,8 +40,8 @@ const ProductsList = function () {
   const t = useTranslate();
   const navigate = useNavigate();
   const Currency = useCurrency();
-  const { OpenDialog } = useDialog();
   const { instanceDateTime } = useDateTime();
+  const { OpenDialog, CloseDialog } = useDialog();
   const { token, instance, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
@@ -274,12 +275,34 @@ const ProductsList = function () {
                 if (!data || typeof data !== "object" || !("id" in data))
                   return;
                 OpenDialog({
-                  category: "Success",
+                  category: "Danger",
                   title: t.dialog.title_delete,
                   description: t.dialog.description_delete,
-                  confirmText: t.components.confirm,
+                  confirmText: t.components.delete,
                   onConfirm: async function () {
-                    return;
+                    try {
+                      const response = await apis.Product.delete(
+                        token,
+                        instance.name,
+                        data.id as string,
+                        workspaceId,
+                      );
+                      if (!response.data?.result) {
+                        toast.warning(t.toast.error_delete);
+                        return;
+                      }
+                      toast.success(t.toast.success_delete);
+                      CloseDialog();
+                      await FetchProducts();
+                      return;
+                    } catch (err) {
+                      toast.error(t.toast.error_delete);
+                      console.error(
+                        "[src/pages/settings/workspaces/WorkspaceList.tsx]",
+                        err,
+                      );
+                      return;
+                    }
                   },
                 });
               },

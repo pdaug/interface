@@ -151,10 +151,10 @@ const WorkspaceList = function () {
                   return;
                 }
                 OpenDialog({
-                  category: "Success",
+                  category: "Danger",
                   title: t.dialog.title_delete,
                   description: t.dialog.description_delete,
-                  confirmText: t.components.confirm,
+                  confirmText: t.components.delete,
                   onConfirm: async function () {
                     try {
                       const response = await apis.Workspace.delete(
