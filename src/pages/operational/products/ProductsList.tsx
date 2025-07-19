@@ -15,6 +15,7 @@ import { ApiResponsePaginate } from "../../../types/Api";
 // hooks
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
+import useCurrency from "../../../hooks/useCurrency";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
@@ -37,6 +38,7 @@ const pageSize = 10;
 const ProductsList = function () {
   const t = useTranslate();
   const navigate = useNavigate();
+  const Currency = useCurrency();
   const { OpenDialog } = useDialog();
   const { instanceDateTime } = useDateTime();
   const { token, instance, workspaceId } = useSystem();
@@ -242,7 +244,7 @@ const ProductsList = function () {
               label: t.product.price,
               handler: function (data) {
                 if (!Array.isArray(data.variants)) return "";
-                return <div>{data?.variants?.[0].price || 0}</div>;
+                return <div>{Currency(data?.variants?.[0].price || 0)}</div>;
               },
             },
             createdAt: {
