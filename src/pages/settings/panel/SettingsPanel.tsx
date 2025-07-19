@@ -80,13 +80,25 @@ const SettingsPanel = function () {
   });
 
   const FetchSettings = async function () {
+    const toastId = toast.loading(t.components.loading);
     try {
       const response = await apis.Settings.get(instance.name);
-      if (!response.data?.result) return;
+      if (!response.data?.result) {
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_find,
+        });
+        toast.dismiss(toastId);
+        return;
+      }
       setForm(response.data.result);
+      toast.dismiss(toastId);
       return;
     } catch (err) {
+      toast.error(t.toast.warning_error, {
+        description: t.toast.warning_find,
+      });
       console.error("[src/pages/settings/SettingsPanel.tsx]", err);
+      toast.dismiss(toastId);
       return;
     }
   };

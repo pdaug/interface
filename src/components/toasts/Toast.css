@@ -68,6 +68,11 @@
   font-weight: bold;
 }
 
+[data-type="loading"] [data-title] {
+  font-weight: 400 !important;
+  font-size: var(--textSmall) !important;
+}
+
 .toast [data-description] {
   font-size: var(--textSmall);
 }
