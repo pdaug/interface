@@ -1,15 +1,19 @@
+import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
-import { Plus, QuestionMark } from "@phosphor-icons/react";
 import { endOfDay, startOfDay, subMonths } from "date-fns";
+import { Plus, QuestionMark } from "@phosphor-icons/react";
 
 //apis
 import apis from "../../../apis";
 
+// utils
+import Download from "../../../utils/Download";
+import Clipboard from "../../../utils/Clipboard";
+
 // types
 import { TypeService } from "../../../types/Service";
-
 import { ApiResponsePaginate } from "../../../types/Api";
 
 // hooks
@@ -32,9 +36,6 @@ import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import { toast } from "sonner";
-import Clipboard from "../../../utils/Clipboard";
-import Download from "../../../utils/Download";
 
 const pageSize = 10;
 
@@ -243,6 +244,7 @@ const ServicesList = function () {
             },
             pricingValue: {
               label: t.service.pricing_value,
+              maxWidth: "128px",
               handler: function (data) {
                 return <div>{Currency(data?.pricingValue as number)}</div>;
               },

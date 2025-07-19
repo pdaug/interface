@@ -8,9 +8,12 @@ import { endOfDay, startOfDay, subMonths } from "date-fns";
 //apis
 import apis from "../../../apis";
 
+// utils
+import Download from "../../../utils/Download";
+import Clipboard from "../../../utils/Clipboard";
+
 // types
 import { TypeProduct } from "../../../types/Product";
-
 import { ApiResponsePaginate } from "../../../types/Api";
 
 // hooks
@@ -243,6 +246,7 @@ const ProductsList = function () {
             },
             price: {
               label: t.product.price,
+              maxWidth: "128px",
               handler: function (data) {
                 if (!Array.isArray(data.variants)) return "";
                 return <div>{Currency(data?.variants?.[0].price || 0)}</div>;
@@ -259,6 +263,38 @@ const ProductsList = function () {
           selected={selected}
           setSelected={setSelected}
           options={[
+            {
+              id: "copy",
+              label: t.components.copy_id,
+              onClick: async function (_: React.MouseEvent, data: unknown) {
+                if (data && typeof data === "object" && "id" in data) {
+                  const result = await Clipboard.copy(data.id as string);
+                  if (result) {
+                    toast.success(t.toast.success, {
+                      description: t.toast.success_copy,
+                    });
+                    return;
+                  }
+                }
+                toast.warning(t.toast.warning_error, {
+                  description: t.toast.warning_copy,
+                });
+                return;
+              },
+            },
+            {
+              id: "download",
+              label: t.components.download,
+              onClick: function (_: React.MouseEvent, data: unknown) {
+                if (data && typeof data === "object" && "id" in data) {
+                  Download.JSON(data, `product-${data.id}.json`);
+                  toast.success(t.toast.success, {
+                    description: t.toast.success_download,
+                  });
+                }
+                return;
+              },
+            },
             {
               id: "edit",
               label: t.components.edit,
