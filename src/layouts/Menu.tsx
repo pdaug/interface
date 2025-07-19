@@ -44,7 +44,9 @@ const Menu = function () {
             return;
           }
           selectWorkspace(workspace.id);
-          toast.success(t.toast.success_workspace);
+          toast.success(t.toast.success, {
+            description: t.toast.success_workspace,
+          });
           return;
         },
       } as DropdownValue;

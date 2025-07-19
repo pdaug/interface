@@ -166,7 +166,9 @@ const WorkspaceList = function () {
                         toast.warning(t.toast.error_delete);
                         return;
                       }
-                      toast.success(t.toast.success_delete);
+                      toast.success(t.toast.success, {
+                        description: t.toast.success_delete,
+                      });
                       CloseDialog();
                       await FetchWorkspaces();
                       return;

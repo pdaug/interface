@@ -83,7 +83,9 @@ const WorkspaceInspect = function () {
         );
         if (!response.data?.result) toast.warning(t.toast.warning_edit);
         if (response.data.state === "success") {
-          toast.success(t.toast.success_edit);
+          toast.success(t.toast.success, {
+            description: t.toast.success_edit,
+          });
           navigate("/f/workspaces");
         }
         return;
@@ -92,7 +94,9 @@ const WorkspaceInspect = function () {
       const response = await apis.Workspace.create(token, instance.name, form);
       if (!response.data?.result) toast.warning(t.toast.warning_create);
       if (response.data.state === "success") {
-        toast.success(t.toast.success_create);
+        toast.success(t.toast.success, {
+          description: t.toast.success_create,
+        });
         navigate("/f/workspaces");
       }
       return;

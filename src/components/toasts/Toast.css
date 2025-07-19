@@ -63,6 +63,15 @@
   width: 24px;
 }
 
+.toast [data-title] {
+  font-size: var(--textRegular);
+  font-weight: bold;
+}
+
+.toast [data-description] {
+  font-size: var(--textSmall);
+}
+
 .toast [data-close-button="true"] * {
   color: var(--textColor);
   fill: var(--textColor);

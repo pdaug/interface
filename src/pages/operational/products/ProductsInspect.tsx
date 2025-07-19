@@ -111,7 +111,9 @@ const ProductsInspect = function () {
         );
         if (!response.data?.result) toast.warning(t.toast.warning_edit);
         if (response.data.state === "success") {
-          toast.success(t.toast.success_edit);
+          toast.success(t.toast.success, {
+            description: t.toast.success_edit,
+          });
           navigate("/f/products");
         }
         return;
@@ -125,7 +127,9 @@ const ProductsInspect = function () {
       );
       if (!response.data?.result) toast.warning(t.toast.warning_create);
       if (response.data.state === "success") {
-        toast.success(t.toast.success_create);
+        toast.success(t.toast.success, {
+          description: t.toast.success_create,
+        });
         navigate("/f/products");
       }
       return;

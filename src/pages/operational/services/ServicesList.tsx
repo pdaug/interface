@@ -32,6 +32,9 @@ import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import { toast } from "sonner";
+import Clipboard from "../../../utils/Clipboard";
+import Download from "../../../utils/Download";
 
 const pageSize = 10;
 
@@ -39,8 +42,8 @@ const ServicesList = function () {
   const t = useTranslate();
   const navigate = useNavigate();
   const Currency = useCurrency();
-  const { OpenDialog } = useDialog();
   const { instanceDateTime } = useDateTime();
+  const { OpenDialog, CloseDialog } = useDialog();
   const { token, instance, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
@@ -256,6 +259,36 @@ const ServicesList = function () {
           setSelected={setSelected}
           options={[
             {
+              id: "copy",
+              label: t.components.copy_id,
+              onClick: async function (_: React.MouseEvent, data: unknown) {
+                if (data && typeof data === "object" && "id" in data) {
+                  const result = await Clipboard.copy(data.id as string);
+                  if (result) {
+                    toast.success(t.toast.success, {
+                      description: t.toast.success_copy,
+                    });
+                    return;
+                  }
+                }
+                toast.warning(t.toast.warning_copy);
+                return;
+              },
+            },
+            {
+              id: "download",
+              label: t.components.download,
+              onClick: function (_: React.MouseEvent, data: unknown) {
+                if (data && typeof data === "object" && "id" in data) {
+                  Download.JSON(data, `service-${data.id}.json`);
+                  toast.success(t.toast.success, {
+                    description: t.toast.success_download,
+                  });
+                }
+                return;
+              },
+            },
+            {
               id: "edit",
               label: t.components.edit,
               onClick: function (_: React.MouseEvent, data: unknown) {
@@ -276,7 +309,31 @@ const ServicesList = function () {
                   description: t.dialog.description_delete,
                   confirmText: t.components.delete,
                   onConfirm: async function () {
-                    return;
+                    try {
+                      const response = await apis.Service.delete(
+                        token,
+                        instance.name,
+                        data.id as string,
+                        workspaceId,
+                      );
+                      if (!response.data?.result) {
+                        toast.warning(t.toast.error_delete);
+                        return;
+                      }
+                      toast.success(t.toast.success, {
+                        description: t.toast.success_delete,
+                      });
+                      CloseDialog();
+                      await FetchServices();
+                      return;
+                    } catch (err) {
+                      toast.error(t.toast.error_delete);
+                      console.error(
+                        "[src/pages/operational/services/ServicesList.tsx]",
+                        err,
+                      );
+                      return;
+                    }
                   },
                 });
               },

@@ -109,7 +109,9 @@ const Login = function () {
       saveWorkspaces(responseWorkspace?.data?.result?.items);
       saveVersion(responseWorkspace.data.version);
 
-      toast.success(t.toast.success_login);
+      toast.success(t.toast.success, {
+        description: t.toast.success_login,
+      });
       navigate("/f");
       return;
     } catch (err) {

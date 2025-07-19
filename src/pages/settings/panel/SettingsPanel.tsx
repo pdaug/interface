@@ -167,7 +167,9 @@ const SettingsPanel = function () {
         ...instance,
         ...responseInstance.data.result,
       });
-      toast.success(t.toast.success_edit);
+      toast.success(t.toast.success, {
+        description: t.toast.success_edit,
+      });
     } catch (err) {
       console.error("[src/pages/settings/SettingsPanel.tsx]", err);
       toast.error(t.toast.error_edit);
@@ -639,7 +641,9 @@ const SettingsPanel = function () {
                         newForm.addressState =
                           response.data?.state || newForm.addressState;
                         toast.dismiss(toastId);
-                        toast.success(t.toast.success_find);
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_find,
+                        });
                       } catch (err) {
                         console.error(
                           "[src/pages/settings/SettingsPanel.tsx]",
