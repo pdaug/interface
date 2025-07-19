@@ -1,5 +1,4 @@
 import { toast } from "sonner";
-import { format } from "date-fns";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +14,7 @@ import { ApiResponsePaginate } from "../../../types/Api";
 // hooks
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
+import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -32,6 +32,7 @@ const pageSize = 10;
 const AccountList = function () {
   const t = useTranslate();
   const navigate = useNavigate();
+  const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { token, instance, workspaceId } = useSystem();
 
@@ -65,7 +66,7 @@ const AccountList = function () {
       setTotal(response.data.result.pagination.total);
       return;
     } catch (err) {
-      console.error("[src/pages/accounts/AccountList.tsx]", err);
+      console.error("[src/pages/settings/accounts/AccountInspect.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -173,7 +174,7 @@ const AccountList = function () {
                     } catch (err) {
                       toast.error(t.toast.error_delete);
                       console.error(
-                        "[src/pages/accounts/AccountList.tsx]",
+                        "[src/pages/settings/accounts/AccountInspect.tsx]",
                         err,
                       );
                       return;
@@ -204,7 +205,7 @@ const AccountList = function () {
               handler: function (data) {
                 return (
                   <Badge
-                    category={data.isCoorporate ? "Neutral" : "Neutral"}
+                    category="Info"
                     value={
                       data.isCoorporate
                         ? t.accounts.corporate
@@ -222,11 +223,8 @@ const AccountList = function () {
             createdAt: {
               label: t.components.created_at,
               handler: function (data) {
-                const dateFormatted = format(
-                  new Date(data.createdAt as string),
-                  "dd/MM/yyyy HH:mm:ss",
-                );
-                return dateFormatted;
+                const datetime = instanceDateTime(data.createdAt as string);
+                return datetime;
               },
             },
           }}

@@ -1,5 +1,4 @@
 import { toast } from "sonner";
-import { format } from "date-fns";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { Asterisk } from "@phosphor-icons/react";
@@ -19,6 +18,7 @@ import { MaskDocument1, MaskDocument2 } from "../../../assets/Mask";
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
 import useSchema from "../../../hooks/useSchema";
+import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -37,6 +37,7 @@ const AccountInspect = function () {
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
+  const { instanceDateTime } = useDateTime();
   const { token, instance, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
@@ -68,7 +69,7 @@ const AccountInspect = function () {
       setForm(response.data.result);
       return;
     } catch (err) {
-      console.error("[src/pages/accounts/AccountInspect.tsx]", err);
+      console.error("[src/pages/settings/accounts/AccountInspect.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -115,7 +116,7 @@ const AccountInspect = function () {
       }
       if (id) toast.error(t.toast.error_edit);
       else toast.error(t.toast.error_create);
-      console.error("[src/pages/accounts/AccountInspect.tsx]", err);
+      console.error("[src/pages/settings/accounts/AccountInspect.tsx]", err);
       return;
     }
   };
@@ -333,12 +334,9 @@ const AccountInspect = function () {
                   readOnly
                   placeholder=""
                   name="createdAt"
-                  id="workspace_created_at"
+                  id="account_created_at"
                   label={t.components.created_at}
-                  value={format(
-                    new Date(form?.createdAt || 0),
-                    "dd/MM/yyyy HH:mm:ss",
-                  )}
+                  value={instanceDateTime(form.createdAt as string)}
                   onChange={function () {
                     return;
                   }}
@@ -347,11 +345,11 @@ const AccountInspect = function () {
                   readOnly
                   placeholder=""
                   name="updatedAt"
-                  id="workspace_updated_at"
+                  id="account_updated_at"
                   label={t.components.updated_at}
                   value={
                     form?.updatedAt
-                      ? format(new Date(form?.updatedAt), "dd/MM/yyyy HH:mm:ss")
+                      ? instanceDateTime(form.updatedAt as string)
                       : "-"
                   }
                   onChange={function () {
@@ -362,11 +360,11 @@ const AccountInspect = function () {
                   readOnly
                   placeholder=""
                   name="deletedAt"
-                  id="workspace_deleted_at"
+                  id="account_deleted_at"
                   label={t.components.deletedAt}
                   value={
                     form?.deletedAt
-                      ? format(new Date(form?.deletedAt), "dd/MM/yyyy HH:mm:ss")
+                      ? instanceDateTime(form.deletedAt as string)
                       : "-"
                   }
                   onChange={function () {

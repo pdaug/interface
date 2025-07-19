@@ -1,5 +1,4 @@
 import { toast } from "sonner";
-import { format } from "date-fns";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { Asterisk } from "@phosphor-icons/react";
@@ -18,6 +17,7 @@ import { WorkspaceCategoryOptions } from "../../../assets/Workspaces";
 import useAsync from "../../../hooks/useAsync";
 import useSchema from "../../../hooks/useSchema";
 import useSystem from "../../../hooks/useSystem";
+import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -36,6 +36,7 @@ const WorkspaceInspect = function () {
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
+  const { instanceDateTime } = useDateTime();
   const { token, instance, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
@@ -216,10 +217,7 @@ const WorkspaceInspect = function () {
                   name="createdAt"
                   id="workspace_created_at"
                   label={t.components.created_at}
-                  value={format(
-                    new Date(form?.createdAt || 0),
-                    "dd/MM/yyyy HH:mm:ss",
-                  )}
+                  value={instanceDateTime(form.createdAt as string)}
                   onChange={function () {
                     return;
                   }}
@@ -232,7 +230,7 @@ const WorkspaceInspect = function () {
                   label={t.components.updated_at}
                   value={
                     form?.updatedAt
-                      ? format(new Date(form?.updatedAt), "dd/MM/yyyy HH:mm:ss")
+                      ? instanceDateTime(form.updatedAt as string)
                       : "-"
                   }
                   onChange={function () {
@@ -247,7 +245,7 @@ const WorkspaceInspect = function () {
                   label={t.components.deletedAt}
                   value={
                     form?.deletedAt
-                      ? format(new Date(form?.deletedAt), "dd/MM/yyyy HH:mm:ss")
+                      ? instanceDateTime(form.deletedAt as string)
                       : "-"
                   }
                   onChange={function () {

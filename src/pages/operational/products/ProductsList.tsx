@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
 import { Plus, QuestionMark } from "@phosphor-icons/react";
-import { endOfDay, format, startOfDay, subMonths } from "date-fns";
+import { endOfDay, startOfDay, subMonths } from "date-fns";
 
 //apis
 import apis from "../../../apis";
@@ -15,6 +15,7 @@ import { ApiResponsePaginate } from "../../../types/Api";
 // hooks
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
+import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -37,6 +38,7 @@ const ProductsList = function () {
   const t = useTranslate();
   const navigate = useNavigate();
   const { OpenDialog } = useDialog();
+  const { instanceDateTime } = useDateTime();
   const { token, instance, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
@@ -246,11 +248,8 @@ const ProductsList = function () {
             createdAt: {
               label: t.components.created_at,
               handler: function (data) {
-                const dateFormatted = format(
-                  new Date(data.createdAt as string),
-                  "dd/MM/yyyy HH:mm:ss",
-                );
-                return dateFormatted;
+                const datetime = instanceDateTime(data.createdAt as string);
+                return datetime;
               },
             },
           }}

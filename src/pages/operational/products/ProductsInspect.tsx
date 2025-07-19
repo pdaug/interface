@@ -1,5 +1,4 @@
 import { toast } from "sonner";
-import { format } from "date-fns";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { Asterisk } from "@phosphor-icons/react";
@@ -32,6 +31,7 @@ import { GenerateIdWithLength } from "../../../utils/GenerateId";
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
 import useSchema from "../../../hooks/useSchema";
+import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -52,6 +52,7 @@ const ProductsInspect = function () {
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
+  const { instanceDateTime } = useDateTime();
   const { token, instance, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
@@ -276,10 +277,7 @@ const ProductsInspect = function () {
                     name="createdAt"
                     id="product_created_at"
                     label={t.components.created_at}
-                    value={format(
-                      new Date(form?.createdAt || 0),
-                      "dd/MM/yyyy HH:mm:ss",
-                    )}
+                    value={instanceDateTime(form.createdAt)}
                     onChange={function () {
                       return;
                     }}
@@ -291,12 +289,7 @@ const ProductsInspect = function () {
                     id="product_updated_at"
                     label={t.components.updated_at}
                     value={
-                      form?.updatedAt
-                        ? format(
-                            new Date(form?.updatedAt),
-                            "dd/MM/yyyy HH:mm:ss",
-                          )
-                        : "-"
+                      form?.updatedAt ? instanceDateTime(form.updatedAt) : "-"
                     }
                     onChange={function () {
                       return;
@@ -309,12 +302,7 @@ const ProductsInspect = function () {
                     id="product_deleted_at"
                     label={t.components.deletedAt}
                     value={
-                      form?.deletedAt
-                        ? format(
-                            new Date(form?.deletedAt),
-                            "dd/MM/yyyy HH:mm:ss",
-                          )
-                        : "-"
+                      form?.deletedAt ? instanceDateTime(form.deletedAt) : "-"
                     }
                     onChange={function () {
                       return;
