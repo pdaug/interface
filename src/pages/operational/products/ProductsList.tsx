@@ -149,7 +149,6 @@ const ProductsList = function () {
             return;
           }}
         />
-        <div style={{ flex: 1 }}></div>
         <Button category="Neutral" text={t.components.import} />
         <Button category="Neutral" text={t.components.export} />
         <Tooltip content={t.components.help}>

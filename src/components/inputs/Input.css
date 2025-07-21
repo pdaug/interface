@@ -1,5 +1,6 @@
 .input {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 0.4rem;
   overflow: hidden;
@@ -461,14 +462,18 @@
   border-radius: var(--borderRadius);
   box-sizing: border-box;
   display: flex;
-  gap: 0.2rem;
+  flex: 1;
   height: 34px;
   padding: 0 1rem;
   overflow: hidden;
-  max-width: 200px;
 }
 
-.inputInterval div {
+.inputIntervalInner {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.inputIntervalInner div {
   font-size: var(--textSmall);
   color: var(--textColor);
   line-height: 1;

@@ -1,12 +1,19 @@
 import React, { forwardRef } from "react";
-import DatePicker from "react-datepicker";
 import { withMask } from "use-mask-input";
+import DatePicker from "react-datepicker";
 import { Minus } from "@phosphor-icons/react";
+
+// locale
+import { registerLocale } from "react-datepicker";
+import { ptBR, enUS } from "date-fns/locale";
+registerLocale("pt", ptBR);
+registerLocale("en", enUS);
 
 // styles
 import "./Input.css";
 
 // hooks
+import useSystem from "../../hooks/useSystem";
 import useDateTime from "../../hooks/useDateTime";
 import useTranslate from "../../hooks/useTranslate";
 
@@ -309,6 +316,7 @@ const InputInterval = function ({
   readOnly,
   onChange,
 }: InputIntervalProps) {
+  const { instance } = useSystem();
   const { instanceDate } = useDateTime();
 
   const Custom = forwardRef<
@@ -316,7 +324,7 @@ const InputInterval = function ({
     React.DOMAttributes<HTMLDivElement>
   >(function (props, ref) {
     return (
-      <div ref={ref} {...props} className="inputInterval">
+      <div ref={ref} {...props} className="inputIntervalInner">
         <div>{value[0] && instanceDate(value[0])}</div>
         <Minus />
         <div>{value[1] && instanceDate(value[1])}</div>
@@ -334,7 +342,7 @@ const InputInterval = function ({
           {helper && <span>{helper}</span>}
         </div>
       )}
-      <div>
+      <div className="inputInterval">
         <DatePicker
           selectsRange
           name={name}
@@ -343,6 +351,7 @@ const InputInterval = function ({
           selected={value[0]}
           startDate={value[0]}
           endDate={value[1]}
+          locale={instance.language}
           onChange={function (date) {
             if (onChange) onChange(date);
             return;
