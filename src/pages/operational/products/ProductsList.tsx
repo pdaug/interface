@@ -106,40 +106,44 @@ const ProductsList = function () {
           text={t.product.new}
           onClick={() => navigate("/f/products/inspect")}
         />
-        <InputSelect
-          label=""
-          empty=""
-          value="all"
-          options={[
-            {
-              id: "all",
-              value: "all",
-              text: t.components.all,
-            },
-            {
-              id: "physical",
-              value: "physical",
-              text: t.product.physical,
-            },
-            {
-              id: "digital",
-              value: "digital",
-              text: t.product.digital,
-            },
-          ]}
-        />
-        <InputInterval
-          label=""
-          value={[interval.start, interval.end]}
-          onChange={function (interval) {
-            const [start, end] = interval;
-            setInterval({
-              start: start ? new Date(start) : null,
-              end: end ? new Date(end) : null,
-            });
-            return;
-          }}
-        />
+        <div style={{ maxWidth: 96 }}>
+          <InputSelect
+            label=""
+            empty=""
+            value="all"
+            options={[
+              {
+                id: "all",
+                value: "all",
+                text: t.components.all,
+              },
+              {
+                id: "physical",
+                value: "physical",
+                text: t.product.physical,
+              },
+              {
+                id: "digital",
+                value: "digital",
+                text: t.product.digital,
+              },
+            ]}
+          />
+        </div>
+        <div style={{ maxWidth: 256 }}>
+          <InputInterval
+            label=""
+            value={[interval.start, interval.end]}
+            onChange={function (interval) {
+              const [start, end] = interval;
+              setInterval({
+                start: start ? new Date(start) : null,
+                end: end ? new Date(end) : null,
+              });
+              return;
+            }}
+          />
+        </div>
         <Input
           label=""
           value={search}
