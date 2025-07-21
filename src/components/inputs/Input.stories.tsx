@@ -128,9 +128,9 @@ export const Password = () => {
 };
 
 export const Interval = () => {
-  const [value, setValue] = useState<[string, string]>([
-    "2025-01-01",
-    "2025-01-28",
+  const [value, setValue] = useState<[Date | null, Date | null]>([
+    new globalThis.Date("2025-01-01"),
+    new globalThis.Date("2025-01-28"),
   ]);
   return (
     <Vertical internal={1} styles={{ width: "30rem" }}>
@@ -503,7 +503,6 @@ export const File: StoryObj = {
           required
           accept="image/*"
           label="Input File Required"
-          mimetype="Send image"
           value={value}
           onChange={(e) => setValue(e.target.files)}
         />
@@ -513,7 +512,6 @@ export const File: StoryObj = {
           multiple
           accept="video/*"
           label="Input File Disabled"
-          mimetype="Choose videos"
           value={value}
           onChange={(e) => setValue(e.target.files)}
         />

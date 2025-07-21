@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Asterisk } from "@phosphor-icons/react";
@@ -29,6 +30,7 @@ import { MaskPhone, MaskPostalCode } from "../../../assets/Mask";
 // hooks
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
+import useSchema from "../../../hooks/useSchema";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -46,9 +48,11 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const SettingsPanel = function () {
   const t = useTranslate();
+  const Schema = useSchema();
   const navigate = useNavigate();
   const { token, instance, saveInstance } = useSystem();
 
+  const [loading, setLoading] = useState<boolean>(true);
   const [logoTemp, setLogoTemp] = useState<File | null>(null);
   const [faviconTemp, setFaviconTemp] = useState<File | null>(null);
   const [logoLargeTemp, setLogoLargeTemp] = useState<File | null>(null);
@@ -80,6 +84,7 @@ const SettingsPanel = function () {
   });
 
   const FetchSettings = async function () {
+    setLoading(true);
     const toastId = toast.loading(t.components.loading);
     try {
       const response = await apis.Settings.get(instance.name);
@@ -88,10 +93,12 @@ const SettingsPanel = function () {
           description: t.toast.warning_find,
         });
         toast.dismiss(toastId);
+        setLoading(false);
         return;
       }
       setForm(response.data.result);
       toast.dismiss(toastId);
+      setLoading(false);
       return;
     } catch (err) {
       toast.error(t.toast.warning_error, {
@@ -99,6 +106,7 @@ const SettingsPanel = function () {
       });
       console.error("[src/pages/settings/SettingsPanel.tsx]", err);
       toast.dismiss(toastId);
+      setLoading(false);
       return;
     }
   };
@@ -110,7 +118,8 @@ const SettingsPanel = function () {
     return;
   };
 
-  const onSubmit = async function () {
+  const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     const toastId = toast.loading(t.components.loading);
     try {
       let logoUrl = null;
@@ -185,6 +194,13 @@ const SettingsPanel = function () {
         description: t.toast.success_edit,
       });
     } catch (err) {
+      if (err instanceof AxiosError) {
+        if (err.response?.data?.result?.message === "schema_incorrect") {
+          Schema(err.response.data.result.err);
+          toast.dismiss(toastId);
+          return;
+        }
+      }
       console.error("[src/pages/settings/SettingsPanel.tsx]", err);
       toast.error(t.toast.warning_error, {
         description: t.toast.error_edit,
@@ -199,7 +215,7 @@ const SettingsPanel = function () {
       <Horizontal>
         <h1>{t.settings.settings}</h1>
       </Horizontal>
-      <div>
+      <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Wrapper
             title={t.settings.title_preferences}
@@ -211,9 +227,10 @@ const SettingsPanel = function () {
                   required
                   name="theme"
                   id="settings_theme"
-                  value={form?.theme || "light"}
+                  disabled={loading}
                   empty={t.stacks.no_option}
                   label={t.components.theme}
+                  value={form?.theme || "light"}
                   options={SettingsTheme.map(function (theme) {
                     return {
                       id: theme,
@@ -234,6 +251,7 @@ const SettingsPanel = function () {
                 <InputSelect
                   required
                   name="theme"
+                  disabled={loading}
                   id="settings_language"
                   empty={t.stacks.no_option}
                   options={SettingsLanguages}
@@ -250,6 +268,7 @@ const SettingsPanel = function () {
                 <InputSelect
                   required
                   name="timezone"
+                  disabled={loading}
                   id="settings_timezone"
                   empty={t.stacks.no_option}
                   label={t.components.timezone}
@@ -275,6 +294,7 @@ const SettingsPanel = function () {
                 <InputSelect
                   required
                   name="dateFormat"
+                  disabled={loading}
                   id="settings_date_format"
                   empty={t.stacks.no_option}
                   label={t.components.date_format}
@@ -307,6 +327,7 @@ const SettingsPanel = function () {
                 <InputSelect
                   required
                   name="currency"
+                  disabled={loading}
                   id="settings_currency"
                   empty={t.stacks.no_option}
                   value={form?.currency || "USD"}
@@ -331,6 +352,7 @@ const SettingsPanel = function () {
             <Vertical internal={1} styles={{ flex: 1 }}>
               <Horizontal internal={1}>
                 <InputColor
+                  disabled={loading}
                   name="colorPrimary"
                   label={t.settings.color_primary}
                   value={form?.colorPrimary || "#fafafa"}
@@ -344,6 +366,7 @@ const SettingsPanel = function () {
                   }}
                 />
                 <InputColor
+                  disabled={loading}
                   name="colorSecondary"
                   label={t.settings.color_secondary}
                   value={form?.colorSecondary || "#fafafa"}
@@ -360,9 +383,10 @@ const SettingsPanel = function () {
               <Horizontal internal={1}>
                 <InputFile
                   name="logo"
-                  helper="PNG 512x512"
                   value={logoTemp}
+                  disabled={loading}
                   accept="image/png"
+                  helper="PNG 512x512"
                   label={t.settings.logo}
                   id="settings_company_logo"
                   onChange={function (event) {
@@ -389,6 +413,7 @@ const SettingsPanel = function () {
                 />
                 <InputFile
                   name="logoLarge"
+                  disabled={loading}
                   accept="image/png"
                   value={logoLargeTemp}
                   helper="PNG 1024x512"
@@ -419,6 +444,7 @@ const SettingsPanel = function () {
                 <InputFile
                   name="favicon"
                   helper="48x48"
+                  disabled={loading}
                   value={faviconTemp}
                   label={t.settings.favicon}
                   id="settings_company_favicon"
@@ -532,9 +558,10 @@ const SettingsPanel = function () {
             <Vertical internal={1}>
               <Horizontal internal={1}>
                 <Input
-                  min={1}
-                  max={32}
+                  min={4}
+                  max={64}
                   required
+                  disabled={loading}
                   name="companyName"
                   id="settings_company_name"
                   value={form?.companyName || ""}
@@ -550,6 +577,7 @@ const SettingsPanel = function () {
                 <InputMask
                   required
                   mask={MaskPhone}
+                  disabled={loading}
                   name="companyMobile"
                   id="settings_company_mobie"
                   value={form?.companyMobile || ""}
@@ -566,6 +594,7 @@ const SettingsPanel = function () {
               <Horizontal internal={1}>
                 <InputMask
                   mask={MaskPhone}
+                  disabled={loading}
                   name="companyPhone"
                   id="settings_company_phone"
                   value={form?.companyPhone || ""}
@@ -580,6 +609,7 @@ const SettingsPanel = function () {
                 />
                 <Input
                   type="email"
+                  disabled={loading}
                   name="companyEmail"
                   id="settings_company_email"
                   value={form?.companyEmail || ""}
@@ -598,6 +628,7 @@ const SettingsPanel = function () {
                   min={1}
                   max={1024}
                   type="url"
+                  disabled={loading}
                   name="companyWebsite"
                   id="settings_company_website"
                   value={form?.companyWebsite || ""}
@@ -611,6 +642,7 @@ const SettingsPanel = function () {
                   }}
                 />
                 <InputSelect
+                  disabled={loading}
                   name="companyActivity"
                   empty={t.stacks.no_option}
                   id="settings_company_activity"
@@ -644,6 +676,7 @@ const SettingsPanel = function () {
               <Horizontal internal={1}>
                 <InputMask
                   required
+                  disabled={loading}
                   mask={MaskPostalCode}
                   name="addressPostalCode"
                   id="settings_address_postal_code"
@@ -691,6 +724,7 @@ const SettingsPanel = function () {
                   min={4}
                   max={64}
                   required
+                  disabled={loading}
                   name="addressStreet"
                   id="settings_address_street"
                   value={form?.addressStreet || ""}
@@ -709,6 +743,7 @@ const SettingsPanel = function () {
                   min={1}
                   max={8}
                   required
+                  disabled={loading}
                   name="addressNumber"
                   id="settings_address_number"
                   value={form?.addressNumber || ""}
@@ -723,6 +758,7 @@ const SettingsPanel = function () {
                 />
                 <Input
                   max={32}
+                  disabled={loading}
                   name="addressComplement"
                   id="settings_address_complement"
                   value={form?.addressComplement || ""}
@@ -739,6 +775,7 @@ const SettingsPanel = function () {
 
                 <Input
                   max={64}
+                  disabled={loading}
                   name="addressNeighborhood"
                   id="settings_address_neighborhood"
                   value={form?.addressNeighborhood || ""}
@@ -758,6 +795,7 @@ const SettingsPanel = function () {
                   min={2}
                   max={64}
                   required
+                  disabled={loading}
                   name="addressCity"
                   id="settings_address_city"
                   value={form?.addressCity || ""}
@@ -772,6 +810,7 @@ const SettingsPanel = function () {
                 />
                 <InputSelect
                   required
+                  disabled={loading}
                   name="addressState"
                   empty={t.stacks.no_option}
                   id="settings_address_state"
@@ -805,19 +844,22 @@ const SettingsPanel = function () {
           <Wrapper>
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
               <Button
+                type="button"
                 onClick={onCancel}
                 category="Neutral"
                 text={t.components.cancel}
               />
               <Button
-                onClick={onSubmit}
+                type="submit"
                 category="Success"
                 text={t.components.edit}
               />
             </Horizontal>
           </Wrapper>
+
+          <div style={{ height: 128 }}></div>
         </Vertical>
-      </div>
+      </form>
     </React.Fragment>
   );
 };

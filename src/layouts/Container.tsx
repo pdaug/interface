@@ -88,17 +88,20 @@ const Container = function () {
   );
 
   // change style by instance
-  useEffect(function () {
-    if (!instance) return;
-    const favicon: HTMLLinkElement | null =
-      document.querySelector("link[rel*='icon']");
-    if (!favicon) return;
-    favicon.type = "image/x-icon";
-    favicon.rel = "shortcut icon";
-    favicon.href = instance.favicon as string;
-    document.title = instance.companyName as string;
-    return;
-  }, []);
+  useEffect(
+    function () {
+      if (!instance) return;
+      const favicon: HTMLLinkElement | null =
+        document.querySelector("link[rel*='icon']");
+      if (!favicon) return;
+      favicon.type = "image/x-icon";
+      favicon.rel = "shortcut icon";
+      favicon.href = instance.favicon as string;
+      document.title = instance.companyName as string;
+      return;
+    },
+    [instance],
+  );
 
   // checker session
   useEffect(

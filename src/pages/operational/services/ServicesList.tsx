@@ -15,6 +15,7 @@ import Clipboard from "../../../utils/Clipboard";
 // types
 import { TypeService } from "../../../types/Service";
 import { ApiResponsePaginate } from "../../../types/Api";
+import { TypeInputInterval } from "../../../types/Components";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
@@ -53,7 +54,7 @@ const ServicesList = function () {
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
   const [services, setServices] = useState<TypeService[]>([]);
-  const [interval, setInterval] = useState({
+  const [interval, setInterval] = useState<TypeInputInterval>({
     start: subMonths(startOfDay(new Date()), 1),
     end: endOfDay(new Date()),
   });
@@ -129,15 +130,12 @@ const ServicesList = function () {
         </div>
         <InputInterval
           label=""
-          value={[
-            interval.start.toISOString().slice(0, 10),
-            interval.end.toISOString().slice(0, 10),
-          ]}
+          value={[interval.start, interval.end]}
           onChange={function (interval) {
             const [start, end] = interval;
             setInterval({
-              start: new Date(start),
-              end: new Date(end),
+              start: start ? new Date(start) : null,
+              end: end ? new Date(end) : null,
             });
             return;
           }}

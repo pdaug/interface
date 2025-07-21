@@ -67,7 +67,10 @@ const OrdersList = function () {
           />
         </div>
         <div>
-          <InputInterval label="" value={["2025-01-01", "2025-02-02"]} />
+          <InputInterval
+            label=""
+            value={[new Date("2025-01-01"), new Date("2025-02-02")]}
+          />
         </div>
         <div style={{ flex: 1 }}></div>
         <Button category="Neutral" text="Importar" />

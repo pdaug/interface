@@ -36,7 +36,7 @@ export const WithData: StoryObj = {
     const [page, setPage] = useState(1);
     return (
       <Pagination
-        data
+        display
         pageCurrent={page}
         pageSize={10}
         itemsTotal={42}

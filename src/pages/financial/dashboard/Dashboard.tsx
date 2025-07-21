@@ -46,7 +46,7 @@ const Dashboard = function () {
         <InputInterval
           label=""
           styles={{ maxWidth: "20rem" }}
-          value={["2025-01-01", "2025-02-02"]}
+          value={[new Date("2025-01-01"), new Date("2025-02-02")]}
         />
         <div style={{ flex: 1 }}></div>
         <Dropdown

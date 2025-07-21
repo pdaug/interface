@@ -351,6 +351,7 @@ const TranslatePt = {
     wrong_file_format: "O arquivo está com o formato errado",
     limit_image_5mb: "A imagem excede o limite de 5MB",
     // fields
+    invalid_enum_value: "Valor desconhecido",
     wrong_credentials: "As credenciais estão incorretas",
     incorrect_length: "Tamanho incorreto",
     too_big: "Muito grande",
@@ -717,6 +718,7 @@ const TranslateEn = {
     wrong_file_format: "The file has the wrong format",
     limit_image_5mb: "The image file exceeds the 5MB limit",
     // fields
+    invalid_enum_value: "Unknown value",
     wrong_credentials: "Wrong credentials",
     incorrect_length: "Incorrect length",
     too_big: "Too big",
