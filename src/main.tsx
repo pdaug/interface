@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 
 // styles
 import "./main.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 // routes
 import Routes from "./Routes";

@@ -360,6 +360,7 @@ const Dashboard = function () {
           />
         </Wrapper>
       </Horizontal>
+      <div style={{ minHeight: 128 }}></div>
     </React.Fragment>
   );
 };

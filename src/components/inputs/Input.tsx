@@ -1,10 +1,13 @@
-import React from "react";
+import React, { forwardRef } from "react";
+import DatePicker from "react-datepicker";
 import { withMask } from "use-mask-input";
+import { Minus } from "@phosphor-icons/react";
 
 // styles
 import "./Input.css";
 
 // hooks
+import useDateTime from "../../hooks/useDateTime";
 import useTranslate from "../../hooks/useTranslate";
 
 export type InputProps = {
@@ -286,12 +289,12 @@ export type InputIntervalProps = {
   label: string;
   helper?: string;
   name?: string;
-  value: [string, string];
+  value: [Date | null, Date | null];
   styles?: React.CSSProperties;
   disabled?: boolean;
   required?: boolean;
   readOnly?: boolean;
-  onChange?: (value: [string, string]) => void;
+  onChange?: (value: [Date | null, Date | null]) => void;
 };
 
 const InputInterval = function ({
@@ -306,6 +309,23 @@ const InputInterval = function ({
   readOnly,
   onChange,
 }: InputIntervalProps) {
+  const { instanceDate } = useDateTime();
+
+  const Custom = forwardRef<
+    HTMLDivElement,
+    React.DOMAttributes<HTMLDivElement>
+  >(function (props, ref) {
+    return (
+      <div ref={ref} {...props} className="inputInterval">
+        <div>{value[0] && instanceDate(value[0])}</div>
+        <Minus />
+        <div>{value[1] && instanceDate(value[1])}</div>
+      </div>
+    );
+  });
+
+  Custom.displayName = "Custom";
+
   return (
     <div className="input" style={styles}>
       {(label || helper) && (
@@ -314,32 +334,20 @@ const InputInterval = function ({
           {helper && <span>{helper}</span>}
         </div>
       )}
-      <div className="inputInterval">
-        <input
-          id={id}
-          required
-          type="date"
+      <div>
+        <DatePicker
+          selectsRange
           name={name}
-          value={value[0]}
-          disabled={disabled}
           readOnly={readOnly}
-          onChange={function (event) {
-            onChange?.([event.currentTarget?.value || "", value[1]]);
+          disabled={disabled}
+          selected={value[0]}
+          startDate={value[0]}
+          endDate={value[1]}
+          onChange={function (date) {
+            if (onChange) onChange(date);
             return;
           }}
-        />
-        <input
-          required
-          type="date"
-          id={`${id}-1`}
-          value={value[1]}
-          name={`${name}-1`}
-          disabled={disabled}
-          readOnly={readOnly}
-          onChange={function (event) {
-            onChange?.([value[0], event.currentTarget?.value || ""]);
-            return;
-          }}
+          customInput={<Custom />}
         />
       </div>
     </div>

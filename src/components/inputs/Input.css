@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  flex: 1;
   overflow: hidden;
   transition: 200ms;
 }
@@ -38,8 +37,8 @@
 
 .inputContent {
   display: flex;
+  height: 34px;
   position: relative;
-  flex: 1;
   overflow: hidden;
 }
 
@@ -455,55 +454,25 @@
 
 /* INTERVAL */
 .inputInterval {
-  display: flex;
-  flex: 1;
-}
-
-.inputInterval input {
-  appearance: none;
+  align-items: center;
   background: var(--foregroundColor);
   background-color: var(--foregroundColor);
   border: 1px solid var(--borderColor);
   border-radius: var(--borderRadius);
   box-sizing: border-box;
-  color: var(--textColor);
-  font-size: var(--textSmall);
-  flex: 1;
-  min-width: 60px;
-  margin: 0;
-  line-height: 1;
+  display: flex;
+  gap: 0.2rem;
+  height: 34px;
+  padding: 0 1rem;
   overflow: hidden;
-  padding: 6px 1rem;
+  max-width: 200px;
+}
+
+.inputInterval div {
+  font-size: var(--textSmall);
+  color: var(--textColor);
+  line-height: 1;
   text-align: center;
-  transition: 200ms;
-}
-
-.inputInterval input:nth-child(1) {
-  border-right: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.inputInterval input:nth-child(2) {
-  border-left: 0;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.inputInterval input:focus {
-  outline: none;
-}
-
-.inputInterval input:disabled {
-  background: var(--backgroundColor) !important;
-  background-color: var(--backgroundColor) !important;
-  color: var(--textLight);
-  cursor: not-allowed;
-  opacity: 1;
-}
-
-.inputInterval input:read-only {
-  background: var(--backgroundColor) !important;
-  background-color: var(--backgroundColor) !important;
-  color: var(--textLight);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

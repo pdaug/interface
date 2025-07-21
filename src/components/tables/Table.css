@@ -29,7 +29,11 @@
   font-size: var(--textRegular);
   font-weight: 600;
   flex: 1;
+  overflow: hidden;
   padding: 0.6rem 0.4rem;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tableBodyRow {

@@ -32,6 +32,8 @@ export const ApiBaseCrud = function (path: string) {
         pageCurrent?: number;
         search?: string;
         searchField?: string;
+        dateStart?: string;
+        dateEnd?: string;
       },
       workspaceId?: string,
     ) {

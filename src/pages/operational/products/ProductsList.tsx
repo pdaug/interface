@@ -15,6 +15,7 @@ import Clipboard from "../../../utils/Clipboard";
 // types
 import { TypeProduct } from "../../../types/Product";
 import { ApiResponsePaginate } from "../../../types/Api";
+import { TypeInputInterval } from "../../../types/Components";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
@@ -53,7 +54,7 @@ const ProductsList = function () {
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
   const [products, setProducts] = useState<TypeProduct[]>([]);
-  const [interval, setInterval] = useState({
+  const [interval, setInterval] = useState<TypeInputInterval>({
     start: subMonths(startOfDay(new Date()), 1),
     end: endOfDay(new Date()),
   });
@@ -73,6 +74,8 @@ const ProductsList = function () {
           pageCurrent: page,
           searchField: "name",
           search: searchDebounced,
+          dateStart: interval.start ? interval.start.toISOString() : undefined,
+          dateEnd: interval.end ? interval.end.toISOString() : undefined,
         },
         workspaceId,
       );
@@ -89,7 +92,7 @@ const ProductsList = function () {
   };
 
   // fetch products
-  useAsync(FetchProducts, [workspaceId, page, searchDebounced]);
+  useAsync(FetchProducts, [interval, workspaceId, page, searchDebounced]);
 
   return (
     <React.Fragment>
@@ -103,41 +106,36 @@ const ProductsList = function () {
           text={t.product.new}
           onClick={() => navigate("/f/products/inspect")}
         />
-        <div>
-          <InputSelect
-            label=""
-            empty=""
-            value="all"
-            options={[
-              {
-                id: "all",
-                value: "all",
-                text: t.components.all,
-              },
-              {
-                id: "physical",
-                value: "physical",
-                text: t.product.physical,
-              },
-              {
-                id: "digital",
-                value: "digital",
-                text: t.product.digital,
-              },
-            ]}
-          />
-        </div>
+        <InputSelect
+          label=""
+          empty=""
+          value="all"
+          options={[
+            {
+              id: "all",
+              value: "all",
+              text: t.components.all,
+            },
+            {
+              id: "physical",
+              value: "physical",
+              text: t.product.physical,
+            },
+            {
+              id: "digital",
+              value: "digital",
+              text: t.product.digital,
+            },
+          ]}
+        />
         <InputInterval
           label=""
-          value={[
-            interval.start.toISOString().slice(0, 10),
-            interval.end.toISOString().slice(0, 10),
-          ]}
+          value={[interval.start, interval.end]}
           onChange={function (interval) {
             const [start, end] = interval;
             setInterval({
-              start: new Date(start),
-              end: new Date(end),
+              start: start ? new Date(start) : null,
+              end: end ? new Date(end) : null,
             });
             return;
           }}
