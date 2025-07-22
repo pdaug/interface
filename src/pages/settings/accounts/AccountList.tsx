@@ -266,14 +266,18 @@ const AccountList = function () {
                   return user.id === data.userId;
                 });
                 return (
-                  <Profile
-                    photoCircle
-                    photoSize={3}
-                    padding={false}
-                    styles={{ lineHeight: 1 }}
-                    description={userFinded?.email || ""}
-                    name={userFinded?.name || t.components.unknown}
-                  />
+                  <Tooltip
+                    content={t.components[userFinded?.role || "collaborator"]}
+                  >
+                    <Profile
+                      photoCircle
+                      photoSize={3}
+                      padding={false}
+                      styles={{ lineHeight: 1 }}
+                      description={userFinded?.email || ""}
+                      name={userFinded?.name || t.components.unknown}
+                    />
+                  </Tooltip>
                 );
               },
             },

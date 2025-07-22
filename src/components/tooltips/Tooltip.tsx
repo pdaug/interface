@@ -11,7 +11,7 @@ export type TooltipTheme = "dark" | "light";
 export type TooltipPlacement = Placement;
 
 export type TooltipProps = {
-  content: string;
+  content: string | React.ReactNode;
   theme?: TooltipTheme;
   placement?: TooltipPlacement;
   children: React.ReactElement | string | number | boolean;

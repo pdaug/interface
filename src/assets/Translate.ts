@@ -291,6 +291,9 @@ const TranslatePt = {
     error_delete: "Houve um erro ao deletar o item.",
   },
   components: {
+    master: "Mestre",
+    admin: "Administrador",
+    collaborator: "Colaborador",
     unknown: "Desconhecido",
     download: "Baixar",
     copy_id: "Copiar Id",
@@ -659,6 +662,9 @@ const TranslateEn = {
     error_delete: "An error occurred while deleting the item.",
   },
   components: {
+    master: "Master",
+    admin: "Administrator",
+    collaborator: "Collaborator",
     unknown: "Unknown",
     download: "Download",
     copy_id: "Copy Id",
