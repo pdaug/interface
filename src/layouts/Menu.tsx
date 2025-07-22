@@ -10,6 +10,7 @@ import { version as versionFrontend } from "../../package.json";
 
 // hooks
 import useSystem from "../hooks/useSystem";
+import useSounds from "../hooks/useSounds";
 import useTranslate from "../hooks/useTranslate";
 
 // components
@@ -19,9 +20,6 @@ import { useDialog } from "../components/dialogs/Dialog";
 import { DropdownValue } from "../components/dropdowns/Dropdown";
 
 const Menu = function () {
-  const t = useTranslate();
-  const navigate = useNavigate();
-  const { OpenDialog } = useDialog();
   const {
     user,
     instance,
@@ -31,6 +29,10 @@ const Menu = function () {
     clear,
     selectWorkspace,
   } = useSystem();
+  const play = useSounds();
+  const t = useTranslate();
+  const navigate = useNavigate();
+  const { OpenDialog } = useDialog();
 
   const workspaceOptions = workspaces
     ?.map(function (workspace) {
@@ -193,7 +195,8 @@ const Menu = function () {
         {
           id: "logout",
           label: t.menu.logout,
-          onClick: function () {
+          onClick: async function () {
+            await play("logout");
             clear();
             navigate("/");
             return;

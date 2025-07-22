@@ -15,6 +15,7 @@ import { ApiResponsePaginate } from "../types/Api";
 // hooks
 import useAsync from "../hooks/useAsync";
 import useSystem from "../hooks/useSystem";
+import useSounds from "../hooks/useSounds";
 import useSchema from "../hooks/useSchema";
 import useTranslate from "../hooks/useTranslate";
 
@@ -35,6 +36,7 @@ const Login = function () {
     saveWorkspaces,
     saveVersion,
   } = useSystem();
+  const play = useSounds();
   const t = useTranslate();
   const Schema = useSchema();
   const navigate = useNavigate();
@@ -134,6 +136,7 @@ const Login = function () {
       toast.success(t.toast.success, {
         description: t.toast.success_login,
       });
+      play("login");
       navigate("/f");
       return;
     } catch (err) {

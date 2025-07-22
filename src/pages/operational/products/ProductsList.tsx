@@ -19,6 +19,7 @@ import { TypeInputInterval } from "../../../types/Components";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
+import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
 import useCurrency from "../../../hooks/useCurrency";
 import useDateTime from "../../../hooks/useDateTime";
@@ -43,6 +44,7 @@ const pageSize = 10;
 
 const ProductsList = function () {
   const t = useTranslate();
+  const play = useSounds();
   const navigate = useNavigate();
   const Currency = useCurrency();
   const { instanceDateTime } = useDateTime();
@@ -80,11 +82,25 @@ const ProductsList = function () {
         },
         workspaceId,
       );
-      if (!response.data?.result?.items) return;
+      if (!response.data?.result?.items) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.warn(
+          "[src/pages/operational/products/ProductsList.tsx]",
+          response.data,
+        );
+        return;
+      }
       setProducts(response.data.result.items);
       setTotal(response.data.result.pagination.total);
       return;
     } catch (err) {
+      play("alert");
+      toast.error(t.toast.warning_error, {
+        description: t.stacks.no_find_item,
+      });
       console.error("[src/pages/operational/products/ProductsList.tsx]", err);
       return;
     } finally {
@@ -294,12 +310,14 @@ const ProductsList = function () {
                 if (data && typeof data === "object" && "id" in data) {
                   const result = await Clipboard.copy(data.id as string);
                   if (result) {
+                    play("ok");
                     toast.success(t.toast.success, {
                       description: t.toast.success_copy,
                     });
                     return;
                   }
                 }
+                play("alert");
                 toast.warning(t.toast.warning_error, {
                   description: t.toast.warning_copy,
                 });
@@ -312,6 +330,7 @@ const ProductsList = function () {
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
                   Download.JSON(data, `product-${data.id}.json`);
+                  play("ok");
                   toast.success(t.toast.success, {
                     description: t.toast.success_download,
                   });
@@ -348,11 +367,13 @@ const ProductsList = function () {
                         workspaceId,
                       );
                       if (!response.data?.result) {
+                        play("alert");
                         toast.warning(t.toast.warning_error, {
                           description: t.toast.error_delete,
                         });
                         return;
                       }
+                      play("ok");
                       toast.success(t.toast.success, {
                         description: t.toast.success_delete,
                       });
@@ -360,6 +381,7 @@ const ProductsList = function () {
                       await FetchProducts();
                       return;
                     } catch (err) {
+                      play("alert");
                       toast.error(t.toast.warning_error, {
                         description: t.toast.error_delete,
                       });

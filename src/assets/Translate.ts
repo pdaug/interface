@@ -341,6 +341,7 @@ const TranslatePt = {
   },
   stacks: {
     // no
+    no_find_item: "O item não foi encontrado",
     no_option: "Nenhuma opção selecionada",
     no_description: "Sem descrição",
     no_items: "Nenhum item encontrado",
@@ -712,6 +713,7 @@ const TranslateEn = {
   },
   stacks: {
     // no
+    no_find_item: "The item was not found",
     no_option: "No options selected",
     no_description: "No description",
     no_items: "No items found",

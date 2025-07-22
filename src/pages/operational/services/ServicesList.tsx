@@ -20,6 +20,7 @@ import { TypeInputInterval } from "../../../types/Components";
 // hooks
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
+import useSounds from "../../../hooks/useSounds";
 import useCurrency from "../../../hooks/useCurrency";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
@@ -43,6 +44,7 @@ const pageSize = 10;
 
 const ServicesList = function () {
   const t = useTranslate();
+  const play = useSounds();
   const navigate = useNavigate();
   const Currency = useCurrency();
   const { instanceDateTime } = useDateTime();
@@ -289,12 +291,14 @@ const ServicesList = function () {
                 if (data && typeof data === "object" && "id" in data) {
                   const result = await Clipboard.copy(data.id as string);
                   if (result) {
+                    play("ok");
                     toast.success(t.toast.success, {
                       description: t.toast.success_copy,
                     });
                     return;
                   }
                 }
+                play("alert");
                 toast.warning(t.toast.warning_error, {
                   description: t.toast.warning_copy,
                 });
@@ -307,6 +311,7 @@ const ServicesList = function () {
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
                   Download.JSON(data, `service-${data.id}.json`);
+                  play("ok");
                   toast.success(t.toast.success, {
                     description: t.toast.success_download,
                   });
@@ -343,11 +348,13 @@ const ServicesList = function () {
                         workspaceId,
                       );
                       if (!response.data?.result) {
+                        play("alert");
                         toast.warning(t.toast.warning_error, {
                           description: t.toast.error_delete,
                         });
                         return;
                       }
+                      play("ok");
                       toast.success(t.toast.success, {
                         description: t.toast.success_delete,
                       });
@@ -355,6 +362,7 @@ const ServicesList = function () {
                       await FetchServices();
                       return;
                     } catch (err) {
+                      play("alert");
                       toast.error(t.toast.warning_error, {
                         description: t.toast.error_delete,
                       });

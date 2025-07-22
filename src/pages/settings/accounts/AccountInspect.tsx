@@ -17,6 +17,7 @@ import { MaskDocument1, MaskDocument2 } from "../../../assets/Mask";
 // hooks
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
+import useSounds from "../../../hooks/useSounds";
 import useSchema from "../../../hooks/useSchema";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
@@ -34,6 +35,7 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const AccountInspect = function () {
   const t = useTranslate();
+  const play = useSounds();
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
@@ -89,11 +91,14 @@ const AccountInspect = function () {
           form,
           workspaceId,
         );
-        if (!response.data?.result)
+        if (!response.data?.result) {
+          play("alert");
           toast.warning(t.toast.warning_error, {
             description: t.toast.warning_edit,
           });
+        }
         if (response.data.state === "success") {
+          play("ok");
           toast.success(t.toast.success, {
             description: t.toast.success_edit,
           });
@@ -108,11 +113,14 @@ const AccountInspect = function () {
         form,
         workspaceId,
       );
-      if (!response.data?.result)
+      if (!response.data?.result) {
+        play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_create,
         });
+      }
       if (response.data.state === "success") {
+        play("ok");
         toast.success(t.toast.success, {
           description: t.toast.success_create,
         });
@@ -126,6 +134,7 @@ const AccountInspect = function () {
           return;
         }
       }
+      play("alert");
       if (id)
         toast.error(t.toast.warning_error, {
           description: t.toast.error_edit,

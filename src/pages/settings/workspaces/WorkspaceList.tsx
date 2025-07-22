@@ -17,6 +17,7 @@ import { ApiResponsePaginate } from "../../../types/Api";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
+import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
@@ -35,6 +36,7 @@ const pageSize = 10;
 
 const WorkspaceList = function () {
   const t = useTranslate();
+  const play = useSounds();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
@@ -138,12 +140,14 @@ const WorkspaceList = function () {
                 if (data && typeof data === "object" && "id" in data) {
                   const result = await Clipboard.copy(data.id as string);
                   if (result) {
+                    play("ok");
                     toast.success(t.toast.success, {
                       description: t.toast.success_copy,
                     });
                     return;
                   }
                 }
+                play("alert");
                 toast.warning(t.toast.warning_error, {
                   description: t.toast.warning_copy,
                 });
@@ -156,6 +160,7 @@ const WorkspaceList = function () {
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
                   Download.JSON(data, `workspace-${data.id}.json`);
+                  play("ok");
                   toast.success(t.toast.success, {
                     description: t.toast.success_download,
                   });
@@ -179,6 +184,7 @@ const WorkspaceList = function () {
                 if (!data || typeof data !== "object" || !("id" in data))
                   return;
                 if (workspaceId === data.id) {
+                  play("alert");
                   toast.error(t.toast.warning_error, {
                     description: t.workspace.not_delete,
                   });
@@ -197,11 +203,13 @@ const WorkspaceList = function () {
                         data.id as string,
                       );
                       if (!response.data?.result) {
+                        play("alert");
                         toast.warning(t.toast.warning_error, {
                           description: t.toast.error_delete,
                         });
                         return;
                       }
+                      play("ok");
                       toast.success(t.toast.success, {
                         description: t.toast.success_delete,
                       });
@@ -209,6 +217,7 @@ const WorkspaceList = function () {
                       await FetchWorkspaces();
                       return;
                     } catch (err) {
+                      play("alert");
                       toast.error(t.toast.warning_error, {
                         description: t.toast.error_delete,
                       });

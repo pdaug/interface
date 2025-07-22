@@ -30,6 +30,7 @@ import { GenerateIdWithLength } from "../../../utils/GenerateId";
 // hooks
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
+import useSounds from "../../../hooks/useSounds";
 import useSchema from "../../../hooks/useSchema";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
@@ -49,6 +50,7 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const ProductsInspect = function () {
   const t = useTranslate();
+  const play = useSounds();
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
@@ -89,10 +91,15 @@ const ProductsInspect = function () {
       setForm(response.data.result);
       return;
     } catch (err) {
+      toast.error(t.toast.warning_error, {
+        description: t.stacks.no_find_item,
+      });
+      play("alert");
       console.error(
         "[src/pages/operational/products/ProductsInspect.tsx]",
         err,
       );
+      navigate("/f/products");
       return;
     } finally {
       setLoading(false);
@@ -103,7 +110,7 @@ const ProductsInspect = function () {
     event.preventDefault();
     try {
       // is editing
-      if (id) {
+      if (id && form.id) {
         const response = await apis.Product.update(
           token,
           instance.name,
@@ -111,16 +118,18 @@ const ProductsInspect = function () {
           form,
           workspaceId,
         );
-        if (!response.data?.result)
+        if (!response.data?.result || response.status !== 200) {
+          play("alert");
           toast.warning(t.toast.warning_error, {
             description: t.toast.warning_edit,
           });
-        if (response.data.state === "success") {
-          toast.success(t.toast.success, {
-            description: t.toast.success_edit,
-          });
-          navigate("/f/products");
+          return;
         }
+        play("ok");
+        toast.success(t.toast.success, {
+          description: t.toast.success_edit,
+        });
+        navigate("/f/products");
         return;
       }
       // is creating
@@ -130,36 +139,35 @@ const ProductsInspect = function () {
         form,
         workspaceId,
       );
-      if (!response.data?.result)
+      if (!response.data?.result || response.status !== 201) {
+        play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_create,
         });
-      if (response.data.state === "success") {
-        toast.success(t.toast.success, {
-          description: t.toast.success_create,
-        });
-        navigate("/f/products");
+        return;
       }
+      play("ok");
+      toast.success(t.toast.success, {
+        description: t.toast.success_create,
+      });
+      navigate("/f/products");
       return;
     } catch (err) {
-      if (err instanceof AxiosError) {
-        if (err.response?.data?.result?.message === "schema_incorrect") {
-          Schema(err.response.data.result.err);
-          return;
-        }
-      }
-      if (id)
-        toast.error(t.toast.warning_error, {
-          description: t.toast.error_edit,
-        });
-      else
-        toast.error(t.toast.warning_error, {
-          description: t.toast.error_create,
-        });
+      play("alert");
       console.error(
         "[src/pages/operational/products/ProductsInspect.tsx]",
         err,
       );
+      if (
+        err instanceof AxiosError &&
+        err.response?.data?.result?.message === "schema_incorrect"
+      ) {
+        Schema(err.response.data.result.err);
+        return;
+      }
+      toast.error(t.toast.warning_error, {
+        description: id ? t.toast.error_edit : t.toast.error_create,
+      });
       return;
     }
   };
@@ -403,6 +411,7 @@ const ProductsInspect = function () {
                         text={t.components.remove}
                         onClick={function () {
                           if (form.variants?.length === 1) {
+                            play("alert");
                             toast.warning(t.toast.warning_error, {
                               description: t.product.no_delete_all_variants,
                             });

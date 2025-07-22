@@ -31,6 +31,7 @@ import { MaskPhone, MaskPostalCode } from "../../../assets/Mask";
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
 import useSchema from "../../../hooks/useSchema";
+import useSounds from "../../../hooks/useSounds";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -48,6 +49,7 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const SettingsPanel = function () {
   const t = useTranslate();
+  const play = useSounds();
   const Schema = useSchema();
   const navigate = useNavigate();
   const { token, instance, saveInstance } = useSystem();
@@ -89,6 +91,7 @@ const SettingsPanel = function () {
     try {
       const response = await apis.Settings.get(instance.name);
       if (!response.data?.result) {
+        play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_find,
         });
@@ -101,6 +104,7 @@ const SettingsPanel = function () {
       setLoading(false);
       return;
     } catch (err) {
+      play("alert");
       toast.error(t.toast.warning_error, {
         description: t.toast.warning_find,
       });
@@ -180,6 +184,7 @@ const SettingsPanel = function () {
         form,
       );
       if (!responseInstance.data?.result) {
+        play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_edit,
         });
@@ -190,17 +195,20 @@ const SettingsPanel = function () {
         ...instance,
         ...responseInstance.data.result,
       });
+      play("ok");
       toast.success(t.toast.success, {
         description: t.toast.success_edit,
       });
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.data?.result?.message === "schema_incorrect") {
+          play("alert");
           Schema(err.response.data.result.err);
           toast.dismiss(toastId);
           return;
         }
       }
+      play("alert");
       console.error("[src/pages/settings/SettingsPanel.tsx]", err);
       toast.error(t.toast.warning_error, {
         description: t.toast.error_edit,
@@ -393,6 +401,7 @@ const SettingsPanel = function () {
                     const file = event.currentTarget.files?.[0] || null;
                     if (!file) return;
                     if (file.size > 5 * 1024 * 1024) {
+                      play("alert");
                       toast.error(t.toast.warning_error, {
                         description: t.stacks.limit_image_5mb,
                       });
@@ -402,6 +411,7 @@ const SettingsPanel = function () {
                       file.type !== "image/png" ||
                       !file.name.includes(".png")
                     ) {
+                      play("alert");
                       toast.error(t.toast.warning_error, {
                         description: t.stacks.wrong_file_format,
                       });
@@ -423,6 +433,7 @@ const SettingsPanel = function () {
                     const file = event.currentTarget.files?.[0] || null;
                     if (!file) return;
                     if (file.size > 5 * 1024 * 1024) {
+                      play("alert");
                       toast.error(t.toast.warning_error, {
                         description: t.stacks.limit_image_5mb,
                       });
@@ -432,6 +443,7 @@ const SettingsPanel = function () {
                       file.type !== "image/png" ||
                       !file.name.includes(".png")
                     ) {
+                      play("alert");
                       toast.error(t.toast.warning_error, {
                         description: t.stacks.wrong_file_format,
                       });
@@ -453,6 +465,7 @@ const SettingsPanel = function () {
                     const file = event.currentTarget.files?.[0] || null;
                     if (!file) return;
                     if (file.size > 5 * 1024 * 1024) {
+                      play("alert");
                       toast.error(t.toast.warning_error, {
                         description: t.stacks.limit_image_5mb,
                       });
@@ -467,6 +480,7 @@ const SettingsPanel = function () {
                         "image/x-icon",
                       ].includes(file.type)
                     ) {
+                      play("alert");
                       toast.error(t.toast.warning_error, {
                         description: t.stacks.wrong_file_format,
                       });
@@ -702,6 +716,7 @@ const SettingsPanel = function () {
                         newForm.addressState =
                           response.data?.state || newForm.addressState;
                         toast.dismiss(toastId);
+                        play("ok");
                         toast.success(t.toast.success, {
                           description: t.toast.success_find,
                         });
@@ -711,6 +726,7 @@ const SettingsPanel = function () {
                           err,
                         );
                         toast.dismiss(toastId);
+                        play("alert");
                         toast.warning(t.toast.warning_error, {
                           description: t.toast.warning_find,
                         });
