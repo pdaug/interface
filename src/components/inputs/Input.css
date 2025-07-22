@@ -43,6 +43,10 @@
   overflow: hidden;
 }
 
+.inputContent:has(textarea) {
+  height: auto;
+}
+
 .inputContent input,
 .inputContent select,
 .inputContent textarea {

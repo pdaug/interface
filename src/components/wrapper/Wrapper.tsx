@@ -50,6 +50,7 @@ const Wrapper = function ({
               <Button
                 text=""
                 onlyIcon
+                type="button"
                 category="Neutral"
                 Icon={isCollapsible ? CaretUp : CaretDown}
                 onClick={function () {
@@ -72,6 +73,7 @@ const Wrapper = function ({
         <div className="wrapperFooter">
           {onCancel && (
             <Button
+              type="button"
               category="Neutral"
               onClick={onCancel}
               text={onCancelLabel || "Cancel"}
@@ -83,6 +85,7 @@ const Wrapper = function ({
             })}
           {onConfirm && (
             <Button
+              type="button"
               category="Success"
               text={onConfirmLabel || "Confirm"}
               onClick={onConfirm}

@@ -104,7 +104,7 @@ const ServicesList = function () {
           text={t.service.new}
           onClick={() => navigate("/f/services/inspect")}
         />
-        <div>
+        <div style={{ maxWidth: 96 }}>
           <InputSelect
             label=""
             empty=""
@@ -128,18 +128,20 @@ const ServicesList = function () {
             ]}
           />
         </div>
-        <InputInterval
-          label=""
-          value={[interval.start, interval.end]}
-          onChange={function (interval) {
-            const [start, end] = interval;
-            setInterval({
-              start: start ? new Date(start) : null,
-              end: end ? new Date(end) : null,
-            });
-            return;
-          }}
-        />
+        <div style={{ maxWidth: 256 }}>
+          <InputInterval
+            label=""
+            value={[interval.start, interval.end]}
+            onChange={function (interval) {
+              const [start, end] = interval;
+              setInterval({
+                start: start ? new Date(start) : null,
+                end: end ? new Date(end) : null,
+              });
+              return;
+            }}
+          />
+        </div>
         <Input
           label=""
           value={search}
@@ -149,7 +151,6 @@ const ServicesList = function () {
             return;
           }}
         />
-        <div style={{ flex: 1 }}></div>
         <Button category="Neutral" text={t.components.import} />
         <Button category="Neutral" text={t.components.export} />
         <Tooltip content={t.components.help}>

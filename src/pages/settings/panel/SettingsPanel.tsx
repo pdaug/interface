@@ -213,7 +213,7 @@ const SettingsPanel = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.settings.settings}</h1>
+        <h1 style={{ color: form.colorPrimary }}>{t.settings.settings}</h1>
       </Horizontal>
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>

@@ -81,51 +81,47 @@ const WorkspaceList = function () {
       <Horizontal>
         <h1>{t.workspace.workspaces}</h1>
       </Horizontal>
-      <Horizontal internal={1} styles={{ justifyContent: "space-between" }}>
-        <Horizontal internal={1}>
+      <Horizontal internal={1}>
+        <Button
+          Icon={Plus}
+          category="Success"
+          text={t.workspace.new}
+          onClick={() => navigate("/f/workspaces/inspect")}
+        />
+        <Input
+          label=""
+          value={search}
+          placeholder={t.components.search}
+          onChange={function (event) {
+            setSearch(event.currentTarget?.value || "");
+            return;
+          }}
+        />
+        <Tooltip content={t.components.help}>
           <Button
-            Icon={Plus}
-            category="Success"
-            text={t.workspace.new}
-            onClick={() => navigate("/f/workspaces/inspect")}
-          />
-          <Input
-            label=""
-            value={search}
-            placeholder={t.components.search}
-            onChange={function (event) {
-              setSearch(event.currentTarget?.value || "");
+            text=""
+            onlyIcon
+            category="Neutral"
+            Icon={QuestionMark}
+            onClick={function () {
+              OpenDialog({
+                width: 700,
+                category: "Success",
+                title: t.components.help,
+                cancelText: t.components.close,
+                description: (
+                  <iframe
+                    height={400}
+                    style={{ border: "none", width: "100%" }}
+                    src="https://www.youtube.com/embed/L-yA7-puosA"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  />
+                ),
+              });
               return;
             }}
           />
-        </Horizontal>
-        <Horizontal internal={1}>
-          <Tooltip content={t.components.help}>
-            <Button
-              text=""
-              onlyIcon
-              category="Neutral"
-              Icon={QuestionMark}
-              onClick={function () {
-                OpenDialog({
-                  width: 700,
-                  category: "Success",
-                  title: t.components.help,
-                  cancelText: t.components.close,
-                  description: (
-                    <iframe
-                      height={400}
-                      style={{ border: "none", width: "100%" }}
-                      src="https://www.youtube.com/embed/L-yA7-puosA"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    />
-                  ),
-                });
-                return;
-              }}
-            />
-          </Tooltip>
-        </Horizontal>
+        </Tooltip>
       </Horizontal>
       <Vertical internal={1}>
         <Table

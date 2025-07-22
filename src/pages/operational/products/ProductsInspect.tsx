@@ -167,7 +167,7 @@ const ProductsInspect = function () {
       <Horizontal>
         <h1>{t.product.product}</h1>
       </Horizontal>
-      <div>
+      <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Wrapper
             title={id ? t.product.title_edit : t.product.title_create}
@@ -271,6 +271,7 @@ const ProductsInspect = function () {
               <Horizontal>
                 <InputText
                   max={256}
+                  height={4}
                   name="description"
                   id="product_description"
                   value={form?.description || ""}
@@ -925,6 +926,7 @@ const ProductsInspect = function () {
           <Wrapper>
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
               <Button
+                type="button"
                 category="Neutral"
                 text={t.components.cancel}
                 onClick={function () {
@@ -933,6 +935,7 @@ const ProductsInspect = function () {
                 }}
               />
               <Button
+                type="submit"
                 onClick={onSubmit}
                 category="Success"
                 text={id ? t.components.edit : t.components.save}
@@ -940,7 +943,7 @@ const ProductsInspect = function () {
             </Horizontal>
           </Wrapper>
         </Vertical>
-      </div>
+      </form>
     </React.Fragment>
   );
 };
