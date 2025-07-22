@@ -9,12 +9,14 @@ import { TypeWorkspace } from "../types/Workspace";
 type SystemState = {
   token: string;
   user: TypeUser;
+  users: TypeUser[];
   instance: TypeInstance;
   workspaces: TypeWorkspace[];
   workspaceId: string;
   version: string | number;
   saveToken: (token: string) => void;
   saveUser: (user: TypeUser) => void;
+  setUsers: (users: TypeUser[]) => void;
   saveInstance: (instance: TypeInstance) => void;
   saveWorkspaces: (workspaces: TypeWorkspace[]) => void;
   saveVersion: (version: string | number) => void;
@@ -28,6 +30,7 @@ const useSystem = create<SystemState>()(
       const initial = {
         token: "",
         user: {} as TypeUser,
+        users: new Array<TypeUser>(),
         instance: {} as TypeInstance,
         workspaces: [],
         version: 0.1,
@@ -39,6 +42,10 @@ const useSystem = create<SystemState>()(
       };
       const saveUser = function (user: TypeUser) {
         set({ user });
+        return;
+      };
+      const setUsers = function (users: TypeUser[]) {
+        set({ users });
         return;
       };
       const saveInstance = function (instance: TypeInstance) {
@@ -65,6 +72,7 @@ const useSystem = create<SystemState>()(
         ...initial,
         saveToken,
         saveUser,
+        setUsers,
         saveInstance,
         saveWorkspaces,
         selectWorkspace,
@@ -78,6 +86,7 @@ const useSystem = create<SystemState>()(
         return {
           token: state.token,
           user: state.user,
+          users: state.users,
           instance: state.instance,
           workspaces: state.workspaces,
           workspaceId: state.workspaceId,

@@ -53,7 +53,7 @@ const ProductsInspect = function () {
   const Schema = useSchema();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
-  const { token, instance, workspaceId } = useSystem();
+  const { user, token, instance, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeProduct>>({
@@ -71,6 +71,7 @@ const ProductsInspect = function () {
     ],
     propertyColor: "#fafafa",
     workspaceId,
+    userId: user.id,
   });
 
   // fetch product
@@ -98,7 +99,8 @@ const ProductsInspect = function () {
     }
   }, []);
 
-  const onSubmit = async function () {
+  const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     try {
       // is editing
       if (id) {
@@ -344,17 +346,19 @@ const ProductsInspect = function () {
                   >
                     <div className="flex1">
                       <Horizontal internal={1}>
-                        <Input
-                          readOnly
-                          placeholder=""
-                          label={t.product.id}
-                          name={`variant.${index}.id`}
-                          id={`product_variant_${index}_id`}
-                          value={form?.variants?.[index].id || ""}
-                          onChange={function () {
-                            return;
-                          }}
-                        />
+                        <div style={{ maxWidth: 96 }}>
+                          <Input
+                            readOnly
+                            placeholder=""
+                            label={t.product.id}
+                            name={`variant.${index}.id`}
+                            id={`product_variant_${index}_id`}
+                            value={String(index + 1)}
+                            onChange={function () {
+                              return;
+                            }}
+                          />
+                        </div>
                         <Input
                           min={1}
                           max={32}
@@ -394,6 +398,7 @@ const ProductsInspect = function () {
                     </div>
                     <div>
                       <Button
+                        type="button"
                         category="Danger"
                         text={t.components.remove}
                         onClick={function () {
@@ -417,6 +422,7 @@ const ProductsInspect = function () {
               <Horizontal internal={1}>
                 <div>
                   <Button
+                    type="button"
                     category="Success"
                     text={t.components.add}
                     onClick={function () {
@@ -936,7 +942,6 @@ const ProductsInspect = function () {
               />
               <Button
                 type="submit"
-                onClick={onSubmit}
                 category="Success"
                 text={id ? t.components.edit : t.components.save}
               />

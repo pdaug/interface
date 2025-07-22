@@ -26,6 +26,7 @@ import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import { Input } from "../../../components/inputs/Input";
 import Tooltip from "../../../components/tooltips/Tooltip";
+import Profile from "../../../components/profiles/Profile";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
@@ -38,7 +39,7 @@ const AccountList = function () {
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { token, instance, workspaceId } = useSystem();
+  const { users, token, instance, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -258,6 +259,24 @@ const AccountList = function () {
             bankName: { label: t.accounts.bank_name },
             bankAgency: { label: t.accounts.bank_agency },
             bankAccount: { label: t.accounts.bank_account },
+            user: {
+              label: t.components.user,
+              handler: function (data) {
+                const userFinded = users?.find(function (user) {
+                  return user.id === data.userId;
+                });
+                return (
+                  <Profile
+                    photoCircle
+                    photoSize={3}
+                    padding={false}
+                    styles={{ lineHeight: 1 }}
+                    description={userFinded?.email || ""}
+                    name={userFinded?.name || t.components.unknown}
+                  />
+                );
+              },
+            },
             createdAt: {
               label: t.components.created_at,
               handler: function (data) {

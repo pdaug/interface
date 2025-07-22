@@ -291,6 +291,7 @@ const TranslatePt = {
     error_delete: "Houve um erro ao deletar o item.",
   },
   components: {
+    unknown: "Desconhecido",
     download: "Baixar",
     copy_id: "Copiar Id",
     timezone: "Fuso horário",
@@ -658,6 +659,7 @@ const TranslateEn = {
     error_delete: "An error occurred while deleting the item.",
   },
   components: {
+    unknown: "Unknown",
     download: "Download",
     copy_id: "Copy Id",
     timezone: "Timezone",

@@ -21,6 +21,7 @@ export type TypeService = {
 
   tags: string[];
 
+  userId: string;
   workspaceId: string;
 
   createdAt: string;

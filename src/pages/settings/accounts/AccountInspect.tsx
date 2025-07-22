@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { Asterisk } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -38,7 +38,7 @@ const AccountInspect = function () {
   const Schema = useSchema();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
-  const { token, instance, workspaceId } = useSystem();
+  const { user, token, instance, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeAccount>>({
@@ -52,6 +52,7 @@ const AccountInspect = function () {
     bankName: "",
     bankAgency: "",
     bankAccount: "",
+    userId: user.id,
   });
 
   // fetch account
@@ -76,7 +77,8 @@ const AccountInspect = function () {
     }
   }, []);
 
-  const onSubmit = async function () {
+  const onSubmit = async function (event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     try {
       // is editing
       if (id) {
@@ -142,7 +144,7 @@ const AccountInspect = function () {
       <Horizontal>
         <h1>{t.accounts.accounts}</h1>
       </Horizontal>
-      <div>
+      <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Wrapper
             title={id ? t.accounts.title_edit : t.accounts.title_create}
@@ -404,6 +406,7 @@ const AccountInspect = function () {
           <Wrapper>
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
               <Button
+                type="button"
                 category="Neutral"
                 text={t.components.cancel}
                 onClick={function () {
@@ -412,14 +415,14 @@ const AccountInspect = function () {
                 }}
               />
               <Button
+                type="submit"
                 category="Success"
-                onClick={onSubmit}
                 text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>
           </Wrapper>
         </Vertical>
-      </div>
+      </form>
     </React.Fragment>
   );
 };

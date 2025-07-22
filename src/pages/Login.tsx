@@ -28,6 +28,7 @@ const Login = function () {
     token,
     user,
     instance,
+    setUsers,
     saveToken,
     saveUser,
     saveInstance,
@@ -110,9 +111,24 @@ const Login = function () {
         return;
       }
 
+      // fetch users
+      const responseUser = await apis.User.list<ApiResponsePaginate<TypeUser>>(
+        responseLogin.data.result.token,
+        form.instance,
+      );
+      if (!responseUser?.data?.result?.items?.length) {
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_user,
+        });
+        return;
+      }
+
+      console.log(responseUser?.data?.result?.items);
+
       saveToken(responseLogin.data.result.token);
       saveUser(responseLogin.data.result.user);
-      saveWorkspaces(responseWorkspace?.data?.result?.items);
+      saveWorkspaces(responseWorkspace.data.result.items);
+      setUsers(responseUser.data.result.items);
       saveVersion(responseWorkspace.data.version);
 
       toast.success(t.toast.success, {

@@ -32,6 +32,7 @@ import {
 } from "../../../components/inputs/Input";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
+import Profile from "../../../components/profiles/Profile";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
@@ -46,7 +47,7 @@ const ProductsList = function () {
   const Currency = useCurrency();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { token, instance, workspaceId } = useSystem();
+  const { users, token, instance, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -251,6 +252,24 @@ const ProductsList = function () {
               handler: function (data) {
                 if (!Array.isArray(data.variants)) return "";
                 return <div>{Currency(data?.variants?.[0].price || 0)}</div>;
+              },
+            },
+            user: {
+              label: t.components.user,
+              handler: function (data) {
+                const userFinded = users?.find(function (user) {
+                  return user.id === data.userId;
+                });
+                return (
+                  <Profile
+                    photoCircle
+                    photoSize={3}
+                    padding={false}
+                    styles={{ lineHeight: 1 }}
+                    description={userFinded?.email || ""}
+                    name={userFinded?.name || t.components.unknown}
+                  />
+                );
               },
             },
             createdAt: {

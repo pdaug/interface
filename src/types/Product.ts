@@ -56,6 +56,7 @@ export type TypeProduct = {
   tags: string[];
 
   workspaceId: string;
+  userId: string;
 
   createdAt: string;
   updatedAt: string | null;

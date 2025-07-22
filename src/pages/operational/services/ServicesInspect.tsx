@@ -42,7 +42,7 @@ const ServicesInspect = function () {
   const Schema = useSchema();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
-  const { token, instance, workspaceId } = useSystem();
+  const { user, token, instance, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeService>>({
@@ -54,6 +54,7 @@ const ServicesInspect = function () {
     pricingMethod: "hourly",
     tags: [],
     workspaceId,
+    userId: user.id,
   });
 
   // fetch service
@@ -81,7 +82,8 @@ const ServicesInspect = function () {
     }
   }, []);
 
-  const onSubmit = async function () {
+  const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     try {
       // is editing
       if (id) {
@@ -150,7 +152,7 @@ const ServicesInspect = function () {
       <Horizontal>
         <h1>{t.service.service}</h1>
       </Horizontal>
-      <div>
+      <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Wrapper
             title={id ? t.service.title_edit : t.service.title_create}
@@ -186,7 +188,7 @@ const ServicesInspect = function () {
                   }}
                 />
                 <Input
-                  min={1}
+                  min={4}
                   max={32}
                   required
                   name="name"
@@ -338,6 +340,7 @@ const ServicesInspect = function () {
           <Wrapper>
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
               <Button
+                type="button"
                 category="Neutral"
                 text={t.components.cancel}
                 onClick={function () {
@@ -346,14 +349,14 @@ const ServicesInspect = function () {
                 }}
               />
               <Button
-                onClick={onSubmit}
+                type="submit"
                 category="Success"
                 text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>
           </Wrapper>
         </Vertical>
-      </div>
+      </form>
     </React.Fragment>
   );
 };

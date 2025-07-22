@@ -2,7 +2,7 @@ import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
-import { endOfDay, startOfDay, subMonths } from "date-fns";
+import { endOfDay, startOfYear } from "date-fns";
 import { Plus, QuestionMark } from "@phosphor-icons/react";
 
 //apis
@@ -32,6 +32,7 @@ import {
 } from "../../../components/inputs/Input";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
+import Profile from "../../../components/profiles/Profile";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
@@ -46,7 +47,7 @@ const ServicesList = function () {
   const Currency = useCurrency();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { token, instance, workspaceId } = useSystem();
+  const { users, token, instance, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -55,7 +56,7 @@ const ServicesList = function () {
   const [selected, setSelected] = useState<string[]>([]);
   const [services, setServices] = useState<TypeService[]>([]);
   const [interval, setInterval] = useState<TypeInputInterval>({
-    start: subMonths(startOfDay(new Date()), 1),
+    start: startOfYear(new Date()),
     end: endOfDay(new Date()),
   });
 
@@ -246,6 +247,24 @@ const ServicesList = function () {
               maxWidth: "128px",
               handler: function (data) {
                 return <div>{Currency(data?.pricingValue as number)}</div>;
+              },
+            },
+            user: {
+              label: t.components.user,
+              handler: function (data) {
+                const userFinded = users?.find(function (user) {
+                  return user.id === data.userId;
+                });
+                return (
+                  <Profile
+                    photoCircle
+                    photoSize={3}
+                    padding={false}
+                    styles={{ lineHeight: 1 }}
+                    description={userFinded?.email || ""}
+                    name={userFinded?.name || t.components.unknown}
+                  />
+                );
               },
             },
             createdAt: {
