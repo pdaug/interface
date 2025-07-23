@@ -54,6 +54,7 @@ const EmployeesInspect = function () {
     id: "",
     status: true,
     name: "",
+    password: "1234567890",
     document1: "",
     document2: "",
     phone: "",
@@ -397,10 +398,10 @@ const EmployeesInspect = function () {
               <Horizontal internal={1}>
                 <InputMask
                   required
-                  disabled={loading}
                   mask={MaskPostalCode}
                   name="addressPostalCode"
                   id="employee_address_postal_code"
+                  disabled={loading && Boolean(id)}
                   value={form?.addressPostalCode || ""}
                   label={t.components.address_postal_code}
                   placeholder={t.components.address_postal_code_placeholder}
@@ -447,9 +448,9 @@ const EmployeesInspect = function () {
                   min={4}
                   max={64}
                   required
-                  disabled={loading}
                   name="addressStreet"
                   id="employee_address_street"
+                  disabled={loading && Boolean(id)}
                   value={form?.addressStreet || ""}
                   label={t.components.address_street}
                   placeholder={t.components.address_street_placeholder}
@@ -466,9 +467,9 @@ const EmployeesInspect = function () {
                   min={1}
                   max={8}
                   required
-                  disabled={loading}
                   name="addressNumber"
                   id="employee_address_number"
+                  disabled={loading && Boolean(id)}
                   value={form?.addressNumber || ""}
                   label={t.components.address_number}
                   placeholder={t.components.address_number_placeholder}
@@ -481,9 +482,9 @@ const EmployeesInspect = function () {
                 />
                 <Input
                   max={32}
-                  disabled={loading}
                   name="addressComplement"
                   id="employee_address_complement"
+                  disabled={loading && Boolean(id)}
                   value={form?.addressComplement || ""}
                   label={t.components.address_complement}
                   placeholder={t.components.address_complement_placeholder}
@@ -498,9 +499,9 @@ const EmployeesInspect = function () {
 
                 <Input
                   max={64}
-                  disabled={loading}
                   name="addressNeighborhood"
                   id="employee_address_neighborhood"
+                  disabled={loading && Boolean(id)}
                   value={form?.addressNeighborhood || ""}
                   label={t.components.address_neighborhood}
                   placeholder={t.components.address_neighborhood_placeholder}
@@ -518,10 +519,10 @@ const EmployeesInspect = function () {
                   min={2}
                   max={64}
                   required
-                  disabled={loading}
                   name="addressCity"
                   id="employee_address_city"
                   value={form?.addressCity || ""}
+                  disabled={loading && Boolean(id)}
                   label={t.components.address_city}
                   placeholder={t.components.address_city_placeholder}
                   onChange={function (event) {
@@ -533,11 +534,11 @@ const EmployeesInspect = function () {
                 />
                 <InputSelect
                   required
-                  disabled={loading}
                   name="addressState"
                   empty={t.stacks.no_option}
                   id="employee_address_state"
                   value={form?.addressState || ""}
+                  disabled={loading && Boolean(id)}
                   label={t.components.address_state}
                   options={SettingsAddressState.map(function (state) {
                     return {

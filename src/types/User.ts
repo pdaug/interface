@@ -6,6 +6,7 @@ export type TypeUser = {
   name: string;
   document1: string;
   document2: string;
+  password?: string;
   phone: string;
   mobile: string;
   email: string;
