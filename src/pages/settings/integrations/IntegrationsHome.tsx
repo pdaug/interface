@@ -23,6 +23,7 @@ const IntegrationsHome = function () {
       <Horizontal>
         <h1>{t.integrations.integrations}</h1>
       </Horizontal>
+
       <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
         <Horizontal internal={1}>
           <Button
@@ -49,7 +50,53 @@ const IntegrationsHome = function () {
           />
         </Horizontal>
       </Horizontal>
+
       <Vertical internal={1}>
+        <Horizontal>{t.integrations.sales}</Horizontal>
+
+        <Horizontal internal={1}>
+          <Wrapper
+            actions={[
+              {
+                id: "mercadolibre",
+                category: "Neutral",
+                text: t.integrations.setup,
+                Icon: GearSix,
+                disabled: true,
+              },
+            ]}
+          >
+            <Vertical internal={1}>
+              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+                <img
+                  width={integrationLogoSize}
+                  alt="integration_mercadolibre"
+                  src="/integrations/mercadolibre.png"
+                  style={{ borderRadius: "var(--borderRadius)" }}
+                />
+                <div style={{ fontSize: "var(--textHighlight)" }}>
+                  {t.integrations.mercadolibre}
+                </div>
+              </Horizontal>
+              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+                <Badge category="Warning" value={t.integrations.wip} />
+                <div
+                  style={{
+                    color: "var(--textLight)",
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {t.integrations.mercadolibre_description}
+                </div>
+              </Horizontal>
+            </Vertical>
+          </Wrapper>
+
+          <div className="flex1"></div>
+        </Horizontal>
+
+        <Horizontal>{t.integrations.comunications}</Horizontal>
+
         <Horizontal internal={1}>
           <Wrapper
             actions={[
@@ -87,6 +134,7 @@ const IntegrationsHome = function () {
               </Horizontal>
             </Vertical>
           </Wrapper>
+
           <Wrapper
             actions={[
               {
@@ -124,6 +172,50 @@ const IntegrationsHome = function () {
             </Vertical>
           </Wrapper>
         </Horizontal>
+
+        <Horizontal internal={1}>
+          <Wrapper
+            actions={[
+              {
+                id: "mailsend",
+                category: "Neutral",
+                text: t.integrations.setup,
+                Icon: GearSix,
+                disabled: true,
+              },
+            ]}
+          >
+            <Vertical internal={1}>
+              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+                <img
+                  width={integrationLogoSize}
+                  alt="integration_mailchimp"
+                  src="/integrations/mailchimp.png"
+                  style={{ borderRadius: "var(--borderRadius)" }}
+                />
+                <div style={{ fontSize: "var(--textHighlight)" }}>
+                  {t.integrations.mailchimp}
+                </div>
+              </Horizontal>
+              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+                <Badge category="Warning" value={t.integrations.wip} />
+                <div
+                  style={{
+                    color: "var(--textLight)",
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {t.integrations.mailchimp_description}
+                </div>
+              </Horizontal>
+            </Vertical>
+          </Wrapper>
+
+          <div className="flex1"></div>
+        </Horizontal>
+
+        <Horizontal>{t.integrations.payments}</Horizontal>
+
         <Horizontal internal={1}>
           <Wrapper
             actions={[
@@ -161,6 +253,85 @@ const IntegrationsHome = function () {
               </Horizontal>
             </Vertical>
           </Wrapper>
+
+          <Wrapper
+            actions={[
+              {
+                id: "paypal",
+                category: "Neutral",
+                text: t.integrations.setup,
+                Icon: GearSix,
+                disabled: true,
+              },
+            ]}
+          >
+            <Vertical internal={1}>
+              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+                <img
+                  width={integrationLogoSize}
+                  alt="integration_paypal"
+                  src="/integrations/paypal.png"
+                  style={{ borderRadius: "var(--borderRadius)" }}
+                />
+                <div style={{ fontSize: "var(--textHighlight)" }}>
+                  {t.integrations.paypal}
+                </div>
+              </Horizontal>
+              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+                <Badge category="Warning" value={t.integrations.wip} />
+                <div
+                  style={{
+                    color: "var(--textLight)",
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {t.integrations.paypal_description}
+                </div>
+              </Horizontal>
+            </Vertical>
+          </Wrapper>
+        </Horizontal>
+
+        <Horizontal>{t.integrations.ai}</Horizontal>
+
+        <Horizontal internal={1}>
+          <Wrapper
+            actions={[
+              {
+                id: "gemini",
+                category: "Neutral",
+                text: t.integrations.setup,
+                Icon: GearSix,
+                disabled: true,
+              },
+            ]}
+          >
+            <Vertical internal={1}>
+              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+                <img
+                  width={integrationLogoSize}
+                  alt="integration_gemini"
+                  src="/integrations/gemini.webp"
+                  style={{ borderRadius: "var(--borderRadius)" }}
+                />
+                <div style={{ fontSize: "var(--textHighlight)" }}>
+                  {t.integrations.gemini}
+                </div>
+              </Horizontal>
+              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+                <Badge category="Warning" value={t.integrations.wip} />
+                <div
+                  style={{
+                    color: "var(--textLight)",
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {t.integrations.gemini_description}
+                </div>
+              </Horizontal>
+            </Vertical>
+          </Wrapper>
+
           <Wrapper
             actions={[
               {
@@ -203,6 +374,8 @@ const IntegrationsHome = function () {
             </Vertical>
           </Wrapper>
         </Horizontal>
+
+        <div style={{ height: 128 }}></div>
       </Vertical>
     </React.Fragment>
   );
