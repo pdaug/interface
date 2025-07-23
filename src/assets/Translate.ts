@@ -340,6 +340,7 @@ const TranslatePt = {
     "yyyy-MM-dd": "ano-mês-dia",
     all: "Todos",
     // buttons
+    open_game: "Abrir jogo",
     remove: "Remover",
     add: "Adicionar",
     help: "Obtenha ajuda",
@@ -426,7 +427,7 @@ const TranslateEn = {
     dashboard: "Dashboard",
     orders: "Orders",
     inflows: "Inflows",
-    outflows: "outflows",
+    outflows: "Outflows",
     statements: "Statements",
     administrative: "Administrative",
     customers: "Customers",
@@ -742,6 +743,7 @@ const TranslateEn = {
     "yyyy-MM-dd": "year-month-day",
     all: "All",
     // buttons
+    open_game: "Open game",
     remove: "Remove",
     add: "Add",
     help: "Get help",
