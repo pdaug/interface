@@ -355,6 +355,7 @@ const TranslatePt = {
     confirm: "Confirmar",
     save: "Salvar",
     // labels
+    empty_name: "Nome vazio",
     status: "Estado",
     active: "Ativado",
     inactive: "Desativado",
@@ -758,6 +759,7 @@ const TranslateEn = {
     confirm: "Confirm",
     save: "Save",
     // labels
+    empty_name: "Empty name",
     status: "Status",
     active: "Active",
     inactive: "Inactive",

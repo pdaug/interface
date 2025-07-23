@@ -38,6 +38,7 @@ import Tooltip from "../../../components/tooltips/Tooltip";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
+import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const pageSize = 10;
@@ -49,7 +50,7 @@ const ProductsList = function () {
   const Currency = useCurrency();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { users, token, instance, workspaceId } = useSystem();
+  const { users, token, instance, workspaces, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -114,7 +115,25 @@ const ProductsList = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.product.products}</h1>
+        <h1>
+          <Breadcrumb
+            links={[
+              {
+                id: "workspace",
+                label:
+                  workspaces.find(function (workspace) {
+                    return workspace.id === workspaceId;
+                  })?.name || "",
+                url: "/f/",
+              },
+              {
+                id: "products",
+                label: t.product.products,
+                url: "/f/products",
+              },
+            ]}
+          />
+        </h1>
       </Horizontal>
       <Horizontal internal={1} styles={{ overflow: "hidden" }}>
         <Button

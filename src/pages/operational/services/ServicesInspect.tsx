@@ -36,6 +36,7 @@ import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 
 const ServicesInspect = function () {
   const t = useTranslate();
@@ -44,7 +45,7 @@ const ServicesInspect = function () {
   const Schema = useSchema();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
-  const { user, token, instance, workspaceId } = useSystem();
+  const { user, token, instance, workspaces, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeService>>({
@@ -165,7 +166,30 @@ const ServicesInspect = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.service.service}</h1>
+        <h1>
+          <Breadcrumb
+            links={[
+              {
+                id: "workspace",
+                label:
+                  workspaces.find(function (workspace) {
+                    return workspace.id === workspaceId;
+                  })?.name || "",
+                url: "/f/",
+              },
+              {
+                id: "services",
+                label: t.service.services,
+                url: "/f/services",
+              },
+              {
+                id: "service",
+                label: form?.name || t.components.empty_name,
+                url: `/f/services/inspect${id ? `/${id}` : ""}`,
+              },
+            ]}
+          />
+        </h1>
       </Horizontal>
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>

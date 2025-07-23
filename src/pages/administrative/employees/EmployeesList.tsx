@@ -121,7 +121,6 @@ const EmployeesList = function () {
               {
                 id: "employees",
                 label: t.employee.employees,
-                url: "/f/employees",
               },
             ]}
           />

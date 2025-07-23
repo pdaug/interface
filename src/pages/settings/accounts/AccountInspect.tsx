@@ -31,6 +31,7 @@ import {
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
+import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const AccountInspect = function () {
@@ -40,7 +41,7 @@ const AccountInspect = function () {
   const Schema = useSchema();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
-  const { user, token, instance, workspaceId } = useSystem();
+  const { user, token, instance, workspaces, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeAccount>>({
@@ -157,7 +158,30 @@ const AccountInspect = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.accounts.accounts}</h1>
+        <h1>
+          <Breadcrumb
+            links={[
+              {
+                id: "workspace",
+                label:
+                  workspaces.find(function (workspace) {
+                    return workspace.id === workspaceId;
+                  })?.name || "",
+                url: "/f/",
+              },
+              {
+                id: "accounts",
+                label: t.accounts.accounts,
+                url: "/f/accounts",
+              },
+              {
+                id: "account",
+                label: form?.name || t.components.empty_name,
+                url: `/f/accounts/inspect${id ? `/${id}` : ""}`,
+              },
+            ]}
+          />
+        </h1>
       </Horizontal>
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>

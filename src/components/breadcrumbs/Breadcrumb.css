@@ -14,6 +14,7 @@
 
 .breadcrumb a {
   color: var(--textColor);
+  cursor: pointer;
   /* font-size: var(--textRegular); */
   /* font-weight: 400; */
   transition: 200ms;
@@ -32,7 +33,7 @@
 
 .breadcrumb span {
   color: var(--textColor);
-  font-size: var(--textRegular);
-  font-weight: 400;
+  /* font-size: var(--textRegular); */
+  /* font-weight: 400; */
   text-decoration: none;
 }
