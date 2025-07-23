@@ -1,3 +1,5 @@
+export type TypeUserRole = "master" | "admin" | "collaborator";
+
 export type TypeUser = {
   id: string;
   status: boolean;
@@ -7,7 +9,7 @@ export type TypeUser = {
   phone: string;
   mobile: string;
   email: string;
-  role: "master" | "admin" | "collaborator";
+  role: TypeUserRole;
   addressStreet: string;
   addressNumber: string;
   addressComplement: string;

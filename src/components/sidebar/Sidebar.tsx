@@ -48,7 +48,7 @@ const Sidebar = function ({ selected, header, options, footer }: SidebarProps) {
                       <div
                         key={item.id}
                         onClick={item?.onClick}
-                        className={`sidebarMenuItem ${selected === item.id ? "sidebarMenuItemSelected" : ""}`}
+                        className={`sidebarMenuItem ${selected.includes(item.id) ? "sidebarMenuItemSelected" : ""}`}
                       >
                         {item.Icon && <item.Icon size={16} />}
                         <span>{item.label}</span>

@@ -278,7 +278,7 @@ const EmployeesList = function () {
               label: t.components.download,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
-                  Download.JSON(data, `service-${data.id}.json`);
+                  Download.JSON(data, `employee-${data.id}.json`);
                   play("ok");
                   toast.success(t.toast.success, {
                     description: t.toast.success_download,
@@ -292,7 +292,7 @@ const EmployeesList = function () {
               label: t.components.edit,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data)
-                  navigate(`/f/services/inspect/${data.id}`);
+                  navigate(`/f/employees/inspect/${data.id}`);
                 return;
               },
             },
@@ -309,11 +309,10 @@ const EmployeesList = function () {
                   confirmText: t.components.delete,
                   onConfirm: async function () {
                     try {
-                      const response = await apis.Service.delete(
+                      const response = await apis.User.delete(
                         token,
                         instance.name,
                         data.id as string,
-                        workspaceId,
                       );
                       if (!response.data?.result) {
                         play("alert");
@@ -335,7 +334,7 @@ const EmployeesList = function () {
                         description: t.toast.error_delete,
                       });
                       console.error(
-                        "[src/pages/operational/services/ServicesList.tsx]",
+                        "[src/pages/administrative/employees/EmployeesList.tsx]",
                         err,
                       );
                       return;
