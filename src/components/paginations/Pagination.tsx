@@ -3,6 +3,9 @@ import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 // styles
 import "./Pagination.css";
 
+// hooks
+import useTranslate from "../../hooks/useTranslate";
+
 export type PaginationProps = {
   display?: boolean;
   pageCurrent: number;
@@ -18,6 +21,8 @@ const Pagination = function ({
   itemsTotal,
   setPage,
 }: PaginationProps) {
+  const t = useTranslate();
+
   const pageTotal = Math.ceil(itemsTotal / pageSize);
 
   const GoPageStart = function () {
@@ -50,13 +55,13 @@ const Pagination = function ({
     <div className="pagination">
       {display && (
         <div className="paginationData">
-          <span>Mostrando</span>
+          <span>{t.components.pagination_showing}</span>
           <b>{pageCurrent}</b>
-          <span>de</span>
+          <span>{t.components.pagination_of}</span>
           <b>{pageTotal}</b>
-          <span>páginas -</span>
+          <span>{t.components.pagination_page} -</span>
           <b>{itemsTotal}</b>
-          <span>items</span>
+          <span>{t.components.pagination_items}</span>
         </div>
       )}
       <div className="paginationButtons">

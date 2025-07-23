@@ -13,7 +13,7 @@ import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
 
 // types
-import { TypeService } from "../../../types/Service";
+import { TypeUser } from "../../../types/User";
 import { ApiResponsePaginate } from "../../../types/Api";
 import { TypeInputInterval } from "../../../types/Components";
 
@@ -21,42 +21,36 @@ import { TypeInputInterval } from "../../../types/Components";
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
 import useSounds from "../../../hooks/useSounds";
-import useCurrency from "../../../hooks/useCurrency";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
-import {
-  Input,
-  InputSelect,
-  InputInterval,
-} from "../../../components/inputs/Input";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
-import Profile from "../../../components/profiles/Profile";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import { Input, InputInterval } from "../../../components/inputs/Input";
+import Avatar from "../../../components/avatars/Avatar";
 
 const pageSize = 10;
 
-const ServicesList = function () {
+const EmployeesList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
-  const Currency = useCurrency();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { users, token, instance, workspaceId } = useSystem();
+  const { token, instance, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
-  const [services, setServices] = useState<TypeService[]>([]);
+  const [employees, setEmployees] = useState<TypeUser[]>([]);
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: startOfYear(new Date()),
     end: endOfDay(new Date()),
@@ -64,12 +58,10 @@ const ServicesList = function () {
 
   const [searchDebounced] = useDebounce(search, 500);
 
-  const FetchServices = async function () {
+  const FetchEmployees = async function () {
     setLoading(true);
     try {
-      const response = await apis.Service.list<
-        ApiResponsePaginate<TypeService>
-      >(
+      const response = await apis.User.list<ApiResponsePaginate<TypeUser>>(
         token,
         instance.name,
         {
@@ -77,10 +69,7 @@ const ServicesList = function () {
           pageCurrent: page,
           searchField: "name",
           search: searchDebounced,
-          dateStart: interval.start ? interval.start.toISOString() : undefined,
-          dateEnd: interval.end ? interval.end.toISOString() : undefined,
         },
-        workspaceId,
       );
       if (!response.data?.result?.items) {
         play("alert");
@@ -88,12 +77,12 @@ const ServicesList = function () {
           description: t.stacks.no_find_item,
         });
         console.warn(
-          "[src/pages/operational/services/ServicesList.tsx]",
+          "[src/pages/administrative/employees/EmployeesList.tsx]",
           response.data,
         );
         return;
       }
-      setServices(response.data.result.items);
+      setEmployees(response.data.result.items);
       setTotal(response.data.result.pagination.total);
       return;
     } catch (err) {
@@ -101,52 +90,31 @@ const ServicesList = function () {
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/operational/services/ServicesList.tsx]", err);
+      console.error(
+        "[src/pages/administrative/employees/EmployeesList.tsx]",
+        err,
+      );
       return;
     } finally {
       setLoading(false);
     }
   };
 
-  // fetch services
-  useAsync(FetchServices, [interval, workspaceId, page, searchDebounced]);
+  // fetch employees
+  useAsync(FetchEmployees, [page, searchDebounced]);
 
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.service.services}</h1>
+        <h1>{t.employee.employees}</h1>
       </Horizontal>
       <Horizontal internal={1} styles={{ overflow: "hidden" }}>
         <Button
           Icon={Plus}
           category="Success"
-          text={t.service.new}
-          onClick={() => navigate("/f/services/inspect")}
+          text={t.employee.new}
+          onClick={() => navigate("/f/employees/inspect")}
         />
-        <div style={{ maxWidth: 96 }}>
-          <InputSelect
-            label=""
-            empty=""
-            value="all"
-            options={[
-              {
-                id: "all",
-                value: "all",
-                text: t.components.all,
-              },
-              {
-                id: "physical",
-                value: "physical",
-                text: t.service.physical,
-              },
-              {
-                id: "digital",
-                value: "digital",
-                text: t.service.digital,
-              },
-            ]}
-          />
-        </div>
         <div style={{ maxWidth: 256 }}>
           <InputInterval
             label=""
@@ -170,8 +138,6 @@ const ServicesList = function () {
             return;
           }}
         />
-        <Button category="Neutral" text={t.components.import} />
-        <Button category="Neutral" text={t.components.export} />
         <Tooltip content={t.components.help}>
           <Button
             text=""
@@ -202,7 +168,7 @@ const ServicesList = function () {
         <Table
           border
           loading={loading}
-          data={services as TableData[]}
+          data={employees as TableData[]}
           columns={{
             status: {
               label: t.components.status,
@@ -218,75 +184,42 @@ const ServicesList = function () {
                 );
               },
             },
-            type: {
-              label: t.service.type,
+            role: {
+              label: t.employee.role,
               maxWidth: "96px",
               handler: function (data) {
                 return (
                   <Badge
                     category="Info"
                     value={
-                      data.type === "physical"
-                        ? t.service.physical
-                        : t.service.digital
+                      t.components?.[data.role as keyof typeof t.components] ||
+                      t.components.collaborator
                     }
                   />
                 );
               },
             },
-            method: {
-              label: t.service.pricing_method,
-              maxWidth: "96px",
+            photo: {
+              label: t.employee.photo,
+              maxWidth: 48,
               handler: function (data) {
                 return (
-                  <Badge
-                    category="Info"
-                    value={
-                      t.service[data.pricingMethod as keyof typeof t.service]
-                    }
+                  <Avatar
+                    circle
+                    size={4}
+                    label={String(data?.name || t.components.unknown)}
                   />
                 );
               },
             },
-            name: { label: t.service.name },
-            description: {
-              label: t.components.description,
+            name: { label: t.employee.name },
+            document1: { label: t.employee.document },
+            mobile: { label: t.employee.mobile },
+            email: { label: t.employee.email },
+            address: {
+              label: t.employee.address,
               handler: function (data) {
-                if (data.description) return data.description as string;
-                return (
-                  <i style={{ color: "var(--textLight)" }}>
-                    {t.stacks.no_description}
-                  </i>
-                );
-              },
-            },
-            pricingValue: {
-              label: t.service.pricing_value,
-              maxWidth: "128px",
-              handler: function (data) {
-                return <div>{Currency(data?.pricingValue as number)}</div>;
-              },
-            },
-            user: {
-              label: t.components.user,
-              handler: function (data) {
-                const userFinded = users?.find(function (user) {
-                  return user.id === data.userId;
-                });
-                return (
-                  <Tooltip
-                    content={t.components[userFinded?.role || "collaborator"]}
-                  >
-                    <Profile
-                      photoCircle
-                      photoSize={3}
-                      padding={false}
-                      styles={{ lineHeight: 1 }}
-                      description={userFinded?.email || ""}
-                      name={userFinded?.name || t.components.unknown}
-                    />
-                  </Tooltip>
-                );
+                return `${data?.addressStreet}, ${data?.addressNumber}, ${data?.addressCity} - ${data?.addressState}`;
               },
             },
             createdAt: {
@@ -375,7 +308,7 @@ const ServicesList = function () {
                         description: t.toast.success_delete,
                       });
                       CloseDialog();
-                      await FetchServices();
+                      await FetchEmployees();
                       return;
                     } catch (err) {
                       play("alert");
@@ -406,4 +339,4 @@ const ServicesList = function () {
   );
 };
 
-export default ServicesList;
+export default EmployeesList;

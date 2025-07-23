@@ -14,6 +14,7 @@ import ErrorPage from "./pages/ErrorPage";
 import financial from "./pages/financial";
 import settings from "./pages/settings";
 import operational from "./pages/operational";
+import administrative from "./pages/administrative";
 
 const Router = createBrowserRouter([
   {
@@ -25,7 +26,7 @@ const Router = createBrowserRouter([
     path: "f",
     element: <Container />,
     errorElement: <ErrorPage />,
-    children: [...financial, ...settings, ...operational],
+    children: [...financial, ...settings, ...operational, ...administrative],
   },
   {
     path: "*",
