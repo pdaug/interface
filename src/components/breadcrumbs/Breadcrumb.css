@@ -13,9 +13,9 @@
 }
 
 .breadcrumb a {
-  color: var(--infoColor);
-  font-size: var(--textRegular);
-  font-weight: 400;
+  color: var(--textColor);
+  /* font-size: var(--textRegular); */
+  /* font-weight: 400; */
   transition: 200ms;
   text-decoration: none;
 }

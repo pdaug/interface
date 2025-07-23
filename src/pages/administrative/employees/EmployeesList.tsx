@@ -28,12 +28,13 @@ import useTranslate from "../../../hooks/useTranslate";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import Tooltip from "../../../components/tooltips/Tooltip";
+import Profile from "../../../components/profiles/Profile";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
+import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import { Input, InputInterval } from "../../../components/inputs/Input";
-import Avatar from "../../../components/avatars/Avatar";
 
 const pageSize = 10;
 
@@ -43,7 +44,7 @@ const EmployeesList = function () {
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { token, instance, workspaceId } = useSystem();
+  const { token, instance, workspaces, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -106,7 +107,25 @@ const EmployeesList = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.employee.employees}</h1>
+        <h1>
+          <Breadcrumb
+            links={[
+              {
+                id: "workspace",
+                label:
+                  workspaces.find(function (workspace) {
+                    return workspace.id === workspaceId;
+                  })?.name || "",
+                url: "/f/",
+              },
+              {
+                id: "employees",
+                label: t.employee.employees,
+                url: "/f/employees",
+              },
+            ]}
+          />
+        </h1>
       </Horizontal>
       <Horizontal internal={1} styles={{ overflow: "hidden" }}>
         <Button
@@ -199,20 +218,21 @@ const EmployeesList = function () {
                 );
               },
             },
-            photo: {
-              label: t.employee.photo,
-              maxWidth: 48,
+
+            name: {
+              label: t.employee.name,
               handler: function (data) {
                 return (
-                  <Avatar
-                    circle
-                    size={4}
-                    label={String(data?.name || t.components.unknown)}
+                  <Profile
+                    photoCircle
+                    photoSize={4}
+                    padding={false}
+                    name={data.name as string}
+                    photo={(data.photo as string) ?? undefined}
                   />
                 );
               },
             },
-            name: { label: t.employee.name },
             document1: { label: t.employee.document },
             mobile: { label: t.employee.mobile },
             email: { label: t.employee.email },
