@@ -68,11 +68,25 @@ const AccountList = function () {
         },
         workspaceId,
       );
-      if (!response.data?.result?.items) return;
+      if (!response.data?.result?.items) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.warn(
+          "[src/pages/settings/accounts/AccountInspect.tsx]",
+          response.data,
+        );
+        return;
+      }
       setAccounts(response.data.result.items);
       setTotal(response.data.result.pagination.total);
       return;
     } catch (err) {
+      play("alert");
+      toast.error(t.toast.warning_error, {
+        description: t.stacks.no_find_item,
+      });
       console.error("[src/pages/settings/accounts/AccountInspect.tsx]", err);
       return;
     } finally {

@@ -70,14 +70,26 @@ const ServicesInspect = function () {
         id,
         workspaceId,
       );
-      if (!response.data?.result) return;
+      if (!response.data?.result || response.status !== 200) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        navigate("/f/services");
+        return;
+      }
       setForm(response.data.result);
       return;
     } catch (err) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.no_find_item,
+      });
       console.error(
         "[src/pages/operational/services/ServicesInspect.tsx]",
         err,
       );
+      navigate("/f/services");
       return;
     } finally {
       setLoading(false);
@@ -96,19 +108,18 @@ const ServicesInspect = function () {
           form,
           workspaceId,
         );
-        if (!response.data?.result) {
+        if (!response.data?.result || response.status !== 200) {
           play("alert");
           toast.warning(t.toast.warning_error, {
             description: t.toast.warning_edit,
           });
+          return;
         }
-        if (response.data.state === "success") {
-          play("ok");
-          toast.success(t.toast.success, {
-            description: t.toast.success_edit,
-          });
-          navigate("/f/services");
-        }
+        play("ok");
+        toast.success(t.toast.success, {
+          description: t.toast.success_edit,
+        });
+        navigate("/f/services");
         return;
       }
       // is creating
@@ -118,41 +129,35 @@ const ServicesInspect = function () {
         form,
         workspaceId,
       );
-      if (!response.data?.result) {
+      if (!response.data?.result || response.status !== 201) {
         play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_create,
         });
+        return;
       }
-      if (response.data.state === "success") {
-        play("ok");
-        toast.success(t.toast.success, {
-          description: t.toast.success_create,
-        });
-        navigate("/f/services");
-      }
+      play("ok");
+      toast.success(t.toast.success, {
+        description: t.toast.success_create,
+      });
+      navigate("/f/services");
       return;
     } catch (err) {
-      if (err instanceof AxiosError) {
-        if (err.response?.data?.result?.message === "schema_incorrect") {
-          play("alert");
-          Schema(err.response.data.result.err);
-          return;
-        }
-      }
       play("alert");
-      if (id)
-        toast.error(t.toast.warning_error, {
-          description: t.toast.error_edit,
-        });
-      else
-        toast.error(t.toast.warning_error, {
-          description: t.toast.error_create,
-        });
       console.error(
         "[src/pages/operational/services/ServicesInspect.tsx]",
         err,
       );
+      if (
+        err instanceof AxiosError &&
+        err.response?.data?.result?.message === "schema_incorrect"
+      ) {
+        Schema(err.response.data.result.err);
+        return;
+      }
+      toast.error(t.toast.warning_error, {
+        description: id ? t.toast.error_edit : t.toast.error_create,
+      });
       return;
     }
   };

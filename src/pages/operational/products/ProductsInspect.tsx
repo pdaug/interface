@@ -87,14 +87,21 @@ const ProductsInspect = function () {
         id,
         workspaceId,
       );
-      if (!response.data?.result) return;
+      if (!response.data?.result || response.status !== 200) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        navigate("/f/products");
+        return;
+      }
       setForm(response.data.result);
       return;
     } catch (err) {
+      play("alert");
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      play("alert");
       console.error(
         "[src/pages/operational/products/ProductsInspect.tsx]",
         err,

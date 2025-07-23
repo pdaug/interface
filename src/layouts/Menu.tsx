@@ -42,12 +42,14 @@ const Menu = function () {
         label: workspace.name,
         onClick: function () {
           if (workspace.id === workspaceId) {
+            play("alert");
             toast.warning(t.toast.warning_error, {
               description: t.workspace.already_selected_workspace,
             });
             return;
           }
           selectWorkspace(workspace.id);
+          play("ok");
           toast.success(t.toast.success, {
             description: t.toast.success_workspace,
           });
