@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import { withMask } from "use-mask-input";
-import DatePicker from "react-datepicker";
+import DatePicker, { CalendarContainer } from "react-datepicker";
 
 // locale
 import { ptBR, enUS } from "date-fns/locale";
@@ -16,7 +16,9 @@ import "./InputInterval.css";
 import useSystem from "../../hooks/useSystem";
 import useDateTime from "../../hooks/useDateTime";
 import useTranslate from "../../hooks/useTranslate";
-import { endOfDay, startOfDay } from "date-fns";
+import { endOfDay, isSameDay, isToday, startOfDay, subDays } from "date-fns";
+import { Vertical } from "../aligns/Align";
+import Button from "../buttons/Button";
 
 export type InputProps = {
   id?: string;
@@ -317,10 +319,11 @@ const InputInterval = function ({
   readOnly,
   onChange,
 }: InputIntervalProps) {
+  const t = useTranslate();
   const { instance } = useSystem();
   const { instanceDate } = useDateTime();
 
-  const Custom = forwardRef<
+  const ButtonInputInterval = forwardRef<
     HTMLDivElement,
     React.DOMAttributes<HTMLDivElement>
   >(function (props, ref) {
@@ -332,7 +335,75 @@ const InputInterval = function ({
     );
   });
 
-  Custom.displayName = "Custom";
+  ButtonInputInterval.displayName = "Custom";
+
+  const ContainerInputInterval = function ({
+    className,
+    children,
+  }: {
+    className: string;
+    children: React.ReactNode;
+  }) {
+    return (
+      <CalendarContainer className={className}>
+        <Vertical>
+          {children}
+          <Vertical internal={0.4} external={0.4}>
+            <Button
+              type="button"
+              category={
+                isToday(value[0] || 0) && isToday(value[1] || 0)
+                  ? "Info"
+                  : "Neutral"
+              }
+              text={t.components.today}
+              onClick={function () {
+                if (onChange)
+                  onChange([startOfDay(new Date()), endOfDay(new Date())]);
+                return;
+              }}
+            />
+            <Button
+              type="button"
+              category={
+                isSameDay(value[0] || 0, subDays(new Date(), 7)) &&
+                isToday(value[1] || 0)
+                  ? "Info"
+                  : "Neutral"
+              }
+              text={t.components.this_week}
+              onClick={function () {
+                if (onChange)
+                  onChange([
+                    startOfDay(subDays(new Date(), 7)),
+                    endOfDay(new Date()),
+                  ]);
+                return;
+              }}
+            />
+            <Button
+              type="button"
+              category={
+                isSameDay(value[0] || 0, subDays(new Date(), 30)) &&
+                isToday(value[1] || 0)
+                  ? "Info"
+                  : "Neutral"
+              }
+              text={t.components.this_month}
+              onClick={function () {
+                if (onChange)
+                  onChange([
+                    startOfDay(subDays(new Date(), 30)),
+                    endOfDay(new Date()),
+                  ]);
+                return;
+              }}
+            />
+          </Vertical>
+        </Vertical>
+      </CalendarContainer>
+    );
+  };
 
   return (
     <div className="input" style={styles}>
@@ -360,7 +431,8 @@ const InputInterval = function ({
               ]);
             return;
           }}
-          customInput={<Custom />}
+          customInput={<ButtonInputInterval />}
+          calendarContainer={ContainerInputInterval}
         />
       </div>
     </div>

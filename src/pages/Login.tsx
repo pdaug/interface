@@ -66,6 +66,10 @@ const Login = function () {
         const response = await apis.Instance.search<TypeInstance>(subdomain);
         if (!response.data?.result) return;
         saveInstance(response.data.result);
+        setForm({
+          ...form,
+          instance: response.data.result.name,
+        });
       }
     } catch (err) {
       console.error("[src/pages/Login.tsx]", err);
@@ -125,8 +129,6 @@ const Login = function () {
         return;
       }
 
-      console.log(responseUser?.data?.result?.items);
-
       saveToken(responseLogin.data.result.token);
       saveUser(responseLogin.data.result.user);
       saveWorkspaces(responseWorkspace.data.result.items);
@@ -182,7 +184,7 @@ const Login = function () {
           ]}
         >
           <Vertical internal={1}>
-            {instance && instance.logoLarge && (
+            {instance && instance?.logoLarge && (
               <Horizontal styles={{ justifyContent: "center" }}>
                 <img
                   alt="logo large"
@@ -191,20 +193,22 @@ const Login = function () {
                 />
               </Horizontal>
             )}
-            <Input
-              required
-              name="instance"
-              id="login_instance"
-              placeholder="johndoe"
-              value={form.instance}
-              label={t.login.instance}
-              onChange={function (event) {
-                const newForm = { ...form };
-                newForm.instance = event.currentTarget?.value || "";
-                setForm(newForm);
-                return;
-              }}
-            />
+            {!instance?.name && (
+              <Input
+                required
+                name="instance"
+                id="login_instance"
+                placeholder="johndoe"
+                value={form.instance}
+                label={t.login.instance}
+                onChange={function (event) {
+                  const newForm = { ...form };
+                  newForm.instance = event.currentTarget?.value || "";
+                  setForm(newForm);
+                  return;
+                }}
+              />
+            )}
             <Input
               required
               name="username"

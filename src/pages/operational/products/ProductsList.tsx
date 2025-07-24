@@ -2,8 +2,8 @@ import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
+import { endOfDay, startOfYear } from "date-fns";
 import { Plus, QuestionMark } from "@phosphor-icons/react";
-import { endOfDay, startOfDay, subMonths } from "date-fns";
 
 //apis
 import apis from "../../../apis";
@@ -59,7 +59,7 @@ const ProductsList = function () {
   const [selected, setSelected] = useState<string[]>([]);
   const [products, setProducts] = useState<TypeProduct[]>([]);
   const [interval, setInterval] = useState<TypeInputInterval>({
-    start: subMonths(startOfDay(new Date()), 1),
+    start: startOfYear(new Date()),
     end: endOfDay(new Date()),
   });
 
