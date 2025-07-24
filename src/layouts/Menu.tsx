@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { GearSix, CaretDown } from "@phosphor-icons/react";
+import { GearSix, CaretDown, Check } from "@phosphor-icons/react";
 
 // assets
 import { MenuOptions } from "../assets/Menu";
@@ -40,6 +40,12 @@ const Menu = function () {
       return {
         id: workspace.id,
         label: workspace.name,
+        Icon: workspace.id === workspaceId ? Check : Check,
+        IconColor:
+          workspace.id === workspaceId
+            ? "var(--successColor)"
+            : "var(--borderDark)",
+        IconWeight: workspace.id === workspaceId ? "bold" : "regular",
         onClick: function () {
           if (workspace.id === workspaceId) {
             play("alert");

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Icon as PhosphorIcons } from "@phosphor-icons/react";
+import { IconWeight, Icon as PhosphorIcons } from "@phosphor-icons/react";
 
 // styles
 import "./Dropdown.css";
@@ -9,6 +9,8 @@ export type DropdownValue = {
   label: string;
   disabled?: boolean;
   Icon?: PhosphorIcons;
+  IconColor?: string;
+  IconWeight?: IconWeight;
   onClick?:
     | (() => void)
     | ((
@@ -83,7 +85,15 @@ const Dropdown = function ({ children, values, data }: DropdownProps) {
         ref={dropdownContentRef}
         className={`dropdownContent ${dropdownOpen ? "dropdownContentOpen" : ""}`}
       >
-        {values.map(function ({ id, label, Icon, disabled, onClick }) {
+        {values.map(function ({
+          id,
+          label,
+          Icon,
+          IconColor,
+          IconWeight,
+          disabled,
+          onClick,
+        }) {
           const onClickWithClose = function (
             event: React.MouseEvent<HTMLButtonElement>,
           ) {
@@ -98,7 +108,13 @@ const Dropdown = function ({ children, values, data }: DropdownProps) {
               onClick={onClickWithClose}
               className="dropdownContentOption"
             >
-              {Icon && <Icon size={16} />}
+              {Icon && (
+                <Icon
+                  size={16}
+                  color={IconColor || "var(--textColor)"}
+                  weight={IconWeight}
+                />
+              )}
               <span>{label}</span>
             </button>
           );
