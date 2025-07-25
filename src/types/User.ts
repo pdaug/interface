@@ -3,6 +3,7 @@ export type TypeUserRole = "master" | "admin" | "collaborator";
 export type TypeUser = {
   id: string;
   status: boolean;
+  photo?: string | null;
   name: string;
   document1: string;
   document2: string;

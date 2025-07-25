@@ -28,6 +28,7 @@ const Upload = {
     data: {
       file: File;
       name: string;
+      path?: string;
       height?: number;
       width?: number;
       quality?: number;
@@ -36,6 +37,7 @@ const Upload = {
     const formData = new FormData();
     formData.append("file", data.file);
     formData.append("name", data.name);
+    if (data.path) formData.append("path", String(data.path));
     if (data.height) formData.append("height", String(data.height));
     if (data.width) formData.append("width", String(data.width));
     if (data.quality) formData.append("quality", String(data.quality));

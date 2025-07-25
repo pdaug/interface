@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
-import { Asterisk } from "@phosphor-icons/react";
+import { Asterisk, User } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // apis
@@ -31,10 +31,12 @@ import useTranslate from "../../../hooks/useTranslate";
 // components
 import {
   Input,
+  InputFile,
   InputMask,
   InputSelect,
 } from "../../../components/inputs/Input";
 import Button from "../../../components/buttons/Button";
+import Avatar from "../../../components/avatars/Avatar";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
@@ -48,6 +50,8 @@ const EmployeesInspect = function () {
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
   const { token, instance, workspaces, workspaceId } = useSystem();
+
+  const [photoTemp, setPhotoTemp] = useState<File | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeUser>>({
@@ -107,6 +111,22 @@ const EmployeesInspect = function () {
     try {
       // is editing
       if (id) {
+        // upload photo temp
+        if (photoTemp) {
+          const responseUploadImage = await apis.Upload.image<string>(
+            instance.name,
+            token,
+            {
+              file: photoTemp,
+              path: `image/user/${id}`,
+              name: id,
+              height: 256,
+              width: 256,
+              quality: 100,
+            },
+          );
+          form.photo = responseUploadImage.data?.result || null;
+        }
         const response = await apis.User.update(token, instance.name, id, form);
         if (!response.data?.result || response.status !== 200) {
           play("alert");
@@ -123,7 +143,11 @@ const EmployeesInspect = function () {
         return;
       }
       // is creating
-      const response = await apis.User.create(token, instance.name, form);
+      const response = await apis.User.create<TypeUser>(
+        token,
+        instance.name,
+        form,
+      );
       if (!response.data?.result || response.status !== 201) {
         play("alert");
         toast.warning(t.toast.warning_error, {
@@ -131,6 +155,25 @@ const EmployeesInspect = function () {
         });
         return;
       }
+      // upload photo temp
+      if (photoTemp) {
+        const responseUploadImage = await apis.Upload.image<string>(
+          instance.name,
+          token,
+          {
+            file: photoTemp,
+            path: `image/user/${response.data.result.id}`,
+            name: response.data.result.id,
+            height: 256,
+            width: 256,
+            quality: 100,
+          },
+        );
+        form.photo = responseUploadImage.data?.result || null;
+      }
+      await apis.User.update(token, instance.name, response.data.result.id, {
+        photo: form.photo,
+      });
       play("ok");
       toast.success(t.toast.success, {
         description: t.toast.success_create,
@@ -160,7 +203,7 @@ const EmployeesInspect = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>
+        <h2>
           <Breadcrumb
             links={[
               {
@@ -183,10 +226,65 @@ const EmployeesInspect = function () {
               },
             ]}
           />
-        </h1>
+        </h2>
       </Horizontal>
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
+          <Horizontal internal={1}>
+            <Wrapper>
+              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+                <Avatar
+                  label=""
+                  size={12}
+                  Icon={User}
+                  photo={
+                    photoTemp
+                      ? URL.createObjectURL(photoTemp)
+                      : form?.photo || ""
+                  }
+                />
+                <InputFile
+                  name="photo"
+                  value={photoTemp}
+                  disabled={loading}
+                  id="employee_photo"
+                  helper="PNG, JPG e JPEG"
+                  label={t.employee.photo}
+                  accept="image/png, image/jpg, image/jpeg"
+                  onChange={function (event) {
+                    const file = event.currentTarget.files?.[0] || null;
+                    if (!file) return;
+                    if (file.size > 5 * 1024 * 1024) {
+                      play("alert");
+                      toast.error(t.toast.warning_error, {
+                        description: t.stacks.limit_image_5mb,
+                      });
+                      return;
+                    }
+                    setPhotoTemp(file);
+                    return;
+                  }}
+                />
+              </Horizontal>
+            </Wrapper>
+
+            <Wrapper
+              title="Históricos"
+              description="Aqui ficam todos os históricos desse colaborador"
+            >
+              <Vertical internal={0.4} styles={{ alignItems: "center" }}>
+                <span
+                  style={{
+                    color: "var(--textLight)",
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {t.stacks.no_items}
+                </span>
+              </Vertical>
+            </Wrapper>
+          </Horizontal>
+
           <Wrapper
             title={id ? t.employee.title_edit : t.employee.title_create}
             description={t.employee.subtitle}
