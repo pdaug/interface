@@ -48,6 +48,7 @@ import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import Profile from "../../../components/profiles/Profile";
 
 // TODO: change price type to string
 const ProductsInspect = function () {
@@ -58,7 +59,7 @@ const ProductsInspect = function () {
   const Currency = useCurrency();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
-  const { user, token, instance, workspaces, workspaceId } = useSystem();
+  const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
   const [productTemp, setProductTemp] = useState<(File | null)[]>([]);
 
@@ -78,8 +79,13 @@ const ProductsInspect = function () {
     ],
     propertyColor: "#fafafa",
     workspaceId,
-    userId: user.id,
   });
+
+  const userFinded = form.userId
+    ? users.find(function (userLocal) {
+        return form.userId === userLocal.id;
+      })
+    : null;
 
   // fetch product
   useAsync(async function () {
@@ -125,6 +131,7 @@ const ProductsInspect = function () {
 
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setLoading(true);
     const toastId = toast.loading(t.components.loading);
     try {
       // is editing
@@ -156,6 +163,7 @@ const ProductsInspect = function () {
         );
         if (!response.data?.result || response.status !== 200) {
           play("alert");
+          setLoading(false);
           toast.dismiss(toastId);
           toast.warning(t.toast.warning_error, {
             description: t.toast.warning_edit,
@@ -168,9 +176,11 @@ const ProductsInspect = function () {
           description: t.toast.success_edit,
         });
         navigate("/f/products");
+        setLoading(false);
         return;
       }
       // is creating
+      form.userId = user.id;
       const response = await apis.Product.create<TypeProduct>(
         token,
         instance.name,
@@ -183,6 +193,7 @@ const ProductsInspect = function () {
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_create,
         });
+        setLoading(false);
         return;
       }
       // upload product temp
@@ -216,8 +227,10 @@ const ProductsInspect = function () {
         description: t.toast.success_create,
       });
       navigate("/f/products");
+      setLoading(false);
       return;
     } catch (err) {
+      setLoading(false);
       play("alert");
       toast.dismiss(toastId);
       console.error(
@@ -385,8 +398,20 @@ const ProductsInspect = function () {
                   }}
                 />
               </Horizontal>
+              {/* TODO: add user finded in edit page */}
               {Boolean(id) && (
                 <Horizontal internal={1}>
+                  <div
+                    className="flex1"
+                    style={{ alignItems: "flex-end", display: "flex" }}
+                  >
+                    <Profile
+                      padding={false}
+                      photo={userFinded?.photo || ""}
+                      description={userFinded?.email || ""}
+                      name={userFinded?.name || t.components.unknown}
+                    />
+                  </div>
                   <Input
                     readOnly
                     placeholder=""
@@ -470,7 +495,7 @@ const ProductsInspect = function () {
                           value={productTemp[index]}
                           name={`variant.${index}.photo`}
                           id={`product_variant_${index}_photo`}
-                          accept="image/png, image/jpg, image/jpeg"
+                          accept="image/png, image/jpg, image/jpeg, image/webp"
                           onChange={function (event) {
                             const file = event.currentTarget.files?.[0] || null;
                             if (!file) return;
@@ -1066,6 +1091,7 @@ const ProductsInspect = function () {
               <Button
                 type="button"
                 category="Neutral"
+                disabled={loading}
                 text={t.components.cancel}
                 onClick={function () {
                   navigate("/f/products");
@@ -1074,6 +1100,7 @@ const ProductsInspect = function () {
               />
               <Button
                 type="submit"
+                disabled={loading}
                 category="Success"
                 text={id ? t.components.edit : t.components.save}
               />
