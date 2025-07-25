@@ -196,8 +196,23 @@ const ServicesList = function () {
             return;
           }}
         />
-        <Button category="Neutral" text={t.components.import} />
-        <Button category="Neutral" text={t.components.export} />
+        {/* <Button category="Neutral" text={t.components.import} /> */}
+        <Button
+          category="Neutral"
+          disabled={!selected.length}
+          text={t.components.export}
+          onClick={function () {
+            const data = services.filter(function (service) {
+              return selected.includes(service.id);
+            });
+            Download.JSON(data, `services.json`);
+            play("ok");
+            toast.success(t.toast.success, {
+              description: t.toast.success_download,
+            });
+            return;
+          }}
+        />
         <Tooltip content={t.components.help}>
           <Button
             text=""

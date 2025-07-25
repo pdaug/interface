@@ -58,6 +58,7 @@ const Dashboard = function () {
         <InputSelect
           label=""
           empty=""
+          disabled
           value="general"
           styles={{ maxWidth: "10rem" }}
           options={[
@@ -110,6 +111,7 @@ const Dashboard = function () {
           ]}
         >
           <Button
+            disabled
             category="Neutral"
             text={t.components.download}
             Icon={DownloadSimple}

@@ -56,7 +56,6 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const pageSize = 10;
 
-// TODO: export only selected length and download
 const ProductsList = function () {
   const t = useTranslate();
   const play = useSounds();
@@ -301,8 +300,23 @@ const ProductsList = function () {
             return;
           }}
         />
-        <Button category="Neutral" text={t.components.import} />
-        <Button category="Neutral" text={t.components.export} />
+        {/* <Button category="Neutral" text={t.components.import} /> */}
+        <Button
+          category="Neutral"
+          disabled={!selected.length}
+          text={t.components.export}
+          onClick={function () {
+            const data = products.filter(function (product) {
+              return selected.includes(product.id);
+            });
+            Download.JSON(data, `products.json`);
+            play("ok");
+            toast.success(t.toast.success, {
+              description: t.toast.success_download,
+            });
+            return;
+          }}
+        />
         <Tooltip content={t.components.help}>
           <Button
             text=""

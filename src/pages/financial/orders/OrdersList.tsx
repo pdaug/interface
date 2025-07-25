@@ -8,6 +8,9 @@ import { Plus, QuestionMark } from "@phosphor-icons/react";
 // apis
 import apis from "../../../apis";
 
+// utils
+import Download from "../../../utils/Download";
+
 // types
 import { TypeOrder } from "../../../types/Order";
 import { ApiResponsePaginate } from "../../../types/Api";
@@ -154,8 +157,23 @@ const OrdersList = function () {
             return;
           }}
         />
-        <Button category="Neutral" text={t.components.import} />
-        <Button category="Neutral" text={t.components.export} />
+        {/* <Button category="Neutral" text={t.components.import} /> */}
+        <Button
+          category="Neutral"
+          disabled={!selected.length}
+          text={t.components.export}
+          onClick={function () {
+            const data = orders.filter(function (order) {
+              return selected.includes(order.id);
+            });
+            Download.JSON(data, `orders.json`);
+            play("ok");
+            toast.success(t.toast.success, {
+              description: t.toast.success_download,
+            });
+            return;
+          }}
+        />
         <Tooltip content={t.components.help}>
           <Button
             text=""

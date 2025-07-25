@@ -84,6 +84,7 @@ const ProductsInspect = function () {
   // fetch product
   useAsync(async function () {
     if (!id) return;
+    const toastId = toast.loading(t.components.loading);
     setLoading(true);
     try {
       const response = await apis.Product.get(
@@ -94,6 +95,7 @@ const ProductsInspect = function () {
       );
       if (!response.data?.result || response.status !== 200) {
         play("alert");
+        toast.dismiss(toastId);
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
@@ -101,9 +103,11 @@ const ProductsInspect = function () {
         return;
       }
       setForm(response.data.result);
+      toast.dismiss(toastId);
       return;
     } catch (err) {
       play("alert");
+      toast.dismiss(toastId);
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
@@ -114,12 +118,14 @@ const ProductsInspect = function () {
       navigate("/f/products");
       return;
     } finally {
+      toast.dismiss(toastId);
       setLoading(false);
     }
   }, []);
 
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const toastId = toast.loading(t.components.loading);
     try {
       // is editing
       if (id && form.id) {
@@ -150,12 +156,14 @@ const ProductsInspect = function () {
         );
         if (!response.data?.result || response.status !== 200) {
           play("alert");
+          toast.dismiss(toastId);
           toast.warning(t.toast.warning_error, {
             description: t.toast.warning_edit,
           });
           return;
         }
         play("ok");
+        toast.dismiss(toastId);
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
         });
@@ -171,6 +179,7 @@ const ProductsInspect = function () {
       );
       if (!response.data?.result || response.status !== 201) {
         play("alert");
+        toast.dismiss(toastId);
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_create,
         });
@@ -202,6 +211,7 @@ const ProductsInspect = function () {
         workspaceId,
       );
       play("ok");
+      toast.dismiss(toastId);
       toast.success(t.toast.success, {
         description: t.toast.success_create,
       });
@@ -209,6 +219,7 @@ const ProductsInspect = function () {
       return;
     } catch (err) {
       play("alert");
+      toast.dismiss(toastId);
       console.error(
         "[src/pages/operational/products/ProductsInspect.tsx]",
         err,

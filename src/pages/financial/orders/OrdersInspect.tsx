@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Asterisk } from "@phosphor-icons/react";
+import { useNavigate, useParams } from "react-router-dom";
+
+// types
+import { TypeOrder } from "../../../types/Order";
 
 // hooks
 import useSystem from "../../../hooks/useSystem";
@@ -9,16 +13,18 @@ import useTranslate from "../../../hooks/useTranslate";
 import Button from "../../../components/buttons/Button";
 import { Input } from "../../../components/inputs/Input";
 import Wrapper from "../../../components/wrapper/Wrapper";
+import Callout from "../../../components/callouts/Callout";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const OrdersInspect = function () {
   const t = useTranslate();
   const { id } = useParams();
+  const navigate = useNavigate();
   const { workspaces, workspaceId } = useSystem();
 
-  const [form, setForm] = useState({
-    name: "",
+  const [form, setForm] = useState<Partial<TypeOrder>>({
+    id: "",
   });
 
   return (
@@ -42,58 +48,60 @@ const OrdersInspect = function () {
               },
               {
                 id: "order",
-                label: form?.name || t.components.empty_name,
+                label: form?.id || t.components.empty_name,
                 url: `/f/orders/inspect${id ? `/${id}` : ""}`,
               },
             ]}
           />
         </h2>
       </Horizontal>
-      <div>
-        <Wrapper title="One Title" description="Description">
-          <Vertical internal={1}>
-            <Horizontal internal={1}>
-              <Input
-                label="Name"
-                placeholder="Name"
-                value={form.name}
-                onChange={function (event) {
-                  const newForm = { ...form };
-                  newForm.name = event.currentTarget?.value || "";
-                  setForm(newForm);
-                  return;
-                }}
-              />
-              <Input
-                label="Name"
-                placeholder="Name"
-                value={form.name}
-                onChange={function (event) {
-                  const newForm = { ...form };
-                  newForm.name = event.currentTarget?.value || "";
-                  setForm(newForm);
-                  return;
-                }}
-              />
-              <Input
-                label="Name"
-                placeholder="Name"
-                value={form.name}
-                onChange={function (event) {
-                  const newForm = { ...form };
-                  newForm.name = event.currentTarget?.value || "";
-                  setForm(newForm);
-                  return;
-                }}
-              />
-            </Horizontal>
+      <form>
+        <Vertical internal={1}>
+          <Wrapper title="One Title" description="Description">
+            <Vertical internal={1}>
+              <Horizontal internal={1}>
+                <Input
+                  label="Name"
+                  placeholder="Name"
+                  value={form.id || ""}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.id = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+            </Vertical>
+          </Wrapper>
+
+          <Callout
+            Icon={Asterisk}
+            category="Warning"
+            text={t.stacks.required_fields}
+            styles={{ fontSize: "var(--textSmall)" }}
+          />
+
+          <Wrapper>
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
-              <Button category="Neutral" text="Cancel" />
-              <Button category="Success" text="Save" />
+              <Button
+                type="button"
+                category="Neutral"
+                text={t.components.cancel}
+                onClick={function () {
+                  navigate("/f/orders");
+                  return;
+                }}
+              />
+              <Button
+                type="submit"
+                category="Success"
+                text={id ? t.components.edit : t.components.save}
+              />
             </Horizontal>
-          </Vertical>
-        </Wrapper>
-      </div>
+          </Wrapper>
+        </Vertical>
+      </form>
     </React.Fragment>
   );
 };

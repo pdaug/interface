@@ -1,7 +1,7 @@
 import { TypeAddress } from "./Components";
 
 export type TypeOrder = {
-  id?: string;
+  id: string;
   status: boolean;
   description: string;
   dateStart: string;
