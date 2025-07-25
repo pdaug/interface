@@ -17,6 +17,7 @@ import { TypeInputInterval } from "../../../types/Components";
 import useAsync from "../../../hooks/useAsync";
 import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
+import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -38,6 +39,7 @@ const OrdersList = function () {
   const play = useSounds();
   const navigate = useNavigate();
   const { OpenDialog } = useDialog();
+  const { instanceDateTime } = useDateTime();
   const { token, instance, users, workspaces, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
@@ -187,22 +189,24 @@ const OrdersList = function () {
           data={orders as TableData[]}
           columns={{
             status: {
-              label: "Status",
-              maxWidth: "96px",
+              label: t.components.status,
+              maxWidth: 96,
               handler: function (data) {
                 return (
                   <Badge
                     category={data.status ? "Success" : "Danger"}
-                    value={data.status ? "Active" : "Disabled"}
+                    value={
+                      data.status ? t.components.active : t.components.inactive
+                    }
                   />
                 );
               },
             },
-            originName: { label: "Origem" },
-            priceMethod: { label: "Forma de pagamento" },
-            priceTotal: { label: "Valor" },
+            originName: { label: t.order.origin_name },
+            priceMethod: { label: t.order.price_method },
+            priceTotal: { label: t.order.price_total },
             dateOverdue: {
-              label: "Data do vencimento",
+              label: t.order.date_overdue,
               handler: function (data) {
                 const dateFormatted = new Date(
                   String(data.dateOverdue),
@@ -211,7 +215,7 @@ const OrdersList = function () {
               },
             },
             datePayment: {
-              label: "Data do pagamento",
+              label: t.order.date_payment,
               handler: function (data) {
                 const dateFormatted = data.datePayment
                   ? new Date(String(data.datePayment)).toLocaleString()
@@ -219,7 +223,7 @@ const OrdersList = function () {
                 return dateFormatted;
               },
             },
-            destinationName: { label: "Destino" },
+            destinationName: { label: t.order.destination_name },
             user: {
               label: t.components.user,
               handler: function (data) {
@@ -240,6 +244,13 @@ const OrdersList = function () {
                     />
                   </Tooltip>
                 );
+              },
+            },
+            createdAt: {
+              label: t.components.created_at,
+              handler: function (data) {
+                const datetime = instanceDateTime(data.createdAt as string);
+                return datetime;
               },
             },
           }}
