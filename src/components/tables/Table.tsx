@@ -104,11 +104,19 @@ const Table = function ({
       </div>
       {loading ? (
         <Horizontal external={1} styles={{ justifyContent: "center" }}>
-          {t.components.loading}...
+          <i
+            style={{ color: "var(--textLight)", fontSize: "var(--textSmall)" }}
+          >
+            {t.components.loading}...
+          </i>
         </Horizontal>
       ) : data.length === 0 ? (
         <Horizontal external={1} styles={{ justifyContent: "center" }}>
-          {t.stacks.no_items}
+          <i
+            style={{ color: "var(--textLight)", fontSize: "var(--textSmall)" }}
+          >
+            {t.stacks.no_items}
+          </i>
         </Horizontal>
       ) : (
         <div className="tableBody">

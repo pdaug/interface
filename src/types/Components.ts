@@ -4,3 +4,13 @@ export type TypeInputInterval = {
 };
 
 export type TypeProductViewMode = "shelves" | "table";
+
+export type TypeAddress = {
+  street: string;
+  number: string;
+  complement?: string;
+  postalCode: string;
+  neighborhood?: string;
+  city: string;
+  state: string;
+};

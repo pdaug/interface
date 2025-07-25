@@ -389,14 +389,15 @@ const ProductsList = function () {
               })
             ) : (
               <Wrapper>
-                <Horizontal
-                  styles={{
-                    color: "var(--textLight)",
-                    fontSize: "var(--textSmall)",
-                    justifyContent: "center",
-                  }}
-                >
-                  {t.stacks.no_items}
+                <Horizontal styles={{ justifyContent: "center" }}>
+                  <i
+                    style={{
+                      color: "var(--textLight)",
+                      fontSize: "var(--textSmall)",
+                    }}
+                  >
+                    {t.stacks.no_items}
+                  </i>
                 </Horizontal>
               </Wrapper>
             )}

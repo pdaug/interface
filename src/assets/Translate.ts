@@ -312,6 +312,11 @@ const TranslatePt = {
     energy_and_utilities: "Energia",
     mining_and_extraction: "Mineração",
   },
+  order: {
+    order: "Pedido",
+    orders: "Pedidos",
+    new: "Novo pedido",
+  },
   pages: {
     error: "Erro",
     error_description: "Houve um erro ao acessar esta página",
@@ -765,6 +770,11 @@ const TranslateEn = {
     import_and_export: "Import and Export",
     energy_and_utilities: "Energy and Utilities",
     mining_and_extraction: "Mining and Extraction",
+  },
+  order: {
+    order: "Order",
+    orders: "Orders",
+    new: "New order",
   },
   pages: {
     error: "Error",

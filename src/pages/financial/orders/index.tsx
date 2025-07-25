@@ -1,6 +1,6 @@
 // pages
-import OrdersEdit from "./OrdersEdit";
 import OrdersList from "./OrdersList";
+import OrdersInspect from "./OrdersInspect";
 
 export default [
   {
@@ -9,10 +9,10 @@ export default [
   },
   {
     path: "inspect",
-    Component: OrdersEdit,
+    Component: OrdersInspect,
   },
   {
     path: "inspect/:id",
-    Component: OrdersEdit,
+    Component: OrdersInspect,
   },
 ];
