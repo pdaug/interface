@@ -43,6 +43,7 @@ import {
   InputSelect,
 } from "../../../components/inputs/Input";
 import Button from "../../../components/buttons/Button";
+import Avatar from "../../../components/avatars/Avatar";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
@@ -492,78 +493,72 @@ const SettingsPanel = function () {
                 />
               </Horizontal>
               <Horizontal internal={1}>
-                {/* TODO: change to avatar */}
-                <div
-                  className="flex1"
-                  style={{
+                <Horizontal
+                  styles={{
                     alignItems: "center",
                     background: "var(--backgroundColor)",
                     backgroundColor: "var(--backgroundColor)",
                     border: "1px solid var(--borderColor)",
                     borderRadius: "var(--borderRadius)",
-                    display: "flex",
+                    flex: 1,
                     justifyContent: "center",
                     padding: "0.4rem",
                   }}
                 >
-                  <img
-                    height={96}
-                    width={96}
-                    src={
+                  <Avatar
+                    label=""
+                    size={12}
+                    photo={
                       logoTemp
                         ? URL.createObjectURL(logoTemp)
                         : form?.logo || ""
                     }
                   />
-                </div>
-                {/* TODO: change to avatar */}
-                <div
-                  className="flex1"
-                  style={{
+                </Horizontal>
+                <Horizontal
+                  styles={{
                     alignItems: "center",
                     background: "var(--backgroundColor)",
                     backgroundColor: "var(--backgroundColor)",
                     border: "1px solid var(--borderColor)",
                     borderRadius: "var(--borderRadius)",
-                    display: "flex",
+                    flex: 1,
                     justifyContent: "center",
                     padding: "0.4rem",
                   }}
                 >
-                  <img
-                    height={96}
-                    width={192}
-                    src={
+                  <Avatar
+                    label=""
+                    size={[12, 24]}
+                    photo={
                       logoLargeTemp
                         ? URL.createObjectURL(logoLargeTemp)
                         : form?.logoLarge || ""
                     }
                   />
-                </div>
-                {/* TODO: change to avatar */}
-                <div
-                  className="flex1"
-                  style={{
+                </Horizontal>
+                <Horizontal
+                  styles={{
                     alignItems: "center",
                     background: "var(--backgroundColor)",
                     backgroundColor: "var(--backgroundColor)",
                     border: "1px solid var(--borderColor)",
                     borderRadius: "var(--borderRadius)",
-                    display: "flex",
+                    flex: 1,
                     justifyContent: "center",
                     padding: "0.4rem",
                   }}
                 >
-                  <img
-                    height={48}
-                    width={48}
-                    src={
+                  <Avatar
+                    label=""
+                    size={6}
+                    photo={
                       faviconTemp
                         ? URL.createObjectURL(faviconTemp)
                         : form?.favicon || ""
                     }
                   />
-                </div>
+                </Horizontal>
               </Horizontal>
             </Vertical>
           </Wrapper>
