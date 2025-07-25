@@ -308,6 +308,7 @@ const ServicesList = function () {
                       photoSize={3}
                       padding={false}
                       styles={{ lineHeight: 1 }}
+                      photo={userFinded?.photo || ""}
                       description={userFinded?.email || ""}
                       name={userFinded?.name || t.components.unknown}
                     />

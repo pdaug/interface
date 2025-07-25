@@ -56,6 +56,7 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const pageSize = 10;
 
+// TODO: export only selected length and download
 const ProductsList = function () {
   const t = useTranslate();
   const play = useSounds();
@@ -331,6 +332,7 @@ const ProductsList = function () {
       <Vertical internal={1} styles={{ flex: 1 }}>
         {viewMode === "shelves" && (
           <Horizontal internal={1} styles={{ flexWrap: "wrap" }}>
+            {/* TODO: loading and not items */}
             {products.length ? (
               products.map(function (product) {
                 const userFinded = users?.find(function (user) {
@@ -492,6 +494,7 @@ const ProductsList = function () {
                         photoSize={3}
                         padding={false}
                         styles={{ lineHeight: 1 }}
+                        photo={userFinded?.photo || ""}
                         description={userFinded?.email || ""}
                         name={userFinded?.name || t.components.unknown}
                       />

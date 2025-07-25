@@ -72,7 +72,7 @@ const Menu = function () {
       workspaces?.find(function (workspace) {
         if (!workspace.status) return;
         return workspaceId == workspace?.id;
-      })?.name || "no_workspace",
+      })?.name || "",
     dropdown: {
       children: (
         <div className="cursor">

@@ -49,7 +49,8 @@ const EmployeesInspect = function () {
   const Schema = useSchema();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
-  const { token, instance, workspaces, workspaceId } = useSystem();
+  const { user, token, instance, workspaces, workspaceId, saveUser } =
+    useSystem();
 
   const [photoTemp, setPhotoTemp] = useState<File | null>(null);
 
@@ -127,7 +128,12 @@ const EmployeesInspect = function () {
           );
           form.photo = responseUploadImage.data?.result || null;
         }
-        const response = await apis.User.update(token, instance.name, id, form);
+        const response = await apis.User.update<TypeUser>(
+          token,
+          instance.name,
+          id,
+          form,
+        );
         if (!response.data?.result || response.status !== 200) {
           play("alert");
           toast.warning(t.toast.warning_error, {
@@ -135,6 +141,8 @@ const EmployeesInspect = function () {
           });
           return;
         }
+        // if user update it is yourself
+        if (id === user.id) saveUser(response.data.result);
         play("ok");
         toast.success(t.toast.success, {
           description: t.toast.success_edit,

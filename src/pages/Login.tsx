@@ -41,6 +41,7 @@ const Login = function () {
   const Schema = useSchema();
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     instance: "",
     username: "",
@@ -77,19 +78,22 @@ const Login = function () {
   }, []);
 
   const OnSubmit = async function (event: React.FormEvent) {
+    setLoading(true);
     event.preventDefault();
+    const toastId = toast.loading(t.components.loading);
     try {
       // fetch instance
       const responseInstance = await apis.Instance.search<TypeInstance>(
         form.instance,
       );
       if (!responseInstance?.data?.result) {
+        play("alert");
+        toast.dismiss(toastId);
         toast.error(t.toast.warning_error, {
           description: t.stacks.no_instance,
         });
         return;
       }
-      saveInstance(responseInstance.data?.result);
 
       // fetch login
       const responseLogin = await apis.Login<{ user: TypeUser; token: string }>(
@@ -100,6 +104,8 @@ const Login = function () {
         },
       );
       if (!responseLogin?.data?.result) {
+        play("alert");
+        toast.dismiss(toastId);
         toast.error(t.toast.warning_error, {
           description: t.stacks.wrong_credentials,
         });
@@ -111,6 +117,8 @@ const Login = function () {
         ApiResponsePaginate<TypeWorkspace>
       >(responseLogin.data.result.token, form.instance);
       if (!responseWorkspace?.data?.result?.items?.length) {
+        play("alert");
+        toast.dismiss(toastId);
         toast.error(t.toast.warning_error, {
           description: t.stacks.no_workspace,
         });
@@ -123,12 +131,15 @@ const Login = function () {
         form.instance,
       );
       if (!responseUser?.data?.result?.items?.length) {
+        play("alert");
+        toast.dismiss(toastId);
         toast.error(t.toast.warning_error, {
           description: t.stacks.no_user,
         });
         return;
       }
 
+      saveInstance(responseInstance.data?.result);
       saveToken(responseLogin.data.result.token);
       saveUser(responseLogin.data.result.user);
       saveWorkspaces(responseWorkspace.data.result.items);
@@ -140,15 +151,26 @@ const Login = function () {
       });
       play("login");
       navigate("/f");
+      toast.dismiss(toastId);
       return;
     } catch (err) {
+      toast.dismiss(toastId);
+      play("alert");
       if (err instanceof AxiosError) {
         console.error("[src/pages/Login.tsx]", err.response?.data.result);
         if (err.response?.data?.result?.message === "invalid_credentials")
           toast.error(t.toast.warning_error, {
             description: t.stacks.wrong_credentials,
           });
+        if (err.response?.data?.result?.message === "wrong_password")
+          toast.error(t.toast.warning_error, {
+            description: t.stacks.wrong_credentials,
+          });
         if (err.response?.data?.result?.message === "instance_no_exist")
+          toast.error(t.toast.warning_error, {
+            description: t.stacks.no_instance,
+          });
+        if (err.response?.data?.result?.message === "no_exist_instance")
           toast.error(t.toast.warning_error, {
             description: t.stacks.no_instance,
           });
@@ -158,6 +180,8 @@ const Login = function () {
       }
       console.error("[src/pages/Login.tsx]", err);
       return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -169,6 +193,7 @@ const Login = function () {
           actions={[
             {
               type: "button",
+              disabled: loading,
               category: "Neutral",
               text: t.login.forgot_password,
               onClick: function () {
@@ -178,6 +203,7 @@ const Login = function () {
             },
             {
               type: "submit",
+              disabled: loading,
               category: "Success",
               text: t.login.login,
             },
@@ -211,6 +237,7 @@ const Login = function () {
             )}
             <Input
               required
+              type="email"
               name="username"
               id="login_username"
               value={form.username}

@@ -49,6 +49,8 @@ import Callout from "../../../components/callouts/Callout";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
+// TODO: change price type to string
+// TODO: preview products in card
 const ProductsInspect = function () {
   const t = useTranslate();
   const play = useSounds();
