@@ -102,7 +102,7 @@ const WorkspaceList = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.workspace.workspaces}</h1>
+        <h2>{t.workspace.workspaces}</h2>
       </Horizontal>
       <Horizontal internal={1}>
         <Button

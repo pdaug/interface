@@ -1,4 +1,35 @@
 const TranslatePt = {
+  dashboard: {
+    dashboard: "Painel",
+    stats_inflows_title: "Entradas",
+    stats_inflows_description: "Total de entradas já realizadas",
+    stats_inflows_receive_title: "Entradas a receber",
+    stats_inflows_receive_description:
+      "Total de entradas que ainda serão recebidas",
+    stats_inflows_late_title: "Entradas em atraso",
+    stats_inflows_late_description:
+      "Total de entradas que já deveriam ter sido recebidas",
+    stats_outflows_title: "Saídas",
+    stats_outflows_description: "Total de saídas já realizadas",
+    stats_outflows_receive_title: "Saídas a receber",
+    stats_outflows_receive_description:
+      "Total de saídas que ainda serão realizadas",
+    stats_outflows_late_title: "Saídas em atraso",
+    stats_outflows_late_description:
+      "Total de saídas que já deveriam ter sido realizadas",
+    chart_inflows_title: "Entradas Financeiras",
+    chart_inflows_description:
+      "As entradas distribuídas ao longo do intervalo de tempo.",
+    chart_outflows_title: "Saídas Financeiras",
+    chart_outflows_description:
+      "As saídas distribuídas ao longo do intervalo de tempo.",
+    chart_inflows_resume_title: "Resumo de Entradas",
+    chart_inflows_resume_description:
+      "Visualização das entradas a receber e em atraso.",
+    chart_outflows_resume_title: "Resumo de Saídas",
+    chart_outflows_resume_description:
+      "Visualização das saídas a receber e em atraso.",
+  },
   about: {
     title: "Sobre",
     description: "Forza Sistemas. Todos os direitos reservados.",
@@ -339,6 +370,10 @@ const TranslatePt = {
     "MM/dd/yyyy": "mês/dia/ano",
     "yyyy-MM-dd": "ano-mês-dia",
     all: "Todos",
+    // format
+    json: "Formato JSON",
+    xlsx: "Planilha Excel",
+    csv: "Arquivo CSV",
     // address
     address_street: "Rua",
     address_street_placeholder: "Ex. Rua Azul",
@@ -426,6 +461,33 @@ const TranslatePt = {
 };
 
 const TranslateEn = {
+  dashboard: {
+    dashboard: "Dashboard",
+    stats_inflows_title: "Inflows",
+    stats_inflows_description: "Total inflows already received",
+    stats_inflows_receive_title: "Receivable inflows",
+    stats_inflows_receive_description: "Total inflows yet to be received",
+    stats_inflows_late_title: "Overdue inflows",
+    stats_inflows_late_description:
+      "Total inflows that should have already been received",
+    stats_outflows_title: "Outflows",
+    stats_outflows_description: "Total outflows already made",
+    stats_outflows_receive_title: "Pending outflows",
+    stats_outflows_receive_description: "Total outflows yet to be made",
+    stats_outflows_late_title: "Overdue outflows",
+    stats_outflows_late_description:
+      "Total outflows that should have already been made",
+    chart_inflows_title: "Financial Inflows",
+    chart_inflows_description:
+      "Inflows distributed over the selected time range.",
+    chart_outflows_title: "Financial Outflows",
+    chart_outflows_description:
+      "Outflows distributed over the selected time range.",
+    chart_inflows_resume_title: "Inflows Summary",
+    chart_inflows_resume_description: "View of pending and overdue inflows.",
+    chart_outflows_resume_title: "Outflows Summary",
+    chart_outflows_resume_description: "View of pending and overdue outflows.",
+  },
   about: {
     title: "About",
     description: "Forza Sistemas. All rights reserved.",
@@ -762,6 +824,10 @@ const TranslateEn = {
     "MM/dd/yyyy": "month/day/year",
     "yyyy-MM-dd": "year-month-day",
     all: "All",
+    // format
+    json: "Format JSON",
+    xlsx: "Sheets Excel",
+    csv: "File CSV",
     // address
     address_street: "Street",
     address_street_placeholder: "e.g. St Blue",

@@ -492,6 +492,7 @@ const SettingsPanel = function () {
                 />
               </Horizontal>
               <Horizontal internal={1}>
+                {/* TODO: change to avatar */}
                 <div
                   className="flex1"
                   style={{
@@ -515,6 +516,7 @@ const SettingsPanel = function () {
                     }
                   />
                 </div>
+                {/* TODO: change to avatar */}
                 <div
                   className="flex1"
                   style={{
@@ -538,6 +540,7 @@ const SettingsPanel = function () {
                     }
                   />
                 </div>
+                {/* TODO: change to avatar */}
                 <div
                   className="flex1"
                   style={{

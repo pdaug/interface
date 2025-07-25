@@ -183,7 +183,7 @@ const ProductsInspect = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>
+        <h2>
           <Breadcrumb
             links={[
               {
@@ -206,7 +206,7 @@ const ProductsInspect = function () {
               },
             ]}
           />
-        </h1>
+        </h2>
       </Horizontal>
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
@@ -376,6 +376,7 @@ const ProductsInspect = function () {
             description={t.product.subtitle_variants}
           >
             <Vertical internal={1}>
+              {/* TODO: add images to upload */}
               {form.variants?.map(function (variant, index) {
                 return (
                   <Horizontal

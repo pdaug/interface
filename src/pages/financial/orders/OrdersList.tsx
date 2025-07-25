@@ -33,6 +33,7 @@ const OrdersList = function () {
   return (
     <React.Fragment>
       <Horizontal>
+        {/* TODO: change to breadcrumb */}
         <h1>Pedidos</h1>
       </Horizontal>
       <Horizontal internal={1} styles={{ overflow: "hidden" }}>

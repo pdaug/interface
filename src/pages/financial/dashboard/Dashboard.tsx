@@ -1,160 +1,212 @@
-import React from "react";
+import React, { useState } from "react";
+import { endOfDay, startOfYear } from "date-fns";
 import { QuestionMark, DownloadSimple } from "@phosphor-icons/react";
+
+// types
+import { TypeInputInterval } from "../../../types/Components";
+
+// hooks
+import useSystem from "../../../hooks/useSystem";
+import useTranslate from "../../../hooks/useTranslate";
 
 // components
 import Stats from "../../../components/stats/Stats";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
+import Tooltip from "../../../components/tooltips/Tooltip";
 import { ChartLine } from "../../../components/charts/Chart";
 import Dropdown from "../../../components/dropdowns/Dropdown";
 import { Horizontal } from "../../../components/aligns/Align";
 import { useDialog } from "../../../components/dialogs/Dialog";
+import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { InputInterval, InputSelect } from "../../../components/inputs/Input";
 
 const Dashboard = function () {
+  const t = useTranslate();
   const { OpenDialog } = useDialog();
+  const { instance, workspaces, workspaceId } = useSystem();
+
+  const [interval, setInterval] = useState<TypeInputInterval>({
+    start: startOfYear(new Date()),
+    end: endOfDay(new Date()),
+  });
 
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>Dashboard</h1>
+        <h2>
+          <Breadcrumb
+            links={[
+              {
+                id: "workspace",
+                label:
+                  workspaces.find(function (workspace) {
+                    return workspace.id === workspaceId;
+                  })?.name || "",
+                url: "/f/",
+              },
+              {
+                id: "dashboard",
+                label: t.dashboard.dashboard,
+                url: "/f/dashboard",
+              },
+            ]}
+          />
+        </h2>
       </Horizontal>
       <Horizontal internal={1}>
         <InputSelect
-          styles={{ maxWidth: "10rem" }}
           label=""
           empty=""
           value="general"
+          styles={{ maxWidth: "10rem" }}
           options={[
             {
               id: "inflow",
-              text: "Entradas",
               value: "inflow",
+              text: t.menu.inflows,
             },
             {
               id: "outflow",
-              text: "Saídas",
               value: "outflow",
+              text: t.menu.outflows,
             },
             {
               id: "general",
-              text: "Geral",
               value: "general",
+              text: t.components.all,
             },
           ]}
         />
-        <InputInterval
-          label=""
-          styles={{ maxWidth: "20rem" }}
-          value={[new Date("2025-01-01"), new Date("2025-02-02")]}
-        />
+        <div style={{ minWidth: 200, maxWidth: 256 }}>
+          <InputInterval
+            label=""
+            value={[interval.start, interval.end]}
+            onChange={function (interval) {
+              const [start, end] = interval;
+              setInterval({
+                start: start ? new Date(start) : null,
+                end: end ? new Date(end) : null,
+              });
+              return;
+            }}
+          />
+        </div>
         <div style={{ flex: 1 }}></div>
         <Dropdown
           values={[
             {
               id: "xlsx",
-              label: "Planilha XSL",
+              label: t.components.xlsx,
             },
             {
               id: "csv",
-              label: "Arquivo CSV",
+              label: t.components.csv,
             },
             {
               id: "json",
-              label: "Formato JSON",
+              label: t.components.json,
             },
           ]}
         >
-          <Button category="Neutral" text="Baixar" Icon={DownloadSimple} />
+          <Button
+            category="Neutral"
+            text={t.components.download}
+            Icon={DownloadSimple}
+          />
         </Dropdown>
-        <Button
-          onClick={() =>
-            OpenDialog({
-              category: "Info",
-              title: "Título",
-              description: (
-                <iframe
-                  width="100%"
-                  height="315"
-                  title="YouTube video player"
-                  src="https://www.youtube.com/embed/q7vKnhTSoK8?si=gQf4QNmMqIEeRg_G"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                ></iframe>
-              ),
-            })
-          }
-          category="Neutral"
-          text=""
-          Icon={QuestionMark}
-          onlyIcon
-        />
+        <Tooltip content={t.components.help}>
+          <Button
+            text=""
+            onlyIcon
+            category="Neutral"
+            Icon={QuestionMark}
+            onClick={function () {
+              OpenDialog({
+                width: 700,
+                category: "Success",
+                title: t.components.help,
+                cancelText: t.components.close,
+                description: (
+                  <iframe
+                    height={400}
+                    style={{ border: "none", width: "100%" }}
+                    src="https://www.youtube.com/embed/L-yA7-puosA"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  />
+                ),
+              });
+              return;
+            }}
+          />
+        </Tooltip>
       </Horizontal>
       <Horizontal internal={1}>
         <Stats
-          title="Entradas"
+          title={t.dashboard.stats_inflows_title}
           value={5000}
-          valueLocale="pt-BR"
-          valueOptions={{ style: "currency", currency: "BRL" }}
-          footer="Total de entradas já realizadas"
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.dashboard.stats_inflows_description}
         />
         <Stats
           metric={0.1}
           metricStatus="Up"
           metricLocale="pt-BR"
           metricOptions={{ style: "percent" }}
-          title="Entradas a receber"
+          title={t.dashboard.stats_inflows_receive_title}
           value={500}
-          valueLocale="pt-BR"
-          valueOptions={{ style: "currency", currency: "BRL" }}
-          footer="Total de entradas que ainda serão recebidas"
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.dashboard.stats_inflows_receive_description}
         />
         <Stats
           metric={0.2}
           metricStatus="Up"
           metricLocale="pt-BR"
           metricOptions={{ style: "percent" }}
-          title="Entradas em atraso"
+          title={t.dashboard.stats_inflows_late_title}
           value={1000}
-          valueLocale="pt-BR"
-          valueOptions={{ style: "currency", currency: "BRL" }}
-          footer="Total de entradas que já deveriam ter sido recebidas"
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.dashboard.stats_inflows_late_description}
         />
       </Horizontal>
       <Horizontal internal={1}>
         <Stats
-          title="Saídas"
+          title={t.dashboard.stats_outflows_title}
           value={1000}
-          valueLocale="pt-BR"
-          valueOptions={{ style: "currency", currency: "BRL" }}
-          footer="Total de saídas já realizadas"
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.dashboard.stats_outflows_description}
         />
         <Stats
           metric={0.05}
           metricStatus="Down"
           metricLocale="pt-BR"
           metricOptions={{ style: "percent" }}
-          title="Saídas a realizar"
+          title={t.dashboard.stats_outflows_receive_title}
           value={50}
-          valueLocale="pt-BR"
-          valueOptions={{ style: "currency", currency: "BRL" }}
-          footer="Total de saídas que ainda serão realizadas"
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.dashboard.stats_outflows_receive_description}
         />
         <Stats
           metric={0.1}
           metricStatus="Down"
           metricLocale="pt-BR"
           metricOptions={{ style: "percent" }}
-          title="Saídas em atraso"
+          title={t.dashboard.stats_outflows_late_title}
           value={100}
-          valueLocale="pt-BR"
-          valueOptions={{ style: "currency", currency: "BRL" }}
-          footer="Total de saídas que já deveriam ter sido realizadas"
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.dashboard.stats_outflows_late_description}
         />
       </Horizontal>
       <Horizontal internal={1}>
         <Wrapper
-          title="Entradas Financeiras"
-          description="As entradas distribuídas ao longo do intervalo de tempo."
+          title={t.dashboard.chart_inflows_title}
+          description={t.dashboard.chart_inflows_description}
         >
           <ChartLine
             height={320}
@@ -200,8 +252,8 @@ const Dashboard = function () {
           />
         </Wrapper>
         <Wrapper
-          title="Saídas Financeiras"
-          description="As saídas distribuídas ao longo do intervalo de tempo."
+          title={t.dashboard.chart_outflows_title}
+          description={t.dashboard.chart_outflows_description}
         >
           <ChartLine
             height={320}
@@ -249,8 +301,8 @@ const Dashboard = function () {
       </Horizontal>
       <Horizontal internal={1}>
         <Wrapper
-          title="Resumo de Entradas"
-          description="Visualização das entradas a receber e em atraso."
+          title={t.dashboard.chart_inflows_resume_title}
+          description={t.dashboard.chart_inflows_resume_description}
         >
           <ChartLine
             height={320}
@@ -304,8 +356,8 @@ const Dashboard = function () {
           />
         </Wrapper>
         <Wrapper
-          title="Resumo de Saídas"
-          description="Visualização das sáidas a realizar e em atraso."
+          title={t.dashboard.chart_outflows_resume_title}
+          description={t.dashboard.chart_outflows_resume_description}
         >
           <ChartLine
             height={320}

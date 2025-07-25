@@ -122,7 +122,7 @@ const ServicesList = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>
+        <h2>
           <Breadcrumb
             links={[
               {
@@ -140,7 +140,7 @@ const ServicesList = function () {
               },
             ]}
           />
-        </h1>
+        </h2>
       </Horizontal>
       <Horizontal internal={1} styles={{ overflow: "hidden" }}>
         <Button

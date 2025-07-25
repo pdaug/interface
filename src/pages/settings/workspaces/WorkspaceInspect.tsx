@@ -150,7 +150,7 @@ const WorkspaceInspect = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.workspace.workspaces}</h1>
+        <h2>{t.workspace.workspaces}</h2>
       </Horizontal>
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>

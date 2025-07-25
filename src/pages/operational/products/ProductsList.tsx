@@ -44,6 +44,7 @@ import {
 import Card from "../../../components/cards/Card";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
+import Wrapper from "../../../components/wrapper/Wrapper";
 import Profile from "../../../components/profiles/Profile";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import { ProductViewModes } from "../../../assets/Components";
@@ -229,7 +230,7 @@ const ProductsList = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>
+        <h2>
           <Breadcrumb
             links={[
               {
@@ -247,7 +248,7 @@ const ProductsList = function () {
               },
             ]}
           />
-        </h1>
+        </h2>
       </Horizontal>
       <Horizontal internal={1} styles={{ overflow: "hidden" }}>
         <Button
@@ -330,61 +331,75 @@ const ProductsList = function () {
       <Vertical internal={1} styles={{ flex: 1 }}>
         {viewMode === "shelves" && (
           <Horizontal internal={1} styles={{ flexWrap: "wrap" }}>
-            {products.map(function (product) {
-              const userFinded = users?.find(function (user) {
-                return user.id === product.userId;
-              });
-              return (
-                <Card
-                  data={product}
-                  key={product.id}
-                  name={product.name}
-                  options={getOptions}
-                  description={product?.variants?.[0].name}
-                  price={Currency(product?.variants?.[0].price || 0)}
-                  profile={{
-                    padding: false,
-                    photoSize: 3,
-                    photoCircle: true,
-                    photo:
-                      userFinded && "photo" in userFinded
-                        ? (userFinded?.photo as string)
-                        : "",
-                    styles: { fontSize: "var(--textSmall)" },
-                    name: userFinded?.name || t.components.unknown,
+            {products.length ? (
+              products.map(function (product) {
+                const userFinded = users?.find(function (user) {
+                  return user.id === product.userId;
+                });
+                return (
+                  <Card
+                    data={product}
+                    key={product.id}
+                    name={product.name}
+                    options={getOptions}
+                    description={product?.variants?.[0].name}
+                    price={Currency(product?.variants?.[0].price || 0)}
+                    profile={{
+                      padding: false,
+                      photoSize: 3,
+                      photoCircle: true,
+                      photo:
+                        userFinded && "photo" in userFinded
+                          ? (userFinded?.photo as string)
+                          : "",
+                      styles: { fontSize: "var(--textSmall)" },
+                      name: userFinded?.name || t.components.unknown,
+                    }}
+                    states={
+                      <React.Fragment>
+                        <Badge
+                          key="badge-product-status"
+                          category={product.status ? "Success" : "Danger"}
+                          value={
+                            product.status
+                              ? t.components.active
+                              : t.components.inactive
+                          }
+                        />
+                        <Badge
+                          category="Info"
+                          value={
+                            product.type === "physical"
+                              ? t.product.physical
+                              : t.product.digital
+                          }
+                        />
+                        <Badge
+                          category="Info"
+                          value={
+                            product.category === "single"
+                              ? t.product.single
+                              : t.product.variants
+                          }
+                        />
+                      </React.Fragment>
+                    }
+                  />
+                );
+              })
+            ) : (
+              <Wrapper>
+                <Horizontal
+                  styles={{
+                    color: "var(--textLight)",
+                    fontSize: "var(--textSmall)",
+                    justifyContent: "center",
                   }}
-                  states={
-                    <React.Fragment>
-                      <Badge
-                        key="badge-product-status"
-                        category={product.status ? "Success" : "Danger"}
-                        value={
-                          product.status
-                            ? t.components.active
-                            : t.components.inactive
-                        }
-                      />
-                      <Badge
-                        category="Info"
-                        value={
-                          product.type === "physical"
-                            ? t.product.physical
-                            : t.product.digital
-                        }
-                      />
-                      <Badge
-                        category="Info"
-                        value={
-                          product.category === "single"
-                            ? t.product.single
-                            : t.product.variants
-                        }
-                      />
-                    </React.Fragment>
-                  }
-                />
-              );
-            })}
+                >
+                  {t.stacks.no_items}
+                </Horizontal>
+              </Wrapper>
+            )}
           </Horizontal>
         )}
         {viewMode === "table" && (

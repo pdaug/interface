@@ -108,7 +108,7 @@ const AccountList = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>
+        <h2>
           <Breadcrumb
             links={[
               {
@@ -126,7 +126,7 @@ const AccountList = function () {
               },
             ]}
           />
-        </h1>
+        </h2>
       </Horizontal>
       <Horizontal internal={1}>
         <Button

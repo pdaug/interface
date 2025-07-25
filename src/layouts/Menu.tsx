@@ -101,6 +101,7 @@ const Menu = function () {
   const footer = {
     name: user.name as string,
     description: user.email as string,
+    photo: user.photo || "",
     photoCircle: true,
     dropdown: {
       children: (

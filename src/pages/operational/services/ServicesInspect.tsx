@@ -166,7 +166,7 @@ const ServicesInspect = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>
+        <h2>
           <Breadcrumb
             links={[
               {
@@ -189,7 +189,7 @@ const ServicesInspect = function () {
               },
             ]}
           />
-        </h1>
+        </h2>
       </Horizontal>
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>

@@ -21,7 +21,7 @@ const IntegrationsHome = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h1>{t.integrations.integrations}</h1>
+        <h2>{t.integrations.integrations}</h2>
       </Horizontal>
 
       <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
