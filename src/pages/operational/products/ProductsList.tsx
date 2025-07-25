@@ -332,7 +332,6 @@ const ProductsList = function () {
       <Vertical internal={1} styles={{ flex: 1 }}>
         {viewMode === "shelves" && (
           <Horizontal internal={1} styles={{ flexWrap: "wrap" }}>
-            {/* TODO: loading and not items */}
             {products.length ? (
               products.map(function (product) {
                 const userFinded = users?.find(function (user) {
@@ -399,7 +398,7 @@ const ProductsList = function () {
                       fontSize: "var(--textSmall)",
                     }}
                   >
-                    {t.stacks.no_items}
+                    {loading ? `${t.components.loading}...` : t.stacks.no_items}
                   </i>
                 </Horizontal>
               </Wrapper>
