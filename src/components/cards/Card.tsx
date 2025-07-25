@@ -12,7 +12,8 @@ import Profile, { ProfileProps } from "../profiles/Profile";
 import Dropdown, { DropdownValue } from "../dropdowns/Dropdown";
 
 export type CardProps = {
-  photo?: string;
+  small?: boolean;
+  photo?: string | null;
   states?: React.ReactNode;
   name: string;
   description: string;
@@ -23,6 +24,7 @@ export type CardProps = {
 };
 
 const Card = function ({
+  small,
   photo,
   name,
   states,
@@ -35,7 +37,7 @@ const Card = function ({
   const t = useTranslate();
 
   return (
-    <div className="card">
+    <div className={`card ${small ? "cardSmall" : "cardLarge"}`}>
       <div className="cardPhoto">
         <div className="cardPhotoStates">{states}</div>
         {photo ? (
@@ -46,7 +48,7 @@ const Card = function ({
       </div>
       <div className="cardContent">
         <div className="cardInfo">
-          <div className="cardName">{name}</div>
+          <div className="cardName">{name || "\u200B"} </div>
           <div className="cardDescription">
             {description || <i>{t.stacks.no_description}</i>}
           </div>

@@ -4,6 +4,7 @@ export type TypeProductCategory = "variant" | "single";
 
 export type TypeProductVariants = {
   id: string;
+  photo?: string | null;
   name: string;
   price: number;
 };

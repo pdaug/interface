@@ -24,25 +24,25 @@ import {
   TypeProductCondition,
 } from "../../../types/Product";
 
-// utils
-import { GenerateIdWithLength } from "../../../utils/GenerateId";
-
 // hooks
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
 import useSounds from "../../../hooks/useSounds";
 import useSchema from "../../../hooks/useSchema";
 import useDateTime from "../../../hooks/useDateTime";
+import useCurrency from "../../../hooks/useCurrency";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
 import {
   Input,
   InputText,
+  InputFile,
   InputMoney,
   InputColor,
   InputSelect,
 } from "../../../components/inputs/Input";
+import Card from "../../../components/cards/Card";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
@@ -50,15 +50,17 @@ import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 // TODO: change price type to string
-// TODO: preview products in card
 const ProductsInspect = function () {
   const t = useTranslate();
   const play = useSounds();
   const { id } = useParams();
   const Schema = useSchema();
+  const Currency = useCurrency();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
   const { user, token, instance, workspaces, workspaceId } = useSystem();
+
+  const [productTemp, setProductTemp] = useState<(File | null)[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeProduct>>({
@@ -69,7 +71,7 @@ const ProductsInspect = function () {
     category: "single",
     variants: [
       {
-        id: GenerateIdWithLength(24),
+        id: "",
         name: "",
         price: 0,
       },
@@ -121,6 +123,24 @@ const ProductsInspect = function () {
     try {
       // is editing
       if (id && form.id) {
+        // upload product temp
+        for (const [index, file] of productTemp.entries()) {
+          if (!file) continue;
+          if (!form.variants?.[index]) continue;
+          const responseUploadImage = await apis.Upload.image<string>(
+            instance.name,
+            token,
+            {
+              file,
+              path: `image/product/${id}-${index}`,
+              name: `${id}-${index}`,
+              height: 1024,
+              width: 1024,
+              quality: 80,
+            },
+          );
+          form.variants[index].photo = responseUploadImage.data?.result || null;
+        }
         const response = await apis.Product.update(
           token,
           instance.name,
@@ -143,7 +163,7 @@ const ProductsInspect = function () {
         return;
       }
       // is creating
-      const response = await apis.Product.create(
+      const response = await apis.Product.create<TypeProduct>(
         token,
         instance.name,
         form,
@@ -156,6 +176,31 @@ const ProductsInspect = function () {
         });
         return;
       }
+      // upload product temp
+      for (const [index, file] of productTemp.entries()) {
+        if (!file) continue;
+        if (!form.variants?.[index]) continue;
+        const responseUploadImage = await apis.Upload.image<string>(
+          instance.name,
+          token,
+          {
+            file,
+            path: `image/product/${response.data.result.id}-${index}`,
+            name: `${response.data.result.id}-${index}`,
+            height: 1024,
+            width: 1024,
+            quality: 80,
+          },
+        );
+        form.variants[index].photo = responseUploadImage.data?.result || null;
+      }
+      await apis.Product.update(
+        token,
+        instance.name,
+        response.data.result.id,
+        { variants: form.variants },
+        workspaceId,
+      );
       play("ok");
       toast.success(t.toast.success, {
         description: t.toast.success_create,
@@ -378,7 +423,28 @@ const ProductsInspect = function () {
             description={t.product.subtitle_variants}
           >
             <Vertical internal={1}>
-              {/* TODO: add images to upload */}
+              <Horizontal
+                internal={1}
+                styles={{ paddingBottom: "1rem", overflowX: "auto" }}
+              >
+                {form.variants?.map(function (variant, index) {
+                  return (
+                    <Card
+                      small
+                      photo={
+                        productTemp?.[index]
+                          ? URL.createObjectURL(productTemp[index])
+                          : form?.variants?.[index]?.photo || ""
+                      }
+                      key={variant.id}
+                      name={variant.name}
+                      description={form.description || ""}
+                      price={Currency(variant.price || 0)}
+                    />
+                  );
+                })}
+              </Horizontal>
+
               {form.variants?.map(function (variant, index) {
                 return (
                   <Horizontal
@@ -388,19 +454,30 @@ const ProductsInspect = function () {
                   >
                     <div className="flex1">
                       <Horizontal internal={1}>
-                        <div style={{ maxWidth: 96 }}>
-                          <Input
-                            readOnly
-                            placeholder=""
-                            label={t.product.id}
-                            name={`variant.${index}.id`}
-                            id={`product_variant_${index}_id`}
-                            value={String(index + 1)}
-                            onChange={function () {
+                        <InputFile
+                          label={t.product.photo}
+                          value={productTemp[index]}
+                          name={`variant.${index}.photo`}
+                          id={`product_variant_${index}_photo`}
+                          accept="image/png, image/jpg, image/jpeg"
+                          onChange={function (event) {
+                            const file = event.currentTarget.files?.[0] || null;
+                            if (!file) return;
+                            if (file.size > 5 * 1024 * 1024) {
+                              play("alert");
+                              toast.error(t.toast.warning_error, {
+                                description: t.stacks.limit_image_5mb,
+                              });
                               return;
-                            }}
-                          />
-                        </div>
+                            }
+                            setProductTemp(function (prevState) {
+                              const cloneState = [...prevState];
+                              cloneState[index] = file;
+                              return cloneState;
+                            });
+                            return;
+                          }}
+                        />
                         <Input
                           min={1}
                           max={32}
@@ -442,6 +519,7 @@ const ProductsInspect = function () {
                       <Button
                         type="button"
                         category="Danger"
+                        disabled={index === 0}
                         text={t.components.remove}
                         onClick={function () {
                           if (form.variants?.length === 1) {
@@ -472,7 +550,7 @@ const ProductsInspect = function () {
                       const newForm = { ...form };
                       if (!newForm?.variants) return;
                       newForm.variants.push({
-                        id: GenerateIdWithLength(24),
+                        id: "",
                         name: "",
                         price: 0,
                       });

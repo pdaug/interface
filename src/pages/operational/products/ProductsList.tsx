@@ -344,6 +344,7 @@ const ProductsList = function () {
                     key={product.id}
                     name={product.name}
                     options={getOptions}
+                    photo={product?.variants?.[0].photo}
                     description={product?.variants?.[0].name}
                     price={Currency(product?.variants?.[0].price || 0)}
                     profile={{

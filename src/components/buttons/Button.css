@@ -10,6 +10,7 @@
   cursor: pointer;
   display: flex;
   font-size: var(--textSmall);
+  height: 34px;
   gap: 0.4rem;
   justify-content: center;
   min-height: 32px;
