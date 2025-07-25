@@ -7,6 +7,7 @@ import "./Dropdown.css";
 export type DropdownValue = {
   id: string;
   label: string;
+  styles?: React.CSSProperties;
   disabled?: boolean;
   Icon?: PhosphorIcons;
   IconColor?: string;
@@ -88,6 +89,7 @@ const Dropdown = function ({ children, values, data }: DropdownProps) {
         {values.map(function ({
           id,
           label,
+          styles,
           Icon,
           IconColor,
           IconWeight,
@@ -107,6 +109,7 @@ const Dropdown = function ({ children, values, data }: DropdownProps) {
               disabled={disabled}
               onClick={onClickWithClose}
               className="dropdownContentOption"
+              style={styles}
             >
               {Icon && (
                 <Icon

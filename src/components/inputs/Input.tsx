@@ -17,7 +17,7 @@ import useSystem from "../../hooks/useSystem";
 import useDateTime from "../../hooks/useDateTime";
 import useTranslate from "../../hooks/useTranslate";
 import { endOfDay, isSameDay, isToday, startOfDay, subDays } from "date-fns";
-import { Vertical } from "../aligns/Align";
+import { Horizontal, Vertical } from "../aligns/Align";
 import Button from "../buttons/Button";
 
 export type InputProps = {
@@ -323,14 +323,45 @@ const InputInterval = function ({
   const { instance } = useSystem();
   const { instanceDate } = useDateTime();
 
+  const noFilterDate = !value[0] && !value[1];
+
+  const isIntervalToday =
+    value[0] && value[1] && isToday(value[0]) && isToday(value[1]);
+
+  const isIntervalWeek =
+    value[0] &&
+    value[1] &&
+    isSameDay(value[0], subDays(new Date(), 7)) &&
+    isToday(value[1]);
+
+  const isIntervalMonth =
+    value[0] &&
+    value[1] &&
+    isSameDay(value[0], subDays(new Date(), 30)) &&
+    isToday(value[1]);
+
   const ButtonInputInterval = forwardRef<
     HTMLDivElement,
     React.DOMAttributes<HTMLDivElement>
   >(function (props, ref) {
     return (
       <div ref={ref} {...props} className="inputIntervalInner">
-        <span>{value[0] && instanceDate(value[0])}</span>
-        <span>{value[1] && instanceDate(value[1])}</span>
+        {isIntervalToday ||
+        isIntervalWeek ||
+        isIntervalMonth ||
+        noFilterDate ? (
+          <span>
+            {noFilterDate && t.components.no_filter_date}
+            {isIntervalToday && t.components.today}
+            {isIntervalWeek && t.components.this_week}
+            {isIntervalMonth && t.components.this_month}
+          </span>
+        ) : (
+          <React.Fragment>
+            <span>{value[0] && instanceDate(value[0])}</span>
+            <span>{value[1] && instanceDate(value[1])}</span>
+          </React.Fragment>
+        )}
       </div>
     );
   });
@@ -349,28 +380,32 @@ const InputInterval = function ({
         <Vertical>
           {children}
           <Vertical internal={0.4} external={0.4}>
+            <Horizontal internal={0.4}>
+              <Button
+                type="button"
+                style={{ flex: 1 }}
+                text={t.components.today}
+                category={isIntervalToday ? "Info" : "Neutral"}
+                onClick={function () {
+                  if (onChange)
+                    onChange([startOfDay(new Date()), endOfDay(new Date())]);
+                  return;
+                }}
+              />
+              <Button
+                type="button"
+                style={{ flex: 1 }}
+                text={t.components.no_filter_date}
+                category={!value[0] && !value[1] ? "Warning" : "Neutral"}
+                onClick={function () {
+                  if (onChange) onChange([null, null]);
+                  return;
+                }}
+              />
+            </Horizontal>
             <Button
               type="button"
-              category={
-                isToday(value[0] || 0) && isToday(value[1] || 0)
-                  ? "Info"
-                  : "Neutral"
-              }
-              text={t.components.today}
-              onClick={function () {
-                if (onChange)
-                  onChange([startOfDay(new Date()), endOfDay(new Date())]);
-                return;
-              }}
-            />
-            <Button
-              type="button"
-              category={
-                isSameDay(value[0] || 0, subDays(new Date(), 7)) &&
-                isToday(value[1] || 0)
-                  ? "Info"
-                  : "Neutral"
-              }
+              category={isIntervalWeek ? "Info" : "Neutral"}
               text={t.components.this_week}
               onClick={function () {
                 if (onChange)
@@ -383,12 +418,7 @@ const InputInterval = function ({
             />
             <Button
               type="button"
-              category={
-                isSameDay(value[0] || 0, subDays(new Date(), 30)) &&
-                isToday(value[1] || 0)
-                  ? "Info"
-                  : "Neutral"
-              }
+              category={isIntervalMonth ? "Info" : "Neutral"}
               text={t.components.this_month}
               onClick={function () {
                 if (onChange)

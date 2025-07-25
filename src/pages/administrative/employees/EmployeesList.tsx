@@ -1,9 +1,16 @@
+import {
+  Trash,
+  Plus,
+  CopySimple,
+  PencilSimple,
+  QuestionMark,
+  DownloadSimple,
+} from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
 import { endOfDay, startOfYear } from "date-fns";
-import { Plus, QuestionMark } from "@phosphor-icons/react";
 
 //apis
 import apis from "../../../apis";
@@ -70,6 +77,8 @@ const EmployeesList = function () {
           pageCurrent: page,
           searchField: "name",
           search: searchDebounced,
+          dateStart: interval.start ? interval.start.toISOString() : undefined,
+          dateEnd: interval.end ? interval.end.toISOString() : undefined,
         },
       );
       if (!response.data?.result?.items) {
@@ -102,7 +111,7 @@ const EmployeesList = function () {
   };
 
   // fetch employees
-  useAsync(FetchEmployees, [page, searchDebounced]);
+  useAsync(FetchEmployees, [interval, page, searchDebounced]);
 
   return (
     <React.Fragment>
@@ -133,7 +142,7 @@ const EmployeesList = function () {
           text={t.employee.new}
           onClick={() => navigate("/f/employees/inspect")}
         />
-        <div style={{ maxWidth: 256 }}>
+        <div style={{ minWidth: 200, maxWidth: 256 }}>
           <InputInterval
             label=""
             value={[interval.start, interval.end]}
@@ -254,6 +263,7 @@ const EmployeesList = function () {
           options={[
             {
               id: "copy",
+              Icon: CopySimple,
               label: t.components.copy_id,
               onClick: async function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
@@ -275,6 +285,7 @@ const EmployeesList = function () {
             },
             {
               id: "download",
+              Icon: DownloadSimple,
               label: t.components.download,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
@@ -289,6 +300,7 @@ const EmployeesList = function () {
             },
             {
               id: "edit",
+              Icon: PencilSimple,
               label: t.components.edit,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data)
@@ -298,7 +310,10 @@ const EmployeesList = function () {
             },
             {
               id: "delete",
+              Icon: Trash,
               label: t.components.delete,
+              IconColor: "var(--dangerColor",
+              styles: { color: "var(--dangerColor)" },
               onClick: async function (_: React.MouseEvent, data: unknown) {
                 if (!data || typeof data !== "object" || !("id" in data))
                   return;

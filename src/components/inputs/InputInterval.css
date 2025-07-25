@@ -1,4 +1,5 @@
 .react-datepicker-wrapper {
+  flex: 1;
   overflow: hidden;
 }
 

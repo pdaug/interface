@@ -44,7 +44,7 @@
   color: var(--textColor);
   display: flex;
   gap: 0.4rem;
-  padding: 0.4rem 1rem;
+  padding: 0.4rem;
   text-align: left;
   transition: 200ms;
 }

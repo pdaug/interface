@@ -1,9 +1,16 @@
+import {
+  Trash,
+  Plus,
+  CopySimple,
+  PencilSimple,
+  QuestionMark,
+  DownloadSimple,
+} from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
 import { endOfDay, startOfYear } from "date-fns";
-import { Plus, QuestionMark } from "@phosphor-icons/react";
 
 //apis
 import apis from "../../../apis";
@@ -166,7 +173,7 @@ const ProductsList = function () {
             ]}
           />
         </div>
-        <div style={{ maxWidth: 256 }}>
+        <div style={{ minWidth: 200, maxWidth: 256 }}>
           <InputInterval
             label=""
             value={[interval.start, interval.end]}
@@ -325,6 +332,7 @@ const ProductsList = function () {
             {
               id: "copy",
               label: t.components.copy_id,
+              Icon: CopySimple,
               onClick: async function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
                   const result = await Clipboard.copy(data.id as string);
@@ -346,6 +354,7 @@ const ProductsList = function () {
             {
               id: "download",
               label: t.components.download,
+              Icon: DownloadSimple,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
                   Download.JSON(data, `product-${data.id}.json`);
@@ -360,6 +369,7 @@ const ProductsList = function () {
             {
               id: "edit",
               label: t.components.edit,
+              Icon: PencilSimple,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data)
                   navigate(`/f/products/inspect/${data.id}`);
@@ -369,6 +379,9 @@ const ProductsList = function () {
             {
               id: "delete",
               label: t.components.delete,
+              Icon: Trash,
+              IconColor: "var(--dangerColor",
+              styles: { color: "var(--dangerColor)" },
               onClick: async function (_: React.MouseEvent, data: unknown) {
                 if (!data || typeof data !== "object" || !("id" in data))
                   return;

@@ -1,9 +1,16 @@
+import {
+  Trash,
+  Plus,
+  CopySimple,
+  PencilSimple,
+  QuestionMark,
+  DownloadSimple,
+} from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
 import { endOfDay, startOfYear } from "date-fns";
-import { Plus, QuestionMark } from "@phosphor-icons/react";
 
 //apis
 import apis from "../../../apis";
@@ -166,7 +173,7 @@ const ServicesList = function () {
             ]}
           />
         </div>
-        <div style={{ maxWidth: 256 }}>
+        <div style={{ minWidth: 200, maxWidth: 256 }}>
           <InputInterval
             label=""
             value={[interval.start, interval.end]}
@@ -321,6 +328,7 @@ const ServicesList = function () {
           options={[
             {
               id: "copy",
+              Icon: CopySimple,
               label: t.components.copy_id,
               onClick: async function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
@@ -342,6 +350,7 @@ const ServicesList = function () {
             },
             {
               id: "download",
+              Icon: DownloadSimple,
               label: t.components.download,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
@@ -356,6 +365,7 @@ const ServicesList = function () {
             },
             {
               id: "edit",
+              Icon: PencilSimple,
               label: t.components.edit,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data)
@@ -365,7 +375,10 @@ const ServicesList = function () {
             },
             {
               id: "delete",
+              Icon: Trash,
               label: t.components.delete,
+              IconColor: "var(--dangerColor",
+              styles: { color: "var(--dangerColor)" },
               onClick: async function (_: React.MouseEvent, data: unknown) {
                 if (!data || typeof data !== "object" || !("id" in data))
                   return;

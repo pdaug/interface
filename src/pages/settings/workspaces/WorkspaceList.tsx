@@ -1,8 +1,15 @@
+import {
+  Trash,
+  Plus,
+  CopySimple,
+  PencilSimple,
+  QuestionMark,
+  DownloadSimple,
+} from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
-import { Plus, QuestionMark } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -149,6 +156,7 @@ const WorkspaceList = function () {
           options={[
             {
               id: "copy",
+              Icon: CopySimple,
               label: t.components.copy_id,
               onClick: async function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
@@ -170,6 +178,7 @@ const WorkspaceList = function () {
             },
             {
               id: "download",
+              Icon: DownloadSimple,
               label: t.components.download,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
@@ -184,6 +193,7 @@ const WorkspaceList = function () {
             },
             {
               id: "edit",
+              Icon: PencilSimple,
               label: t.components.edit,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data)
@@ -193,7 +203,10 @@ const WorkspaceList = function () {
             },
             {
               id: "delete",
+              Icon: Trash,
               label: t.components.delete,
+              IconColor: "var(--dangerColor",
+              styles: { color: "var(--dangerColor)" },
               onClick: async function (_: React.MouseEvent, data: unknown) {
                 if (!data || typeof data !== "object" || !("id" in data))
                   return;

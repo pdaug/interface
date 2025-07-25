@@ -379,6 +379,7 @@ const TranslatePt = {
     choose_file: "Escolha o arquivo",
     no_file_choosen: "Nenhum arquivo escolhido",
     // dates
+    no_filter_date: "Sem data",
     today: "Hoje",
     this_week: "Esta semana",
     this_month: "Este mês",
@@ -799,9 +800,10 @@ const TranslateEn = {
     choose_file: "Choose file",
     no_file_choosen: "No files choosen",
     // dates
-    today: "Hoje",
-    this_week: "Esta semana",
-    this_month: "Este mês",
+    no_filter_date: "No date",
+    today: "Today",
+    this_week: "This week",
+    this_month: "This month",
     created_at: "Created at",
     updated_at: "Updated at",
     deletedAt: "Disabled at",
