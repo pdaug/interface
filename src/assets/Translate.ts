@@ -369,6 +369,8 @@ const TranslatePt = {
     confirm: "Confirmar",
     save: "Salvar",
     // labels
+    shelves: "Estante",
+    table: "Tabela",
     empty_name: "Nome vazio",
     status: "Estado",
     active: "Ativado",
@@ -790,6 +792,8 @@ const TranslateEn = {
     confirm: "Confirm",
     save: "Save",
     // labels
+    shelves: "Shelves",
+    table: "Table",
     empty_name: "Empty name",
     status: "Status",
     active: "Active",

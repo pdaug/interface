@@ -20,9 +20,12 @@ import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
 
 // types
+import {
+  TypeInputInterval,
+  TypeProductViewMode,
+} from "../../../types/Components";
 import { TypeProduct } from "../../../types/Product";
 import { ApiResponsePaginate } from "../../../types/Api";
-import { TypeInputInterval } from "../../../types/Components";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
@@ -38,10 +41,12 @@ import {
   InputSelect,
   InputInterval,
 } from "../../../components/inputs/Input";
+import Card from "../../../components/cards/Card";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import Profile from "../../../components/profiles/Profile";
 import Tooltip from "../../../components/tooltips/Tooltip";
+import { ProductViewModes } from "../../../assets/Components";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
@@ -58,6 +63,8 @@ const ProductsList = function () {
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { users, token, instance, workspaces, workspaceId } = useSystem();
+
+  const [viewMode, setViewMode] = useState<TypeProductViewMode>("shelves");
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -119,6 +126,106 @@ const ProductsList = function () {
   // fetch products
   useAsync(FetchProducts, [interval, workspaceId, page, searchDebounced]);
 
+  const getOptions = [
+    {
+      id: "copy",
+      label: t.components.copy_id,
+      Icon: CopySimple,
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          const result = await Clipboard.copy(data.id as string);
+          if (result) {
+            play("ok");
+            toast.success(t.toast.success, {
+              description: t.toast.success_copy,
+            });
+            return;
+          }
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_copy,
+        });
+        return;
+      },
+    },
+    {
+      id: "download",
+      label: t.components.download,
+      Icon: DownloadSimple,
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          Download.JSON(data, `product-${data.id}.json`);
+          play("ok");
+          toast.success(t.toast.success, {
+            description: t.toast.success_download,
+          });
+        }
+        return;
+      },
+    },
+    {
+      id: "edit",
+      label: t.components.edit,
+      Icon: PencilSimple,
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data)
+          navigate(`/f/products/inspect/${data.id}`);
+        return;
+      },
+    },
+    {
+      id: "delete",
+      label: t.components.delete,
+      Icon: Trash,
+      IconColor: "var(--dangerColor",
+      styles: { color: "var(--dangerColor)" },
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (!data || typeof data !== "object" || !("id" in data)) return;
+        OpenDialog({
+          category: "Danger",
+          title: t.dialog.title_delete,
+          description: t.dialog.description_delete,
+          confirmText: t.components.delete,
+          onConfirm: async function () {
+            try {
+              const response = await apis.Product.delete(
+                token,
+                instance.name,
+                data.id as string,
+                workspaceId,
+              );
+              if (!response.data?.result) {
+                play("alert");
+                toast.warning(t.toast.warning_error, {
+                  description: t.toast.error_delete,
+                });
+                return;
+              }
+              play("ok");
+              toast.success(t.toast.success, {
+                description: t.toast.success_delete,
+              });
+              CloseDialog();
+              await FetchProducts();
+              return;
+            } catch (err) {
+              play("alert");
+              toast.error(t.toast.warning_error, {
+                description: t.toast.error_delete,
+              });
+              console.error(
+                "[src/pages/settings/workspaces/WorkspaceList.tsx]",
+                err,
+              );
+              return;
+            }
+          },
+        });
+      },
+    },
+  ];
+
   return (
     <React.Fragment>
       <Horizontal>
@@ -149,28 +256,24 @@ const ProductsList = function () {
           text={t.product.new}
           onClick={() => navigate("/f/products/inspect")}
         />
-        <div style={{ maxWidth: 96 }}>
+        <div style={{ maxWidth: 128 }}>
           <InputSelect
             label=""
-            empty=""
-            value="all"
-            options={[
-              {
-                id: "all",
-                value: "all",
-                text: t.components.all,
-              },
-              {
-                id: "physical",
-                value: "physical",
-                text: t.product.physical,
-              },
-              {
-                id: "digital",
-                value: "digital",
-                text: t.product.digital,
-              },
-            ]}
+            value={viewMode}
+            empty={t.stacks.no_option}
+            options={ProductViewModes.map(function (viewMode) {
+              return {
+                id: viewMode,
+                value: viewMode,
+                text: t.components[viewMode as keyof typeof t.components],
+              };
+            })}
+            onChange={function (event) {
+              const newViewMode = (event.currentTarget?.value ||
+                "table") as TypeProductViewMode;
+              setViewMode(newViewMode);
+              return;
+            }}
           />
         </div>
         <div style={{ minWidth: 200, maxWidth: 256 }}>
@@ -225,210 +328,174 @@ const ProductsList = function () {
         </Tooltip>
       </Horizontal>
       <Vertical internal={1} styles={{ flex: 1 }}>
-        <Table
-          border
-          loading={loading}
-          data={products as TableData[]}
-          columns={{
-            status: {
-              label: t.components.status,
-              maxWidth: "96px",
-              handler: function (data) {
-                return (
-                  <Badge
-                    category={data.status ? "Success" : "Danger"}
-                    value={
-                      data.status ? t.components.active : t.components.inactive
-                    }
-                  />
-                );
-              },
-            },
-            type: {
-              label: t.product.type,
-              maxWidth: "96px",
-              handler: function (data) {
-                return (
-                  <Badge
-                    category="Info"
-                    value={
-                      data.type === "physical"
-                        ? t.product.physical
-                        : t.product.digital
-                    }
-                  />
-                );
-              },
-            },
-            category: {
-              label: t.product.category,
-              maxWidth: "96px",
-              handler: function (data) {
-                return (
-                  <Badge
-                    category="Info"
-                    value={
-                      data.category === "single"
-                        ? t.product.single
-                        : t.product.variants
-                    }
-                  />
-                );
-              },
-            },
-            name: { label: t.product.name },
-            description: {
-              label: t.components.description,
-              handler: function (data) {
-                if (data.description) return data.description as string;
-                return (
-                  <i style={{ color: "var(--textLight)" }}>
-                    {t.stacks.no_description}
-                  </i>
-                );
-              },
-            },
-            price: {
-              label: t.product.price,
-              maxWidth: "128px",
-              handler: function (data) {
-                if (!Array.isArray(data.variants)) return "";
-                return <div>{Currency(data?.variants?.[0].price || 0)}</div>;
-              },
-            },
-            user: {
-              label: t.components.user,
-              handler: function (data) {
-                const userFinded = users?.find(function (user) {
-                  return user.id === data.userId;
-                });
-                return (
-                  <Tooltip
-                    content={t.components[userFinded?.role || "collaborator"]}
-                  >
-                    <Profile
-                      photoCircle
-                      photoSize={3}
-                      padding={false}
-                      styles={{ lineHeight: 1 }}
-                      description={userFinded?.email || ""}
-                      name={userFinded?.name || t.components.unknown}
-                    />
-                  </Tooltip>
-                );
-              },
-            },
-            createdAt: {
-              label: t.components.created_at,
-              handler: function (data) {
-                const datetime = instanceDateTime(data.createdAt as string);
-                return datetime;
-              },
-            },
-          }}
-          selected={selected}
-          setSelected={setSelected}
-          options={[
-            {
-              id: "copy",
-              label: t.components.copy_id,
-              Icon: CopySimple,
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  const result = await Clipboard.copy(data.id as string);
-                  if (result) {
-                    play("ok");
-                    toast.success(t.toast.success, {
-                      description: t.toast.success_copy,
-                    });
-                    return;
+        {viewMode === "shelves" && (
+          <Horizontal internal={1} styles={{ flexWrap: "wrap" }}>
+            {products.map(function (product) {
+              const userFinded = users?.find(function (user) {
+                return user.id === product.userId;
+              });
+              return (
+                <Card
+                  data={product}
+                  key={product.id}
+                  name={product.name}
+                  options={getOptions}
+                  description={product?.variants?.[0].name}
+                  price={Currency(product?.variants?.[0].price || 0)}
+                  profile={{
+                    padding: false,
+                    photoSize: 3,
+                    photoCircle: true,
+                    photo:
+                      userFinded && "photo" in userFinded
+                        ? (userFinded?.photo as string)
+                        : "",
+                    styles: { fontSize: "var(--textSmall)" },
+                    name: userFinded?.name || t.components.unknown,
+                  }}
+                  states={
+                    <React.Fragment>
+                      <Badge
+                        key="badge-product-status"
+                        category={product.status ? "Success" : "Danger"}
+                        value={
+                          product.status
+                            ? t.components.active
+                            : t.components.inactive
+                        }
+                      />
+                      <Badge
+                        category="Info"
+                        value={
+                          product.type === "physical"
+                            ? t.product.physical
+                            : t.product.digital
+                        }
+                      />
+                      <Badge
+                        category="Info"
+                        value={
+                          product.category === "single"
+                            ? t.product.single
+                            : t.product.variants
+                        }
+                      />
+                    </React.Fragment>
                   }
-                }
-                play("alert");
-                toast.warning(t.toast.warning_error, {
-                  description: t.toast.warning_copy,
-                });
-                return;
-              },
-            },
-            {
-              id: "download",
-              label: t.components.download,
-              Icon: DownloadSimple,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  Download.JSON(data, `product-${data.id}.json`);
-                  play("ok");
-                  toast.success(t.toast.success, {
-                    description: t.toast.success_download,
-                  });
-                }
-                return;
-              },
-            },
-            {
-              id: "edit",
-              label: t.components.edit,
-              Icon: PencilSimple,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data)
-                  navigate(`/f/products/inspect/${data.id}`);
-                return;
-              },
-            },
-            {
-              id: "delete",
-              label: t.components.delete,
-              Icon: Trash,
-              IconColor: "var(--dangerColor",
-              styles: { color: "var(--dangerColor)" },
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (!data || typeof data !== "object" || !("id" in data))
-                  return;
-                OpenDialog({
-                  category: "Danger",
-                  title: t.dialog.title_delete,
-                  description: t.dialog.description_delete,
-                  confirmText: t.components.delete,
-                  onConfirm: async function () {
-                    try {
-                      const response = await apis.Product.delete(
-                        token,
-                        instance.name,
-                        data.id as string,
-                        workspaceId,
-                      );
-                      if (!response.data?.result) {
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.toast.error_delete,
-                        });
-                        return;
+                />
+              );
+            })}
+          </Horizontal>
+        )}
+        {viewMode === "table" && (
+          <Table
+            border
+            loading={loading}
+            data={products as TableData[]}
+            columns={{
+              status: {
+                label: t.components.status,
+                maxWidth: "96px",
+                handler: function (data) {
+                  return (
+                    <Badge
+                      category={data.status ? "Success" : "Danger"}
+                      value={
+                        data.status
+                          ? t.components.active
+                          : t.components.inactive
                       }
-                      play("ok");
-                      toast.success(t.toast.success, {
-                        description: t.toast.success_delete,
-                      });
-                      CloseDialog();
-                      await FetchProducts();
-                      return;
-                    } catch (err) {
-                      play("alert");
-                      toast.error(t.toast.warning_error, {
-                        description: t.toast.error_delete,
-                      });
-                      console.error(
-                        "[src/pages/settings/workspaces/WorkspaceList.tsx]",
-                        err,
-                      );
-                      return;
-                    }
-                  },
-                });
+                    />
+                  );
+                },
               },
-            },
-          ]}
-        />
+              type: {
+                label: t.product.type,
+                maxWidth: "96px",
+                handler: function (data) {
+                  return (
+                    <Badge
+                      category="Info"
+                      value={
+                        data.type === "physical"
+                          ? t.product.physical
+                          : t.product.digital
+                      }
+                    />
+                  );
+                },
+              },
+              category: {
+                label: t.product.category,
+                maxWidth: "96px",
+                handler: function (data) {
+                  return (
+                    <Badge
+                      category="Info"
+                      value={
+                        data.category === "single"
+                          ? t.product.single
+                          : t.product.variants
+                      }
+                    />
+                  );
+                },
+              },
+              name: { label: t.product.name },
+              description: {
+                label: t.components.description,
+                handler: function (data) {
+                  if (data.description) return data.description as string;
+                  return (
+                    <i style={{ color: "var(--textLight)" }}>
+                      {t.stacks.no_description}
+                    </i>
+                  );
+                },
+              },
+              price: {
+                label: t.product.price,
+                maxWidth: "128px",
+                handler: function (data) {
+                  if (!Array.isArray(data.variants)) return "";
+                  return <div>{Currency(data?.variants?.[0].price || 0)}</div>;
+                },
+              },
+              user: {
+                label: t.components.user,
+                handler: function (data) {
+                  const userFinded = users?.find(function (user) {
+                    return user.id === data.userId;
+                  });
+                  return (
+                    <Tooltip
+                      content={t.components[userFinded?.role || "collaborator"]}
+                    >
+                      <Profile
+                        photoCircle
+                        photoSize={3}
+                        padding={false}
+                        styles={{ lineHeight: 1 }}
+                        description={userFinded?.email || ""}
+                        name={userFinded?.name || t.components.unknown}
+                      />
+                    </Tooltip>
+                  );
+                },
+              },
+              createdAt: {
+                label: t.components.created_at,
+                handler: function (data) {
+                  const datetime = instanceDateTime(data.createdAt as string);
+                  return datetime;
+                },
+              },
+            }}
+            selected={selected}
+            setSelected={setSelected}
+            options={getOptions}
+          />
+        )}
         <Pagination
           display
           pageCurrent={page}
