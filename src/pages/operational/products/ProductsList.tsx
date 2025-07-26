@@ -5,6 +5,7 @@ import {
   PencilSimple,
   QuestionMark,
   DownloadSimple,
+  DotsThreeOutline,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -48,6 +49,7 @@ import Wrapper from "../../../components/wrapper/Wrapper";
 import Profile from "../../../components/profiles/Profile";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import { ProductViewModes } from "../../../assets/Components";
+import Dropdown from "../../../components/dropdowns/Dropdown";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
@@ -250,7 +252,7 @@ const ProductsList = function () {
           />
         </h2>
       </Horizontal>
-      <Horizontal internal={1} styles={{ overflow: "hidden" }}>
+      <Horizontal internal={1}>
         <Button
           Icon={Plus}
           category="Success"
@@ -353,25 +355,10 @@ const ProductsList = function () {
                 });
                 return (
                   <Card
-                    data={product}
+                    mode="Large"
                     key={product.id}
-                    name={product.name}
-                    options={getOptions}
-                    photo={product?.variants?.[0].photo}
-                    description={product?.variants?.[0].name}
-                    price={Currency(product?.variants?.[0].price || 0)}
-                    profile={{
-                      padding: false,
-                      photoSize: 3,
-                      photoCircle: true,
-                      photo:
-                        userFinded && "photo" in userFinded
-                          ? (userFinded?.photo as string)
-                          : "",
-                      styles: { fontSize: "var(--textSmall)" },
-                      name: userFinded?.name || t.components.unknown,
-                    }}
-                    states={
+                    photo={product?.variants?.[0]?.photo || ""}
+                    photoChildren={
                       <React.Fragment>
                         <Badge
                           key="badge-product-status"
@@ -400,7 +387,37 @@ const ProductsList = function () {
                         />
                       </React.Fragment>
                     }
-                  />
+                    footer={
+                      <React.Fragment>
+                        <Profile
+                          photoCircle
+                          padding={false}
+                          photoSize={3}
+                          photo={userFinded?.photo || ""}
+                          styles={{ flex: 1, fontSize: "var(--textSmall)" }}
+                          name={userFinded?.name || t.components.unknown}
+                        />
+                        <Dropdown values={getOptions} data={product}>
+                          <div style={{ cursor: "pointer" }}>
+                            <DotsThreeOutline weight="fill" />
+                          </div>
+                        </Dropdown>
+                      </React.Fragment>
+                    }
+                  >
+                    <div>{product.name}</div>
+                    <div
+                      style={{
+                        color: "var(--textLight)",
+                        fontSize: "var(--textSmall)",
+                      }}
+                    >
+                      {product?.variants?.[0].name}
+                    </div>
+                    <div style={{ fontSize: "var(--textHighlight)" }}>
+                      {Currency(product?.variants?.[0].price || 0)}
+                    </div>
+                  </Card>
                 );
               })
             ) : (

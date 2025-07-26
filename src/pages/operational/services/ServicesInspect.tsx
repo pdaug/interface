@@ -54,7 +54,7 @@ const ServicesInspect = function () {
     name: "",
     description: "",
     type: "physical",
-    pricingValue: 0,
+    pricingValue: "0.00",
     pricingMethod: "hourly",
     tags: [],
     workspaceId,
@@ -305,10 +305,10 @@ const ServicesInspect = function () {
                   id="service_pricing_value"
                   label={t.service.pricing_value}
                   disabled={loading && Boolean(id)}
-                  value={String(form?.pricingValue)}
+                  value={form?.pricingValue || "0.00"}
                   onChange={function (value) {
                     const newForm = { ...form };
-                    newForm.pricingValue = Number(value);
+                    newForm.pricingValue = value;
                     setForm(newForm);
                     return;
                   }}

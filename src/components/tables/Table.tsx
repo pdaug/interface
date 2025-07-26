@@ -159,7 +159,7 @@ const Table = function ({
                       {columnValue.tooltip &&
                       typeof rowDataValue !== "object" ? (
                         <Tooltip content={columnValue.tooltip}>
-                          {rowDataValue}
+                          <div>{rowDataValue}</div>
                         </Tooltip>
                       ) : (
                         (rowDataValue as React.ReactNode)

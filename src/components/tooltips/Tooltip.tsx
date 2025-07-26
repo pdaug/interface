@@ -14,7 +14,7 @@ export type TooltipProps = {
   content: string | React.ReactNode;
   theme?: TooltipTheme;
   placement?: TooltipPlacement;
-  children: React.ReactElement | string | number | boolean;
+  children: React.ReactElement;
 };
 
 const Tooltip = function ({
@@ -25,7 +25,7 @@ const Tooltip = function ({
 }: TooltipProps) {
   return (
     <Tippy content={content} theme={theme} placement={placement}>
-      <div>{children}</div>
+      {children}
     </Tippy>
   );
 };

@@ -16,7 +16,7 @@ export type TypeService = {
   description: string;
   type: TypeServiceType;
 
-  pricingValue: number;
+  pricingValue: string;
   pricingMethod: TypeServiceMethod;
 
   tags: string[];

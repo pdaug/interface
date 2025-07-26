@@ -46,9 +46,9 @@ import Card from "../../../components/cards/Card";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
+import Profile from "../../../components/profiles/Profile";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Profile from "../../../components/profiles/Profile";
 
 // TODO: change price type to string
 const ProductsInspect = function () {
@@ -73,8 +73,9 @@ const ProductsInspect = function () {
     variants: [
       {
         id: "",
+        photo: "",
         name: "",
-        price: 0,
+        price: "0.00",
       },
     ],
     propertyColor: "#fafafa",
@@ -460,123 +461,65 @@ const ProductsInspect = function () {
             <Vertical internal={1}>
               <Horizontal
                 internal={1}
-                styles={{ paddingBottom: "1rem", overflowX: "auto" }}
+                styles={{ paddingBottom: "1rem", overflowX: "scroll" }}
               >
                 {form.variants?.map(function (variant, index) {
                   return (
                     <Card
-                      small
+                      mode="Large"
+                      key={`product-variant-${index}`}
                       photo={
                         productTemp?.[index]
                           ? URL.createObjectURL(productTemp[index])
                           : form?.variants?.[index]?.photo || ""
                       }
-                      key={variant.id}
-                      name={variant.name}
-                      description={form.description || ""}
-                      price={Currency(variant.price || 0)}
-                    />
+                      photoChildren={
+                        <React.Fragment>
+                          <Button
+                            type="button"
+                            category="Danger"
+                            disabled={index === 0}
+                            text={t.components.remove}
+                            onClick={function () {
+                              if (form.variants?.length === 1) {
+                                play("alert");
+                                toast.warning(t.toast.warning_error, {
+                                  description: t.product.no_delete_all_variants,
+                                });
+                                return;
+                              }
+                              const newForm = { ...form };
+                              if (!newForm?.variants) return;
+                              newForm.variants.splice(index, 1);
+                              setForm(newForm);
+                              return;
+                            }}
+                          />
+                        </React.Fragment>
+                      }
+                    >
+                      <div>{form.name || "\u200B"}</div>
+                      <div
+                        style={{
+                          color: "var(--textLight)",
+                          fontSize: "var(--textSmall)",
+                        }}
+                      >
+                        {variant?.name || "\u200B"}
+                      </div>
+                      <div style={{ fontSize: "var(--textHighlight)" }}>
+                        {Currency(variant?.price || 0)}
+                      </div>
+                    </Card>
                   );
                 })}
-              </Horizontal>
-
-              {form.variants?.map(function (variant, index) {
-                return (
-                  <Horizontal
-                    key={variant.id}
-                    internal={1}
-                    styles={{ alignItems: "flex-end" }}
-                  >
-                    <div className="flex1">
-                      <Horizontal internal={1}>
-                        <InputFile
-                          label={t.product.photo}
-                          value={productTemp[index]}
-                          name={`variant.${index}.photo`}
-                          id={`product_variant_${index}_photo`}
-                          accept="image/png, image/jpg, image/jpeg, image/webp"
-                          onChange={function (event) {
-                            const file = event.currentTarget.files?.[0] || null;
-                            if (!file) return;
-                            if (file.size > 5 * 1024 * 1024) {
-                              play("alert");
-                              toast.error(t.toast.warning_error, {
-                                description: t.stacks.limit_image_5mb,
-                              });
-                              return;
-                            }
-                            setProductTemp(function (prevState) {
-                              const cloneState = [...prevState];
-                              cloneState[index] = file;
-                              return cloneState;
-                            });
-                            return;
-                          }}
-                        />
-                        <Input
-                          min={1}
-                          max={32}
-                          required
-                          label={t.product.variant_name}
-                          name={`variant.${index}.name`}
-                          disabled={loading && Boolean(id)}
-                          id={`product_variant_${index}_name`}
-                          placeholder={t.product.variant_name_placeholder}
-                          value={form?.variants?.[index].name || ""}
-                          onChange={function (event) {
-                            const newForm = { ...form };
-                            if (!newForm?.variants?.[index]) return;
-                            newForm.variants[index].name =
-                              event.currentTarget?.value || "";
-                            setForm(newForm);
-                            return;
-                          }}
-                        />
-                        <InputMoney
-                          required
-                          placeholder="0.00"
-                          label={t.product.price}
-                          name={`variant.${index}.price`}
-                          disabled={loading && Boolean(id)}
-                          id={`product_variant_${index}_price`}
-                          value={String(form?.variants?.[index].price)}
-                          onChange={function (value) {
-                            const newForm = { ...form };
-                            if (!newForm?.variants?.[index]) return;
-                            newForm.variants[index].price = Number(value);
-                            setForm(newForm);
-                            return;
-                          }}
-                        />
-                      </Horizontal>
-                    </div>
-                    <div>
-                      <Button
-                        type="button"
-                        category="Danger"
-                        disabled={index === 0}
-                        text={t.components.remove}
-                        onClick={function () {
-                          if (form.variants?.length === 1) {
-                            play("alert");
-                            toast.warning(t.toast.warning_error, {
-                              description: t.product.no_delete_all_variants,
-                            });
-                            return;
-                          }
-                          const newForm = { ...form };
-                          if (!newForm?.variants) return;
-                          newForm.variants.splice(index, 1);
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                    </div>
-                  </Horizontal>
-                );
-              })}
-              <Horizontal internal={1}>
-                <div>
+                <Vertical
+                  styles={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minWidth: 200,
+                  }}
+                >
                   <Button
                     type="button"
                     category="Success"
@@ -586,15 +529,86 @@ const ProductsInspect = function () {
                       if (!newForm?.variants) return;
                       newForm.variants.push({
                         id: "",
+                        photo: "",
                         name: "",
-                        price: 0,
+                        price: "0.00",
                       });
                       setForm(newForm);
                       return;
                     }}
                   />
-                </div>
+                </Vertical>
               </Horizontal>
+
+              {form.variants?.map(function (variant, index) {
+                return (
+                  <Horizontal
+                    key={variant.id}
+                    internal={1}
+                    styles={{ alignItems: "flex-end" }}
+                  >
+                    <InputFile
+                      label={t.product.photo}
+                      value={productTemp[index]}
+                      name={`variant.${index}.photo`}
+                      id={`product_variant_${index}_photo`}
+                      accept="image/png, image/jpg, image/jpeg, image/webp"
+                      onChange={function (event) {
+                        const file = event.currentTarget.files?.[0] || null;
+                        if (!file) return;
+                        if (file.size > 5 * 1024 * 1024) {
+                          play("alert");
+                          toast.error(t.toast.warning_error, {
+                            description: t.stacks.limit_image_5mb,
+                          });
+                          return;
+                        }
+                        setProductTemp(function (prevState) {
+                          const cloneState = [...prevState];
+                          cloneState[index] = file;
+                          return cloneState;
+                        });
+                        return;
+                      }}
+                    />
+                    <Input
+                      min={1}
+                      max={32}
+                      required
+                      label={t.product.variant_name}
+                      name={`variant.${index}.name`}
+                      disabled={loading && Boolean(id)}
+                      id={`product_variant_${index}_name`}
+                      placeholder={t.product.variant_name_placeholder}
+                      value={form?.variants?.[index].name || ""}
+                      onChange={function (event) {
+                        const newForm = { ...form };
+                        if (!newForm?.variants?.[index]) return;
+                        newForm.variants[index].name =
+                          event.currentTarget?.value || "";
+                        setForm(newForm);
+                        return;
+                      }}
+                    />
+                    <InputMoney
+                      required
+                      placeholder="0.00"
+                      label={t.product.price}
+                      name={`variant.${index}.price`}
+                      disabled={loading && Boolean(id)}
+                      id={`product_variant_${index}_price`}
+                      value={form?.variants?.[index].price || "0.00"}
+                      onChange={function (value) {
+                        const newForm = { ...form };
+                        if (!newForm?.variants?.[index]) return;
+                        newForm.variants[index].price = value;
+                        setForm(newForm);
+                        return;
+                      }}
+                    />
+                  </Horizontal>
+                );
+              })}
             </Vertical>
           </Wrapper>
 

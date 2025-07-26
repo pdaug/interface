@@ -6,7 +6,7 @@ export type TypeProductVariants = {
   id: string;
   photo?: string | null;
   name: string;
-  price: number;
+  price: string;
 };
 
 export type TypeProductLicense = "lifetime" | "subscription" | "single_use";
