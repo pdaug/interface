@@ -38,7 +38,12 @@ const Routes = (
   <DialogProvider>
     <ToastElement />
     <DialogElement />
-    <RouterProvider router={Router} />
+    <RouterProvider
+      router={Router}
+      future={{
+        v7_startTransition: true,
+      }}
+    />
   </DialogProvider>
 );
 export default Routes;

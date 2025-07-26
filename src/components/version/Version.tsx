@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 // styles
 import "./Version.css";
 
@@ -9,6 +11,15 @@ import { version as versionFrontend } from "../../../package.json";
 
 const Version = function () {
   const { version: versionBackend } = useSystem();
+
+  useEffect(function () {
+    console.error("Version", {
+      Frontend: Number(versionFrontend),
+      Backend: versionBackend,
+    });
+    return;
+  }, []);
+
   return (
     <div className="version">
       <span>{versionFrontend}</span>
