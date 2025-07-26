@@ -254,10 +254,10 @@ const EmployeesInspect = function () {
                 <InputFile
                   name="photo"
                   value={photoTemp}
-                  disabled={loading}
                   id="employee_photo"
                   helper="PNG, JPG e JPEG"
                   label={t.employee.photo}
+                  disabled={loading && Boolean(id)}
                   accept="image/png, image/jpg, image/jpeg"
                   onChange={function (event) {
                     const file = event.currentTarget.files?.[0] || null;
