@@ -33,11 +33,7 @@ import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
-import {
-  Input,
-  InputSelect,
-  InputInterval,
-} from "../../../components/inputs/Input";
+import { Input, InputInterval } from "../../../components/inputs/Input";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import Profile from "../../../components/profiles/Profile";
@@ -149,30 +145,6 @@ const ServicesList = function () {
           text={t.service.new}
           onClick={() => navigate("/f/services/inspect")}
         />
-        <div style={{ maxWidth: 96 }}>
-          <InputSelect
-            label=""
-            empty=""
-            value="all"
-            options={[
-              {
-                id: "all",
-                value: "all",
-                text: t.components.all,
-              },
-              {
-                id: "physical",
-                value: "physical",
-                text: t.service.physical,
-              },
-              {
-                id: "digital",
-                value: "digital",
-                text: t.service.digital,
-              },
-            ]}
-          />
-        </div>
         <div style={{ minWidth: 200, maxWidth: 256 }}>
           <InputInterval
             label=""

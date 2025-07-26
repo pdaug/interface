@@ -21,7 +21,7 @@ const IntegrationsHome = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h2>{t.integrations.integrations}</h2>
+        <h2>{t.integration.integrations}</h2>
       </Horizontal>
 
       <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
@@ -52,7 +52,7 @@ const IntegrationsHome = function () {
       </Horizontal>
 
       <Vertical internal={1}>
-        <Horizontal>{t.integrations.sales}</Horizontal>
+        <Horizontal>{t.integration.sales}</Horizontal>
 
         <Horizontal internal={1}>
           <Wrapper
@@ -60,7 +60,7 @@ const IntegrationsHome = function () {
               {
                 id: "mercadolibre",
                 category: "Neutral",
-                text: t.integrations.setup,
+                text: t.integration.setup,
                 Icon: GearSix,
                 disabled: true,
               },
@@ -75,18 +75,18 @@ const IntegrationsHome = function () {
                   style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
-                  {t.integrations.mercadolibre}
+                  {t.integration.mercadolibre}
                 </div>
               </Horizontal>
               <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
-                <Badge category="Warning" value={t.integrations.wip} />
+                <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
                     color: "var(--textLight)",
                     fontSize: "var(--textSmall)",
                   }}
                 >
-                  {t.integrations.mercadolibre_description}
+                  {t.integration.mercadolibre_description}
                 </div>
               </Horizontal>
             </Vertical>
@@ -95,7 +95,7 @@ const IntegrationsHome = function () {
           <div className="flex1"></div>
         </Horizontal>
 
-        <Horizontal>{t.integrations.comunications}</Horizontal>
+        <Horizontal>{t.integration.comunications}</Horizontal>
 
         <Horizontal internal={1}>
           <Wrapper
@@ -103,7 +103,7 @@ const IntegrationsHome = function () {
               {
                 id: "mailsend",
                 category: "Neutral",
-                text: t.integrations.setup,
+                text: t.integration.setup,
                 Icon: GearSix,
                 disabled: true,
               },
@@ -118,18 +118,18 @@ const IntegrationsHome = function () {
                   style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
-                  {t.integrations.mailersend}
+                  {t.integration.mailersend}
                 </div>
               </Horizontal>
               <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
-                <Badge category="Warning" value={t.integrations.wip} />
+                <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
                     color: "var(--textLight)",
                     fontSize: "var(--textSmall)",
                   }}
                 >
-                  {t.integrations.mailersend_description}
+                  {t.integration.mailersend_description}
                 </div>
               </Horizontal>
             </Vertical>
@@ -140,7 +140,7 @@ const IntegrationsHome = function () {
               {
                 id: "twilio",
                 category: "Neutral",
-                text: t.integrations.setup,
+                text: t.integration.setup,
                 Icon: GearSix,
                 disabled: true,
               },
@@ -155,18 +155,18 @@ const IntegrationsHome = function () {
                   style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
-                  {t.integrations.twilio}
+                  {t.integration.twilio}
                 </div>
               </Horizontal>
               <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
-                <Badge category="Warning" value={t.integrations.wip} />
+                <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
                     color: "var(--textLight)",
                     fontSize: "var(--textSmall)",
                   }}
                 >
-                  {t.integrations.twilio_description}
+                  {t.integration.twilio_description}
                 </div>
               </Horizontal>
             </Vertical>
@@ -179,7 +179,7 @@ const IntegrationsHome = function () {
               {
                 id: "mailsend",
                 category: "Neutral",
-                text: t.integrations.setup,
+                text: t.integration.setup,
                 Icon: GearSix,
                 disabled: true,
               },
@@ -194,18 +194,18 @@ const IntegrationsHome = function () {
                   style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
-                  {t.integrations.mailchimp}
+                  {t.integration.mailchimp}
                 </div>
               </Horizontal>
               <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
-                <Badge category="Warning" value={t.integrations.wip} />
+                <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
                     color: "var(--textLight)",
                     fontSize: "var(--textSmall)",
                   }}
                 >
-                  {t.integrations.mailchimp_description}
+                  {t.integration.mailchimp_description}
                 </div>
               </Horizontal>
             </Vertical>
@@ -214,7 +214,7 @@ const IntegrationsHome = function () {
           <div className="flex1"></div>
         </Horizontal>
 
-        <Horizontal>{t.integrations.payments}</Horizontal>
+        <Horizontal>{t.integration.payments}</Horizontal>
 
         <Horizontal internal={1}>
           <Wrapper
@@ -222,7 +222,7 @@ const IntegrationsHome = function () {
               {
                 id: "stripe",
                 category: "Neutral",
-                text: t.integrations.setup,
+                text: t.integration.setup,
                 Icon: GearSix,
                 disabled: true,
               },
@@ -237,18 +237,18 @@ const IntegrationsHome = function () {
                   style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
-                  {t.integrations.stripe}
+                  {t.integration.stripe}
                 </div>
               </Horizontal>
               <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
-                <Badge category="Warning" value={t.integrations.wip} />
+                <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
                     color: "var(--textLight)",
                     fontSize: "var(--textSmall)",
                   }}
                 >
-                  {t.integrations.stripe_description}
+                  {t.integration.stripe_description}
                 </div>
               </Horizontal>
             </Vertical>
@@ -259,7 +259,7 @@ const IntegrationsHome = function () {
               {
                 id: "paypal",
                 category: "Neutral",
-                text: t.integrations.setup,
+                text: t.integration.setup,
                 Icon: GearSix,
                 disabled: true,
               },
@@ -274,25 +274,25 @@ const IntegrationsHome = function () {
                   style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
-                  {t.integrations.paypal}
+                  {t.integration.paypal}
                 </div>
               </Horizontal>
               <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
-                <Badge category="Warning" value={t.integrations.wip} />
+                <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
                     color: "var(--textLight)",
                     fontSize: "var(--textSmall)",
                   }}
                 >
-                  {t.integrations.paypal_description}
+                  {t.integration.paypal_description}
                 </div>
               </Horizontal>
             </Vertical>
           </Wrapper>
         </Horizontal>
 
-        <Horizontal>{t.integrations.ai}</Horizontal>
+        <Horizontal>{t.integration.ai}</Horizontal>
 
         <Horizontal internal={1}>
           <Wrapper
@@ -300,7 +300,7 @@ const IntegrationsHome = function () {
               {
                 id: "gemini",
                 category: "Neutral",
-                text: t.integrations.setup,
+                text: t.integration.setup,
                 Icon: GearSix,
                 disabled: true,
               },
@@ -315,18 +315,18 @@ const IntegrationsHome = function () {
                   style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
-                  {t.integrations.gemini}
+                  {t.integration.gemini}
                 </div>
               </Horizontal>
               <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
-                <Badge category="Warning" value={t.integrations.wip} />
+                <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
                     color: "var(--textLight)",
                     fontSize: "var(--textSmall)",
                   }}
                 >
-                  {t.integrations.gemini_description}
+                  {t.integration.gemini_description}
                 </div>
               </Horizontal>
             </Vertical>
@@ -337,7 +337,7 @@ const IntegrationsHome = function () {
               {
                 id: "openai",
                 category: "Neutral",
-                text: t.integrations.setup,
+                text: t.integration.setup,
                 Icon: GearSix,
                 onClick: function () {
                   toast.warning(t.toast.warning_error, {
@@ -357,18 +357,18 @@ const IntegrationsHome = function () {
                   style={{ borderRadius: "var(--borderRadius)" }}
                 />
                 <div style={{ fontSize: "var(--textHighlight)" }}>
-                  {t.integrations.openai}
+                  {t.integration.openai}
                 </div>
               </Horizontal>
               <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
-                <Badge category="Info" value={t.integrations.beta} />
+                <Badge category="Info" value={t.integration.beta} />
                 <div
                   style={{
                     color: "var(--textLight)",
                     fontSize: "var(--textSmall)",
                   }}
                 >
-                  {t.integrations.openai_description}
+                  {t.integration.openai_description}
                 </div>
               </Horizontal>
             </Vertical>

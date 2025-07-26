@@ -121,7 +121,7 @@ const AccountList = function () {
               },
               {
                 id: "accounts",
-                label: t.accounts.accounts,
+                label: t.account.accounts,
                 url: "/f/accounts",
               },
             ]}
@@ -132,7 +132,7 @@ const AccountList = function () {
         <Button
           Icon={Plus}
           category="Success"
-          text={t.accounts.new}
+          text={t.account.new}
           onClick={() => navigate("/f/accounts/inspect")}
         />
         <Input
@@ -293,7 +293,7 @@ const AccountList = function () {
               },
             },
             isCoorporate: {
-              label: t.accounts.is_coorporate,
+              label: t.account.is_coorporate,
               maxWidth: "96px",
               handler: function (data) {
                 return (
@@ -301,18 +301,18 @@ const AccountList = function () {
                     category="Info"
                     value={
                       data.isCoorporate
-                        ? t.accounts.corporate
-                        : t.accounts.personal
+                        ? t.account.corporate
+                        : t.account.personal
                     }
                   />
                 );
               },
             },
-            name: { label: t.accounts.name },
-            holder: { label: t.accounts.holder },
-            bankName: { label: t.accounts.bank_name },
-            bankAgency: { label: t.accounts.bank_agency },
-            bankAccount: { label: t.accounts.bank_account },
+            name: { label: t.account.name },
+            holder: { label: t.account.holder },
+            bankName: { label: t.account.bank_name },
+            bankAgency: { label: t.account.bank_agency },
+            bankAccount: { label: t.account.bank_account },
             user: {
               label: t.components.user,
               handler: function (data) {

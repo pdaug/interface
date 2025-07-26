@@ -1095,7 +1095,7 @@ const ProductsInspect = function () {
           <Callout
             Icon={Asterisk}
             category="Warning"
-            text={t.stacks.required_fields}
+            text={t.callout.required_fields}
             styles={{ fontSize: "var(--textSmall)" }}
           />
 

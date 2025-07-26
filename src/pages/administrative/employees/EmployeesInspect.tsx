@@ -661,13 +661,19 @@ const EmployeesInspect = function () {
                   }}
                 />
               </Horizontal>
+              <Callout
+                Icon={Asterisk}
+                category="Warning"
+                text={t.callout.postal_code_search}
+                styles={{ fontSize: "var(--textSmall)" }}
+              />
             </Vertical>
           </Wrapper>
 
           <Callout
             Icon={Asterisk}
             category="Warning"
-            text={t.stacks.required_fields}
+            text={t.callout.required_fields}
             styles={{ fontSize: "var(--textSmall)" }}
           />
 

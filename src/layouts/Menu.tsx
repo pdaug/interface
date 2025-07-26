@@ -1,6 +1,15 @@
+import {
+  Bank,
+  Plug,
+  Info,
+  Check,
+  SignOut,
+  GearSix,
+  CaretDown,
+  Warehouse,
+} from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { GearSix, CaretDown, Check } from "@phosphor-icons/react";
 
 // assets
 import { MenuOptions } from "../assets/Menu";
@@ -112,26 +121,31 @@ const Menu = function () {
       values: [
         {
           id: "workspaces",
+          Icon: Warehouse,
           label: t.menu.workspaces,
           onClick: () => navigate("/f/workspaces"),
         },
         {
-          id: "integrations",
-          label: t.menu.integrations,
-          onClick: () => navigate("/f/integrations"),
-        },
-        {
           id: "accounts",
+          Icon: Bank,
           label: t.menu.accounts,
           onClick: () => navigate("/f/accounts"),
         },
         {
+          id: "integrations",
+          Icon: Plug,
+          label: t.menu.integrations,
+          onClick: () => navigate("/f/integrations"),
+        },
+        {
           id: "settings",
+          Icon: GearSix,
           label: t.menu.settings,
           onClick: () => navigate("/f/settings"),
         },
         {
           id: "about",
+          Icon: Info,
           label: t.menu.about,
           onClick: function () {
             OpenDialog({
@@ -188,12 +202,11 @@ const Menu = function () {
                     })}
                   </Vertical>
                   <Vertical internal={0.2}>
-                    <div style={{ fontSize: "var(--textSmall)" }}>
+                    <code style={{ fontSize: "var(--textSmall)" }}>
                       {t.about.version_backend}: {versionBackend}
-                    </div>
-                    <div style={{ fontSize: "var(--textSmall)" }}>
+                      <br />
                       {t.about.version_frontend}: {versionFrontend}
-                    </div>
+                    </code>
                   </Vertical>
                 </Vertical>
               ),
@@ -203,7 +216,10 @@ const Menu = function () {
         },
         {
           id: "logout",
+          Icon: SignOut,
           label: t.menu.logout,
+          styles: { color: "var(--dangerColor)" },
+          IconColor: "var(--dangerColor)",
           onClick: async function () {
             await play("logout");
             clear();

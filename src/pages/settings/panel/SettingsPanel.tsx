@@ -2,7 +2,7 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Asterisk } from "@phosphor-icons/react";
+import { Asterisk, ImageBroken } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -510,6 +510,7 @@ const SettingsPanel = function () {
                   <Avatar
                     label=""
                     size={12}
+                    Icon={ImageBroken}
                     photo={
                       logoTemp
                         ? URL.createObjectURL(logoTemp)
@@ -532,6 +533,7 @@ const SettingsPanel = function () {
                   <Avatar
                     label=""
                     size={[12, 24]}
+                    Icon={ImageBroken}
                     photo={
                       logoLargeTemp
                         ? URL.createObjectURL(logoLargeTemp)
@@ -554,6 +556,7 @@ const SettingsPanel = function () {
                   <Avatar
                     label=""
                     size={6}
+                    Icon={ImageBroken}
                     photo={
                       faviconTemp
                         ? URL.createObjectURL(faviconTemp)
@@ -847,13 +850,19 @@ const SettingsPanel = function () {
                   }}
                 />
               </Horizontal>
+              <Callout
+                Icon={Asterisk}
+                category="Warning"
+                text={t.callout.postal_code_search}
+                styles={{ fontSize: "var(--textSmall)" }}
+              />
             </Vertical>
           </Wrapper>
 
           <Callout
             Icon={Asterisk}
             category="Warning"
-            text={t.stacks.required_fields}
+            text={t.callout.required_fields}
             styles={{ fontSize: "var(--textSmall)" }}
           />
 

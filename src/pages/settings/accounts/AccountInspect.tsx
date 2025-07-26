@@ -178,7 +178,7 @@ const AccountInspect = function () {
               },
               {
                 id: "accounts",
-                label: t.accounts.accounts,
+                label: t.account.accounts,
                 url: "/f/accounts",
               },
               {
@@ -193,8 +193,8 @@ const AccountInspect = function () {
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Wrapper
-            title={id ? t.accounts.title_edit : t.accounts.title_create}
-            description={t.accounts.subtitle}
+            title={id ? t.account.title_edit : t.account.title_create}
+            description={t.account.subtitle}
           >
             <Vertical internal={1}>
               <Horizontal internal={1}>
@@ -232,9 +232,9 @@ const AccountInspect = function () {
                   name="name"
                   id="account_name"
                   value={form?.name || ""}
-                  label={t.accounts.name}
+                  label={t.account.name}
                   disabled={loading && Boolean(id)}
-                  placeholder={t.accounts.name_placeholder}
+                  placeholder={t.account.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.name = event.currentTarget?.value || "";
@@ -246,19 +246,19 @@ const AccountInspect = function () {
                   name="isCoorporate"
                   id="account_is_coorporate"
                   empty={t.stacks.no_option}
-                  label={t.accounts.is_coorporate}
+                  label={t.account.is_coorporate}
                   disabled={loading && Boolean(id)}
                   value={String(form?.isCoorporate)}
                   options={[
                     {
                       id: "true",
                       value: "true",
-                      text: t.accounts.corporate,
+                      text: t.account.corporate,
                     },
                     {
                       id: "false",
                       value: "false",
-                      text: t.accounts.personal,
+                      text: t.account.personal,
                     },
                   ]}
                   onChange={function (event) {
@@ -278,9 +278,9 @@ const AccountInspect = function () {
                   name="holder"
                   id="account_holder"
                   value={form?.holder || ""}
-                  label={t.accounts.holder}
+                  label={t.account.holder}
                   disabled={loading && Boolean(id)}
-                  placeholder={t.accounts.holder_placeholder}
+                  placeholder={t.account.holder_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.holder = event.currentTarget?.value || "";
@@ -295,8 +295,8 @@ const AccountInspect = function () {
                   id="account_holder_document_1"
                   disabled={loading && Boolean(id)}
                   value={form?.holderDocument1 || ""}
-                  label={t.accounts.holder_document_1}
-                  placeholder={t.accounts.holder_document_placeholder}
+                  label={t.account.holder_document_1}
+                  placeholder={t.account.holder_document_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.holderDocument1 = event.currentTarget?.value || "";
@@ -310,8 +310,8 @@ const AccountInspect = function () {
                   id="account_holder_document_2"
                   disabled={loading && Boolean(id)}
                   value={form?.holderDocument2 || ""}
-                  label={t.accounts.holder_document_2}
-                  placeholder={t.accounts.holder_document_placeholder}
+                  label={t.account.holder_document_2}
+                  placeholder={t.account.holder_document_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.holderDocument2 = event.currentTarget?.value || "";
@@ -326,7 +326,7 @@ const AccountInspect = function () {
                   name="bankCode"
                   placeholder="123"
                   id="account_bank_code"
-                  label={t.accounts.bank_code}
+                  label={t.account.bank_code}
                   value={form?.bankCode || ""}
                   onChange={function () {
                     return;
@@ -337,7 +337,7 @@ const AccountInspect = function () {
                   name="bankName"
                   id="account_bank_name"
                   empty={t.stacks.no_option}
-                  label={t.accounts.bank_name}
+                  label={t.account.bank_name}
                   value={form?.bankCode || ""}
                   disabled={loading && Boolean(id)}
                   options={BanksSafely.map(function (bank) {
@@ -366,9 +366,9 @@ const AccountInspect = function () {
                   name="bankAgency"
                   id="account_bank_agency"
                   value={form?.bankAgency || ""}
-                  label={t.accounts.bank_agency}
+                  label={t.account.bank_agency}
                   disabled={loading && Boolean(id)}
-                  placeholder={t.accounts.bank_number_placeholder}
+                  placeholder={t.account.bank_number_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.bankAgency = event.currentTarget?.value || "";
@@ -383,9 +383,9 @@ const AccountInspect = function () {
                   name="bankAccount"
                   id="account_bank_account"
                   value={form?.bankAccount || ""}
-                  label={t.accounts.bank_account}
+                  label={t.account.bank_account}
                   disabled={loading && Boolean(id)}
-                  placeholder={t.accounts.bank_number_placeholder}
+                  placeholder={t.account.bank_number_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.bankAccount = event.currentTarget?.value || "";
@@ -456,7 +456,7 @@ const AccountInspect = function () {
           <Callout
             Icon={Asterisk}
             category="Warning"
-            text={t.stacks.required_fields}
+            text={t.callout.required_fields}
             styles={{ fontSize: "var(--textSmall)" }}
           />
 
