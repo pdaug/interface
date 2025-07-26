@@ -34,9 +34,10 @@ import {
 } from "../../../components/inputs/Input";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
+import Profile from "../../../components/profiles/Profile";
 import Callout from "../../../components/callouts/Callout";
-import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
+import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const ServicesInspect = function () {
   const t = useTranslate();
@@ -45,7 +46,7 @@ const ServicesInspect = function () {
   const Schema = useSchema();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
-  const { user, token, instance, workspaces, workspaceId } = useSystem();
+  const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeService>>({
@@ -59,6 +60,12 @@ const ServicesInspect = function () {
     workspaceId,
     userId: user.id,
   });
+
+  const userFinded = form.userId
+    ? users.find(function (userLocal) {
+        return form.userId === userLocal.id;
+      })
+    : null;
 
   // fetch service
   useAsync(async function () {
@@ -327,6 +334,17 @@ const ServicesInspect = function () {
               </Horizontal>
               {Boolean(id) && (
                 <Horizontal internal={1}>
+                  <div
+                    className="flex1"
+                    style={{ alignItems: "flex-end", display: "flex" }}
+                  >
+                    <Profile
+                      padding={false}
+                      photo={userFinded?.photo || ""}
+                      description={userFinded?.email || ""}
+                      name={userFinded?.name || t.components.unknown}
+                    />
+                  </div>
                   <Input
                     readOnly
                     placeholder=""

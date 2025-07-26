@@ -79,6 +79,7 @@ const ProductsInspect = function () {
     ],
     propertyColor: "#fafafa",
     workspaceId,
+    userId: user.id,
   });
 
   const userFinded = form.userId
@@ -180,7 +181,6 @@ const ProductsInspect = function () {
         return;
       }
       // is creating
-      form.userId = user.id;
       const response = await apis.Product.create<TypeProduct>(
         token,
         instance.name,
@@ -398,7 +398,6 @@ const ProductsInspect = function () {
                   }}
                 />
               </Horizontal>
-              {/* TODO: add user finded in edit page */}
               {Boolean(id) && (
                 <Horizontal internal={1}>
                   <div
