@@ -63,6 +63,8 @@ const TranslatePt = {
     "MM/dd/yyyy": "mês/dia/ano",
     "yyyy-MM-dd": "ano-mês-dia",
     all: "Todos",
+    photo: "Foto",
+    image: "Imagem",
     // format
     json: "Formato JSON",
     xlsx: "Planilha Excel",
@@ -428,6 +430,8 @@ const TranslatePt = {
   },
   stacks: {
     // no
+    no_email: "Sem email",
+    no_document: "Sem documento",
     no_find_item: "O item não foi encontrado",
     no_option: "Nenhuma opção selecionada",
     no_description: "Sem descrição",
@@ -573,6 +577,8 @@ const TranslateEn = {
     "MM/dd/yyyy": "month/day/year",
     "yyyy-MM-dd": "year-month-day",
     all: "All",
+    photo: "Photo",
+    image: "Image",
     // format
     json: "Format JSON",
     xlsx: "Sheets Excel",
@@ -864,6 +870,8 @@ const TranslateEn = {
   },
   stacks: {
     // no
+    no_email: "No email",
+    no_document: "No document",
     no_find_item: "The item was not found",
     no_option: "No options selected",
     no_description: "No description",

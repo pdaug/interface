@@ -168,6 +168,23 @@ const CustomersList = function () {
             return;
           }}
         />
+        {/* <Button category="Neutral" text={t.components.import} /> */}
+        <Button
+          category="Neutral"
+          disabled={!selected.length}
+          text={t.components.export}
+          onClick={function () {
+            const data = customers.filter(function (customer) {
+              return selected.includes(customer.id);
+            });
+            Download.JSON(data, `customers.json`);
+            play("ok");
+            toast.success(t.toast.success, {
+              description: t.toast.success_download,
+            });
+            return;
+          }}
+        />
         <Tooltip content={t.components.help}>
           <Button
             text=""
@@ -214,11 +231,54 @@ const CustomersList = function () {
                 );
               },
             },
-            name: { label: t.customer.name },
-            description: { label: t.customer.description },
-            document1: { label: t.customer.document },
+            name: {
+              label: t.customer.name,
+              handler: function (data) {
+                return (
+                  <Profile
+                    photoCircle
+                    photoSize={4}
+                    padding={false}
+                    name={data.name as string}
+                    photo={(data.photo as string) ?? undefined}
+                  />
+                );
+              },
+            },
+            description: {
+              label: t.customer.description,
+              handler: function (data) {
+                if (data.description) return data.description as string;
+                return (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.stacks.no_description}
+                  </i>
+                );
+              },
+            },
+            document1: {
+              label: t.customer.document,
+              handler: function (data) {
+                if (data.document1) return data.document1 as string;
+                return (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.stacks.no_document}
+                  </i>
+                );
+              },
+            },
             mobile: { label: t.customer.mobile },
-            email: { label: t.customer.email },
+            email: {
+              label: t.customer.email,
+              handler: function (data) {
+                if (data.email) return data.email as string;
+                return (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.stacks.no_email}
+                  </i>
+                );
+              },
+            },
             address: {
               label: t.customer.address,
               handler: function (data) {

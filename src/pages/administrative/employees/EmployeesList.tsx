@@ -4,7 +4,7 @@ import {
   CopySimple,
   PencilSimple,
   QuestionMark,
-  DownloadSimple,
+  // DownloadSimple,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -16,7 +16,7 @@ import { endOfDay, startOfYear } from "date-fns";
 import apis from "../../../apis";
 
 // utils
-import Download from "../../../utils/Download";
+// import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
 
 // types
@@ -283,21 +283,21 @@ const EmployeesList = function () {
                 return;
               },
             },
-            {
-              id: "download",
-              Icon: DownloadSimple,
-              label: t.components.download,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  Download.JSON(data, `employee-${data.id}.json`);
-                  play("ok");
-                  toast.success(t.toast.success, {
-                    description: t.toast.success_download,
-                  });
-                }
-                return;
-              },
-            },
+            // {
+            //   id: "download",
+            //   Icon: DownloadSimple,
+            //   label: t.components.download,
+            //   onClick: function (_: React.MouseEvent, data: unknown) {
+            //     if (data && typeof data === "object" && "id" in data) {
+            //       Download.JSON(data, `employee-${data.id}.json`);
+            //       play("ok");
+            //       toast.success(t.toast.success, {
+            //         description: t.toast.success_download,
+            //       });
+            //     }
+            //     return;
+            //   },
+            // },
             {
               id: "edit",
               Icon: PencilSimple,

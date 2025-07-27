@@ -1,8 +1,13 @@
+import {
+  UserList,
+  Asterisk,
+  MapTrifold,
+  Storefront,
+} from "@phosphor-icons/react";
 import { toast } from "sonner";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Asterisk, MapTrifold, Storefront } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -30,6 +35,7 @@ import useTranslate from "../../../hooks/useTranslate";
 // components
 import {
   Input,
+  InputFile,
   InputMask,
   InputSelect,
   InputText,
@@ -41,6 +47,8 @@ import Callout from "../../../components/callouts/Callout";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import Avatar from "../../../components/avatars/Avatar";
+import Stats from "../../../components/stats/Stats";
 
 const CustomersInspect = function () {
   const t = useTranslate();
@@ -51,6 +59,8 @@ const CustomersInspect = function () {
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
+
+  const [photoTemp, setPhotoTemp] = useState<File | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeCustomer>>({
@@ -127,6 +137,22 @@ const CustomersInspect = function () {
     try {
       // is editing
       if (id) {
+        // upload photo temp
+        if (photoTemp) {
+          const responseUploadImage = await apis.Upload.image<string>(
+            instance.name,
+            token,
+            {
+              file: photoTemp,
+              path: `image/customer/${id}`,
+              name: id,
+              height: 256,
+              width: 256,
+              quality: 100,
+            },
+          );
+          form.photo = responseUploadImage.data?.result || null;
+        }
         const response = await apis.Customer.update<TypeCustomer>(
           token,
           instance.name,
@@ -141,6 +167,31 @@ const CustomersInspect = function () {
           });
           return;
         }
+        // upload photo temp
+        if (photoTemp) {
+          const responseUploadImage = await apis.Upload.image<string>(
+            instance.name,
+            token,
+            {
+              file: photoTemp,
+              path: `image/customer/${response.data.result.id}`,
+              name: response.data.result.id,
+              height: 256,
+              width: 256,
+              quality: 100,
+            },
+          );
+          form.photo = responseUploadImage.data?.result || null;
+        }
+        await apis.Customer.update(
+          token,
+          instance.name,
+          response.data.result.id,
+          {
+            photo: form.photo,
+          },
+          workspaceId,
+        );
         play("ok");
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
@@ -218,6 +269,70 @@ const CustomersInspect = function () {
       </Horizontal>
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
+          <Horizontal internal={1}>
+            <Wrapper>
+              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+                <Avatar
+                  label=""
+                  size={10}
+                  Icon={UserList}
+                  photo={
+                    photoTemp
+                      ? URL.createObjectURL(photoTemp)
+                      : form?.photo || ""
+                  }
+                />
+
+                <InputFile
+                  name="photo"
+                  value={photoTemp}
+                  id="customer_photo"
+                  helper="PNG, JPG e JPEG"
+                  label={t.components.photo}
+                  disabled={loading && Boolean(id)}
+                  accept="image/png, image/jpg, image/jpeg"
+                  onChange={function (event) {
+                    const file = event.currentTarget.files?.[0] || null;
+                    if (!file) return;
+                    if (file.size > 5 * 1024 * 1024) {
+                      play("alert");
+                      toast.error(t.toast.warning_error, {
+                        description: t.stacks.limit_image_5mb,
+                      });
+                      return;
+                    }
+                    setPhotoTemp(file);
+                    return;
+                  }}
+                />
+              </Horizontal>
+            </Wrapper>
+
+            <Stats
+              metric={0.1}
+              metricStatus="Up"
+              metricLocale="pt-BR"
+              metricOptions={{ style: "percent" }}
+              title={t.dashboard.stats_inflows_receive_title}
+              value={500}
+              valueLocale={instance.language}
+              valueOptions={{ style: "currency", currency: instance.currency }}
+              footer={t.dashboard.stats_inflows_receive_description}
+            />
+
+            <Stats
+              metric={0.1}
+              metricStatus="Up"
+              metricLocale="pt-BR"
+              metricOptions={{ style: "percent" }}
+              title={t.dashboard.stats_inflows_receive_title}
+              value={500}
+              valueLocale={instance.language}
+              valueOptions={{ style: "currency", currency: instance.currency }}
+              footer={t.dashboard.stats_inflows_receive_description}
+            />
+          </Horizontal>
+
           <Wrapper
             title={id ? t.customer.title_edit : t.customer.title_create}
             description={t.customer.subtitle}
@@ -284,18 +399,36 @@ const CustomersInspect = function () {
                     if (mobile.length === 13) {
                       const toastId = toast.loading(t.components.loading);
                       try {
-                        const response = await apis.WhatsApp.contact({
+                        const responseWhatsApp = await apis.WhatsApp.contact({
                           number: mobile,
                         });
                         newForm.name =
-                          !newForm.name?.length && response.data.result?.name
-                            ? response.data.result?.name
+                          !newForm.name?.length &&
+                          responseWhatsApp.data.result?.name
+                            ? responseWhatsApp.data.result?.name
                             : newForm.name;
-                        newForm.photo =
-                          response.data.result?.photoUrl || newForm.photo;
                         newForm.description =
-                          response.data.result.description ||
+                          responseWhatsApp.data.result.description ||
                           newForm.description;
+                        if (responseWhatsApp.data.result?.photoUrl) {
+                          const responsePhoto = await axios.get(
+                            responseWhatsApp.data.result?.photoUrl,
+                            {
+                              responseType: "blob",
+                            },
+                          );
+                          const mimeType =
+                            responsePhoto.headers["content-type"] ||
+                            "image/jpeg";
+                          const newPhoto = new File(
+                            [responsePhoto.data],
+                            "customer",
+                            {
+                              type: mimeType,
+                            },
+                          );
+                          setPhotoTemp(newPhoto);
+                        }
                         play("ok");
                         toast.dismiss(toastId);
                         toast.success(t.toast.success, {
