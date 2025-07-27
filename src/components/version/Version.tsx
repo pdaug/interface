@@ -13,7 +13,7 @@ const Version = function () {
   const { version: versionBackend } = useSystem();
 
   useEffect(function () {
-    console.error("Version", {
+    console.info("Version", {
       Frontend: Number(versionFrontend),
       Backend: versionBackend,
     });

@@ -34,9 +34,11 @@ const TranslatePt = {
   },
   callout: {
     company_document_search:
-      "Ao digitar o campo 'Documento (CNPJ)', será pesquisado automaticamente a empresa na base da dados",
+      "Ao preencher o campo 'Documento (CNPJ)', será pesquisado e preenchido automaticamente os dados da empresa",
+    person_mobile_search:
+      "Ao preencher o campo 'Número de Celular', será preenchido automaticamente com os dados do WhatsApp",
     postal_code_search:
-      "Ao digitar o campo 'Código Postal (CEP)', será pesquisado automaticamente o endereço na base da dados",
+      "Ao preencher o campo 'Código Postal (CEP)', será buscado automaticamente o endereço através da base da dados pública",
     required_fields: "Os campos com asteriscos são obrigatórios",
   },
   components: {
@@ -125,6 +127,7 @@ const TranslatePt = {
     name: "Nome do cliente",
     name_placeholder: "Ex. Fulano de Tal",
     description: "Descrição",
+    description_placeholder: "Ex. Aqui está o meu novo cliente...",
     document: "Documento",
     mobile: "Número de celular",
     mobile_placeholder: "+55 (11) 98888-7777",
@@ -541,9 +544,11 @@ const TranslateEn = {
   },
   callout: {
     company_document_search:
-      "When you enter the 'Document' field, the company will be automatically searched in the database",
+      "When filling in the 'Document' field, the company's information will be automatically searched and filled in.",
+    person_mobile_search:
+      "When filling in the 'Mobile' field, the information will be automatically filled in using WhatsApp data.",
     postal_code_search:
-      "When you enter the 'Postal Code (ZIP Code)' field, the address will be automatically searched in the database",
+      "When filling in the 'Postal Code (ZIP)' field, the address will be automatically retrieved from the public database.",
     required_fields: "Fields marked with an asterisk are required",
   },
   components: {
@@ -632,6 +637,7 @@ const TranslateEn = {
     name: "Customer name",
     name_placeholder: "e.g. John Doe",
     description: "Description",
+    description_placeholder: "e.g. Hello I am a new customer...",
     document: "Document",
     mobile: "Mobile phone",
     mobile_placeholder: "+1 (111) 1111-1111",

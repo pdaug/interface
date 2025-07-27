@@ -32,9 +32,11 @@ import {
   Input,
   InputMask,
   InputSelect,
+  InputText,
 } from "../../../components/inputs/Input";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
+import Profile from "../../../components/profiles/Profile";
 import Callout from "../../../components/callouts/Callout";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
@@ -48,7 +50,7 @@ const CustomersInspect = function () {
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { user, token, instance, workspaces, workspaceId } = useSystem();
+  const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeCustomer>>({
@@ -76,6 +78,12 @@ const CustomersInspect = function () {
     userId: user.id,
     workspaceId,
   });
+
+  const userFinded = form.userId
+    ? users.find(function (userLocal) {
+        return form.userId === userLocal.id;
+      })
+    : null;
 
   // fetch customer
   useAsync(async function () {
@@ -141,7 +149,7 @@ const CustomersInspect = function () {
         return;
       }
       // is creating
-      const response = await apis.User.create<TypeCustomer>(
+      const response = await apis.Customer.create<TypeCustomer>(
         token,
         instance.name,
         form,
@@ -269,9 +277,43 @@ const CustomersInspect = function () {
                   value={form?.mobile || ""}
                   disabled={loading && Boolean(id)}
                   placeholder={t.customer.mobile_placeholder}
-                  onChange={function (event) {
+                  onChange={async function (event) {
                     const newForm = { ...form };
-                    newForm.mobile = event.currentTarget?.value || "";
+                    const mobileRaw = event.currentTarget?.value || "";
+                    const mobile = mobileRaw.replace(/\D/g, "");
+                    if (mobile.length === 13) {
+                      const toastId = toast.loading(t.components.loading);
+                      try {
+                        const response = await apis.WhatsApp.contact({
+                          number: mobile,
+                        });
+                        newForm.name =
+                          !newForm.name?.length && response.data.result?.name
+                            ? response.data.result?.name
+                            : newForm.name;
+                        newForm.photo =
+                          response.data.result?.photoUrl || newForm.photo;
+                        newForm.description =
+                          response.data.result.description ||
+                          newForm.description;
+                        play("ok");
+                        toast.dismiss(toastId);
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_find,
+                        });
+                      } catch (err) {
+                        console.error(
+                          "[src/pages/administrative/customers/CustomerInspect.tsx]",
+                          err,
+                        );
+                        toast.dismiss(toastId);
+                        play("alert");
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.warning_find,
+                        });
+                      }
+                    }
+                    newForm.mobile = mobile;
                     setForm(newForm);
                     return;
                   }}
@@ -407,8 +449,37 @@ const CustomersInspect = function () {
                   }}
                 />
               </Horizontal>
+              <Horizontal internal={1}>
+                <InputText
+                  max={256}
+                  height={4}
+                  name="description"
+                  id="customer_description"
+                  value={form?.description || ""}
+                  label={t.components.description}
+                  disabled={loading && Boolean(id)}
+                  placeholder={t.customer.description_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.description = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
               {Boolean(id) && (
                 <Horizontal internal={1}>
+                  <div
+                    className="flex1"
+                    style={{ alignItems: "flex-end", display: "flex" }}
+                  >
+                    <Profile
+                      padding={false}
+                      photo={userFinded?.photo || ""}
+                      description={userFinded?.email || ""}
+                      name={userFinded?.name || t.components.unknown}
+                    />
+                  </div>
                   <Input
                     readOnly
                     placeholder=""
@@ -452,7 +523,12 @@ const CustomersInspect = function () {
                 Icon={Storefront}
                 IconSize={16}
                 category="Info"
-                text={t.callout.company_document_search}
+                text={
+                  <Vertical internal={0.4}>
+                    <div>{t.callout.person_mobile_search}</div>
+                    <div>{t.callout.company_document_search}</div>
+                  </Vertical>
+                }
                 styles={{ fontSize: "var(--textSmall)" }}
               />
             </Vertical>

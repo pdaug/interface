@@ -4,6 +4,7 @@ export type TypeCustomer = {
   id: string;
   status: boolean;
 
+  photo?: string | null;
   name: string;
   description: string;
 

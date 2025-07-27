@@ -46,3 +46,9 @@ export type ApiCompanyDate = {
   municipio: string | null; // city
   uf: string | null; // state
 };
+
+export type ApiWhatsAppContact = {
+  name: string | null;
+  photoUrl: string | null;
+  description: string | null;
+};

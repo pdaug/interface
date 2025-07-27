@@ -114,7 +114,7 @@ const CustomersList = function () {
   };
 
   // fetch customers
-  useAsync(FetchCustomers, [interval, page, searchDebounced]);
+  useAsync(FetchCustomers, [interval, page, workspaceId, searchDebounced]);
 
   return (
     <React.Fragment>
