@@ -1,5 +1,6 @@
 // apis external
 import PostalCode from "./external/PostalCode";
+import CompanyData from "./external/CompanyData";
 
 // apis internal
 import User from "./internal/User";
@@ -18,6 +19,7 @@ import Workspace from "./internal/Workspace";
 export default {
   // external
   PostalCode,
+  CompanyData,
   // internal
   Account,
   Customer,

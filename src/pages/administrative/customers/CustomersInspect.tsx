@@ -286,9 +286,58 @@ const CustomersInspect = function () {
                   value={form?.document1 || ""}
                   disabled={loading && Boolean(id)}
                   placeholder={t.customer.document_placeholder}
-                  onChange={function (event) {
+                  onChange={async function (event) {
                     const newForm = { ...form };
-                    newForm.document1 = event.currentTarget?.value || "";
+                    const document1Raw = event.currentTarget?.value || "";
+                    const document1 = document1Raw.replace(/\D/g, "");
+                    newForm.document1 = document1;
+                    if (document1.length === 14) {
+                      const toastId = toast.loading(t.components.loading);
+                      try {
+                        const response = await apis.CompanyData(document1);
+                        newForm.phone1 = response.data?.ddd_telefone_1
+                          ? `+55${response.data?.ddd_telefone_1}`
+                          : newForm.phone1;
+                        newForm.phone2 = response.data?.ddd_telefone_2
+                          ? `+55${response.data?.ddd_telefone_2}`
+                          : newForm.phone2;
+                        newForm.name =
+                          response.data?.nome_fantasia ||
+                          response.data?.razao_social ||
+                          newForm.name;
+                        newForm.email = response.data?.email || newForm.email;
+                        if (!newForm.addresses?.[0]) return;
+                        newForm.addresses[0].street =
+                          response.data?.logradouro || "";
+                        newForm.addresses[0].number =
+                          response.data?.numero || "";
+                        newForm.addresses[0].complement =
+                          response.data?.complemento || "";
+                        newForm.addresses[0].neighborhood =
+                          response.data?.bairro || "";
+                        newForm.addresses[0].postalCode =
+                          response.data?.cep || "";
+                        newForm.addresses[0].city =
+                          response.data?.municipio || "";
+                        newForm.addresses[0].state =
+                          response.data?.uf?.toUpperCase() || "";
+                        toast.dismiss(toastId);
+                        play("ok");
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_find,
+                        });
+                      } catch (err) {
+                        console.error(
+                          "[src/pages/administrative/customers/CustomerInspect.tsx]",
+                          err,
+                        );
+                        toast.dismiss(toastId);
+                        play("alert");
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.warning_find,
+                        });
+                      }
+                    }
                     setForm(newForm);
                     return;
                   }}

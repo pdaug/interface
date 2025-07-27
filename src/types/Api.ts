@@ -30,3 +30,19 @@ export type ApiPostalCode = {
   neighborhood: string;
   street: string;
 };
+
+export type ApiCompanyDate = {
+  razao_social: string;
+  nome_fantasia: string;
+  ddd_telefone_1: string;
+  ddd_telefone_2: string;
+  email: string | null;
+
+  logradouro: string | null; // street
+  numero: string | null; // number
+  complemento: string | null; // complement
+  bairro: string | null; // neighborhood
+  cep: string | null; // postalCode
+  municipio: string | null; // city
+  uf: string | null; // state
+};

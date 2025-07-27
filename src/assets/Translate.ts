@@ -132,7 +132,7 @@ const TranslatePt = {
     email_placeholder: "Ex. fulano@email.com",
     address: "Endereço",
     document_1: "Documento (CPF/CNPJ)",
-    document_2: "Documento (RG)",
+    document_2: "Documento (Código, CNAE, RG)",
     document_placeholder: "111.222.333-44",
     phone_1: "Número Telefone 1",
     phone_2: "Número Telefone 2",
