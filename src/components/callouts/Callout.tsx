@@ -34,7 +34,7 @@ const Callout = function ({
 }: CalloutProps) {
   return (
     <div id={id} className={`callout callout${category}`} style={styles}>
-      <div>{Icon && <Icon weight={IconWeight} size={IconSize} />}</div>
+      {Icon && <Icon weight={IconWeight} size={IconSize} />}
       <span>{text}</span>
     </div>
   );

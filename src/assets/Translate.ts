@@ -33,6 +33,8 @@ const TranslatePt = {
     subtitle: "Preencha os campos abaixo para criar ou editar a conta",
   },
   callout: {
+    company_document_search:
+      "Ao digitar o campo 'Documento (CNPJ)', será pesquisado automaticamente a empresa na base da dados",
     postal_code_search:
       "Ao digitar o campo 'Código Postal (CEP)', será pesquisado automaticamente o endereço na base da dados",
     required_fields: "Os campos com asteriscos são obrigatórios",
@@ -115,6 +117,32 @@ const TranslatePt = {
     // others
     loading: "Carregando",
     search: "Faça a sua pesquisa...",
+  },
+  customer: {
+    customer: "Cliente",
+    customers: "Clientes",
+    new: "Novo cliente",
+    name: "Nome do cliente",
+    name_placeholder: "Ex. Fulano de Tal",
+    description: "Descrição",
+    document: "Documento",
+    mobile: "Número de celular",
+    mobile_placeholder: "+55 (11) 98888-7777",
+    email: "Email",
+    email_placeholder: "Ex. fulano@email.com",
+    address: "Endereço",
+    document_1: "Documento (CPF/CNPJ)",
+    document_2: "Documento (RG)",
+    document_placeholder: "111.222.333-44",
+    phone_1: "Número Telefone 1",
+    phone_2: "Número Telefone 2",
+    title_edit: "Edite o cliente",
+    title_create: "Crie um novo cliente",
+    subtitle: "Preencha os campos abaixo para criar ou editar o cliente",
+    title_addresses: "Endereço do cliente",
+    subtitle_addresses:
+      "Preencha os campos com os dados do endereço do cliente",
+    no_delete_address: "Não é possível deletar todos os endereços",
   },
   dashboard: {
     dashboard: "Painel",
@@ -407,6 +435,7 @@ const TranslatePt = {
     no_workspace: "Nenhuma organização encontrada",
     no_integration: "Nenhuma integração encontrada",
     session_expired: "A sessão expirou",
+    no_address: "Sem endereço",
     // limit
     wrong_file_format: "O arquivo está com o formato errado",
     limit_image_5mb: "A imagem excede o limite de 5MB",
@@ -511,6 +540,8 @@ const TranslateEn = {
     subtitle: "Fill the below fields to create or edit the account",
   },
   callout: {
+    company_document_search:
+      "When you enter the 'Document' field, the company will be automatically searched in the database",
     postal_code_search:
       "When you enter the 'Postal Code (ZIP Code)' field, the address will be automatically searched in the database",
     required_fields: "Fields marked with an asterisk are required",
@@ -593,6 +624,32 @@ const TranslateEn = {
     // others
     loading: "Loading",
     search: "Type here to search...",
+  },
+  customer: {
+    customer: "Customer",
+    customers: "Customers",
+    new: "New customer",
+    name: "Customer name",
+    name_placeholder: "e.g. John Doe",
+    description: "Description",
+    document: "Document",
+    mobile: "Mobile phone",
+    mobile_placeholder: "+1 (111) 1111-1111",
+    email: "Email",
+    email_placeholder: "e.g. johndoe@email.com",
+    address: "Address",
+    document_1: "Document 1",
+    document_2: "Document 2",
+    document_placeholder: "111 222 333 44",
+    phone_1: "Phone 1",
+    phone_2: "Phone 2",
+    title_edit: "Edit the customer",
+    title_create: "Create a new customer",
+    subtitle: "Fill the below fields to create or edit the customer",
+    title_addresses: "Customer addresses",
+    subtitle_addresses:
+      "Fill in the fields with the customer's address information",
+    no_delete_address: "Do not delete all addresses",
   },
   dashboard: {
     dashboard: "Dashboard",
@@ -811,6 +868,7 @@ const TranslateEn = {
     no_workspace: "No workspaces found",
     no_integration: "No integration found",
     session_expired: "Your sessions is expired",
+    no_address: "No address",
     // file
     wrong_file_format: "The file has the wrong format",
     limit_image_5mb: "The image file exceeds the 5MB limit",

@@ -2,29 +2,33 @@
 import PostalCode from "./external/PostalCode";
 
 // apis internal
+import User from "./internal/User";
+import Order from "./internal/Order";
 import Login from "./internal/Login";
 import Upload from "./internal/Upload";
 import Session from "./internal/Session";
+import Service from "./internal/Service";
+import Product from "./internal/Product";
+import Account from "./internal/Account";
 import Settings from "./internal/Settings";
 import Instance from "./internal/Instance";
-import User from "./internal/User";
+import Customer from "./internal/Customer";
 import Workspace from "./internal/Workspace";
-import Account from "./internal/Account";
-import Product from "./internal/Product";
-import Service from "./internal/Service";
-import Order from "./internal/Order";
 
 export default {
+  // external
+  PostalCode,
+  // internal
+  Account,
+  Customer,
   Instance,
   Login,
-  Session,
-  Settings,
-  User,
-  Workspace,
-  Account,
   Order,
   Product,
-  Upload,
   Service,
-  PostalCode,
+  Session,
+  Settings,
+  Upload,
+  User,
+  Workspace,
 };

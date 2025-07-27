@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
-import { Asterisk, User } from "@phosphor-icons/react";
+import { Asterisk, MapTrifold, User } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // apis
@@ -662,8 +662,9 @@ const EmployeesInspect = function () {
                 />
               </Horizontal>
               <Callout
-                Icon={Asterisk}
-                category="Warning"
+                Icon={MapTrifold}
+                IconSize={16}
+                category="Info"
                 text={t.callout.postal_code_search}
                 styles={{ fontSize: "var(--textSmall)" }}
               />

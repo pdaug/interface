@@ -113,6 +113,15 @@ a {
   color: var(--infoColor);
 }
 
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid var(--borderColor);
+  margin: 1em 0;
+  padding: 0;
+}
+
 code {
   background: var(--textDark);
   background-color: var(--textDark);
@@ -131,4 +140,8 @@ code {
 
 .flex1 {
   flex: 1;
+}
+
+.w-full {
+  width: 100%;
 }

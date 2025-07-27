@@ -1,6 +1,6 @@
 import {
-  Trash,
   Plus,
+  Trash,
   CopySimple,
   PencilSimple,
   QuestionMark,
@@ -20,7 +20,7 @@ import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
 
 // types
-import { TypeUser } from "../../../types/User";
+import { TypeCustomer } from "../../../types/Customers";
 import { ApiResponsePaginate } from "../../../types/Api";
 import { TypeInputInterval } from "../../../types/Components";
 
@@ -35,30 +35,30 @@ import useTranslate from "../../../hooks/useTranslate";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import Tooltip from "../../../components/tooltips/Tooltip";
-import Profile from "../../../components/profiles/Profile";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import { Input, InputInterval } from "../../../components/inputs/Input";
+import Profile from "../../../components/profiles/Profile";
 
 const pageSize = 10;
 
-const EmployeesList = function () {
+const CustomersList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { token, instance, workspaces, workspaceId } = useSystem();
+  const { users, token, instance, workspaces, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
-  const [employees, setEmployees] = useState<TypeUser[]>([]);
+  const [customers, setCustomers] = useState<TypeCustomer[]>([]);
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: startOfYear(new Date()),
     end: endOfDay(new Date()),
@@ -66,11 +66,12 @@ const EmployeesList = function () {
 
   const [searchDebounced] = useDebounce(search, 500);
 
-  // TODO: formatter docuemtn and phonenumber
-  const FetchEmployees = async function () {
+  const FetchCustomers = async function () {
     setLoading(true);
     try {
-      const response = await apis.User.list<ApiResponsePaginate<TypeUser>>(
+      const response = await apis.Customer.list<
+        ApiResponsePaginate<TypeCustomer>
+      >(
         token,
         instance.name,
         {
@@ -81,6 +82,7 @@ const EmployeesList = function () {
           dateStart: interval.start ? interval.start.toISOString() : undefined,
           dateEnd: interval.end ? interval.end.toISOString() : undefined,
         },
+        workspaceId,
       );
       if (!response.data?.result?.items) {
         play("alert");
@@ -88,12 +90,12 @@ const EmployeesList = function () {
           description: t.stacks.no_find_item,
         });
         console.warn(
-          "[src/pages/administrative/employees/EmployeesList.tsx]",
+          "[src/pages/administrative/customers/CustomersList.tsx]",
           response.data,
         );
         return;
       }
-      setEmployees(response.data.result.items);
+      setCustomers(response.data.result.items);
       setTotal(response.data.result.pagination.total);
       return;
     } catch (err) {
@@ -102,7 +104,7 @@ const EmployeesList = function () {
         description: t.stacks.no_find_item,
       });
       console.error(
-        "[src/pages/administrative/employees/EmployeesList.tsx]",
+        "[src/pages/administrative/customers/CustomersList.tsx]",
         err,
       );
       return;
@@ -111,8 +113,8 @@ const EmployeesList = function () {
     }
   };
 
-  // fetch employees
-  useAsync(FetchEmployees, [interval, page, searchDebounced]);
+  // fetch customers
+  useAsync(FetchCustomers, [interval, page, searchDebounced]);
 
   return (
     <React.Fragment>
@@ -129,8 +131,8 @@ const EmployeesList = function () {
                 url: "/f/",
               },
               {
-                id: "employees",
-                label: t.employee.employees,
+                id: "customers",
+                label: t.customer.customers,
               },
             ]}
           />
@@ -140,8 +142,8 @@ const EmployeesList = function () {
         <Button
           Icon={Plus}
           category="Success"
-          text={t.employee.new}
-          onClick={() => navigate("/f/employees/inspect")}
+          text={t.customer.new}
+          onClick={() => navigate("/f/customers/inspect")}
         />
         <div style={{ minWidth: 200, maxWidth: 256 }}>
           <InputInterval
@@ -196,7 +198,7 @@ const EmployeesList = function () {
         <Table
           border
           loading={loading}
-          data={employees as TableData[]}
+          data={customers as TableData[]}
           columns={{
             status: {
               label: t.components.status,
@@ -212,42 +214,49 @@ const EmployeesList = function () {
                 );
               },
             },
-            role: {
-              label: t.employee.role,
-              maxWidth: "96px",
-              handler: function (data) {
-                return (
-                  <Badge
-                    category="Info"
-                    value={
-                      t.components?.[data.role as keyof typeof t.components] ||
-                      t.components.collaborator
-                    }
-                  />
-                );
-              },
-            },
-            name: {
-              label: t.employee.name,
-              handler: function (data) {
-                return (
-                  <Profile
-                    photoCircle
-                    photoSize={4}
-                    padding={false}
-                    name={data.name as string}
-                    photo={(data.photo as string) ?? undefined}
-                  />
-                );
-              },
-            },
-            document1: { label: t.employee.document },
-            mobile: { label: t.employee.mobile },
-            email: { label: t.employee.email },
+            name: { label: t.customer.name },
+            description: { label: t.customer.description },
+            document1: { label: t.customer.document },
+            mobile: { label: t.customer.mobile },
+            email: { label: t.customer.email },
             address: {
-              label: t.employee.address,
+              label: t.customer.address,
               handler: function (data) {
-                return `${data?.addressStreet}, ${data?.addressNumber}, ${data?.addressCity} - ${data?.addressState}`;
+                if ("addresses" in data && Array.isArray(data.addresses))
+                  return `${data?.addresses?.[0]?.street}, ${data?.addresses?.[0]?.number}, ${data?.addresses?.[0]?.city} - ${data?.addresses?.[0]?.state}`;
+                return (
+                  <i
+                    style={{
+                      color: "var(--textLight)",
+                      fontSize: "var(--textSmall)",
+                    }}
+                  >
+                    {t.stacks.no_address}
+                  </i>
+                );
+              },
+            },
+            user: {
+              label: t.components.user,
+              handler: function (data) {
+                const userFinded = users?.find(function (user) {
+                  return user.id === data.userId;
+                });
+                return (
+                  <Tooltip
+                    content={t.components[userFinded?.role || "collaborator"]}
+                  >
+                    <Profile
+                      photoCircle
+                      photoSize={3}
+                      padding={false}
+                      styles={{ lineHeight: 1 }}
+                      photo={userFinded?.photo || ""}
+                      description={userFinded?.email || ""}
+                      name={userFinded?.name || t.components.unknown}
+                    />
+                  </Tooltip>
+                );
               },
             },
             createdAt: {
@@ -289,7 +298,7 @@ const EmployeesList = function () {
               label: t.components.download,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data) {
-                  Download.JSON(data, `employee-${data.id}.json`);
+                  Download.JSON(data, `customer-${data.id}.json`);
                   play("ok");
                   toast.success(t.toast.success, {
                     description: t.toast.success_download,
@@ -304,7 +313,7 @@ const EmployeesList = function () {
               label: t.components.edit,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data)
-                  navigate(`/f/employees/inspect/${data.id}`);
+                  navigate(`/f/customers/inspect/${data.id}`);
                 return;
               },
             },
@@ -341,7 +350,7 @@ const EmployeesList = function () {
                         description: t.toast.success_delete,
                       });
                       CloseDialog();
-                      await FetchEmployees();
+                      await FetchCustomers();
                       return;
                     } catch (err) {
                       play("alert");
@@ -349,7 +358,7 @@ const EmployeesList = function () {
                         description: t.toast.error_delete,
                       });
                       console.error(
-                        "[src/pages/administrative/employees/EmployeesList.tsx]",
+                        "[src/pages/administrative/customers/CustomersList.tsx]",
                         err,
                       );
                       return;
@@ -372,4 +381,4 @@ const EmployeesList = function () {
   );
 };
 
-export default EmployeesList;
+export default CustomersList;

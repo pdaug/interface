@@ -2,7 +2,7 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Asterisk, ImageBroken } from "@phosphor-icons/react";
+import { Asterisk, ImageBroken, MapTrifold } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -851,8 +851,9 @@ const SettingsPanel = function () {
                 />
               </Horizontal>
               <Callout
-                Icon={Asterisk}
-                category="Warning"
+                Icon={MapTrifold}
+                IconSize={16}
+                category="Info"
                 text={t.callout.postal_code_search}
                 styles={{ fontSize: "var(--textSmall)" }}
               />
