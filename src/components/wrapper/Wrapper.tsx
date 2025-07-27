@@ -19,6 +19,7 @@ export type WrapperProps = {
   onConfirmLabel?: string;
   actions?: ButtonProps[];
   styles?: React.CSSProperties;
+  contentStyles?: React.CSSProperties;
 };
 
 const Wrapper = function ({
@@ -32,6 +33,7 @@ const Wrapper = function ({
   onConfirmLabel,
   actions,
   styles,
+  contentStyles,
 }: WrapperProps) {
   const [isCollapsible, setCollapsible] = useState(Boolean(collapsible));
 
@@ -62,12 +64,8 @@ const Wrapper = function ({
           </Horizontal>
         </div>
       )}
-      <div className="wrapperContent">
-        {!isCollapsible ? (
-          <div className="wrapperContentInner">{children}</div>
-        ) : (
-          <div style={{ height: 8 }}></div>
-        )}
+      <div className="wrapperContent" style={contentStyles}>
+        {!isCollapsible ? children : <div>&nbsp;</div>}
       </div>
       {(onCancel || onConfirm || actions?.length) && (
         <div className="wrapperFooter">

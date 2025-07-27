@@ -239,11 +239,17 @@ const EmployeesInspect = function () {
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Horizontal internal={1}>
-            <Wrapper>
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+            <Wrapper
+              styles={{ maxWidth: "40%" }}
+              contentStyles={{ display: "flex" }}
+            >
+              <Horizontal
+                internal={1}
+                styles={{ flex: 1, alignItems: "center" }}
+              >
                 <Avatar
                   label=""
-                  size={12}
+                  size={14}
                   Icon={User}
                   photo={
                     photoTemp
@@ -277,10 +283,13 @@ const EmployeesInspect = function () {
             </Wrapper>
 
             <Wrapper
-              title="Históricos"
-              description="Aqui ficam todos os históricos desse colaborador"
+              title={t.employee.schedules_title}
+              description={t.employee.schedules_description}
             >
-              <Vertical internal={0.4} styles={{ alignItems: "center" }}>
+              <Vertical
+                internal={0.4}
+                styles={{ alignItems: "center", height: 96 }}
+              >
                 <span
                   style={{
                     color: "var(--textLight)",

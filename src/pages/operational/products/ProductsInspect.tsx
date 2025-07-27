@@ -633,10 +633,11 @@ const ProductsInspect = function () {
 
           <Wrapper
             collapsible
+            contentStyles={{ padding: 0 }}
             title={t.product.title_specifications}
             description={t.product.subtitle_specifications}
           >
-            <Vertical internal={1}>
+            <Vertical internal={1} external={1}>
               <Horizontal internal={1}>
                 <Input
                   max={32}
@@ -831,10 +832,11 @@ const ProductsInspect = function () {
 
           <Wrapper
             collapsible
+            contentStyles={{ padding: 0 }}
             title={t.product.title_properties}
             description={t.product.subtitle_properties}
           >
-            <Vertical internal={1}>
+            <Vertical internal={1} external={1}>
               <Horizontal internal={1}>
                 <Input
                   max={32}
@@ -988,10 +990,11 @@ const ProductsInspect = function () {
 
           <Wrapper
             collapsible
+            contentStyles={{ padding: 0 }}
             title={t.product.title_attributes}
             description={t.product.subtitle_attributes}
           >
-            <Vertical internal={1}>
+            <Vertical internal={1} external={1}>
               <Horizontal internal={1}>
                 <Input
                   min={0}

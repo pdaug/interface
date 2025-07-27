@@ -270,11 +270,11 @@ const CustomersInspect = function () {
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Horizontal internal={1}>
-            <Wrapper>
+            <Wrapper styles={{ minWidth: "40%" }}>
               <Horizontal internal={1} styles={{ alignItems: "center" }}>
                 <Avatar
                   label=""
-                  size={10}
+                  size={14}
                   Icon={UserList}
                   photo={
                     photoTemp
@@ -311,25 +311,24 @@ const CustomersInspect = function () {
             <Stats
               metric={0.1}
               metricStatus="Up"
-              metricLocale="pt-BR"
+              metricLocale={instance.language}
               metricOptions={{ style: "percent" }}
-              title={t.dashboard.stats_inflows_receive_title}
+              title={t.customer.stats_inflows_title}
               value={500}
               valueLocale={instance.language}
               valueOptions={{ style: "currency", currency: instance.currency }}
-              footer={t.dashboard.stats_inflows_receive_description}
+              footer={t.customer.stats_inflows_description}
             />
 
             <Stats
-              metric={0.1}
-              metricStatus="Up"
-              metricLocale="pt-BR"
+              metric={0.08}
+              metricStatus="Down"
+              metricLocale={instance.language}
               metricOptions={{ style: "percent" }}
-              title={t.dashboard.stats_inflows_receive_title}
-              value={500}
-              valueLocale={instance.language}
-              valueOptions={{ style: "currency", currency: instance.currency }}
-              footer={t.dashboard.stats_inflows_receive_description}
+              title={t.customer.stats_interactions_title}
+              value={2}
+              valueUnit={t.customer.interactions}
+              footer={t.customer.stats_interactions_description}
             />
           </Horizontal>
 

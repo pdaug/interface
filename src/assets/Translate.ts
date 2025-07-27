@@ -148,6 +148,12 @@ const TranslatePt = {
     subtitle_addresses:
       "Preencha os campos com os dados do endereço do cliente",
     no_delete_address: "Não é possível deletar todos os endereços",
+    stats_inflows_title: "Total de entradas",
+    stats_inflows_description: "Entradas vinda deste cliente",
+    interactions: "Interações",
+    stats_interactions_title: "Total de interações",
+    stats_interactions_description:
+      "Interações que este cliente teve ao todo no sistema",
   },
   dashboard: {
     dashboard: "Painel",
@@ -209,6 +215,9 @@ const TranslatePt = {
     title_address: "Endereço do colaborador",
     subtitle_address:
       "Preencha os campos abaixo com os dados de endereço do colaborador",
+    schedules_title: "Horários reservados",
+    schedules_description:
+      "Todos os horários que foram reservados na agenda deste colaborador",
   },
   integration: {
     integration: "Integração",
@@ -662,6 +671,12 @@ const TranslateEn = {
     subtitle_addresses:
       "Fill in the fields with the customer's address information",
     no_delete_address: "Do not delete all addresses",
+    stats_inflows_title: "Total Inflows",
+    stats_inflows_description: "Entries received from this client",
+    interactions: "Interactions",
+    stats_interactions_title: "Total Interactions",
+    stats_interactions_description:
+      "Total number of interactions this client has had in the system",
   },
   dashboard: {
     dashboard: "Dashboard",
@@ -718,6 +733,9 @@ const TranslateEn = {
     email_placeholder: "e.g. johndoe@company.com",
     title_address: "Employeee address",
     subtitle_address: "Fill the inputs with the address data from employee",
+    schedules_title: "Schedules",
+    schedules_description:
+      "All schedules that reservade in schedule list in this employee",
   },
   integration: {
     integration: "Integration",
