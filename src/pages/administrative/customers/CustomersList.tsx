@@ -18,6 +18,7 @@ import apis from "../../../apis";
 // utils
 import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
+import PhoneNumber from "../../../utils/PhoneNumber";
 
 // types
 import { TypeCustomer } from "../../../types/Customers";
@@ -35,13 +36,13 @@ import useTranslate from "../../../hooks/useTranslate";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import Tooltip from "../../../components/tooltips/Tooltip";
+import Profile from "../../../components/profiles/Profile";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import { Input, InputInterval } from "../../../components/inputs/Input";
-import Profile from "../../../components/profiles/Profile";
 
 const pageSize = 10;
 
@@ -267,12 +268,32 @@ const CustomersList = function () {
                 );
               },
             },
-            mobile: { label: t.customer.mobile },
+            mobile: {
+              label: t.customer.mobile,
+              handler: function (data) {
+                return (
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`tel:${data.mobile as string}`}
+                  >
+                    {PhoneNumber.Internacional((data?.mobile as string) || "")}
+                  </a>
+                );
+              },
+            },
             email: {
               label: t.customer.email,
               handler: function (data) {
-                if (data.email) return data.email as string;
-                return (
+                return data.email ? (
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`mailto:${data.email as string}`}
+                  >
+                    {(data?.email as string) || ""}
+                  </a>
+                ) : (
                   <i style={{ color: "var(--textLight)" }}>
                     {t.stacks.no_email}
                   </i>

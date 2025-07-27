@@ -111,6 +111,13 @@ h6 {
 
 a {
   color: var(--infoColor);
+  text-decoration: none;
+  transition: 200ms;
+}
+
+a:hover {
+  text-decoration: underline;
+  transition: 200ms;
 }
 
 hr {

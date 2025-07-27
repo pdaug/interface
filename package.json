@@ -19,6 +19,7 @@
     "@tippyjs/react": "^4.2.6",
     "axios": "^1.10.0",
     "date-fns": "^4.1.0",
+    "libphonenumber-js": "^1.12.10",
     "nanoid": "^5.1.5",
     "react": "^19.0.0",
     "react-datepicker": "^8.4.0",

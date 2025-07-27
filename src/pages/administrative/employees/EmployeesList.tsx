@@ -18,6 +18,7 @@ import apis from "../../../apis";
 // utils
 // import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
+import PhoneNumber from "../../../utils/PhoneNumber";
 
 // types
 import { TypeUser } from "../../../types/User";
@@ -242,8 +243,34 @@ const EmployeesList = function () {
               },
             },
             document1: { label: t.employee.document },
-            mobile: { label: t.employee.mobile },
-            email: { label: t.employee.email },
+            mobile: {
+              label: t.employee.mobile,
+              handler: function (data) {
+                return (
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`tel:${data.mobile as string}`}
+                  >
+                    {PhoneNumber.Internacional((data?.mobile as string) || "")}
+                  </a>
+                );
+              },
+            },
+            email: {
+              label: t.employee.email,
+              handler: function (data) {
+                return (
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`mailto:${data.email as string}`}
+                  >
+                    {(data?.email as string) || ""}
+                  </a>
+                );
+              },
+            },
             address: {
               label: t.employee.address,
               handler: function (data) {

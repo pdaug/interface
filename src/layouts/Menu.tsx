@@ -1,12 +1,12 @@
 import {
-  Bank,
   Plug,
   Info,
+  House,
   Check,
   SignOut,
   GearSix,
   CaretDown,
-  Warehouse,
+  CreditCard,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -121,13 +121,13 @@ const Menu = function () {
       values: [
         {
           id: "workspaces",
-          Icon: Warehouse,
+          Icon: House,
           label: t.menu.workspaces,
           onClick: () => navigate("/f/workspaces"),
         },
         {
           id: "accounts",
-          Icon: Bank,
+          Icon: CreditCard,
           label: t.menu.accounts,
           onClick: () => navigate("/f/accounts"),
         },
