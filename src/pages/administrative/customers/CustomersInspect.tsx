@@ -70,7 +70,7 @@ const CustomersInspect = function () {
         neighborhood: "",
         postalCode: "",
         city: "",
-        state: "",
+        state: "SP",
       },
     ],
     userId: user.id,

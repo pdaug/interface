@@ -47,6 +47,7 @@ import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
 import Profile from "../../../components/profiles/Profile";
+import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
@@ -58,6 +59,7 @@ const ProductsInspect = function () {
   const Currency = useCurrency();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
+  const { OpenDialog, CloseDialog } = useDialog();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
   const [productTemp, setProductTemp] = useState<(File | null)[]>([]);
@@ -68,7 +70,7 @@ const ProductsInspect = function () {
     name: "",
     description: "",
     type: "physical",
-    category: "single",
+    category: "variant",
     variants: [
       {
         id: "",
@@ -463,6 +465,7 @@ const ProductsInspect = function () {
                 styles={{ paddingBottom: "1rem", overflowX: "scroll" }}
               >
                 {form.variants?.map(function (variant, index) {
+                  if (form.category === "single" && index > 0) return;
                   return (
                     <Card
                       mode="Large"
@@ -474,26 +477,41 @@ const ProductsInspect = function () {
                       }
                       photoChildren={
                         <React.Fragment>
-                          <Button
-                            type="button"
-                            category="Danger"
-                            disabled={index === 0}
-                            text={t.components.remove}
-                            onClick={function () {
-                              if (form.variants?.length === 1) {
-                                play("alert");
-                                toast.warning(t.toast.warning_error, {
-                                  description: t.product.no_delete_all_variants,
+                          {form.category === "variant" && (
+                            <Button
+                              type="button"
+                              category="Danger"
+                              text={t.components.remove}
+                              onClick={function () {
+                                if (form.variants?.length === 1) {
+                                  play("alert");
+                                  toast.warning(t.toast.warning_error, {
+                                    description:
+                                      t.product.no_delete_all_variants,
+                                  });
+                                  return;
+                                }
+                                OpenDialog({
+                                  category: "Danger",
+                                  title: t.dialog.title_delete,
+                                  description: t.dialog.description_delete,
+                                  confirmText: t.components.remove,
+                                  onConfirm: function () {
+                                    const newForm = { ...form };
+                                    if (!newForm?.variants) return;
+                                    newForm.variants.splice(index, 1);
+                                    setForm(newForm);
+                                    play("ok");
+                                    toast.success(t.toast.success, {
+                                      description: t.toast.success_delete,
+                                    });
+                                    CloseDialog();
+                                    return;
+                                  },
                                 });
-                                return;
-                              }
-                              const newForm = { ...form };
-                              if (!newForm?.variants) return;
-                              newForm.variants.splice(index, 1);
-                              setForm(newForm);
-                              return;
-                            }}
-                          />
+                              }}
+                            />
+                          )}
                         </React.Fragment>
                       }
                     >
@@ -512,31 +530,33 @@ const ProductsInspect = function () {
                     </Card>
                   );
                 })}
-                <Vertical
-                  styles={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                    minWidth: 200,
-                  }}
-                >
-                  <Button
-                    type="button"
-                    category="Success"
-                    text={t.components.add}
-                    onClick={function () {
-                      const newForm = { ...form };
-                      if (!newForm?.variants) return;
-                      newForm.variants.push({
-                        id: "",
-                        photo: "",
-                        name: "",
-                        price: "0.00",
-                      });
-                      setForm(newForm);
-                      return;
+                {form.category === "variant" && (
+                  <Vertical
+                    styles={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                      minWidth: 200,
                     }}
-                  />
-                </Vertical>
+                  >
+                    <Button
+                      type="button"
+                      category="Success"
+                      text={t.components.add}
+                      onClick={function () {
+                        const newForm = { ...form };
+                        if (!newForm?.variants) return;
+                        newForm.variants.push({
+                          id: "",
+                          photo: "",
+                          name: "",
+                          price: "0.00",
+                        });
+                        setForm(newForm);
+                        return;
+                      }}
+                    />
+                  </Vertical>
+                )}
               </Horizontal>
 
               {form.variants?.map(function (variant, index) {
