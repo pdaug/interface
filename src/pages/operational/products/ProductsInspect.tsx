@@ -64,7 +64,7 @@ const ProductsInspect = function () {
 
   const [productTemp, setProductTemp] = useState<(File | null)[]>([]);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<Partial<TypeProduct>>({
     status: true,
     name: "",
@@ -109,6 +109,7 @@ const ProductsInspect = function () {
           description: t.stacks.no_find_item,
         });
         navigate("/f/products");
+        setLoading(false);
         return;
       }
       setForm(response.data.result);
@@ -125,6 +126,7 @@ const ProductsInspect = function () {
         err,
       );
       navigate("/f/products");
+      setLoading(false);
       return;
     } finally {
       toast.dismiss(toastId);
