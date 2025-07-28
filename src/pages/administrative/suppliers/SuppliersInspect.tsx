@@ -1,19 +1,14 @@
-import {
-  UserList,
-  Asterisk,
-  MapTrifold,
-  Storefront,
-} from "@phosphor-icons/react";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 import React, { useState } from "react";
-import axios, { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { Asterisk, MapTrifold, Storefront } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
 
 // types
-import { TypeCustomer } from "../../../types/Customers";
+import { TypeSupplier } from "../../../types/1231";
 
 // assets
 import {
@@ -35,13 +30,10 @@ import useTranslate from "../../../hooks/useTranslate";
 // components
 import {
   Input,
-  InputFile,
+  InputText,
   InputMask,
   InputSelect,
-  InputText,
 } from "../../../components/inputs/Input";
-import Stats from "../../../components/stats/Stats";
-import Avatar from "../../../components/avatars/Avatar";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Profile from "../../../components/profiles/Profile";
@@ -50,7 +42,7 @@ import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
-const CustomersInspect = function () {
+const SuppliersInspect = function () {
   const t = useTranslate();
   const play = useSounds();
   const { id } = useParams();
@@ -60,20 +52,19 @@ const CustomersInspect = function () {
   const { OpenDialog, CloseDialog } = useDialog();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
-  const [photoTemp, setPhotoTemp] = useState<File | null>(null);
-
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState<Partial<TypeCustomer>>({
+  const [form, setForm] = useState<Partial<TypeSupplier>>({
     id: "",
     status: true,
     name: "",
     description: "",
     document1: "",
     document2: "",
-    phone1: "",
-    phone2: "",
-    mobile: "",
-    email: "",
+    companyName: "",
+    companyDocument: "",
+    companyMobile: "",
+    companyPhone: "",
+    companyEmail: "",
     addresses: [
       {
         street: "",
@@ -95,12 +86,12 @@ const CustomersInspect = function () {
       })
     : null;
 
-  // fetch customer
+  // fetch supplier
   useAsync(async function () {
     if (!id) return;
     setLoading(true);
     try {
-      const response = await apis.Customer.get(
+      const response = await apis.Supplier.get(
         token,
         instance.name,
         id,
@@ -111,7 +102,7 @@ const CustomersInspect = function () {
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        navigate("/f/customers");
+        navigate("/f/suppliers");
         return;
       }
       setForm(response.data.result);
@@ -122,10 +113,10 @@ const CustomersInspect = function () {
         description: t.stacks.no_find_item,
       });
       console.error(
-        "[src/pages/administrative/customers/CustomersInspect.tsx]",
+        "[src/pages/administrative/suppliers/SuppliersInspect.tsx]",
         err,
       );
-      navigate("/f/customers");
+      navigate("/f/suppliers");
       return;
     } finally {
       setLoading(false);
@@ -137,23 +128,7 @@ const CustomersInspect = function () {
     try {
       // is editing
       if (id) {
-        // upload photo temp
-        if (photoTemp) {
-          const responseUploadImage = await apis.Upload.image<string>(
-            instance.name,
-            token,
-            {
-              file: photoTemp,
-              path: `image/customer/${id}`,
-              name: id,
-              height: 256,
-              width: 256,
-              quality: 100,
-            },
-          );
-          form.photo = responseUploadImage.data?.result || null;
-        }
-        const response = await apis.Customer.update<TypeCustomer>(
+        const response = await apis.Supplier.update<TypeSupplier>(
           token,
           instance.name,
           id,
@@ -171,11 +146,11 @@ const CustomersInspect = function () {
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
         });
-        navigate("/f/customers");
+        navigate("/f/suppliers");
         return;
       }
       // is creating
-      const response = await apis.Customer.create<TypeCustomer>(
+      const response = await apis.Supplier.create<TypeSupplier>(
         token,
         instance.name,
         form,
@@ -188,41 +163,16 @@ const CustomersInspect = function () {
         });
         return;
       }
-      // upload photo temp
-      if (photoTemp) {
-        const responseUploadImage = await apis.Upload.image<string>(
-          instance.name,
-          token,
-          {
-            file: photoTemp,
-            path: `image/customer/${response.data.result.id}`,
-            name: response.data.result.id,
-            height: 256,
-            width: 256,
-            quality: 100,
-          },
-        );
-        form.photo = responseUploadImage.data?.result || null;
-      }
-      await apis.Customer.update(
-        token,
-        instance.name,
-        response.data.result.id,
-        {
-          photo: form.photo,
-        },
-        workspaceId,
-      );
       play("ok");
       toast.success(t.toast.success, {
         description: t.toast.success_create,
       });
-      navigate("/f/customers");
+      navigate("/f/suppliers");
       return;
     } catch (err) {
       play("alert");
       console.error(
-        "[src/pages/administrative/customers/CustomersInspect.tsx]",
+        "[src/pages/administrative/suppliers/SuppliersInspect.tsx]",
         err,
       );
       if (
@@ -254,14 +204,14 @@ const CustomersInspect = function () {
                 url: "/f/",
               },
               {
-                id: "customers",
-                label: t.customer.customers,
-                url: "/f/customers",
+                id: "suppliers",
+                label: t.supplier.suppliers,
+                url: "/f/suppliers",
               },
               {
-                id: "customer",
+                id: "supplier",
                 label: form?.name || t.components.empty_name,
-                url: `/f/customers/inspect${id ? `/${id}` : ""}`,
+                url: `/f/suppliers/inspect${id ? `/${id}` : ""}`,
               },
             ]}
           />
@@ -269,79 +219,16 @@ const CustomersInspect = function () {
       </Horizontal>
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
-          <Horizontal internal={1}>
-            <Wrapper styles={{ minWidth: "40%" }}>
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
-                <Avatar
-                  label=""
-                  size={14}
-                  Icon={UserList}
-                  photo={
-                    photoTemp
-                      ? URL.createObjectURL(photoTemp)
-                      : form?.photo || ""
-                  }
-                />
-
-                <InputFile
-                  name="photo"
-                  value={photoTemp}
-                  id="customer_photo"
-                  helper="PNG, JPG e JPEG"
-                  label={t.components.photo}
-                  disabled={loading && Boolean(id)}
-                  accept="image/png, image/jpg, image/jpeg"
-                  onChange={function (event) {
-                    const file = event.currentTarget.files?.[0] || null;
-                    if (!file) return;
-                    if (file.size > 5 * 1024 * 1024) {
-                      play("alert");
-                      toast.error(t.toast.warning_error, {
-                        description: t.stacks.limit_image_5mb,
-                      });
-                      return;
-                    }
-                    setPhotoTemp(file);
-                    return;
-                  }}
-                />
-              </Horizontal>
-            </Wrapper>
-
-            <Stats
-              metric={0.1}
-              metricStatus="Up"
-              metricLocale={instance.language}
-              metricOptions={{ style: "percent" }}
-              title={t.customer.stats_inflows_title}
-              value={500}
-              valueLocale={instance.language}
-              valueOptions={{ style: "currency", currency: instance.currency }}
-              footer={t.customer.stats_inflows_description}
-            />
-
-            <Stats
-              metric={0.08}
-              metricStatus="Down"
-              metricLocale={instance.language}
-              metricOptions={{ style: "percent" }}
-              title={t.customer.stats_interactions_title}
-              value={2}
-              valueUnit={t.customer.interactions}
-              footer={t.customer.stats_interactions_description}
-            />
-          </Horizontal>
-
           <Wrapper
-            title={id ? t.customer.title_edit : t.customer.title_create}
-            description={t.customer.subtitle}
+            title={id ? t.supplier.title_edit : t.supplier.title_create}
+            description={t.supplier.subtitle}
           >
             <Vertical internal={1}>
               <Horizontal internal={1}>
                 <InputSelect
                   required
                   name="status"
-                  id="customer_status"
+                  id="supplier_status"
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
@@ -370,82 +257,14 @@ const CustomersInspect = function () {
                   max={32}
                   required
                   name="name"
-                  id="customer_name"
+                  id="supplier_name"
                   value={form?.name || ""}
-                  label={t.customer.name}
+                  label={t.supplier.name}
                   disabled={loading && Boolean(id)}
-                  placeholder={t.customer.name_placeholder}
+                  placeholder={t.supplier.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.name = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <InputMask
-                  required
-                  name="mobile"
-                  mask={MaskPhone}
-                  id="customer_mobile"
-                  label={t.customer.mobile}
-                  value={form?.mobile || ""}
-                  disabled={loading && Boolean(id)}
-                  placeholder={t.customer.mobile_placeholder}
-                  onChange={async function (event) {
-                    const newForm = { ...form };
-                    const mobileRaw = event.currentTarget?.value || "";
-                    const mobile = mobileRaw.replace(/\D/g, "");
-                    if (mobile.length === 13) {
-                      const toastId = toast.loading(t.components.loading);
-                      try {
-                        const responseWhatsApp = await apis.WhatsApp.contact({
-                          number: mobile,
-                        });
-                        newForm.name =
-                          !newForm.name?.length &&
-                          responseWhatsApp.data.result?.name
-                            ? responseWhatsApp.data.result?.name
-                            : newForm.name;
-                        newForm.description =
-                          responseWhatsApp.data.result.description ||
-                          newForm.description;
-                        if (responseWhatsApp.data.result?.photoUrl) {
-                          const responsePhoto = await axios.get(
-                            responseWhatsApp.data.result?.photoUrl,
-                            {
-                              responseType: "blob",
-                            },
-                          );
-                          const mimeType =
-                            responsePhoto.headers["content-type"] ||
-                            "image/jpeg";
-                          const newPhoto = new File(
-                            [responsePhoto.data],
-                            "customer",
-                            {
-                              type: mimeType,
-                            },
-                          );
-                          setPhotoTemp(newPhoto);
-                        }
-                        play("ok");
-                        toast.dismiss(toastId);
-                        toast.success(t.toast.success, {
-                          description: t.toast.success_find,
-                        });
-                      } catch (err) {
-                        console.error(
-                          "[src/pages/administrative/customers/CustomerInspect.tsx]",
-                          err,
-                        );
-                        toast.dismiss(toastId);
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.toast.warning_find,
-                        });
-                      }
-                    }
-                    newForm.mobile = mobile;
                     setForm(newForm);
                     return;
                   }}
@@ -455,63 +274,14 @@ const CustomersInspect = function () {
                 <InputMask
                   name="document1"
                   mask={MaskDocument1}
-                  id="customer_document_1"
-                  label={t.customer.document_1}
+                  id="supplier_document_1"
+                  label={t.supplier.document_1}
                   value={form?.document1 || ""}
                   disabled={loading && Boolean(id)}
-                  placeholder={t.customer.document_placeholder}
-                  onChange={async function (event) {
+                  placeholder={t.supplier.document_placeholder}
+                  onChange={function (event) {
                     const newForm = { ...form };
-                    const document1Raw = event.currentTarget?.value || "";
-                    const document1 = document1Raw.replace(/\D/g, "");
-                    newForm.document1 = document1;
-                    if (document1.length === 14) {
-                      const toastId = toast.loading(t.components.loading);
-                      try {
-                        const response = await apis.CompanyData(document1);
-                        newForm.phone1 = response.data?.ddd_telefone_1
-                          ? `+55${response.data?.ddd_telefone_1}`
-                          : newForm.phone1;
-                        newForm.phone2 = response.data?.ddd_telefone_2
-                          ? `+55${response.data?.ddd_telefone_2}`
-                          : newForm.phone2;
-                        newForm.name =
-                          response.data?.nome_fantasia ||
-                          response.data?.razao_social ||
-                          newForm.name;
-                        newForm.email = response.data?.email || newForm.email;
-                        if (!newForm.addresses?.[0]) return;
-                        newForm.addresses[0].street =
-                          response.data?.logradouro || "";
-                        newForm.addresses[0].number =
-                          response.data?.numero || "";
-                        newForm.addresses[0].complement =
-                          response.data?.complemento || "";
-                        newForm.addresses[0].neighborhood =
-                          response.data?.bairro || "";
-                        newForm.addresses[0].postalCode =
-                          response.data?.cep || "";
-                        newForm.addresses[0].city =
-                          response.data?.municipio || "";
-                        newForm.addresses[0].state =
-                          response.data?.uf?.toUpperCase() || "";
-                        toast.dismiss(toastId);
-                        play("ok");
-                        toast.success(t.toast.success, {
-                          description: t.toast.success_find,
-                        });
-                      } catch (err) {
-                        console.error(
-                          "[src/pages/administrative/customers/CustomerInspect.tsx]",
-                          err,
-                        );
-                        toast.dismiss(toastId);
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.toast.warning_find,
-                        });
-                      }
-                    }
+                    newForm.document1 = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}
@@ -519,63 +289,14 @@ const CustomersInspect = function () {
                 <InputMask
                   name="document2"
                   mask={MaskDocument2}
-                  id="customer_document_2"
-                  label={t.customer.document_2}
+                  id="supplier_document_2"
+                  label={t.supplier.document_2}
                   value={form?.document2 || ""}
                   disabled={loading && Boolean(id)}
-                  placeholder={t.customer.document_placeholder}
+                  placeholder={t.supplier.document_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.document2 = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-              <Horizontal internal={1}>
-                <InputMask
-                  name="phone1"
-                  mask={MaskPhone}
-                  id="customer_phone_1"
-                  label={t.customer.phone_1}
-                  value={form?.phone1 || ""}
-                  disabled={loading && Boolean(id)}
-                  placeholder={t.customer.mobile_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.phone1 = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <InputMask
-                  name="phone2"
-                  mask={MaskPhone}
-                  id="customer_phone_2"
-                  label={t.customer.phone_2}
-                  value={form?.phone2 || ""}
-                  disabled={loading && Boolean(id)}
-                  placeholder={t.customer.mobile_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.phone2 = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <Input
-                  min={4}
-                  max={32}
-                  type="email"
-                  name="email"
-                  id="customer_email"
-                  value={form?.email || ""}
-                  label={t.customer.email}
-                  disabled={loading && Boolean(id)}
-                  placeholder={t.customer.email_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.email = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}
@@ -586,11 +307,11 @@ const CustomersInspect = function () {
                   max={256}
                   height={4}
                   name="description"
-                  id="customer_description"
+                  id="supplier_description"
                   value={form?.description || ""}
                   label={t.components.description}
                   disabled={loading && Boolean(id)}
-                  placeholder={t.customer.description_placeholder}
+                  placeholder={t.supplier.description_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.description = event.currentTarget?.value || "";
@@ -667,8 +388,187 @@ const CustomersInspect = function () {
           </Wrapper>
 
           <Wrapper
-            title={id ? t.customer.title_addresses : t.customer.title_addresses}
-            description={t.customer.subtitle_addresses}
+            title={t.supplier.title_company}
+            description={t.supplier.subtitle_company}
+          >
+            <Vertical internal={1}>
+              <Horizontal internal={1}>
+                <Input
+                  min={4}
+                  max={32}
+                  required
+                  name="companyName"
+                  id="supplier_company_name"
+                  label={t.supplier.company_name}
+                  value={form?.companyName || ""}
+                  disabled={loading && Boolean(id)}
+                  placeholder={t.supplier.company_name_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.companyName = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <InputMask
+                  mask={MaskDocument1}
+                  name="companyDocument"
+                  label={t.supplier.document_1}
+                  id="supplier_company_document"
+                  disabled={loading && Boolean(id)}
+                  value={form?.companyDocument || ""}
+                  placeholder={t.supplier.document_placeholder}
+                  onChange={async function (event) {
+                    const newForm = { ...form };
+                    const companyDocumentRaw = event.currentTarget?.value || "";
+                    const companyDocument = companyDocumentRaw.replace(
+                      /\D/g,
+                      "",
+                    );
+                    if (companyDocument.length === 14) {
+                      const toastId = toast.loading(t.components.loading);
+                      try {
+                        const response =
+                          await apis.CompanyData(companyDocument);
+                        newForm.companyMobile = response.data?.ddd_telefone_1
+                          ? `+55${response.data?.ddd_telefone_1}`
+                          : newForm.companyMobile;
+                        newForm.companyPhone = response.data?.ddd_telefone_2
+                          ? `+55${response.data?.ddd_telefone_2}`
+                          : newForm.companyPhone;
+                        newForm.companyName =
+                          response.data?.nome_fantasia ||
+                          response.data?.razao_social ||
+                          newForm.companyName;
+                        newForm.companyMobile =
+                          response.data?.email || newForm.companyMobile;
+                        if (!newForm.addresses?.[0]) return;
+                        newForm.addresses[0].street =
+                          response.data?.logradouro || "";
+                        newForm.addresses[0].number =
+                          response.data?.numero || "";
+                        newForm.addresses[0].complement =
+                          response.data?.complemento || "";
+                        newForm.addresses[0].neighborhood =
+                          response.data?.bairro || "";
+                        newForm.addresses[0].postalCode =
+                          response.data?.cep || "";
+                        newForm.addresses[0].city =
+                          response.data?.municipio || "";
+                        newForm.addresses[0].state =
+                          response.data?.uf?.toUpperCase() || "";
+                        toast.dismiss(toastId);
+                        play("ok");
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_find,
+                        });
+                      } catch (err) {
+                        console.error(
+                          "[src/pages/administrative/suppliers/SuppliersInspect.tsx]",
+                          err,
+                        );
+                        toast.dismiss(toastId);
+                        play("alert");
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.warning_find,
+                        });
+                      }
+                    }
+                    newForm.companyDocument = companyDocument;
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+              <Horizontal internal={1}>
+                <InputMask
+                  required
+                  mask={MaskPhone}
+                  name="companyMobile"
+                  label={t.supplier.mobile}
+                  id="supplier_company_mobile"
+                  value={form?.companyMobile || ""}
+                  disabled={loading && Boolean(id)}
+                  placeholder={t.supplier.mobile_placeholder}
+                  onChange={async function (event) {
+                    const newForm = { ...form };
+                    const companyMobileRaw = event.currentTarget?.value || "";
+                    const companyMobile = companyMobileRaw.replace(/\D/g, "");
+                    if (companyMobile.length === 13) {
+                      const toastId = toast.loading(t.components.loading);
+                      try {
+                        const responseWhatsApp = await apis.WhatsApp.contact({
+                          number: companyMobile,
+                        });
+                        newForm.name =
+                          !newForm.name?.length &&
+                          responseWhatsApp.data.result?.name
+                            ? responseWhatsApp.data.result?.name
+                            : newForm.name;
+                        newForm.description =
+                          responseWhatsApp.data.result.description ||
+                          newForm.description;
+                        play("ok");
+                        toast.dismiss(toastId);
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_find,
+                        });
+                      } catch (err) {
+                        console.error(
+                          "[src/pages/administrative/suppliers/SuppliersInspect.tsx]",
+                          err,
+                        );
+                        toast.dismiss(toastId);
+                        play("alert");
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.warning_find,
+                        });
+                      }
+                    }
+                    newForm.companyMobile = companyMobile;
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <InputMask
+                  mask={MaskPhone}
+                  name="companyPhone"
+                  label={t.supplier.phone_1}
+                  id="supplier_company_phone"
+                  value={form?.companyPhone || ""}
+                  disabled={loading && Boolean(id)}
+                  placeholder={t.supplier.mobile_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.companyPhone = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <Input
+                  min={4}
+                  max={32}
+                  type="email"
+                  name="companyEmail"
+                  label={t.supplier.email}
+                  id="supplier_company_email"
+                  value={form?.companyEmail || ""}
+                  disabled={loading && Boolean(id)}
+                  placeholder={t.supplier.email_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.companyEmail = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+            </Vertical>
+          </Wrapper>
+
+          <Wrapper
+            title={t.supplier.title_addresses}
+            description={t.supplier.subtitle_addresses}
           >
             <Vertical internal={1}>
               {form.addresses?.map(function (_, index) {
@@ -695,7 +595,7 @@ const CustomersInspect = function () {
                         disabled={loading && Boolean(id)}
                         name={`addresses[${index}].postalCode`}
                         label={t.components.address_postal_code}
-                        id={`customer_addresses_${index}_postal_code`}
+                        id={`supplier_addresses_${index}_postal_code`}
                         value={form?.addresses?.[index].postalCode || ""}
                         placeholder={
                           t.components.address_postal_code_placeholder
@@ -731,7 +631,7 @@ const CustomersInspect = function () {
                               });
                             } catch (err) {
                               console.error(
-                                "[src/pages/administrative/customers/CustomerInspect.tsx]",
+                                "[src/pages/administrative/suppliers/SuppliersInspect.tsx]",
                                 err,
                               );
                               toast.dismiss(toastId);
@@ -751,7 +651,7 @@ const CustomersInspect = function () {
                         required
                         disabled={loading && Boolean(id)}
                         name={`addresses[${index}].street`}
-                        id={`customer_addresses_${index}_street`}
+                        id={`supplier_addresses_${index}_street`}
                         value={form?.addresses?.[index].street || ""}
                         label={t.components.address_street}
                         placeholder={t.components.address_street_placeholder}
@@ -772,7 +672,7 @@ const CustomersInspect = function () {
                           if (index === 0) {
                             play("alert");
                             toast.warning(t.toast.warning_error, {
-                              description: t.customer.no_delete_address,
+                              description: t.supplier.no_delete_address,
                             });
                             return;
                           }
@@ -804,7 +704,7 @@ const CustomersInspect = function () {
                         disabled={loading && Boolean(id)}
                         label={t.components.address_number}
                         name={`addresses[${index}].number`}
-                        id={`customer_addresses_${index}_number`}
+                        id={`supplier_addresses_${index}_number`}
                         value={form?.addresses?.[index].number || ""}
                         placeholder={t.components.address_number_placeholder}
                         onChange={function (event) {
@@ -821,7 +721,7 @@ const CustomersInspect = function () {
                         disabled={loading && Boolean(id)}
                         label={t.components.address_complement}
                         name={`addresses[${index}].complement`}
-                        id={`customer_addresses_${index}_complement`}
+                        id={`supplier_addresses_${index}_complement`}
                         value={form?.addresses?.[index].complement || ""}
                         placeholder={
                           t.components.address_complement_placeholder
@@ -840,7 +740,7 @@ const CustomersInspect = function () {
                         disabled={loading && Boolean(id)}
                         label={t.components.address_neighborhood}
                         name={`addresses[${index}].neighborhood`}
-                        id={`customer_addresses_${index}_neighborhood`}
+                        id={`supplier_addresses_${index}_neighborhood`}
                         value={form?.addresses?.[index].neighborhood || ""}
                         placeholder={
                           t.components.address_neighborhood_placeholder
@@ -863,7 +763,7 @@ const CustomersInspect = function () {
                         disabled={loading && Boolean(id)}
                         name={`addresses[${index}].city`}
                         label={t.components.address_city}
-                        id={`customer_addresses_${index}_city`}
+                        id={`supplier_addresses_${index}_city`}
                         value={form?.addresses?.[index].city || ""}
                         placeholder={t.components.address_city_placeholder}
                         onChange={function (event) {
@@ -881,7 +781,7 @@ const CustomersInspect = function () {
                         disabled={loading && Boolean(id)}
                         name={`addresses[${index}].state`}
                         label={t.components.address_state}
-                        id={`customer_addresses_${index}_state`}
+                        id={`supplier_addresses_${index}_state`}
                         value={form?.addresses?.[index].state || ""}
                         options={SettingsAddressState.map(function (state) {
                           return {
@@ -951,7 +851,7 @@ const CustomersInspect = function () {
                 category="Neutral"
                 text={t.components.cancel}
                 onClick={function () {
-                  navigate("/f/customers");
+                  navigate("/f/suppliers");
                   return;
                 }}
               />
@@ -968,4 +868,4 @@ const CustomersInspect = function () {
   );
 };
 
-export default CustomersInspect;
+export default SuppliersInspect;

@@ -1,6 +1,7 @@
 // pages
 import customers from "./customers";
 import employees from "./employees";
+import suppliers from "./suppliers";
 
 export default [
   {
@@ -10,5 +11,9 @@ export default [
   {
     path: "customers",
     children: customers,
+  },
+  {
+    path: "suppliers",
+    children: suppliers,
   },
 ];

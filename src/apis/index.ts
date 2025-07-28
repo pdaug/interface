@@ -15,6 +15,7 @@ import Settings from "./internal/Settings";
 import Instance from "./internal/Instance";
 import Customer from "./internal/Customer";
 import WhatsApp from "./internal/WhatsApp";
+import Supplier from "./internal/Supplier";
 import Workspace from "./internal/Workspace";
 
 export default {
@@ -31,6 +32,7 @@ export default {
   Service,
   Session,
   Settings,
+  Supplier,
   Upload,
   User,
   WhatsApp,
