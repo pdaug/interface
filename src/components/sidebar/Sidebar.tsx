@@ -27,14 +27,23 @@ export type SidebarProps = {
   header?: ProfileProps;
   options: SidebarOptions;
   footer?: ProfileProps;
+  styles?: React.CSSProperties;
+  stylesMenu?: React.CSSProperties;
 };
 
-const Sidebar = function ({ selected, header, options, footer }: SidebarProps) {
+const Sidebar = function ({
+  styles,
+  stylesMenu,
+  selected,
+  header,
+  options,
+  footer,
+}: SidebarProps) {
   return (
-    <div className="sidebar">
+    <div className="sidebar" style={styles}>
       <div className="sidebarContainer">
         {header && <Profile {...header} />}
-        <div className="sidebarMenu">
+        <div className="sidebarMenu" style={stylesMenu}>
           {options?.map(function (groupOrItem) {
             return "items" in groupOrItem ? (
               <div className="sidebarMenuGroup" key={groupOrItem.id}>

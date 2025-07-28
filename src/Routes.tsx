@@ -8,11 +8,12 @@ import { ToastElement } from "./components/toasts/Toast";
 import { DialogElement, DialogProvider } from "./components/dialogs/Dialog";
 
 // pages
+import tool from "./pages/tool";
 import Login from "./pages/Login";
+import settings from "./pages/settings";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import financial from "./pages/financial";
-import settings from "./pages/settings";
 import operational from "./pages/operational";
 import administrative from "./pages/administrative";
 
@@ -26,7 +27,13 @@ const Router = createBrowserRouter([
     path: "f",
     element: <Container />,
     errorElement: <ErrorPage />,
-    children: [...financial, ...settings, ...operational, ...administrative],
+    children: [
+      ...financial,
+      ...settings,
+      ...operational,
+      ...administrative,
+      ...tool,
+    ],
   },
   {
     path: "*",
