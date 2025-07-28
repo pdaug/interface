@@ -52,3 +52,23 @@ export type ApiWhatsAppContact = {
   photoUrl: string | null;
   description: string | null;
 };
+
+export type ApiAddressProps = {
+  street: string;
+  number: string;
+  city: string;
+};
+
+export type ApiAddressResult = {
+  place_id: number;
+  licence: string;
+  osm_type: string;
+  osm_id: string;
+  category: string;
+  type: string;
+  addresstype: string;
+  name: string;
+  display_name: string;
+  lat: string | number;
+  lon: string | number;
+}[];

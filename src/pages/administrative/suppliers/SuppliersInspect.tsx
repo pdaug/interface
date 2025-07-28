@@ -8,7 +8,7 @@ import { Asterisk, MapTrifold, Storefront } from "@phosphor-icons/react";
 import apis from "../../../apis";
 
 // types
-import { TypeSupplier } from "../../../types/1231";
+import { TypeSupplier } from "../../../types/Supplier";
 
 // assets
 import {

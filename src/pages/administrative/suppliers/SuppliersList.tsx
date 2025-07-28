@@ -21,7 +21,7 @@ import Clipboard from "../../../utils/Clipboard";
 import PhoneNumber from "../../../utils/PhoneNumber";
 
 // types
-import { TypeSupplier } from "../../../types/1231";
+import { TypeSupplier } from "../../../types/Supplier";
 import { ApiResponsePaginate } from "../../../types/Api";
 import { TypeInputInterval } from "../../../types/Components";
 
