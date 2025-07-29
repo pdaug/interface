@@ -42,6 +42,7 @@ import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
+// TODO: add map viewer
 const SuppliersInspect = function () {
   const t = useTranslate();
   const play = useSounds();

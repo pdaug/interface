@@ -25,6 +25,7 @@ import Wrapper from "../components/wrapper/Wrapper";
 import { Center, Horizontal, Vertical } from "../components/aligns/Align";
 
 // TODO: get favicon and title
+// TODO: background color by instance primary and secondary
 const Login = function () {
   const {
     token,

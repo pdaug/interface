@@ -18,6 +18,7 @@ import {
   createEditor,
   Descendant,
   Editor,
+  Element as ElementSlate,
   Transforms,
 } from "slate";
 
@@ -110,8 +111,8 @@ const toggleFormat = function (
     const isActive = isFormatAlign(editor, format);
     Transforms.setNodes(
       editor,
-      { align: isActive ? undefined : format },
-      { match: (n) => Editor.isBlock(editor, n) },
+      { align: isActive ? undefined : format } as Partial<Node>,
+      { match: (n) => Editor.isBlock(editor, n as ElementSlate) },
     );
     return;
   }
@@ -148,7 +149,6 @@ export type DocumentEditorContextProps = {
 };
 
 export const DocumentEditorContext = function ({
-  content,
   setContent,
   children,
 }: DocumentEditorContextProps) {
@@ -166,7 +166,7 @@ export const DocumentEditorContext = function ({
         {
           type: "paragraph",
           children: [{ text: "" }],
-        },
+        } as Descendant,
       ]}
       onChange={function (value) {
         setContent(value);
