@@ -1,35 +1,20 @@
 import { useState } from "react";
 import { Descendant } from "slate";
-import {
-  FileDoc,
-  ChatText,
-  TextHOne,
-  TextHTwo,
-  TextItalic,
-  TextBolder,
-  TextAlignLeft,
-  TextUnderline,
-  TextAlignRight,
-  EnvelopeSimple,
-  TextAlignCenter,
-  TextAlignJustify,
-  TextStrikethrough,
-} from "@phosphor-icons/react";
+import { FileDoc } from "@phosphor-icons/react";
 
 // hooks
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
 import {
-  DocumentEditor,
-  DocumentEditorButton,
-  DocumentEditorContext,
-} from "../../../components/document_editor/DocumentEditor";
+  RichText,
+  RichTextButton,
+  RichTextContext,
+} from "../../../components/richtext/RichText";
 import Button from "../../../components/buttons/Button";
 import Sidebar from "../../../components/sidebar/Sidebar";
-import Tooltip from "../../../components/tooltips/Tooltip";
-import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import { Input, InputSelect } from "../../../components/inputs/Input";
+import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const DocumentsPanel = function () {
   const t = useTranslate();
@@ -42,43 +27,43 @@ const DocumentsPanel = function () {
   });
 
   return (
-    <DocumentEditorContext content={content} setContent={setContent}>
+    <RichTextContext content={content} setContent={setContent}>
       <Horizontal internal={1} styles={{ flex: 1 }}>
         <Vertical internal={1}>
           <Sidebar
             styles={{
-              border: "1px solid var(--borderColor)",
-              borderRadius: "var(--borderRadius)",
+              background: "transparent",
+              backgroundColor: "transparent",
+              border: "none",
               height: "auto",
-              flex: 1,
             }}
-            stylesMenu={{ padding: "0.4rem 0.6rem" }}
-            selected=""
+            stylesMenu={{ padding: "0" }}
+            selected="message"
             options={[
               {
                 id: "documents",
                 name: "Documents",
+                Icon: FileDoc,
                 items: [
                   {
-                    id: "Contrato para cliente",
+                    id: "document",
                     label: "Contrato para cliente",
-                    Icon: FileDoc,
                   },
                   {
-                    id: "Mensagem de boas vindas",
+                    id: "message",
                     label: "Mensagem de boas vindas",
-                    Icon: ChatText,
                   },
                   {
-                    id: "Email de alerta",
+                    id: "email",
                     label: "Email de alerta",
-                    Icon: EnvelopeSimple,
                   },
                 ],
               },
             ]}
           />
+          <Button category="Info" text="New document" />
         </Vertical>
+
         <Vertical internal={1} styles={{ flex: 1 }}>
           <Horizontal styles={{ alignItems: "flex-end" }} internal={1}>
             <Input
@@ -95,7 +80,7 @@ const DocumentsPanel = function () {
                 return;
               }}
             />
-            <div style={{ minWidth: 256 }}>
+            <div style={{ minWidth: 180 }}>
               <InputSelect
                 required
                 name="category"
@@ -125,34 +110,34 @@ const DocumentsPanel = function () {
                     text: "Document",
                   },
                 ]}
+                onChange={function () {
+                  return;
+                }}
               />
             </div>
             <Button type="button" text="Download" category="Neutral" />
             <Button type="button" text="Save" category="Success" />
           </Horizontal>
-          <Horizontal internal={1}>
-            <Tooltip content={t.components.bold} placement="right">
-              <DocumentEditorButton Icon={TextBolder} format="bold" />
-            </Tooltip>
-            <DocumentEditorButton Icon={TextItalic} format="italic" />
-            <DocumentEditorButton Icon={TextUnderline} format="underline" />
-            <DocumentEditorButton
-              Icon={TextStrikethrough}
-              format="strikethrough"
-            />
+
+          <Horizontal internal={0.4}>
+            <RichTextButton format="bold" />
+            <RichTextButton format="italic" />
+            <RichTextButton format="underline" />
+            <RichTextButton format="strikethrough" />
             <div></div>
-            <DocumentEditorButton Icon={TextHOne} format="title" />
-            <DocumentEditorButton Icon={TextHTwo} format="subtitle" />
+            <RichTextButton format="title" />
+            <RichTextButton format="subtitle" />
             <div></div>
-            <DocumentEditorButton Icon={TextAlignLeft} format="left" />
-            <DocumentEditorButton Icon={TextAlignCenter} format="center" />
-            <DocumentEditorButton Icon={TextAlignRight} format="right" />
-            <DocumentEditorButton Icon={TextAlignJustify} format="justify" />
+            <RichTextButton format="left" />
+            <RichTextButton format="center" />
+            <RichTextButton format="right" />
+            <RichTextButton format="justify" />
           </Horizontal>
-          <DocumentEditor />
+
+          <RichText />
         </Vertical>
       </Horizontal>
-    </DocumentEditorContext>
+    </RichTextContext>
   );
 };
 
