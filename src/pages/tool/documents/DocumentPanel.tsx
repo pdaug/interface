@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Descendant } from "slate";
-import { FileDoc } from "@phosphor-icons/react";
 
 // hooks
 import useTranslate from "../../../hooks/useTranslate";
@@ -16,6 +15,8 @@ import Sidebar from "../../../components/sidebar/Sidebar";
 import { Input, InputSelect } from "../../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
+// TODO: text with ai
+// TODO: correct with ai
 const DocumentsPanel = function () {
   const t = useTranslate();
   const [content, setContent] = useState<Descendant[]>([]);
@@ -30,12 +31,21 @@ const DocumentsPanel = function () {
     <RichTextContext content={content} setContent={setContent}>
       <Horizontal internal={1} styles={{ flex: 1 }}>
         <Vertical internal={1}>
+          <Horizontal>
+            <Button
+              category="Neutral"
+              text="New document"
+              style={{ flex: 1 }}
+            />
+          </Horizontal>
+
           <Sidebar
             styles={{
               background: "transparent",
               backgroundColor: "transparent",
               border: "none",
               height: "auto",
+              flex: 1,
             }}
             stylesMenu={{ padding: "0" }}
             selected="message"
@@ -43,7 +53,6 @@ const DocumentsPanel = function () {
               {
                 id: "documents",
                 name: "Documents",
-                Icon: FileDoc,
                 items: [
                   {
                     id: "document",
@@ -61,10 +70,29 @@ const DocumentsPanel = function () {
               },
             ]}
           />
-          <Button category="Info" text="New document" />
         </Vertical>
 
         <Vertical internal={1} styles={{ flex: 1 }}>
+          <Horizontal internal={0.4}>
+            <Button type="button" text="Save" category="Success" />
+            <div style={{ width: 8 }}></div>
+            <Button type="button" text="Undo" category="Neutral" />
+            <Button type="button" text="Redo" category="Neutral" />
+            <div style={{ width: 8 }}></div>
+            <RichTextButton format="bold" />
+            <RichTextButton format="italic" />
+            <RichTextButton format="underline" />
+            <RichTextButton format="strikethrough" />
+            <div style={{ width: 8 }}></div>
+            <RichTextButton format="title" />
+            <RichTextButton format="subtitle" />
+            <div style={{ width: 8 }}></div>
+            <RichTextButton format="left" />
+            <RichTextButton format="center" />
+            <RichTextButton format="right" />
+            <RichTextButton format="justify" />
+          </Horizontal>
+
           <Horizontal styles={{ alignItems: "flex-end" }} internal={1}>
             <Input
               required
@@ -116,22 +144,6 @@ const DocumentsPanel = function () {
               />
             </div>
             <Button type="button" text="Download" category="Neutral" />
-            <Button type="button" text="Save" category="Success" />
-          </Horizontal>
-
-          <Horizontal internal={0.4}>
-            <RichTextButton format="bold" />
-            <RichTextButton format="italic" />
-            <RichTextButton format="underline" />
-            <RichTextButton format="strikethrough" />
-            <div></div>
-            <RichTextButton format="title" />
-            <RichTextButton format="subtitle" />
-            <div></div>
-            <RichTextButton format="left" />
-            <RichTextButton format="center" />
-            <RichTextButton format="right" />
-            <RichTextButton format="justify" />
           </Horizontal>
 
           <RichText />
