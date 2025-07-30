@@ -212,52 +212,6 @@ const DocumentsEditor = function () {
           >
             <Horizontal internal={1} styles={{ flex: 1 }}>
               <Vertical internal={1} styles={{ flex: 1 }}>
-                <Horizontal internal={0.4}>
-                  <Button
-                    type="button"
-                    disabled={loading}
-                    category="Neutral"
-                    text={t.components.undo}
-                  />
-                  <Button
-                    type="button"
-                    disabled={loading}
-                    text={t.components.redo}
-                    category="Neutral"
-                  />
-                  <div style={{ width: 8 }}></div>
-                  <RichTextButton format="bold" />
-                  <RichTextButton format="italic" />
-                  <RichTextButton format="underline" />
-                  <RichTextButton format="strikethrough" />
-                  <div style={{ width: 8 }}></div>
-                  <RichTextButton format="title" />
-                  <RichTextButton format="subtitle" />
-                  <div style={{ width: 8 }}></div>
-                  <RichTextButton format="left" />
-                  <RichTextButton format="center" />
-                  <RichTextButton format="right" />
-                  <RichTextButton format="justify" />
-                  <div className="flex1"></div>
-                  <Button
-                    type="button"
-                    disabled={loading}
-                    category="Neutral"
-                    text={t.components.close}
-                    onClick={function () {
-                      navigate("/f/documents");
-                      return;
-                    }}
-                  />
-                  <div style={{ width: 8 }}></div>
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    text={t.components.save}
-                    category={id ? "Info" : "Success"}
-                  />
-                </Horizontal>
-
                 <Horizontal styles={{ alignItems: "flex-end" }} internal={1}>
                   <Input
                     required
@@ -314,7 +268,53 @@ const DocumentsEditor = function () {
                       }}
                     />
                   </div>
+                  <Button
+                    type="button"
+                    disabled={loading}
+                    category="Neutral"
+                    text={t.components.close}
+                    onClick={function () {
+                      navigate("/f/documents");
+                      return;
+                    }}
+                  />
+                  <Button
+                    type="submit"
+                    category="Success"
+                    disabled={loading}
+                    text={id ? t.components.edit : t.components.save}
+                  />
                 </Horizontal>
+
+                <Horizontal internal={0.4}>
+                  <Button
+                    type="button"
+                    disabled={loading}
+                    category="Neutral"
+                    text={t.components.undo}
+                  />
+                  <Button
+                    type="button"
+                    disabled={loading}
+                    text={t.components.redo}
+                    category="Neutral"
+                  />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextButton format="bold" />
+                  <RichTextButton format="italic" />
+                  <RichTextButton format="underline" />
+                  <RichTextButton format="strikethrough" />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextButton format="title" />
+                  <RichTextButton format="subtitle" />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextButton format="left" />
+                  <RichTextButton format="center" />
+                  <RichTextButton format="right" />
+                  <RichTextButton format="justify" />
+                  <div className="flex1"></div>
+                </Horizontal>
+
                 <RichText />
               </Vertical>
             </Horizontal>

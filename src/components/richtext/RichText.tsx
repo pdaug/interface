@@ -247,13 +247,15 @@ export const RichTextContext = function ({
     <Slate
       editor={editor}
       initialValue={
-        content || [
-          {
-            type: "paragraph",
-            align: "left",
-            children: [{ text: "" }],
-          } as Descendant,
-        ]
+        !content.length
+          ? [
+              {
+                type: "paragraph",
+                align: "left",
+                children: [{ text: "" }],
+              } as Descendant,
+            ]
+          : (content as Descendant[])
       }
       onChange={function (value) {
         setContent(value);
