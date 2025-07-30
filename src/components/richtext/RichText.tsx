@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
 import {
+  Robot,
   TextAa,
   TextHOne,
   TextHTwo,
@@ -7,12 +7,15 @@ import {
   TextBolder,
   TextAlignLeft,
   TextUnderline,
+  ArrowClockwise,
   TextAlignRight,
   TextAlignCenter,
   TextAlignJustify,
   TextStrikethrough,
   Icon as IconPhosphor,
+  ArrowCounterClockwise,
 } from "@phosphor-icons/react";
+import React, { useEffect, useMemo } from "react";
 
 // slate libs
 import {
@@ -25,6 +28,7 @@ import {
   RenderElementProps,
 } from "slate-react";
 import {
+  Node,
   Editor,
   BaseText,
   Transforms,
@@ -32,7 +36,6 @@ import {
   Descendant,
   createEditor,
   Element as ElementSlate,
-  Node,
 } from "slate";
 import { HistoryEditor, withHistory } from "slate-history";
 
@@ -43,14 +46,17 @@ import useTranslate from "../../hooks/useTranslate";
 import Button from "../buttons/Button";
 import Tooltip from "../tooltips/Tooltip";
 
-const stylesList = ["bold", "italic", "underline", "strikethrough"] as const;
+const actionsList = ["ai", "undo", "redo"] as const;
 const typesList = ["title", "subtitle", "paragraph"] as const;
 const alignsList = ["left", "center", "right", "justify"] as const;
+const stylesList = ["bold", "italic", "underline", "strikethrough"] as const;
 
-export type FormatStyles = (typeof stylesList)[number];
 export type FormatTypes = (typeof typesList)[number];
+export type FormatStyles = (typeof stylesList)[number];
 export type FormatAligns = (typeof alignsList)[number];
 export type FormatProps = FormatStyles | FormatTypes | FormatAligns;
+
+export type ActionProps = (typeof actionsList)[number];
 
 export type EditorCustom = BaseEditor & ReactEditor & HistoryEditor;
 
@@ -171,7 +177,7 @@ const toggleFormat = function (editor: EditorCustom, format: FormatProps) {
   }
 };
 
-const RichTextButtonIcons: Record<FormatProps, IconPhosphor> = {
+const RichTextToolIcons: Record<FormatProps, IconPhosphor> = {
   bold: TextBolder,
   italic: TextItalic,
   underline: TextUnderline,
@@ -185,13 +191,51 @@ const RichTextButtonIcons: Record<FormatProps, IconPhosphor> = {
   justify: TextAlignJustify,
 };
 
-export type RichTextButtonProps = {
+export type RichTextToolProps = {
   format: FormatProps;
   Icon?: IconPhosphor;
 };
 
+// hooks
+export const useRichTextActions = function () {
+  const editor = useSlate();
+
+  useEffect(
+    function () {
+      const onKeyDown = (event: KeyboardEvent) => {
+        if (!HistoryEditor.isHistoryEditor(editor)) return;
+
+        if (!ReactEditor.isFocused(editor as unknown as ReactEditor)) return;
+
+        const isMod = event.metaKey || event.ctrlKey;
+        if (!isMod) return;
+
+        const key = event.key.toLowerCase();
+
+        if (key === "z") {
+          event.preventDefault();
+          if (event.shiftKey) HistoryEditor.redo(editor);
+          else HistoryEditor.undo(editor);
+        } else if (key === "y") {
+          event.preventDefault();
+          HistoryEditor.redo(editor);
+        }
+
+        return;
+      };
+
+      window.addEventListener("keydown", onKeyDown);
+      return function () {
+        window.removeEventListener("keydown", onKeyDown);
+        return;
+      };
+    },
+    [editor],
+  );
+};
+
 // component
-export const RichTextButton = function ({ format, Icon }: RichTextButtonProps) {
+export const RichTextTool = function ({ format, Icon }: RichTextToolProps) {
   const t = useTranslate();
   const editor = useSlate();
   const hasSelected =
@@ -212,13 +256,97 @@ export const RichTextButton = function ({ format, Icon }: RichTextButtonProps) {
         onlyIcon
         type="button"
         IconSize={20}
-        Icon={Icon || RichTextButtonIcons[format]}
+        Icon={Icon || RichTextToolIcons[format]}
         category={hasSelected ? "Info" : "Neutral"}
         onMouseDown={function (event) {
           event.preventDefault();
           toggleFormat(editor as EditorCustom, format);
           return;
         }}
+      />
+    </Tooltip>
+  );
+};
+
+const RichTextActionIcons: Record<ActionProps, IconPhosphor> = {
+  ai: Robot,
+  undo: ArrowCounterClockwise,
+  redo: ArrowClockwise,
+};
+
+export type RichTextActionProps = {
+  action: ActionProps;
+  Icon?: IconPhosphor;
+};
+
+// component
+export const RichTextAction = function ({ action }: RichTextActionProps) {
+  const t = useTranslate();
+  const editor = useSlate();
+  const canUndo =
+    HistoryEditor.isHistoryEditor(editor) && editor.history.undos.length > 0;
+  const canRedo =
+    HistoryEditor.isHistoryEditor(editor) && editor.history.redos.length > 0;
+
+  const disabled: Record<ActionProps, boolean> = {
+    undo: !canUndo,
+    redo: !canRedo,
+    ai: true,
+  };
+
+  const onMouseDown: Record<
+    ActionProps,
+    React.MouseEventHandler<HTMLButtonElement>
+  > = {
+    undo: function (event) {
+      event.preventDefault();
+      if (HistoryEditor.isHistoryEditor(editor)) {
+        HistoryEditor.undo(editor);
+      }
+      return;
+    },
+    redo: function (event) {
+      event.preventDefault();
+      if (HistoryEditor.isHistoryEditor(editor)) {
+        HistoryEditor.redo(editor);
+      }
+      return;
+    },
+    ai: function (event) {
+      event.preventDefault();
+      return;
+    },
+  };
+
+  const textAction: Record<ActionProps, string> = {
+    redo: "",
+    undo: "",
+    ai: t.document.ai_text,
+  };
+
+  if (!actionsList.includes(action)) {
+    console.error("[src/components/richtext/RichText.tsx]", action);
+    return;
+  }
+
+  return (
+    <Tooltip
+      placement="bottom"
+      content={
+        t.components[action as keyof typeof t.components] ||
+        t.document[action as keyof typeof t.document] ||
+        t.components.unknown
+      }
+    >
+      <Button
+        type="button"
+        IconSize={20}
+        text={textAction[action]}
+        disabled={disabled[action]}
+        onMouseDown={onMouseDown[action]}
+        Icon={RichTextActionIcons[action]}
+        onlyIcon={action === "undo" || action === "redo"}
+        category={action === "undo" || action === "redo" ? "Neutral" : "Info"}
       />
     </Tooltip>
   );
@@ -269,6 +397,8 @@ export const RichTextContext = function ({
 
 // component
 export const RichText = function () {
+  useRichTextActions();
+
   return (
     <Editable
       placeholder="Enter some plain text..."

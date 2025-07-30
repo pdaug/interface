@@ -8,6 +8,7 @@ export type TypeDocument = {
   name: string;
   category: TypeDocumentCategory;
   content: Descendant[];
+  preview?: string;
 
   userId: string;
   workspaceId: string;

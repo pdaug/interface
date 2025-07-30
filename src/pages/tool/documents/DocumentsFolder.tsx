@@ -44,7 +44,6 @@ import { useDialog } from "../../../components/dialogs/Dialog";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import { GetImageHTML, ObjectToHTML } from "../../../utils/Preview";
 
 const pageSize = 10;
 
@@ -60,7 +59,6 @@ const DocumentsFolder = function () {
   const [total, setTotal] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
-  const [previews, setPreviews] = useState<string[]>([]);
   const [documents, setDocuments] = useState<TypeDocument[]>([]);
 
   const [searchDebounced] = useDebounce(search, 500);
@@ -109,21 +107,6 @@ const DocumentsFolder = function () {
 
   // fetch documents
   useAsync(FetchDocuments, [workspaceId, page, searchDebounced]);
-
-  // load previews
-  useAsync(
-    async function () {
-      if (!documents || !documents.length) return;
-      const newPreviews = new Array<string>();
-      for (const document of documents) {
-        const previewHtml = ObjectToHTML(document.content);
-        const previewImage = await GetImageHTML(previewHtml);
-        newPreviews.push(previewImage);
-      }
-      setPreviews(newPreviews);
-    },
-    [documents],
-  );
 
   const getOptions = [
     {
@@ -296,7 +279,7 @@ const DocumentsFolder = function () {
         <Vertical internal={1} styles={{ flex: 1 }}>
           <Horizontal internal={1} styles={{ flexWrap: "wrap" }}>
             {documents.length ? (
-              documents.map(function (document, index) {
+              documents.map(function (document) {
                 const userFinded = users?.find(function (user) {
                   return user.id === document.userId;
                 });
@@ -305,7 +288,7 @@ const DocumentsFolder = function () {
                     mode="Large"
                     Icon={FileDoc}
                     key={document.id}
-                    photo={previews[index]}
+                    photo={document?.preview || ""}
                     photoChildren={
                       <React.Fragment>
                         <Badge

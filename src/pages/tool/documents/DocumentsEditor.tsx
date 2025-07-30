@@ -20,13 +20,15 @@ import useTranslate from "../../../hooks/useTranslate";
 // components
 import {
   RichText,
-  RichTextButton,
+  RichTextTool,
+  RichTextAction,
   RichTextContext,
 } from "../../../components/richtext/RichText";
 import Button from "../../../components/buttons/Button";
+import { NodesToHtml, HtmlToImage } from "../../../utils/Preview";
+import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Input, InputSelect } from "../../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 
 // TODO: text with ai
 // TODO: correct with ai
@@ -98,6 +100,9 @@ const DocumentsEditor = function () {
     try {
       // is editing
       if (id && form.id) {
+        const nodesHtml = NodesToHtml(form?.content || []);
+        const nodesPreview = await HtmlToImage(nodesHtml);
+        form.preview = nodesPreview;
         const response = await apis.DocumentApi.update(
           token,
           instance.name,
@@ -124,6 +129,9 @@ const DocumentsEditor = function () {
         return;
       }
       // is creating
+      const nodesHtml = NodesToHtml(form?.content || []);
+      const nodesPreview = await HtmlToImage(nodesHtml);
+      form.preview = nodesPreview;
       const response = await apis.DocumentApi.create<TypeDocument>(
         token,
         instance.name,
@@ -287,32 +295,23 @@ const DocumentsEditor = function () {
                 </Horizontal>
 
                 <Horizontal internal={0.4}>
-                  <Button
-                    type="button"
-                    disabled={loading}
-                    category="Neutral"
-                    text={t.components.undo}
-                  />
-                  <Button
-                    type="button"
-                    disabled={loading}
-                    text={t.components.redo}
-                    category="Neutral"
-                  />
+                  <RichTextAction action="undo" />
+                  <RichTextAction action="redo" />
                   <div style={{ width: 8 }}></div>
-                  <RichTextButton format="bold" />
-                  <RichTextButton format="italic" />
-                  <RichTextButton format="underline" />
-                  <RichTextButton format="strikethrough" />
+                  <RichTextTool format="bold" />
+                  <RichTextTool format="italic" />
+                  <RichTextTool format="underline" />
+                  <RichTextTool format="strikethrough" />
                   <div style={{ width: 8 }}></div>
-                  <RichTextButton format="title" />
-                  <RichTextButton format="subtitle" />
+                  <RichTextTool format="title" />
+                  <RichTextTool format="subtitle" />
                   <div style={{ width: 8 }}></div>
-                  <RichTextButton format="left" />
-                  <RichTextButton format="center" />
-                  <RichTextButton format="right" />
-                  <RichTextButton format="justify" />
+                  <RichTextTool format="left" />
+                  <RichTextTool format="center" />
+                  <RichTextTool format="right" />
+                  <RichTextTool format="justify" />
                   <div className="flex1"></div>
+                  <RichTextAction action="ai" />
                 </Horizontal>
 
                 <RichText />

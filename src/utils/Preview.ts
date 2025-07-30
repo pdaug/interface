@@ -1,50 +1,69 @@
 import { Descendant } from "slate";
 import html2canvas from "html2canvas";
 
-const ObjectToHTML = function (nodes: Descendant[]): string {
-  const content = nodes
-    .map(function (node) {
-      if ("text" in node) return node.text;
-      const children = ObjectToHTML(node.children);
-      if ("type" in node)
-        switch (node.type) {
-          case "title":
-            return `<h1 style="font-size:28px; margin:12px 0;">${children}</h1>`;
-          case "subtitle":
-            return `<h2 style="font-size:20px; margin:10px 0;">${children}</h2>`;
-          default:
-            return `<p style="margin:8px 0;">${children}</p>`;
-        }
-    })
-    .join("");
-  return content;
+const NodesToHtml = function (nodes: Descendant[]): string {
+  const content = new Array<string>();
+  for (const node of nodes) {
+    if ("text" in node) {
+      let text = node.text;
+      if ("bold" in node && node.bold) text = `<b>${text}</b>`;
+      if ("italic" in node && node.italic) text = `<i>${text}</i>`;
+      if ("underline" in node && node.underline) text = `<u>${text}</u>`;
+      if ("strikethrough" in node && node.strikethrough)
+        text = `<s>${text}</s>`;
+      content.push(text);
+      continue;
+    }
+    let textAlign = "left";
+    if ("align" in node) textAlign = node.align as string;
+    const children = NodesToHtml(node.children);
+    if ("type" in node && node.type === "title")
+      content.push(
+        `<h1 style="font-size:22px;margin:12px 0;text-align:${textAlign};">${children}</h1>`,
+      );
+    else if ("type" in node && node.type === "subtitle")
+      content.push(
+        `<h2 style="font-size:18px;margin:10px 0;text-align:${textAlign};">${children}</h2>`,
+      );
+    else
+      content.push(
+        `<p style="font-size:14px;margin:8px 0;text-align:${textAlign};">${children}</p>`,
+      );
+  }
+  return content.join("");
 };
 
-const GetImageHTML = async function (html: string): Promise<string> {
+const HtmlToImage = async function (
+  content: string,
+  options?: {
+    width?: number;
+    height?: number;
+    padding?: number;
+    background?: string;
+  },
+): Promise<string> {
   const container = document.createElement("div");
   container.style.position = "fixed";
   container.style.left = "-9999px";
-  container.style.top = "-9999px";
-  container.style.width = "800px";
-  container.style.height = "800px";
-  container.style.padding = "24px";
-  container.style.background = "#fff";
-  container.innerHTML = html;
-
+  container.style.width = `${options?.width || 320}px`;
+  container.style.height = `${options?.height || 320}px`;
+  container.style.overflow = "hidden";
+  container.style.padding = `${options?.padding || 24}px`;
+  container.style.background = options?.background || "white";
+  container.style.backgroundColor = options?.background || "white";
+  container.innerHTML = content;
   document.body.appendChild(container);
-
-  await document.fonts.ready;
-
   const canvas = await html2canvas(container, {
     useCORS: true,
     backgroundColor: "#fff",
-    scale: 2,
+    scale: 0.8,
+    logging: false,
+    removeContainer: true,
+    imageTimeout: 0,
   });
-
   document.body.removeChild(container);
-
-  const dataUrl = canvas.toDataURL("image/png");
-  return dataUrl;
+  const base64 = canvas.toDataURL("image/jpg", 0.2);
+  return base64;
 };
 
-export { ObjectToHTML, GetImageHTML };
+export { NodesToHtml, HtmlToImage };

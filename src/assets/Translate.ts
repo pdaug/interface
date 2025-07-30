@@ -214,6 +214,7 @@ const TranslatePt = {
     new: "Novo documento",
     name: "Nome do documento",
     name_placeholder: "Ex. Meu primeiro documento",
+    ai_text: "Texto com AI",
   },
   employee: {
     employee: "Colaborador",
@@ -789,7 +790,7 @@ const TranslateEn = {
     new: "New document",
     name: "Document name",
     name_placeholder: "e.g. My first document",
-    category: "Category",
+    ai_text: "AI text",
   },
   employee: {
     employee: "Employee",
