@@ -1,7 +1,7 @@
 import { toast } from "sonner";
-import { useState } from "react";
 import { Descendant } from "slate";
 import { AxiosError } from "axios";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // apis
@@ -26,6 +26,7 @@ import {
 import Button from "../../../components/buttons/Button";
 import { Input, InputSelect } from "../../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 
 // TODO: text with ai
 // TODO: correct with ai
@@ -35,7 +36,7 @@ const DocumentsEditor = function () {
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
-  const { token, user, instance, workspaceId } = useSystem();
+  const { token, user, instance, workspaces, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -44,13 +45,7 @@ const DocumentsEditor = function () {
     id: "",
     name: "",
     category: "document",
-    content: [
-      {
-        type: "paragraph",
-        align: "left",
-        children: [{ text: "" }],
-      } as Descendant,
-    ],
+    content: [],
     userId: user.id,
     workspaceId,
   });
@@ -172,124 +167,163 @@ const DocumentsEditor = function () {
   };
 
   return (
-    <RichTextContext
-      content={
-        form?.content || [
-          {
-            type: "paragraph",
-            align: "left",
-            children: [{ text: "" }],
-          } as Descendant,
-        ]
-      }
-      setContent={function (newContent) {
-        const newForm = { ...form };
-        newForm.content = newContent;
-        setForm(newForm);
-        return;
-      }}
-    >
-      <form onSubmit={onSubmit} style={{ display: "flex" }} className="flex1">
-        <Horizontal internal={1} styles={{ flex: 1 }}>
-          <Vertical internal={1} styles={{ flex: 1 }}>
-            <Horizontal internal={0.4}>
-              <Button
-                type="submit"
-                disabled={loading}
-                text={t.components.save}
-                category={id ? "Info" : "Success"}
-              />
-              <div style={{ width: 8 }}></div>
-              <Button
-                type="button"
-                disabled={loading}
-                category="Neutral"
-                text={t.components.undo}
-              />
-              <Button
-                type="button"
-                disabled={loading}
-                text={t.components.redo}
-                category="Neutral"
-              />
-              <div style={{ width: 8 }}></div>
-              <RichTextButton format="bold" />
-              <RichTextButton format="italic" />
-              <RichTextButton format="underline" />
-              <RichTextButton format="strikethrough" />
-              <div style={{ width: 8 }}></div>
-              <RichTextButton format="title" />
-              <RichTextButton format="subtitle" />
-              <div style={{ width: 8 }}></div>
-              <RichTextButton format="left" />
-              <RichTextButton format="center" />
-              <RichTextButton format="right" />
-              <RichTextButton format="justify" />
-            </Horizontal>
+    <React.Fragment>
+      <Horizontal>
+        <h2>
+          <Breadcrumb
+            links={[
+              {
+                id: "workspace",
+                label:
+                  workspaces.find(function (workspace) {
+                    return workspace.id === workspaceId;
+                  })?.name || "",
+                url: "/f/",
+              },
+              {
+                id: "documents",
+                label: t.document.documents,
+                url: "/f/documents",
+              },
+              {
+                id: "document",
+                label: form?.name || t.components.empty_name,
+                url: `/f/documents/inspect${id ? `/${id}` : ""}`,
+              },
+            ]}
+          />
+        </h2>
+      </Horizontal>
 
-            <Horizontal styles={{ alignItems: "flex-end" }} internal={1}>
-              <Input
-                required
-                min={3}
-                max={256}
-                name="name"
-                id="document_name"
-                label={t.document.name}
-                value={form?.name || ""}
-                placeholder={t.document?.name_placeholder}
-                onChange={function (event) {
-                  const newForm = { ...form };
-                  newForm.name = event.currentTarget?.value || "";
-                  setForm(newForm);
-                  return;
-                }}
-              />
-              <div style={{ minWidth: 180 }}>
-                <InputSelect
-                  required
-                  name="category"
-                  id="document_category"
-                  empty={t.stacks.no_option}
-                  label={t.components.category}
-                  value={form?.category || "document"}
-                  options={[
-                    {
-                      id: "email",
-                      value: "email",
-                      text: t.components.email,
-                    },
-                    {
-                      id: "message",
-                      value: "message",
-                      text: t.components.message,
-                    },
-                    {
-                      id: "sms",
-                      value: "sms",
-                      text: t.components.sms,
-                    },
-                    {
-                      id: "document",
-                      value: "document",
-                      text: t.components.document,
-                    },
-                  ]}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.category = (event?.currentTarget?.value ||
-                      "document") as TypeDocumentCategory;
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </div>
-            </Horizontal>
+      {!loading ? (
+        <RichTextContext
+          content={form?.content as Descendant[]}
+          setContent={function (newContent) {
+            const newForm = { ...form };
+            newForm.content = newContent;
+            setForm(newForm);
+            return;
+          }}
+        >
+          <form
+            onSubmit={onSubmit}
+            style={{ display: "flex" }}
+            className="flex1"
+          >
+            <Horizontal internal={1} styles={{ flex: 1 }}>
+              <Vertical internal={1} styles={{ flex: 1 }}>
+                <Horizontal internal={0.4}>
+                  <Button
+                    type="button"
+                    disabled={loading}
+                    category="Neutral"
+                    text={t.components.undo}
+                  />
+                  <Button
+                    type="button"
+                    disabled={loading}
+                    text={t.components.redo}
+                    category="Neutral"
+                  />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextButton format="bold" />
+                  <RichTextButton format="italic" />
+                  <RichTextButton format="underline" />
+                  <RichTextButton format="strikethrough" />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextButton format="title" />
+                  <RichTextButton format="subtitle" />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextButton format="left" />
+                  <RichTextButton format="center" />
+                  <RichTextButton format="right" />
+                  <RichTextButton format="justify" />
+                  <div className="flex1"></div>
+                  <Button
+                    type="button"
+                    disabled={loading}
+                    category="Neutral"
+                    text={t.components.close}
+                    onClick={function () {
+                      navigate("/f/documents");
+                      return;
+                    }}
+                  />
+                  <div style={{ width: 8 }}></div>
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    text={t.components.save}
+                    category={id ? "Info" : "Success"}
+                  />
+                </Horizontal>
 
-            <RichText />
-          </Vertical>
-        </Horizontal>
-      </form>
-    </RichTextContext>
+                <Horizontal styles={{ alignItems: "flex-end" }} internal={1}>
+                  <Input
+                    required
+                    min={3}
+                    max={256}
+                    name="name"
+                    id="document_name"
+                    label={t.document.name}
+                    value={form?.name || ""}
+                    placeholder={t.document?.name_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.name = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <div style={{ minWidth: 180 }}>
+                    <InputSelect
+                      required
+                      name="category"
+                      id="document_category"
+                      empty={t.stacks.no_option}
+                      label={t.components.category}
+                      value={form?.category || "document"}
+                      options={[
+                        {
+                          id: "email",
+                          value: "email",
+                          text: t.components.email,
+                        },
+                        {
+                          id: "message",
+                          value: "message",
+                          text: t.components.message,
+                        },
+                        {
+                          id: "sms",
+                          value: "sms",
+                          text: t.components.sms,
+                        },
+                        {
+                          id: "document",
+                          value: "document",
+                          text: t.components.document,
+                        },
+                      ]}
+                      onChange={function (event) {
+                        const newForm = { ...form };
+                        newForm.category = (event?.currentTarget?.value ||
+                          "document") as TypeDocumentCategory;
+                        setForm(newForm);
+                        return;
+                      }}
+                    />
+                  </div>
+                </Horizontal>
+                <RichText />
+              </Vertical>
+            </Horizontal>
+          </form>
+        </RichTextContext>
+      ) : (
+        t.components.loading
+      )}
+    </React.Fragment>
   );
 };
 

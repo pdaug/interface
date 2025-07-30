@@ -1,5 +1,5 @@
 import React from "react";
-import { ImageBroken } from "@phosphor-icons/react";
+import { ImageBroken, Icon as IconPhosphor } from "@phosphor-icons/react";
 
 // styles
 import "./Card.css";
@@ -8,6 +8,7 @@ export type CardProps = {
   mode: "Small" | "Large";
   photo?: string | null;
   photoChildren?: React.ReactNode;
+  Icon?: IconPhosphor;
   children: React.ReactNode;
   footer?: React.ReactNode;
 };
@@ -16,6 +17,7 @@ const Card = function ({
   mode = "Large",
   photo,
   photoChildren,
+  Icon,
   children,
   footer,
 }: CardProps) {
@@ -25,6 +27,8 @@ const Card = function ({
         <div className="cardPhoto">
           {photo ? (
             <img src={photo} alt="card_photo" />
+          ) : Icon ? (
+            <Icon color="var(--borderDark)" size={32} weight="light" />
           ) : (
             <ImageBroken color="var(--borderDark)" size={32} weight="light" />
           )}

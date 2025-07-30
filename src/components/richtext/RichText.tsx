@@ -32,6 +32,7 @@ import {
   Descendant,
   createEditor,
   Element as ElementSlate,
+  Node,
 } from "slate";
 import { HistoryEditor, withHistory } from "slate-history";
 
@@ -231,6 +232,7 @@ export type RichTextContextProps = {
 
 // component
 export const RichTextContext = function ({
+  content,
   setContent,
   children,
 }: RichTextContextProps) {
@@ -244,13 +246,15 @@ export const RichTextContext = function ({
   return (
     <Slate
       editor={editor}
-      initialValue={[
-        {
-          type: "paragraph",
-          align: "left",
-          children: [{ text: "" }],
-        } as Descendant,
-      ]}
+      initialValue={
+        content || [
+          {
+            type: "paragraph",
+            align: "left",
+            children: [{ text: "" }],
+          } as Descendant,
+        ]
+      }
       onChange={function (value) {
         setContent(value);
         return;

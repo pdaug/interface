@@ -6,6 +6,7 @@ import {
   QuestionMark,
   DownloadSimple,
   DotsThreeOutline,
+  FileDoc,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -27,6 +28,7 @@ import { ApiResponsePaginate } from "../../../types/Api";
 import useAsync from "../../../hooks/useAsync";
 import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
+import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -42,6 +44,7 @@ import { useDialog } from "../../../components/dialogs/Dialog";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import { GetImageHTML, ObjectToHTML } from "../../../utils/Preview";
 
 const pageSize = 10;
 
@@ -49,6 +52,7 @@ const DocumentsFolder = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
+  const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { users, token, instance, workspaces, workspaceId } = useSystem();
 
@@ -56,10 +60,8 @@ const DocumentsFolder = function () {
   const [total, setTotal] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
-  const [selected, setSelected] = useState<string[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
   const [documents, setDocuments] = useState<TypeDocument[]>([]);
-
-  console.log(setSelected([]));
 
   const [searchDebounced] = useDebounce(search, 500);
 
@@ -107,6 +109,21 @@ const DocumentsFolder = function () {
 
   // fetch documents
   useAsync(FetchDocuments, [workspaceId, page, searchDebounced]);
+
+  // load previews
+  useAsync(
+    async function () {
+      if (!documents || !documents.length) return;
+      const newPreviews = new Array<string>();
+      for (const document of documents) {
+        const previewHtml = ObjectToHTML(document.content);
+        const previewImage = await GetImageHTML(previewHtml);
+        newPreviews.push(previewImage);
+      }
+      setPreviews(newPreviews);
+    },
+    [documents],
+  );
 
   const getOptions = [
     {
@@ -249,22 +266,6 @@ const DocumentsFolder = function () {
               return;
             }}
           />
-          <Button
-            category="Neutral"
-            disabled={!selected.length}
-            text={t.components.export}
-            onClick={function () {
-              const data = documents.filter(function (document) {
-                return selected.includes(document.id);
-              });
-              Download.JSON(data, `documents.json`);
-              play("ok");
-              toast.success(t.toast.success, {
-                description: t.toast.success_download,
-              });
-              return;
-            }}
-          />
           <Tooltip content={t.components.help}>
             <Button
               text=""
@@ -295,15 +296,16 @@ const DocumentsFolder = function () {
         <Vertical internal={1} styles={{ flex: 1 }}>
           <Horizontal internal={1} styles={{ flexWrap: "wrap" }}>
             {documents.length ? (
-              documents.map(function (document) {
+              documents.map(function (document, index) {
                 const userFinded = users?.find(function (user) {
                   return user.id === document.userId;
                 });
                 return (
                   <Card
-                    photo=""
                     mode="Large"
+                    Icon={FileDoc}
                     key={document.id}
+                    photo={previews[index]}
                     photoChildren={
                       <React.Fragment>
                         <Badge
@@ -342,7 +344,8 @@ const DocumentsFolder = function () {
                         fontSize: "var(--textSmall)",
                       }}
                     >
-                      {document.name}
+                      {t.components.created_at}:{" "}
+                      {instanceDateTime(document.createdAt)}
                     </div>
                   </Card>
                 );
