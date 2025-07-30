@@ -42,6 +42,10 @@ const TranslatePt = {
     required_fields: "Os campos com asteriscos são obrigatórios",
   },
   components: {
+    document: "Documento",
+    sms: "SMS",
+    message: "Mensagem",
+    email: "Email",
     pagination_showing: "Mostrando",
     pagination_of: "de",
     pagination_page: "páginas",
@@ -95,6 +99,8 @@ const TranslatePt = {
     address_city_placeholder: "Ex. Cores",
     address_state: "Estado",
     // buttons
+    undo: "Desfazer",
+    redo: "Refazer",
     open_game: "Abrir jogo",
     remove: "Remover",
     add: "Adicionar",
@@ -201,6 +207,13 @@ const TranslatePt = {
     title_delete: "Deletar",
     description_delete: "Deseja deletar o item selecionado?",
     title_workspace: "Selecione a organização",
+  },
+  document: {
+    document: "Documento",
+    documents: "Documentos",
+    new: "Novo documento",
+    name: "Nome do documento",
+    name_placeholder: "Ex. Meu primeiro documento",
   },
   employee: {
     employee: "Colaborador",
@@ -608,6 +621,10 @@ const TranslateEn = {
     required_fields: "Fields marked with an asterisk are required",
   },
   components: {
+    document: "Document",
+    sms: "SMS",
+    message: "Message",
+    email: "Email",
     pagination_showing: "Showing",
     pagination_of: "of",
     pagination_page: "pages",
@@ -661,6 +678,8 @@ const TranslateEn = {
     address_city_placeholder: "e.g. Colors",
     address_state: "State",
     // buttons
+    undo: "Undo",
+    redo: "Redo",
     open_game: "Open game",
     remove: "Remove",
     add: "Add",
@@ -763,6 +782,14 @@ const TranslateEn = {
     title_delete: "Delete",
     description_delete: "Do you want delete delete this item?",
     title_workspace: "Select the workspace",
+  },
+  document: {
+    document: "Document",
+    documents: "Documents",
+    new: "New document",
+    name: "Document name",
+    name_placeholder: "e.g. My first document",
+    category: "Category",
   },
   employee: {
     employee: "Employee",

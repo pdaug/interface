@@ -17,6 +17,7 @@ import Customer from "./internal/Customer";
 import WhatsApp from "./internal/WhatsApp";
 import Supplier from "./internal/Supplier";
 import Workspace from "./internal/Workspace";
+import DocumentApi from "./internal/Document";
 
 export default {
   // external
@@ -25,6 +26,7 @@ export default {
   // internal
   Account,
   Customer,
+  DocumentApi,
   Instance,
   Login,
   Order,

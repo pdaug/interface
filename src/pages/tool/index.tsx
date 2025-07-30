@@ -1,9 +1,23 @@
 // pages
-import DocumentsPanel from "./documents/DocumentPanel";
+import DocumentsFolder from "./documents/DocumentsFolder";
+import DocumentsEditor from "./documents/DocumentsEditor";
 
 export default [
   {
     path: "documents",
-    Component: DocumentsPanel,
+    children: [
+      {
+        index: true,
+        Component: DocumentsFolder,
+      },
+      {
+        path: "editor",
+        Component: DocumentsEditor,
+      },
+      {
+        path: "editor/:id",
+        Component: DocumentsEditor,
+      },
+    ],
   },
 ];
