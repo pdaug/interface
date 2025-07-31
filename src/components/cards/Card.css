@@ -7,6 +7,10 @@
   flex: 1;
 }
 
+.cardSelected {
+  border: 1px solid var(--infoColor);
+}
+
 .cardSmall {
   min-width: 200px;
   max-width: 200px;

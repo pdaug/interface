@@ -25,7 +25,7 @@ const Vertical = function ({
 }: AlignElementProps) {
   const style = { gap: `${internal}rem`, margin: `${external}rem`, ...styles };
   return (
-    <div className={`alignVertical ${className}`} style={style}>
+    <div className={`alignVertical ${className || ""}`} style={style}>
       {children}
     </div>
   );
@@ -40,7 +40,7 @@ const Horizontal = function ({
 }: AlignElementProps) {
   const style = { gap: `${internal}rem`, margin: `${external}rem`, ...styles };
   return (
-    <div className={`alignHorizontal ${className}`} style={style}>
+    <div className={`alignHorizontal ${className || ""}`} style={style}>
       {children}
     </div>
   );

@@ -25,6 +25,7 @@ import {
   RichTextContext,
 } from "../../../components/richtext/RichText";
 import Button from "../../../components/buttons/Button";
+import Wrapper from "../../../components/wrapper/Wrapper";
 import { NodesToHtml, HtmlToImage } from "../../../utils/Preview";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Input, InputSelect } from "../../../components/inputs/Input";
@@ -320,7 +321,18 @@ const DocumentsEditor = function () {
           </form>
         </RichTextContext>
       ) : (
-        t.components.loading
+        <Wrapper>
+          <Horizontal className="justify-center">
+            <i
+              style={{
+                color: "var(--textLight)",
+                fontSize: "var(--textSmall)",
+              }}
+            >
+              {loading ? `${t.components.loading}...` : t.stacks.no_items}
+            </i>
+          </Horizontal>
+        </Wrapper>
       )}
     </React.Fragment>
   );

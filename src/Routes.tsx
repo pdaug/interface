@@ -16,12 +16,17 @@ import ErrorPage from "./pages/ErrorPage";
 import financial from "./pages/financial";
 import operational from "./pages/operational";
 import administrative from "./pages/administrative";
+import DocumentsPage from "./pages/tool/documents/DocumentsPage";
 
 const Router = createBrowserRouter([
   {
     path: "/",
     Component: Login,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "/shared/document/:id",
+    Component: DocumentsPage,
   },
   {
     path: "f",

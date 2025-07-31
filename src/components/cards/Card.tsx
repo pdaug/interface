@@ -6,23 +6,33 @@ import "./Card.css";
 
 export type CardProps = {
   mode: "Small" | "Large";
+  selected?: boolean;
   photo?: string | null;
   photoChildren?: React.ReactNode;
   Icon?: IconPhosphor;
   children: React.ReactNode;
   footer?: React.ReactNode;
+  styles?: React.CSSProperties;
+  onClick?: () => void;
 };
 
 const Card = function ({
   mode = "Large",
+  selected,
   photo,
   photoChildren,
   Icon,
   children,
   footer,
+  styles,
+  onClick,
 }: CardProps) {
   return (
-    <div className={`card card${mode}`}>
+    <div
+      style={styles}
+      onClick={onClick}
+      className={`card card${mode} ${selected ? "cardSelected" : ""}`}
+    >
       {(typeof photo === "string" || photoChildren) && (
         <div className="cardPhoto">
           {photo ? (

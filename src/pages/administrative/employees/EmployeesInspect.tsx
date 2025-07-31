@@ -243,7 +243,7 @@ const EmployeesInspect = function () {
               styles={{ maxWidth: "40%" }}
               contentStyles={{ display: "flex" }}
             >
-              <Horizontal internal={1} className="flex-1 items-center">
+              <Horizontal internal={1} className="flex1 items-center">
                 <Avatar
                   label=""
                   size={14}

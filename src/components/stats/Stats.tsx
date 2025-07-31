@@ -18,6 +18,7 @@ export type StatsProps = {
   valueOptions?: Intl.NumberFormatOptions;
   footer?: string;
   styles?: React.CSSProperties;
+  stylesContainer?: React.CSSProperties;
 };
 
 const Stats = function ({
@@ -33,6 +34,7 @@ const Stats = function ({
   valueOptions,
   footer,
   styles,
+  stylesContainer,
 }: StatsProps) {
   const metricFormatted = metric
     ? new Intl.NumberFormat(metricLocale, metricOptions).format(metric)
@@ -45,29 +47,31 @@ const Stats = function ({
 
   return (
     <div className="stats" style={styles}>
-      {Icon && (
-        <div className="statsIcon">
-          <Icon size={24} />
-        </div>
-      )}
-      <div className="statsContainer">
-        <div className="statsHead">
-          <div className="statsHeadTitle">{title}</div>
-          {metricFormatted && (
-            <div className={`statsHeadMetric statsHeadMetric${metricStatus}`}>
-              {metricStatus ? (metricStatus === "Up" ? "+" : "-") : ""}
-              {metricFormatted}
+      <div className="statsContainer" style={stylesContainer}>
+        {Icon && (
+          <div className="statsIcon">
+            <Icon size={24} />
+          </div>
+        )}
+        <div className="statsContent">
+          <div className="statsHead">
+            <div className="statsHeadTitle">{title}</div>
+            {metricFormatted && (
+              <div className={`statsHeadMetric statsHeadMetric${metricStatus}`}>
+                {metricStatus ? (metricStatus === "Up" ? "+" : "-") : ""}
+                {metricFormatted}
+              </div>
+            )}
+          </div>
+          <div className="statsBody">
+            {valueFormatted} {valueUnit}
+          </div>
+          {footer && (
+            <div className="statsFooter">
+              <span>{footer}</span>
             </div>
           )}
         </div>
-        <div className="statsBody">
-          {valueFormatted} {valueUnit}
-        </div>
-        {footer && (
-          <div className="statsFooter">
-            <span>{footer}</span>
-          </div>
-        )}
       </div>
     </div>
   );

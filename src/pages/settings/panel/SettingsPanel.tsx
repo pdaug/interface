@@ -496,7 +496,7 @@ const SettingsPanel = function () {
               </Horizontal>
               <Horizontal internal={1}>
                 <Horizontal
-                  className="flex-1 items-center justify-center"
+                  className="flex1 items-center justify-center"
                   styles={{
                     background: "var(--backgroundColor)",
                     backgroundColor: "var(--backgroundColor)",
@@ -517,7 +517,7 @@ const SettingsPanel = function () {
                   />
                 </Horizontal>
                 <Horizontal
-                  className="flex-1 items-center justify-center"
+                  className="flex1 items-center justify-center"
                   styles={{
                     background: "var(--backgroundColor)",
                     backgroundColor: "var(--backgroundColor)",
@@ -538,7 +538,7 @@ const SettingsPanel = function () {
                   />
                 </Horizontal>
                 <Horizontal
-                  className="flex-1 items-center justify-center"
+                  className="flex1 items-center justify-center"
                   styles={{
                     background: "var(--backgroundColor)",
                     backgroundColor: "var(--backgroundColor)",

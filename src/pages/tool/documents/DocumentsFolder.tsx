@@ -34,18 +34,18 @@ import useTranslate from "../../../hooks/useTranslate";
 
 // components
 import Card from "../../../components/cards/Card";
+import Stats from "../../../components/stats/Stats";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import { Input } from "../../../components/inputs/Input";
 import Wrapper from "../../../components/wrapper/Wrapper";
-import Profile from "../../../components/profiles/Profile";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import Dropdown from "../../../components/dropdowns/Dropdown";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Stats from "../../../components/stats/Stats";
+import Profile from "../../../components/profiles/Profile";
 
 const pageSize = 10;
 
@@ -60,10 +60,23 @@ const DocumentsFolder = function () {
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
+  const [selected, setSelected] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [documents, setDocuments] = useState<TypeDocument[]>([]);
 
   const [searchDebounced] = useDebounce(search, 500);
+
+  const DocumentSelected = selected
+    ? documents.find(function (document) {
+        return document.id === selected;
+      })
+    : null;
+
+  const UserDocumentSelected = DocumentSelected?.userId
+    ? users?.find(function (user) {
+        return user.id === DocumentSelected.userId;
+      })
+    : null;
 
   const filter = {
     document: documents.filter((d) => d.category == "document"),
@@ -129,6 +142,65 @@ const DocumentsFolder = function () {
   // fetch documents
   useAsync(FetchDocuments, [workspaceId, page, searchDebounced]);
 
+  const DownloadAction = function (_: React.MouseEvent, data: unknown) {
+    if (data && typeof data === "object" && "id" in data) {
+      Download.JSON(data, `document-${data.id}.json`);
+      play("ok");
+      toast.success(t.toast.success, {
+        description: t.toast.success_download,
+      });
+    }
+    return;
+  };
+
+  const EditAction = function (_: React.MouseEvent, data: unknown) {
+    if (data && typeof data === "object" && "id" in data)
+      navigate(`/f/documents/editor/${data.id}`);
+    return;
+  };
+
+  const DeleteAction = async function (_: React.MouseEvent, data: unknown) {
+    if (!data || typeof data !== "object" || !("id" in data)) return;
+    OpenDialog({
+      category: "Danger",
+      title: t.dialog.title_delete,
+      description: t.dialog.description_delete,
+      confirmText: t.components.delete,
+      onConfirm: async function () {
+        try {
+          const response = await apis.DocumentApi.delete(
+            token,
+            instance.name,
+            data.id as string,
+            workspaceId,
+          );
+          if (!response.data?.result) {
+            play("alert");
+            toast.warning(t.toast.warning_error, {
+              description: t.toast.error_delete,
+            });
+            return;
+          }
+          play("ok");
+          toast.success(t.toast.success, {
+            description: t.toast.success_delete,
+          });
+          CloseDialog();
+          await FetchDocuments();
+          setSelected("");
+          return;
+        } catch (err) {
+          play("alert");
+          toast.error(t.toast.warning_error, {
+            description: t.toast.error_delete,
+          });
+          console.error("[src/pages/tool/documents/DocumentsFolder.tsx]", err);
+          return;
+        }
+      },
+    });
+  };
+
   const getOptions = [
     {
       id: "copy",
@@ -156,26 +228,13 @@ const DocumentsFolder = function () {
       id: "download",
       label: t.components.download,
       Icon: DownloadSimple,
-      onClick: function (_: React.MouseEvent, data: unknown) {
-        if (data && typeof data === "object" && "id" in data) {
-          Download.JSON(data, `document-${data.id}.json`);
-          play("ok");
-          toast.success(t.toast.success, {
-            description: t.toast.success_download,
-          });
-        }
-        return;
-      },
+      onClick: DownloadAction,
     },
     {
       id: "edit",
       label: t.components.edit,
       Icon: PencilSimple,
-      onClick: function (_: React.MouseEvent, data: unknown) {
-        if (data && typeof data === "object" && "id" in data)
-          navigate(`/f/documents/editor/${data.id}`);
-        return;
-      },
+      onClick: EditAction,
     },
     {
       id: "delete",
@@ -183,49 +242,7 @@ const DocumentsFolder = function () {
       Icon: Trash,
       IconColor: "var(--dangerColor",
       styles: { color: "var(--dangerColor)" },
-      onClick: async function (_: React.MouseEvent, data: unknown) {
-        if (!data || typeof data !== "object" || !("id" in data)) return;
-        OpenDialog({
-          category: "Danger",
-          title: t.dialog.title_delete,
-          description: t.dialog.description_delete,
-          confirmText: t.components.delete,
-          onConfirm: async function () {
-            try {
-              const response = await apis.DocumentApi.delete(
-                token,
-                instance.name,
-                data.id as string,
-                workspaceId,
-              );
-              if (!response.data?.result) {
-                play("alert");
-                toast.warning(t.toast.warning_error, {
-                  description: t.toast.error_delete,
-                });
-                return;
-              }
-              play("ok");
-              toast.success(t.toast.success, {
-                description: t.toast.success_delete,
-              });
-              CloseDialog();
-              await FetchDocuments();
-              return;
-            } catch (err) {
-              play("alert");
-              toast.error(t.toast.warning_error, {
-                description: t.toast.error_delete,
-              });
-              console.error(
-                "[src/pages/tool/documents/DocumentsFolder.tsx]",
-                err,
-              );
-              return;
-            }
-          },
-        });
-      },
+      onClick: DeleteAction,
     },
   ];
 
@@ -297,15 +314,17 @@ const DocumentsFolder = function () {
           </Tooltip>
         </Horizontal>
 
-        <Vertical internal={1} styles={{ flex: 1 }}>
+        <Vertical internal={1} className="flex1">
           <Horizontal internal={1} styles={{ flexWrap: "wrap" }}>
             {documents.length ? (
               documents.map(function (document) {
-                const userFinded = users?.find(function (user) {
-                  return user.id === document.userId;
-                });
                 return (
                   <Card
+                    selected={document.id === selected}
+                    onClick={function () {
+                      setSelected(document.id);
+                      return;
+                    }}
                     mode="Large"
                     Icon={FileDoc}
                     key={document.id}
@@ -332,15 +351,6 @@ const DocumentsFolder = function () {
                         </div>
                       </Dropdown>
                     </Horizontal>
-                    {/* <div
-                      style={{
-                        color: "var(--textLight)",
-                        fontSize: "var(--textSmall)",
-                      }}
-                    >
-                      {t.components.created_at}:{" "}
-                      {instanceDateTime(document.createdAt)}
-                    </div> */}
                   </Card>
                 );
               })
@@ -371,78 +381,177 @@ const DocumentsFolder = function () {
       </Vertical>
 
       <Vertical internal={1}>
-        <Wrapper
-          styles={{
-            flex: "none",
-            height: "fit-content",
-            position: "sticky",
-            width: 280,
-          }}
-        >
-          <Vertical internal={1}>
-            <h3>{t.document.documents}</h3>
-            <Vertical internal={0.2}>
-              <div>
-                {statistics.documentQuantity} {t.components.document}(s)
-              </div>
-              <div>
-                {statistics.emailQuantity} {t.components.email}(s)
-              </div>
-              <div>
-                {statistics.messageQuantity} {t.components.message}(s)
-              </div>
-              <div>
-                {statistics.smsQuantity} {t.components.sms}(s)
-              </div>
-            </Vertical>
-            <b>{t.document.docs_size}</b>
-            <Vertical internal={0.2}>
-              <div>
-                {t.components.document}{" "}
-                {Bytes.getMegabytes(statistics.documentSize)}
-              </div>
-              <div>
-                {t.components.email} {Bytes.getMegabytes(statistics.emailSize)}
-              </div>
-              <div>
-                {t.components.message}{" "}
-                {Bytes.getMegabytes(statistics.messageSize)}
-              </div>
-              <div>
-                {t.components.sms} {Bytes.getMegabytes(statistics.smsSize)}
-              </div>
-            </Vertical>
-            <b>{t.document.docs_relationship}</b>
-            <Vertical internal={0.2}>
-              <div>public 0</div>
-              <div>private 10</div>
-            </Vertical>
-          </Vertical>
-        </Wrapper>
-        <div>
-          <Stats
-            title="Title"
-            value={200}
-            valueUnit="Interações"
-            valueLocale={instance.language}
-            footer="Footer"
-            metric={2}
-            metricStatus="Up"
-            metricLocale={instance.language}
-          />
-        </div>
-        <div>
-          <Stats
-            title="Title"
-            value={200}
-            valueUnit="Interações"
-            valueLocale={instance.language}
-            footer="Footer"
-            metric={2}
-            metricStatus="Up"
-            metricLocale={instance.language}
-          />
-        </div>
+        {selected ? (
+          <React.Fragment>
+            <Card
+              mode="Large"
+              Icon={FileDoc}
+              styles={{ flex: "none", minWidth: 280 }}
+              photo={DocumentSelected?.preview || ""}
+            >
+              <Vertical internal={1}>
+                <Horizontal
+                  internal={1}
+                  styles={{ justifyContent: "flex-end" }}
+                >
+                  <Badge
+                    category="Info"
+                    value={
+                      t.components[
+                        DocumentSelected?.category as keyof typeof t.components
+                      ]
+                    }
+                  />
+                </Horizontal>
+
+                <b className="flex1">{DocumentSelected?.name || ""}</b>
+
+                <Vertical
+                  internal={0.2}
+                  styles={{ fontSize: "var(--textSmall)" }}
+                >
+                  <div className="flex flex1">
+                    <span className="flex1">Id</span>
+                    <span>{DocumentSelected?.id || ""}</span>
+                  </div>
+                  <div className="flex flex1">
+                    <span className="flex1">{t.components.created_at}</span>
+                    <span>
+                      {instanceDateTime(DocumentSelected?.createdAt || "")}
+                    </span>
+                  </div>
+                  <div className="flex flex1">
+                    <span className="flex1">{t.components.updated_at}</span>
+                    <span>
+                      {instanceDateTime(DocumentSelected?.updatedAt || "")}
+                    </span>
+                  </div>
+                </Vertical>
+
+                <Profile
+                  photoCircle
+                  padding={false}
+                  name={UserDocumentSelected?.name || ""}
+                  photo={UserDocumentSelected?.photo || ""}
+                  description={UserDocumentSelected?.email || ""}
+                />
+                <Horizontal internal={0.6}>
+                  <Button
+                    category="Neutral"
+                    style={{ flex: 1 }}
+                    Icon={PencilSimple}
+                    text={t.components.edit}
+                    onClick={(event) => EditAction(event, DocumentSelected)}
+                  />
+                  <Button
+                    text=""
+                    onlyIcon
+                    category="Neutral"
+                    Icon={DownloadSimple}
+                    onClick={(event) => DownloadAction(event, DocumentSelected)}
+                  />
+                  <Button
+                    text=""
+                    onlyIcon
+                    Icon={Trash}
+                    category="Danger"
+                    onClick={(event) => DeleteAction(event, DocumentSelected)}
+                  />
+                </Horizontal>
+              </Vertical>
+            </Card>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <Stats
+              styles={{ flex: "none", width: 280 }}
+              title={t.document.documents_total_title}
+              footer={t.document.documents_total_description}
+              value={documents.length}
+              valueUnit={t.document.documents}
+              valueLocale={instance.language}
+            />
+
+            <Stats
+              styles={{ flex: "none", width: 280 }}
+              title={t.document.documents_relation_title}
+              footer={t.document.documents_relation_description}
+              value={0}
+              valueUnit={t.document.relations}
+              valueLocale={instance.language}
+            />
+
+            <Wrapper
+              styles={{
+                flex: "none",
+                height: "fit-content",
+                position: "sticky",
+                width: 280,
+              }}
+            >
+              <Vertical internal={1}>
+                <b>{t.document.quantity}</b>
+                <Vertical
+                  internal={0.2}
+                  styles={{ fontSize: "var(--textSmall)" }}
+                >
+                  <div className="flex">
+                    <span className="flex1">{t.components.document}(s)</span>
+                    <span>{statistics.documentQuantity}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="flex1">{t.components.email}(s)</span>
+                    <span>{statistics.emailQuantity}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="flex1">{t.components.message}(s)</span>
+                    <span>{statistics.messageQuantity}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="flex1">{t.components.sms}(s)</span>
+                    <span>{statistics.smsQuantity}</span>
+                  </div>
+                </Vertical>
+                <b>{t.document.documents_size}</b>
+                <Vertical
+                  internal={0.2}
+                  styles={{ fontSize: "var(--textSmall)" }}
+                >
+                  <div className="flex">
+                    <span className="flex1">{t.components.document}</span>
+                    <span>{Bytes.getMegabytes(statistics.documentSize)}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="flex1">{t.components.email}</span>
+                    <span>{Bytes.getMegabytes(statistics.emailSize)}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="flex1">{t.components.message}</span>
+                    <span>{Bytes.getMegabytes(statistics.messageSize)}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="flex1">{t.components.sms}</span>
+                    <span>{Bytes.getMegabytes(statistics.smsSize)}</span>
+                  </div>
+                </Vertical>
+                <b>{t.document.documents_type}</b>
+                <Vertical
+                  internal={0.2}
+                  styles={{ fontSize: "var(--textSmall)" }}
+                >
+                  <div className="flex">
+                    <span className="flex1">{t.document.public}(s)</span>
+                    <span>{0}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="flex1">{t.document.private}(s)</span>
+                    <span>{0}</span>
+                  </div>
+                </Vertical>
+              </Vertical>
+            </Wrapper>
+          </React.Fragment>
+        )}
       </Vertical>
     </Horizontal>
   );
