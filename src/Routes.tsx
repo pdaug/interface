@@ -25,7 +25,7 @@ const Router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/shared/document/:id",
+    path: "/share/document/:id",
     Component: DocumentsPage,
   },
   {

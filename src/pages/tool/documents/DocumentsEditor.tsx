@@ -26,6 +26,7 @@ import {
 } from "../../../components/richtext/RichText";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
+import { useDialog } from "../../../components/dialogs/Dialog";
 import { NodesToHtml, HtmlToImage } from "../../../utils/Preview";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Input, InputSelect } from "../../../components/inputs/Input";
@@ -39,6 +40,7 @@ const DocumentsEditor = function () {
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
+  const { OpenDialog, CloseDialog } = useDialog();
   const { token, user, instance, workspaces, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,6 +50,7 @@ const DocumentsEditor = function () {
     id: "",
     name: "",
     category: "document",
+    isPublic: false,
     content: [],
     userId: user.id,
     workspaceId,
@@ -197,7 +200,7 @@ const DocumentsEditor = function () {
               {
                 id: "document",
                 label: form?.name || t.components.empty_name,
-                url: `/f/documents/inspect${id ? `/${id}` : ""}`,
+                url: `/f/documents/editor${id ? `/${id}` : ""}`,
               },
             ]}
           />
@@ -238,52 +241,88 @@ const DocumentsEditor = function () {
                       return;
                     }}
                   />
-                  <div style={{ minWidth: 180 }}>
-                    <InputSelect
-                      required
-                      name="category"
-                      id="document_category"
-                      empty={t.stacks.no_option}
-                      label={t.components.category}
-                      value={form?.category || "document"}
-                      options={[
-                        {
-                          id: "email",
-                          value: "email",
-                          text: t.components.email,
-                        },
-                        {
-                          id: "message",
-                          value: "message",
-                          text: t.components.message,
-                        },
-                        {
-                          id: "sms",
-                          value: "sms",
-                          text: t.components.sms,
-                        },
-                        {
-                          id: "document",
-                          value: "document",
-                          text: t.components.document,
-                        },
-                      ]}
-                      onChange={function (event) {
-                        const newForm = { ...form };
-                        newForm.category = (event?.currentTarget?.value ||
-                          "document") as TypeDocumentCategory;
-                        setForm(newForm);
-                        return;
-                      }}
-                    />
-                  </div>
+                  <InputSelect
+                    required
+                    name="isPublic"
+                    id="document_is_public"
+                    label={t.document.is_public}
+                    empty={t.stacks.no_option}
+                    styles={{ maxWidth: 180 }}
+                    value={String(Boolean(form?.isPublic))}
+                    options={[
+                      {
+                        id: "true",
+                        value: "true",
+                        text: t.components.yes,
+                      },
+                      {
+                        id: "false",
+                        value: "false",
+                        text: t.components.no,
+                      },
+                    ]}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.isPublic = event?.currentTarget?.value === "true";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <InputSelect
+                    required
+                    name="category"
+                    id="document_category"
+                    styles={{ maxWidth: 180 }}
+                    empty={t.stacks.no_option}
+                    label={t.components.category}
+                    value={form?.category || "document"}
+                    options={[
+                      {
+                        id: "email",
+                        value: "email",
+                        text: t.components.email,
+                      },
+                      {
+                        id: "message",
+                        value: "message",
+                        text: t.components.message,
+                      },
+                      {
+                        id: "sms",
+                        value: "sms",
+                        text: t.components.sms,
+                      },
+                      {
+                        id: "document",
+                        value: "document",
+                        text: t.components.document,
+                      },
+                    ]}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.category = (event?.currentTarget?.value ||
+                        "document") as TypeDocumentCategory;
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
                   <Button
                     type="button"
                     disabled={loading}
                     category="Neutral"
                     text={t.components.close}
                     onClick={function () {
-                      navigate("/f/documents");
+                      OpenDialog({
+                        title: t.dialog.title_close,
+                        description: t.dialog.description_close,
+                        category: "Danger",
+                        confirmText: t.components.close,
+                        onConfirm: function () {
+                          navigate("/f/documents");
+                          CloseDialog();
+                          return;
+                        },
+                      });
                       return;
                     }}
                   />
@@ -321,18 +360,20 @@ const DocumentsEditor = function () {
           </form>
         </RichTextContext>
       ) : (
-        <Wrapper>
-          <Horizontal className="justify-center">
-            <i
-              style={{
-                color: "var(--textLight)",
-                fontSize: "var(--textSmall)",
-              }}
-            >
-              {loading ? `${t.components.loading}...` : t.stacks.no_items}
-            </i>
-          </Horizontal>
-        </Wrapper>
+        <Vertical>
+          <Wrapper>
+            <Horizontal className="justify-center">
+              <i
+                style={{
+                  color: "var(--textLight)",
+                  fontSize: "var(--textSmall)",
+                }}
+              >
+                {loading ? `${t.components.loading}...` : t.stacks.no_items}
+              </i>
+            </Horizontal>
+          </Wrapper>
+        </Vertical>
       )}
     </React.Fragment>
   );

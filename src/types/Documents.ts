@@ -9,6 +9,7 @@ export type TypeDocument = {
   category: TypeDocumentCategory;
   content: Descendant[];
   preview?: string;
+  isPublic?: boolean;
 
   userId: string;
   workspaceId: string;

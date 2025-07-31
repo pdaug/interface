@@ -7,6 +7,7 @@ import {
   DownloadSimple,
   DotsThreeOutline,
   FileDoc,
+  ShareNetwork,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -201,6 +202,46 @@ const DocumentsFolder = function () {
     });
   };
 
+  const ShareAction = function (_: React.MouseEvent, data: unknown) {
+    if (!DocumentSelected) return;
+    const id =
+      data && typeof data === "object" && "id" in data
+        ? data?.id
+        : DocumentSelected.id;
+    const urlShare = `https://${location.host}/share/document/${id}`;
+    OpenDialog({
+      category: "Success",
+      title: t.dialog.title_share,
+      description: (
+        <Vertical internal={1}>
+          <div>{t.dialog.description_share}</div>
+          <a href={urlShare} target="_blank" rel="noreferrer">
+            {urlShare}
+          </a>
+        </Vertical>
+      ),
+      confirmText: t.components.copy,
+      onConfirm: async function () {
+        const result = await Clipboard.copy(urlShare);
+        if (result) {
+          play("ok");
+          toast.success(t.toast.success, {
+            description: t.toast.success_copy,
+          });
+          CloseDialog();
+          return;
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_copy,
+        });
+        CloseDialog();
+        return;
+      },
+    });
+    return;
+  };
+
   const getOptions = [
     {
       id: "copy",
@@ -320,15 +361,23 @@ const DocumentsFolder = function () {
               documents.map(function (document) {
                 return (
                   <Card
-                    selected={document.id === selected}
-                    onClick={function () {
-                      setSelected(document.id);
-                      return;
-                    }}
                     mode="Large"
                     Icon={FileDoc}
                     key={document.id}
                     photo={document?.preview || ""}
+                    selected={document.id === selected}
+                    onClick={function () {
+                      if (document.id === selected) {
+                        setSelected("");
+                        return;
+                      }
+                      setSelected(document.id);
+                      return;
+                    }}
+                    onDoubleClick={function (event) {
+                      EditAction(event, document);
+                      return;
+                    }}
                     photoChildren={
                       <React.Fragment>
                         <Badge
@@ -340,11 +389,31 @@ const DocumentsFolder = function () {
                             ]
                           }
                         />
+                        <Badge
+                          category={document?.isPublic ? "Success" : "Warning"}
+                          value={
+                            document?.isPublic
+                              ? t.document.public
+                              : t.document.private
+                          }
+                        />
                       </React.Fragment>
                     }
                   >
                     <Horizontal className="flex items-center">
-                      <div className="flex1">{document.name}</div>
+                      <div
+                        className="flex1"
+                        onClick={function () {
+                          if (document.id === selected) {
+                            setSelected("");
+                            return;
+                          }
+                          setSelected(document.id);
+                          return;
+                        }}
+                      >
+                        {document.name}
+                      </div>
                       <Dropdown values={getOptions} data={document}>
                         <div style={{ cursor: "pointer" }}>
                           <DotsThreeOutline weight="fill" />
@@ -380,13 +449,16 @@ const DocumentsFolder = function () {
         </Vertical>
       </Vertical>
 
-      <Vertical internal={1}>
+      <div>
         {selected ? (
-          <React.Fragment>
+          <Vertical internal={1} styles={{ position: "sticky", top: 0 }}>
             <Card
               mode="Large"
               Icon={FileDoc}
-              styles={{ flex: "none", minWidth: 280 }}
+              styles={{
+                flex: "none",
+                minWidth: 280,
+              }}
               photo={DocumentSelected?.preview || ""}
             >
               <Vertical internal={1}>
@@ -402,17 +474,31 @@ const DocumentsFolder = function () {
                       ]
                     }
                   />
+                  <Badge
+                    category={
+                      DocumentSelected?.isPublic ? "Success" : "Warning"
+                    }
+                    value={
+                      DocumentSelected?.isPublic
+                        ? t.document.public
+                        : t.document.private
+                    }
+                  />
                 </Horizontal>
 
                 <b className="flex1">{DocumentSelected?.name || ""}</b>
 
                 <Vertical
-                  internal={0.2}
+                  internal={0.4}
                   styles={{ fontSize: "var(--textSmall)" }}
                 >
                   <div className="flex flex1">
-                    <span className="flex1">Id</span>
-                    <span>{DocumentSelected?.id || ""}</span>
+                    <span className="flex1">{t.document.documents_size}</span>
+                    <span>
+                      {Bytes.getMegabytes(
+                        Bytes.getBytesObject(DocumentSelected || {}) || 0,
+                      )}
+                    </span>
                   </div>
                   <div className="flex flex1">
                     <span className="flex1">{t.components.created_at}</span>
@@ -426,6 +512,10 @@ const DocumentsFolder = function () {
                       {instanceDateTime(DocumentSelected?.updatedAt || "")}
                     </span>
                   </div>
+                  <div className="flex flex1">
+                    <span className="flex1">Id</span>
+                    <span>{DocumentSelected?.id || ""}</span>
+                  </div>
                 </Vertical>
 
                 <Profile
@@ -435,7 +525,8 @@ const DocumentsFolder = function () {
                   photo={UserDocumentSelected?.photo || ""}
                   description={UserDocumentSelected?.email || ""}
                 />
-                <Horizontal internal={0.6}>
+
+                <Horizontal internal={1}>
                   <Button
                     category="Neutral"
                     style={{ flex: 1 }}
@@ -458,19 +549,16 @@ const DocumentsFolder = function () {
                     onClick={(event) => DeleteAction(event, DocumentSelected)}
                   />
                 </Horizontal>
+
+                <Button
+                  onlyIcon
+                  category="Neutral"
+                  Icon={ShareNetwork}
+                  text={t.components.share}
+                  onClick={(event) => ShareAction(event, DocumentSelected)}
+                />
               </Vertical>
             </Card>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <Stats
-              styles={{ flex: "none", width: 280 }}
-              title={t.document.documents_total_title}
-              footer={t.document.documents_total_description}
-              value={documents.length}
-              valueUnit={t.document.documents}
-              valueLocale={instance.language}
-            />
 
             <Stats
               styles={{ flex: "none", width: 280 }}
@@ -480,7 +568,9 @@ const DocumentsFolder = function () {
               valueUnit={t.document.relations}
               valueLocale={instance.language}
             />
-
+          </Vertical>
+        ) : (
+          <Vertical internal={1} styles={{ position: "sticky", top: 0 }}>
             <Wrapper
               styles={{
                 flex: "none",
@@ -550,9 +640,27 @@ const DocumentsFolder = function () {
                 </Vertical>
               </Vertical>
             </Wrapper>
-          </React.Fragment>
+
+            <Stats
+              styles={{ flex: "none", width: 280 }}
+              title={t.document.documents_total_title}
+              footer={t.document.documents_total_description}
+              value={documents.length}
+              valueUnit={t.document.documents}
+              valueLocale={instance.language}
+            />
+
+            <Stats
+              styles={{ flex: "none", width: 280 }}
+              title={t.document.documents_relation_title}
+              footer={t.document.documents_relation_description}
+              value={0}
+              valueUnit={t.document.relations}
+              valueLocale={instance.language}
+            />
+          </Vertical>
         )}
-      </Vertical>
+      </div>
     </Horizontal>
   );
 };

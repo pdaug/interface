@@ -14,6 +14,7 @@ export type CardProps = {
   footer?: React.ReactNode;
   styles?: React.CSSProperties;
   onClick?: () => void;
+  onDoubleClick?: React.MouseEventHandler;
 };
 
 const Card = function ({
@@ -26,15 +27,16 @@ const Card = function ({
   footer,
   styles,
   onClick,
+  onDoubleClick,
 }: CardProps) {
   return (
     <div
       style={styles}
-      onClick={onClick}
+      onDoubleClick={onDoubleClick}
       className={`card card${mode} ${selected ? "cardSelected" : ""}`}
     >
       {(typeof photo === "string" || photoChildren) && (
-        <div className="cardPhoto">
+        <div className="cardPhoto" onClick={onClick}>
           {photo ? (
             <img src={photo} alt="card_photo" />
           ) : Icon ? (

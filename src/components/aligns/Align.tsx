@@ -14,6 +14,7 @@ export type AlignElementProps = {
   styles?: React.CSSProperties;
   children: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 };
 
 const Vertical = function ({
@@ -22,10 +23,15 @@ const Vertical = function ({
   styles,
   className,
   children,
+  onClick,
 }: AlignElementProps) {
   const style = { gap: `${internal}rem`, margin: `${external}rem`, ...styles };
   return (
-    <div className={`alignVertical ${className || ""}`} style={style}>
+    <div
+      className={`alignVertical ${className || ""}`}
+      style={style}
+      onClick={onClick}
+    >
       {children}
     </div>
   );
@@ -37,10 +43,15 @@ const Horizontal = function ({
   styles,
   className,
   children,
+  onClick,
 }: AlignElementProps) {
   const style = { gap: `${internal}rem`, margin: `${external}rem`, ...styles };
   return (
-    <div className={`alignHorizontal ${className || ""}`} style={style}>
+    <div
+      className={`alignHorizontal ${className || ""}`}
+      style={style}
+      onClick={onClick}
+    >
       {children}
     </div>
   );
