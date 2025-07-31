@@ -9,12 +9,12 @@
 
 .cardSmall {
   min-width: 200px;
-  max-width: 220px;
+  max-width: 200px;
 }
 
 .cardLarge {
   min-width: 260px;
-  max-width: 280px;
+  max-width: 260px;
 }
 
 .cardPhoto {
@@ -33,7 +33,7 @@
 }
 
 .cardLarge .cardPhoto {
-  height: 280px;
+  height: 260px;
 }
 
 .cardPhoto img {

@@ -215,6 +215,8 @@ const TranslatePt = {
     name: "Nome do documento",
     name_placeholder: "Ex. Meu primeiro documento",
     ai_text: "Texto com AI",
+    docs_size: "Tamanho dos documentos",
+    docs_relationship: "Documentos relacionados",
   },
   employee: {
     employee: "Colaborador",
@@ -827,6 +829,8 @@ const TranslateEn = {
     name: "Document name",
     name_placeholder: "e.g. My first document",
     ai_text: "AI text",
+    docs_size: "Documents Size",
+    docs_relationship: "Documents Relationship",
   },
   employee: {
     employee: "Employee",

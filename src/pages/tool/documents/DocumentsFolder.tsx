@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import apis from "../../../apis";
 
 // utils
+import Bytes from "../../../utils/Bytes";
 import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
 
@@ -44,6 +45,7 @@ import { useDialog } from "../../../components/dialogs/Dialog";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import Stats from "../../../components/stats/Stats";
 
 const pageSize = 10;
 
@@ -62,6 +64,25 @@ const DocumentsFolder = function () {
   const [documents, setDocuments] = useState<TypeDocument[]>([]);
 
   const [searchDebounced] = useDebounce(search, 500);
+
+  const filter = {
+    document: documents.filter((d) => d.category == "document"),
+    email: documents.filter((d) => d.category == "email"),
+    message: documents.filter((d) => d.category == "message"),
+    sms: documents.filter((d) => d.category == "sms"),
+  };
+
+  const statistics = {
+    documentQuantity: filter.document.length,
+    emailQuantity: filter.email.length,
+    messageQuantity: filter.message.length,
+    smsQuantity: filter.sms.length,
+
+    documentSize: Bytes.getBytesObject(filter.document),
+    emailSize: Bytes.getBytesObject(filter.email),
+    messageSize: Bytes.getBytesObject(filter.message),
+    smsSize: Bytes.getBytesObject(filter.sms),
+  };
 
   const FetchDocuments = async function () {
     setLoading(true);
@@ -209,8 +230,8 @@ const DocumentsFolder = function () {
   ];
 
   return (
-    <React.Fragment>
-      <Vertical internal={1}>
+    <Horizontal internal={1} styles={{ flex: 1 }}>
+      <Vertical internal={1} styles={{ flex: 1 }}>
         <Horizontal>
           <h2>
             <Breadcrumb
@@ -295,8 +316,8 @@ const DocumentsFolder = function () {
                           category="Info"
                           key="badge-document-category"
                           value={
-                            t.document[
-                              document.category as keyof typeof t.document
+                            t.components[
+                              document.category as keyof typeof t.components
                             ]
                           }
                         />
@@ -358,7 +379,82 @@ const DocumentsFolder = function () {
           />
         </Vertical>
       </Vertical>
-    </React.Fragment>
+
+      <Vertical internal={1}>
+        <Wrapper
+          styles={{
+            flex: "none",
+            height: "fit-content",
+            position: "sticky",
+            width: 280,
+          }}
+        >
+          <Vertical internal={1}>
+            <h3>{t.document.documents}</h3>
+            <Vertical internal={0.2}>
+              <div>
+                {statistics.documentQuantity} {t.components.document}(s)
+              </div>
+              <div>
+                {statistics.emailQuantity} {t.components.email}(s)
+              </div>
+              <div>
+                {statistics.messageQuantity} {t.components.message}(s)
+              </div>
+              <div>
+                {statistics.smsQuantity} {t.components.sms}(s)
+              </div>
+            </Vertical>
+            <b>{t.document.docs_size}</b>
+            <Vertical internal={0.2}>
+              <div>
+                {t.components.document}{" "}
+                {Bytes.getMegabytes(statistics.documentSize)}
+              </div>
+              <div>
+                {t.components.email} {Bytes.getMegabytes(statistics.emailSize)}
+              </div>
+              <div>
+                {t.components.message}{" "}
+                {Bytes.getMegabytes(statistics.messageSize)}
+              </div>
+              <div>
+                {t.components.sms} {Bytes.getMegabytes(statistics.smsSize)}
+              </div>
+            </Vertical>
+            <b>{t.document.docs_relationship}</b>
+            <Vertical internal={0.2}>
+              <div>public 0</div>
+              <div>private 10</div>
+            </Vertical>
+          </Vertical>
+        </Wrapper>
+        <div>
+          <Stats
+            title="Title"
+            value={200}
+            valueUnit="Interações"
+            valueLocale={instance.language}
+            footer="Footer"
+            metric={2}
+            metricStatus="Up"
+            metricLocale={instance.language}
+          />
+        </div>
+        <div>
+          <Stats
+            title="Title"
+            value={200}
+            valueUnit="Interações"
+            valueLocale={instance.language}
+            footer="Footer"
+            metric={2}
+            metricStatus="Up"
+            metricLocale={instance.language}
+          />
+        </div>
+      </Vertical>
+    </Horizontal>
   );
 };
 
