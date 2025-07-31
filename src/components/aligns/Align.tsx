@@ -13,17 +13,19 @@ export type AlignElementProps = {
   internal?: number;
   styles?: React.CSSProperties;
   children: React.ReactNode;
+  className?: string;
 };
 
 const Vertical = function ({
   external,
   internal,
   styles,
+  className,
   children,
 }: AlignElementProps) {
   const style = { gap: `${internal}rem`, margin: `${external}rem`, ...styles };
   return (
-    <div className="alignVertical" style={style}>
+    <div className={`alignVertical ${className}`} style={style}>
       {children}
     </div>
   );
@@ -33,11 +35,12 @@ const Horizontal = function ({
   external,
   internal,
   styles,
+  className,
   children,
 }: AlignElementProps) {
   const style = { gap: `${internal}rem`, margin: `${external}rem`, ...styles };
   return (
-    <div className="alignHorizontal" style={style}>
+    <div className={`alignHorizontal ${className}`} style={style}>
       {children}
     </div>
   );

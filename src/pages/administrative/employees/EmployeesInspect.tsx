@@ -243,10 +243,7 @@ const EmployeesInspect = function () {
               styles={{ maxWidth: "40%" }}
               contentStyles={{ display: "flex" }}
             >
-              <Horizontal
-                internal={1}
-                styles={{ flex: 1, alignItems: "center" }}
-              >
+              <Horizontal internal={1} className="flex-1 items-center">
                 <Avatar
                   label=""
                   size={14}
@@ -288,7 +285,8 @@ const EmployeesInspect = function () {
             >
               <Vertical
                 internal={0.4}
-                styles={{ alignItems: "center", height: 96 }}
+                className="items-center"
+                styles={{ height: 96 }}
               >
                 <span
                   style={{

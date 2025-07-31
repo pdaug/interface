@@ -496,14 +496,12 @@ const SettingsPanel = function () {
               </Horizontal>
               <Horizontal internal={1}>
                 <Horizontal
+                  className="flex-1 items-center justify-center"
                   styles={{
-                    alignItems: "center",
                     background: "var(--backgroundColor)",
                     backgroundColor: "var(--backgroundColor)",
                     border: "1px solid var(--borderColor)",
                     borderRadius: "var(--borderRadius)",
-                    flex: 1,
-                    justifyContent: "center",
                     padding: "0.4rem",
                   }}
                 >
@@ -519,14 +517,12 @@ const SettingsPanel = function () {
                   />
                 </Horizontal>
                 <Horizontal
+                  className="flex-1 items-center justify-center"
                   styles={{
-                    alignItems: "center",
                     background: "var(--backgroundColor)",
                     backgroundColor: "var(--backgroundColor)",
                     border: "1px solid var(--borderColor)",
                     borderRadius: "var(--borderRadius)",
-                    flex: 1,
-                    justifyContent: "center",
                     padding: "0.4rem",
                   }}
                 >
@@ -542,14 +538,12 @@ const SettingsPanel = function () {
                   />
                 </Horizontal>
                 <Horizontal
+                  className="flex-1 items-center justify-center"
                   styles={{
-                    alignItems: "center",
                     background: "var(--backgroundColor)",
                     backgroundColor: "var(--backgroundColor)",
                     border: "1px solid var(--borderColor)",
                     borderRadius: "var(--borderRadius)",
-                    flex: 1,
-                    justifyContent: "center",
                     padding: "0.4rem",
                   }}
                 >

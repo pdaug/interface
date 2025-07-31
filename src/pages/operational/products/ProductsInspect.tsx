@@ -405,8 +405,8 @@ const ProductsInspect = function () {
               {Boolean(id) && (
                 <Horizontal internal={1}>
                   <div
-                    className="flex1"
-                    style={{ alignItems: "flex-end", display: "flex" }}
+                    className="flex flex1"
+                    style={{ alignItems: "flex-end" }}
                   >
                     <Profile
                       padding={false}
@@ -534,9 +534,8 @@ const ProductsInspect = function () {
                 })}
                 {form.category === "variant" && (
                   <Vertical
+                    className="items-center justify-center"
                     styles={{
-                      alignItems: "center",
-                      justifyContent: "center",
                       minWidth: 200,
                     }}
                   >
@@ -564,8 +563,8 @@ const ProductsInspect = function () {
               {form.variants?.map(function (variant, index) {
                 return (
                   <Horizontal
-                    key={variant.id}
                     internal={1}
+                    key={variant.id}
                     styles={{ alignItems: "flex-end" }}
                   >
                     <InputFile

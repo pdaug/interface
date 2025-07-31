@@ -422,7 +422,7 @@ const ProductsList = function () {
               })
             ) : (
               <Wrapper>
-                <Horizontal styles={{ justifyContent: "center" }}>
+                <Horizontal className="justify-center">
                   <i
                     style={{
                       color: "var(--textLight)",

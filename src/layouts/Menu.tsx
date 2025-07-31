@@ -189,9 +189,8 @@ const Menu = function () {
                           href={item.url}
                           target="_blank"
                           rel="noreferrer"
+                          className="flex-1 items-center"
                           style={{
-                            alignItems: "center",
-                            display: "flex",
                             fontSize: "var(--textSmall)",
                             gap: "0.2rem",
                           }}

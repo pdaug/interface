@@ -67,7 +67,7 @@ const IntegrationsHome = function () {
             ]}
           >
             <Vertical internal={1}>
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={1} className="items-center">
                 <img
                   width={integrationLogoSize}
                   alt="integration_mercadolibre"
@@ -78,7 +78,7 @@ const IntegrationsHome = function () {
                   {t.integration.mercadolibre}
                 </div>
               </Horizontal>
-              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+              <Horizontal internal={0.4} className="items-center">
                 <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
@@ -110,7 +110,7 @@ const IntegrationsHome = function () {
             ]}
           >
             <Vertical internal={1}>
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={1} className="items-center">
                 <img
                   width={integrationLogoSize}
                   alt="integration_mailersend"
@@ -121,7 +121,7 @@ const IntegrationsHome = function () {
                   {t.integration.mailersend}
                 </div>
               </Horizontal>
-              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+              <Horizontal internal={0.4} className="items-center">
                 <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
@@ -147,7 +147,7 @@ const IntegrationsHome = function () {
             ]}
           >
             <Vertical internal={1}>
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={1} className="items-center">
                 <img
                   width={integrationLogoSize}
                   alt="integration_twilio"
@@ -158,7 +158,7 @@ const IntegrationsHome = function () {
                   {t.integration.twilio}
                 </div>
               </Horizontal>
-              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+              <Horizontal internal={0.4} className="items-center">
                 <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
@@ -186,7 +186,7 @@ const IntegrationsHome = function () {
             ]}
           >
             <Vertical internal={1}>
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={1} className="items-center">
                 <img
                   width={integrationLogoSize}
                   alt="integration_mailchimp"
@@ -197,7 +197,7 @@ const IntegrationsHome = function () {
                   {t.integration.mailchimp}
                 </div>
               </Horizontal>
-              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+              <Horizontal internal={0.4} className="items-center">
                 <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
@@ -229,7 +229,7 @@ const IntegrationsHome = function () {
             ]}
           >
             <Vertical internal={1}>
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={1} className="items-center">
                 <img
                   width={integrationLogoSize}
                   alt="integration_stripe"
@@ -240,7 +240,7 @@ const IntegrationsHome = function () {
                   {t.integration.stripe}
                 </div>
               </Horizontal>
-              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+              <Horizontal internal={0.4} className="items-center">
                 <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
@@ -266,7 +266,7 @@ const IntegrationsHome = function () {
             ]}
           >
             <Vertical internal={1}>
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={1} className="items-center">
                 <img
                   width={integrationLogoSize}
                   alt="integration_paypal"
@@ -277,7 +277,7 @@ const IntegrationsHome = function () {
                   {t.integration.paypal}
                 </div>
               </Horizontal>
-              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+              <Horizontal internal={0.4} className="items-center">
                 <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
@@ -307,7 +307,7 @@ const IntegrationsHome = function () {
             ]}
           >
             <Vertical internal={1}>
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={1} className="items-center">
                 <img
                   width={integrationLogoSize}
                   alt="integration_gemini"
@@ -318,7 +318,7 @@ const IntegrationsHome = function () {
                   {t.integration.gemini}
                 </div>
               </Horizontal>
-              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+              <Horizontal internal={0.4} className="items-center">
                 <Badge category="Warning" value={t.integration.wip} />
                 <div
                   style={{
@@ -349,7 +349,7 @@ const IntegrationsHome = function () {
             ]}
           >
             <Vertical internal={1}>
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={1} className="items-center">
                 <img
                   width={integrationLogoSize}
                   alt="integration_openai"
@@ -360,7 +360,7 @@ const IntegrationsHome = function () {
                   {t.integration.openai}
                 </div>
               </Horizontal>
-              <Horizontal internal={0.4} styles={{ alignItems: "center" }}>
+              <Horizontal internal={0.4} className="items-center">
                 <Badge category="Info" value={t.integration.beta} />
                 <div
                   style={{

@@ -271,7 +271,7 @@ const CustomersInspect = function () {
         <Vertical internal={1}>
           <Horizontal internal={1}>
             <Wrapper styles={{ minWidth: "40%" }}>
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={1} className="items-center">
                 <Avatar
                   label=""
                   size={14}
@@ -602,8 +602,8 @@ const CustomersInspect = function () {
               {Boolean(id) && (
                 <Horizontal internal={1}>
                   <div
-                    className="flex1"
-                    style={{ alignItems: "flex-end", display: "flex" }}
+                    className="flex flex1"
+                    style={{ alignItems: "flex-end" }}
                   >
                     <Profile
                       padding={false}
@@ -906,7 +906,7 @@ const CustomersInspect = function () {
                   </Vertical>
                 );
               })}
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={1} className="items-center">
                 <Button
                   type="button"
                   category="Success"

@@ -324,8 +324,8 @@ const SuppliersInspect = function () {
               {Boolean(id) && (
                 <Horizontal internal={1}>
                   <div
-                    className="flex1"
-                    style={{ alignItems: "flex-end", display: "flex" }}
+                    className="flex flex1"
+                    style={{ alignItems: "flex-end" }}
                   >
                     <Profile
                       padding={false}
@@ -807,7 +807,7 @@ const SuppliersInspect = function () {
                   </Vertical>
                 );
               })}
-              <Horizontal internal={1} styles={{ alignItems: "center" }}>
+              <Horizontal internal={1} className="items-center">
                 <Button
                   type="button"
                   category="Success"

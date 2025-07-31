@@ -213,7 +213,7 @@ const Login = function () {
         >
           <Vertical internal={1}>
             {instance && instance?.logoLarge && (
-              <Horizontal styles={{ justifyContent: "center" }}>
+              <Horizontal className="justify-center">
                 <img
                   alt="logo large"
                   style={{ height: "6rem" }}

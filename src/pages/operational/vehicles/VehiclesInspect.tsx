@@ -432,8 +432,8 @@ const VehiclesInspect = function () {
               {Boolean(id) && (
                 <Horizontal internal={1}>
                   <div
-                    className="flex1"
-                    style={{ alignItems: "flex-end", display: "flex" }}
+                    className="flex flex1"
+                    style={{ alignItems: "flex-end" }}
                   >
                     <Profile
                       padding={false}

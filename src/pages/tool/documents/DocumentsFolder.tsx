@@ -323,26 +323,16 @@ const DocumentsFolder = function () {
                         />
                       </React.Fragment>
                     }
-                    footer={
-                      <React.Fragment>
-                        <Profile
-                          photoCircle
-                          padding={false}
-                          photoSize={3}
-                          photo={userFinded?.photo || ""}
-                          styles={{ flex: 1, fontSize: "var(--textSmall)" }}
-                          name={userFinded?.name || t.components.unknown}
-                        />
-                        <Dropdown values={getOptions} data={document}>
-                          <div style={{ cursor: "pointer" }}>
-                            <DotsThreeOutline weight="fill" />
-                          </div>
-                        </Dropdown>
-                      </React.Fragment>
-                    }
                   >
-                    <div>{document.name}</div>
-                    <div
+                    <Horizontal className="flex items-center">
+                      <div className="flex1">{document.name}</div>
+                      <Dropdown values={getOptions} data={document}>
+                        <div style={{ cursor: "pointer" }}>
+                          <DotsThreeOutline weight="fill" />
+                        </div>
+                      </Dropdown>
+                    </Horizontal>
+                    {/* <div
                       style={{
                         color: "var(--textLight)",
                         fontSize: "var(--textSmall)",
@@ -350,13 +340,13 @@ const DocumentsFolder = function () {
                     >
                       {t.components.created_at}:{" "}
                       {instanceDateTime(document.createdAt)}
-                    </div>
+                    </div> */}
                   </Card>
                 );
               })
             ) : (
               <Wrapper>
-                <Horizontal styles={{ justifyContent: "center" }}>
+                <Horizontal className="justify-center">
                   <i
                     style={{
                       color: "var(--textLight)",
