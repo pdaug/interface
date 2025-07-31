@@ -1,6 +1,7 @@
 // pages
 import products from "./products";
 import services from "./services";
+import vehicles from "./vehicles";
 
 export default [
   {
@@ -10,5 +11,9 @@ export default [
   {
     path: "services",
     children: services,
+  },
+  {
+    path: "vehicles",
+    children: vehicles,
   },
 ];

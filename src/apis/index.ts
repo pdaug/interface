@@ -10,6 +10,7 @@ import Upload from "./internal/Upload";
 import Session from "./internal/Session";
 import Service from "./internal/Service";
 import Product from "./internal/Product";
+import Vehicle from "./internal/Vehicle";
 import Account from "./internal/Account";
 import Settings from "./internal/Settings";
 import Instance from "./internal/Instance";
@@ -37,6 +38,7 @@ export default {
   Supplier,
   Upload,
   User,
+  Vehicle,
   WhatsApp,
   Workspace,
 };
