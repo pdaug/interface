@@ -34,6 +34,10 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 // TODO: text with ai
 // TODO: correct with ai
+// TODO: hovering toolbar
+// TODO: fix placeholder
+// TODO: color text
+// TODO: serif and sans serif
 const DocumentsEditor = function () {
   const t = useTranslate();
   const play = useSounds();

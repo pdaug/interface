@@ -60,7 +60,6 @@
   font-size: var(--textSmall);
   flex: 1;
   margin: 0;
-  min-width: 60px;
   line-height: 1;
   padding: 6px 1rem;
   transition: 200ms;
@@ -124,10 +123,11 @@
   background: transparent;
   background-color: transparent;
   border: none;
-  flex: 1;
   font-family: monospace;
   font-size: var(--textSmall);
+  flex: 1;
   margin: 0;
+  max-width: 50%;
   padding: 0;
   outline: none;
   text-align: center;
@@ -141,6 +141,7 @@
   cursor: pointer;
   flex: 1;
   line-height: 1 !important;
+  max-width: 50%;
   outline: none !important;
   padding: 0 !important;
 }

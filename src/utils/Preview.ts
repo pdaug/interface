@@ -36,6 +36,9 @@ const NodesToHtml = function (nodes: Descendant[]): string {
 const HtmlToImage = async function (
   content: string,
   options?: {
+    scale?: number;
+    type?: "image/jpg" | "image/png";
+    quality?: number;
     width?: number;
     height?: number;
     padding?: number;
@@ -45,10 +48,10 @@ const HtmlToImage = async function (
   const container = document.createElement("div");
   container.style.position = "fixed";
   container.style.left = "-9999px";
-  container.style.width = `${options?.width || 320}px`;
-  container.style.height = `${options?.height || 320}px`;
+  container.style.width = `${options?.width || 380}px`;
+  container.style.height = `${options?.height || 380}px`;
   container.style.overflow = "hidden";
-  container.style.padding = `${options?.padding || 24}px`;
+  container.style.padding = `${options?.padding || 32}px`;
   container.style.background = options?.background || "white";
   container.style.backgroundColor = options?.background || "white";
   container.innerHTML = content;
@@ -56,13 +59,16 @@ const HtmlToImage = async function (
   const canvas = await html2canvas(container, {
     useCORS: true,
     backgroundColor: "#fff",
-    scale: 0.8,
+    scale: options?.scale || 1,
     logging: false,
     removeContainer: true,
     imageTimeout: 0,
   });
   document.body.removeChild(container);
-  const base64 = canvas.toDataURL("image/jpg", 0.2);
+  const base64 = canvas.toDataURL(
+    options?.type || "image/jpg",
+    options?.quality || 0.7,
+  );
   return base64;
 };
 
