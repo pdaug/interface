@@ -139,6 +139,7 @@
   background-color: none !important;
   border: none !important;
   cursor: pointer;
+  height: 100%;
   flex: 1;
   line-height: 1 !important;
   max-width: 50%;

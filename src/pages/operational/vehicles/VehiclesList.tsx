@@ -42,6 +42,7 @@ import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import { Input, InputInterval } from "../../../components/inputs/Input";
+import { VehicleBrandsOptions } from "../../../assets/Vehicle";
 
 const pageSize = 10;
 
@@ -358,7 +359,24 @@ const VehiclesList = function () {
               },
             },
             plate: { label: t.vehicle.plate },
-            brand: { label: t.vehicle.brand },
+            brand: {
+              label: t.vehicle.brand,
+              handler: function (data) {
+                const brand = (data?.brand || "") as string;
+                const brandFinded = VehicleBrandsOptions?.find(
+                  function (option) {
+                    return option.name === brand.toLowerCase();
+                  },
+                );
+                return (
+                  <Profile
+                    name={brand}
+                    padding={false}
+                    photo={brandFinded?.image || ""}
+                  />
+                );
+              },
+            },
             model: { label: t.vehicle.model },
             user: {
               label: t.components.user,

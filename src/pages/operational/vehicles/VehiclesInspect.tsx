@@ -242,7 +242,7 @@ const VehiclesInspect = function () {
                 Icon={CarSimple}
                 photo={
                   VehicleBrandsOptions.find(function (brand) {
-                    return form.brand === brand.name;
+                    return form.brand?.toLowerCase() === brand.name;
                   })?.image || ""
                 }
               />
@@ -415,7 +415,7 @@ const VehiclesInspect = function () {
                     name="brand"
                     id="vehicle_brand"
                     label={t.vehicle.brand}
-                    value={form?.brand || ""}
+                    value={form?.brand?.toLowerCase() || ""}
                     empty={t.stacks.no_option}
                     disabled={loading && Boolean(id)}
                     options={[

@@ -501,7 +501,9 @@ const InputMask = function ({
   readOnly,
   helper,
 }: InputMaskProps) {
-  const inputRef = withMask(mask);
+  const inputRef = withMask(mask, {
+    autoUnmask: true,
+  });
   return (
     <div className="input">
       <div className="inputHeader" data-required={String(Boolean(required))}>
