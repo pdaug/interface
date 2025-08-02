@@ -1,16 +1,30 @@
 export type TypeVehicleCategory =
   | "passenger"
+  | "motocycle"
+  | "pickup"
+  | "truck"
   | "commercial"
   | "cargo_light"
-  | "cargo"
   | "cargo_heavy"
   | "transport"
+  | "cargo"
   | "vintage"
   | "competition"
   | "polylift_single"
   | "polylift_double"
   | "hydro_vacuum"
-  | "rollon_rolloff";
+  | "rollon_rolloff"
+  | "bus"
+  | "tractor"
+  | "trailer"
+  | "tricycle"
+  | "quadricycle"
+  | "buggy"
+  | "utility"
+  | "special"
+  | "others";
+
+export type TypeVehiclePlateType = "brazil" | "mercosul";
 
 export type TypeVehicle = {
   id: string;
@@ -23,6 +37,7 @@ export type TypeVehicle = {
 
   document: string;
   plate: string;
+  plateType: TypeVehiclePlateType;
   chassi: string;
   color: string;
   brand: string;

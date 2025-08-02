@@ -15,6 +15,9 @@ import { endOfDay, startOfYear } from "date-fns";
 //apis
 import apis from "../../../apis";
 
+// assets
+import { VehicleBrandsOptions } from "../../../assets/Vehicle";
+
 // utils
 import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
@@ -42,7 +45,6 @@ import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import { Input, InputInterval } from "../../../components/inputs/Input";
-import { VehicleBrandsOptions } from "../../../assets/Vehicle";
 
 const pageSize = 10;
 

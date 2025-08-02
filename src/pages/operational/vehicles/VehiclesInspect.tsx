@@ -8,14 +8,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import apis from "../../../apis";
 
 // types
-import { TypeVehicle, TypeVehicleCategory } from "../../../types/Vehicle";
+import {
+  TypeVehicle,
+  TypeVehicleCategory,
+  TypeVehiclePlateType,
+} from "../../../types/Vehicle";
 
 // assets
-import { MaskPlate, MaskPlateOld } from "../../../assets/Mask";
 import {
   VehicleBrandsOptions,
   VehicleCategoryOptions,
 } from "../../../assets/Vehicle";
+import { MaskPlate, MaskPlateOld } from "../../../assets/Mask";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
@@ -29,20 +33,19 @@ import useTranslate from "../../../hooks/useTranslate";
 import {
   Input,
   InputText,
-  InputSelect,
-  InputMask,
   InputColor,
+  InputSelect,
+  InputMaskV2,
 } from "../../../components/inputs/Input";
+import Avatar from "../../../components/avatars/Avatar";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
 import Profile from "../../../components/profiles/Profile";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Avatar from "../../../components/avatars/Avatar";
 
 // TODO: fix plate
-// TODO: select brand
 // TODO: search fipe
 // TODO: add outflow fuel
 const VehiclesInspect = function () {
@@ -55,7 +58,6 @@ const VehiclesInspect = function () {
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState(false);
-  const [plateType, setPlateType] = useState("old");
   const [form, setForm] = useState<Partial<TypeVehicle>>({
     id: "",
     status: true,
@@ -64,8 +66,9 @@ const VehiclesInspect = function () {
     category: "passenger",
     document: "",
     plate: "",
+    plateType: "brazil",
     chassi: "",
-    color: "",
+    color: "#000000",
     brand: "",
     model: "",
     year: new Date().getFullYear(),
@@ -217,7 +220,7 @@ const VehiclesInspect = function () {
               },
               {
                 id: "vehicles",
-                label: t.vehicle.vehicle,
+                label: t.vehicle.vehicles,
                 url: "/f/vehicles",
               },
               {
@@ -337,43 +340,52 @@ const VehiclesInspect = function () {
                     }}
                   />
                   <InputSelect
-                    value={plateType}
                     empty={t.stacks.no_option}
-                    label={t.vehicle.plate_type}
                     styles={{ maxWidth: 180 }}
+                    label={t.vehicle.plate_type}
+                    value={form.plateType as TypeVehiclePlateType}
                     options={[
                       {
-                        id: "old",
-                        value: "old",
-                        text: t.vehicle.plate_old,
+                        id: "brazil",
+                        value: "brazil",
+                        text: t.vehicle.plate_brazil,
                       },
                       {
-                        id: "new",
-                        value: "new",
-                        text: t.vehicle.plate_new,
+                        id: "mercosul",
+                        value: "mercosul",
+                        text: t.vehicle.plate_mercosul,
                       },
                     ]}
                     onChange={function (event) {
-                      const newPlateType = event.currentTarget?.value || "old";
-                      setPlateType(newPlateType);
+                      const newForm = { ...form };
+                      const newPlateType =
+                        event.currentTarget?.value || "brazil";
+                      newForm.plateType = newPlateType as TypeVehiclePlateType;
+                      setForm(newForm);
                       return;
                     }}
                   />
-                  <InputMask
+                  <InputMaskV2
                     required
                     name="plate"
                     id="vehicle_plate"
                     label={t.vehicle.plate}
                     value={form?.plate || ""}
                     disabled={loading && Boolean(id)}
-                    placeholder={t.vehicle.plate_placeholder}
+                    placeholder={
+                      t.vehicle?.[
+                        `plate_${form.plateType}_placeholder` as keyof typeof t.vehicle
+                      ] || t.components.unknown
+                    }
                     mask={
-                      MaskPlate?.[plateType as keyof typeof MaskPlate] ||
+                      MaskPlate?.[form.plateType as TypeVehiclePlateType] ||
                       MaskPlateOld
                     }
                     onChange={function (event) {
                       const newForm = { ...form };
-                      newForm.plate = event.currentTarget?.value || "";
+                      newForm.plate = (
+                        event.currentTarget?.value || ""
+                      ).toUpperCase();
                       setForm(newForm);
                       return;
                     }}

@@ -530,6 +530,137 @@ const InputMask = function ({
   );
 };
 
+export type InputMaskV2Props = {
+  id?: string;
+  label: string;
+  value: string;
+  placeholder: string;
+  mask: string;
+  name?: string;
+  disabled?: boolean;
+  required?: boolean;
+  readOnly?: boolean;
+  helper?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+};
+
+const InputMaskV2 = function ({
+  id,
+  label,
+  value,
+  mask,
+  name,
+  onChange,
+  placeholder,
+  disabled,
+  required,
+  readOnly,
+  helper,
+}: InputMaskV2Props) {
+  return (
+    <div className="input">
+      <div className="inputHeader" data-required={String(Boolean(required))}>
+        <label htmlFor={id}>{label}</label>
+        {helper && <span>{helper}</span>}
+      </div>
+      <div className="inputContent">
+        <input
+          id={id}
+          name={name}
+          type="text"
+          value={value}
+          disabled={disabled}
+          required={required}
+          readOnly={readOnly}
+          placeholder={placeholder}
+          onSelect={function (event) {
+            event.currentTarget.setSelectionRange(
+              value.length || 0,
+              value.length || 0,
+            );
+            return;
+          }}
+          onChange={function () {
+            return;
+          }}
+          onKeyDown={function (event) {
+            event.currentTarget.setSelectionRange(
+              value.length || 0,
+              value.length || 0,
+            );
+            if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+              event.preventDefault();
+              return;
+            }
+            const currentIndex = value.length;
+            const currentMaskChar = mask[currentIndex];
+            const nextMaskChart = mask[currentIndex + 1];
+            // cloning value
+            let newValue = `${value}`;
+            // if backspace
+            if (
+              event.key === "Del" ||
+              event.key === "Delete" ||
+              event.key === "Backspace"
+            ) {
+              newValue = newValue.slice(0, -1);
+              onChange?.({
+                currentTarget: { value: newValue },
+              } as React.ChangeEvent<HTMLInputElement>);
+              return;
+            }
+            // add letter
+            if (
+              event.key.length === 1 &&
+              currentMaskChar === "A" &&
+              /[a-zA-Z]{1}/.test(event.key)
+            ) {
+              newValue += event.key;
+              onChange?.({
+                currentTarget: { value: newValue },
+              } as React.ChangeEvent<HTMLInputElement>);
+            }
+            // add number
+            if (
+              event.key.length === 1 &&
+              currentMaskChar === "9" &&
+              /[0-9]{1}/.test(event.key)
+            ) {
+              newValue += event.key;
+              onChange?.({
+                currentTarget: { value: newValue },
+              } as React.ChangeEvent<HTMLInputElement>);
+            }
+            // add letter or number
+            if (
+              event.key.length === 1 &&
+              currentMaskChar === "#" &&
+              /[a-zA-Z0-9]{1}/.test(event.key)
+            ) {
+              newValue += event.key;
+              onChange?.({
+                currentTarget: { value: newValue },
+              } as React.ChangeEvent<HTMLInputElement>);
+            }
+            // if next is mask other character
+            if (
+              nextMaskChart !== "A" &&
+              nextMaskChart !== "9" &&
+              ["-", "_", "."].includes(nextMaskChart)
+            ) {
+              newValue += nextMaskChart;
+              onChange?.({
+                currentTarget: { value: newValue },
+              } as React.ChangeEvent<HTMLInputElement>);
+            }
+            return;
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
 export type InputMoneyProps = {
   id?: string;
   label: string;
@@ -858,6 +989,7 @@ export {
   InputFile,
   InputInterval,
   InputMask,
+  InputMaskV2,
   InputMoney,
   InputRadio,
   InputSelect,
