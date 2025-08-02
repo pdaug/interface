@@ -208,19 +208,31 @@ const DocumentsFolder = function () {
   };
 
   const ShareAction = function (_: React.MouseEvent, data: unknown) {
-    if (!DocumentSelected) return;
-    const id =
-      data && typeof data === "object" && "id" in data
-        ? data?.id
-        : DocumentSelected.id;
-    const urlShare = `https://${location.host}/share/document/${id}`;
+    if (!data || typeof data !== "object") return;
+    setSelected((data as TypeDocument).id as string);
+    if (!("isPublic" in data) || !data.isPublic) {
+      toast.warning(t.toast.warning_error, {
+        description: t.document.not_public,
+      });
+      return;
+    }
+    const urlShare = `https://${location.host}/share/document/${(data as TypeDocument).id}`;
     OpenDialog({
       category: "Success",
       title: t.dialog.title_share,
       description: (
         <Vertical internal={1}>
           <div>{t.dialog.description_share}</div>
-          <a href={urlShare} target="_blank" rel="noreferrer">
+          <a
+            href={urlShare}
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
+            }}
+          >
             {urlShare}
           </a>
         </Vertical>
@@ -269,6 +281,12 @@ const DocumentsFolder = function () {
         });
         return;
       },
+    },
+    {
+      id: "share",
+      label: t.components.share,
+      Icon: ShareNetwork,
+      onClick: ShareAction,
     },
     {
       id: "download",

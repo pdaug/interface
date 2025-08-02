@@ -243,6 +243,7 @@ const TranslatePt = {
     public: "Público",
     private: "Privado",
     document_private: "Este documento está privado",
+    not_public: "Este documento não está publico",
   },
   employee: {
     employee: "Colaborador",
@@ -897,6 +898,7 @@ const TranslateEn = {
     public: "Public",
     private: "Private",
     document_private: "This document is private",
+    not_public: "This document is not public",
   },
   employee: {
     employee: "Employee",
