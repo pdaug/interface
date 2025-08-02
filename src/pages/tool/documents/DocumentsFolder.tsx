@@ -84,6 +84,8 @@ const DocumentsFolder = function () {
     email: documents.filter((d) => d.category == "email"),
     message: documents.filter((d) => d.category == "message"),
     sms: documents.filter((d) => d.category == "sms"),
+    public: documents.filter((d) => Boolean(d.isPublic)),
+    private: documents.filter((d) => !d.isPublic),
   };
 
   const statistics = {
@@ -96,6 +98,9 @@ const DocumentsFolder = function () {
     emailSize: Bytes.getBytesObject(filter.email),
     messageSize: Bytes.getBytesObject(filter.message),
     smsSize: Bytes.getBytesObject(filter.sms),
+
+    publicQuantity: filter.public.length,
+    privateQuantity: filter.private.length,
   };
 
   const FetchDocuments = async function () {
@@ -631,11 +636,11 @@ const DocumentsFolder = function () {
                 >
                   <div className="flex">
                     <span className="flex1">{t.document.public}(s)</span>
-                    <span>{0}</span>
+                    <span>{statistics.publicQuantity}</span>
                   </div>
                   <div className="flex">
                     <span className="flex1">{t.document.private}(s)</span>
-                    <span>{0}</span>
+                    <span>{statistics.privateQuantity}</span>
                   </div>
                 </Vertical>
               </Vertical>

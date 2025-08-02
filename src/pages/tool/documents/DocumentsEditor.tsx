@@ -8,6 +8,12 @@ import { useNavigate, useParams } from "react-router-dom";
 // apis
 import apis from "../../../apis";
 
+// assets
+import { SettingsLanguages } from "../../../assets/Settings";
+
+// utils
+import { NodesToHtml, HtmlToImage } from "../../../utils/Preview";
+
 // types
 import { TypeDocument, TypeDocumentCategory } from "../../../types/Documents";
 
@@ -22,26 +28,19 @@ import useTranslate from "../../../hooks/useTranslate";
 import {
   RichText,
   RichTextTool,
+  RichTextFont,
+  RichTextColor,
   RichTextAction,
   RichTextContext,
-  RichTextColor,
-  RichTextFont,
 } from "../../../components/richtext/RichText";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import { useDialog } from "../../../components/dialogs/Dialog";
-import { NodesToHtml, HtmlToImage } from "../../../utils/Preview";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Input, InputSelect } from "../../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import { SettingsLanguages } from "../../../assets/Settings";
 
-// TODO: text with ai
-// TODO: correct with ai
 // TODO: hovering toolbar
-// TODO: fix placeholder
-// TODO: color text
-// TODO: serif and sans serif
 const DocumentsEditor = function () {
   const t = useTranslate();
   const play = useSounds();
@@ -53,11 +52,10 @@ const DocumentsEditor = function () {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  // email, message, sms, document
   const [form, setForm] = useState<Partial<TypeDocument>>({
     id: "",
     name: "",
-    category: "document",
+    category: "document", // email, message, sms, document
     isPublic: false,
     content: [],
     userId: user.id,
@@ -241,7 +239,6 @@ const DocumentsEditor = function () {
           <form onSubmit={onSubmit} className="flex flex1">
             <Vertical internal={1} className="flex flex1">
               {/* toolbar */}
-
               <Horizontal internal={0.4}>
                 <RichTextAction action="undo" />
                 <RichTextAction action="redo" />
