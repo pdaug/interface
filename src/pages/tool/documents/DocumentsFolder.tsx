@@ -661,6 +661,17 @@ const DocumentsFolder = function () {
                     <span>{statistics.privateQuantity}</span>
                   </div>
                 </Vertical>
+
+                <Button
+                  Icon={Trash}
+                  IconSize={20}
+                  category="Warning"
+                  text={t.document.open_recycle_bin}
+                  onClick={function () {
+                    navigate("/f/documents/recycle");
+                    return;
+                  }}
+                />
               </Vertical>
             </Wrapper>
 

@@ -34,6 +34,7 @@ export const ApiBaseCrud = function (path: string) {
         searchField?: string;
         dateStart?: string;
         dateEnd?: string;
+        showDeleted?: "true" | "false";
       },
       workspaceId?: string,
     ) {
@@ -86,6 +87,23 @@ export const ApiBaseCrud = function (path: string) {
         "X-Workspace": workspaceId,
       };
       const config = { headers };
+      return ApiBase.delete<ApiResponse<T>>(`/${path}/${id}`, config);
+    },
+    deletePermanently: function <T>(
+      Authorization: string,
+      instance: string,
+      id: string,
+      workspaceId?: string,
+    ) {
+      const headers = {
+        Authorization,
+        "X-Instance": instance,
+        "X-Workspace": workspaceId,
+      };
+      const params = {
+        hard: "true",
+      };
+      const config = { headers, params };
       return ApiBase.delete<ApiResponse<T>>(`/${path}/${id}`, config);
     },
   };

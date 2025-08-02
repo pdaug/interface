@@ -42,6 +42,7 @@ const TranslatePt = {
     required_fields: "Os campos com asteriscos são obrigatórios",
   },
   components: {
+    restore: "Restaurar",
     other: "Outro",
     others: "Outros",
     document: "Documento",
@@ -113,6 +114,7 @@ const TranslatePt = {
     help: "Obtenha ajuda",
     edit: "Editar",
     delete: "Deletar",
+    delete_permanently: "Deletar permanentemente",
     import: "Importar",
     export: "Exportar",
     back: "Voltar",
@@ -564,6 +566,7 @@ const TranslatePt = {
     warning_error: "Oops!",
     loading: "Carregando...",
     // success
+    success_restore: "O item foi restaurado.",
     success_find: "O item foi encontrado.",
     success_download: "O item foi baixado.",
     success_copy: "O id do item foi copiado.",
@@ -573,12 +576,14 @@ const TranslatePt = {
     success_delete: "O item foi deletado.",
     success_workspace: "A organização foi selecionada.",
     // warning
+    warning_restore: "O item não foi restaurado.",
     warning_find: "O item não foi encontrado.",
     warning_create: "O item não foi criado.",
     warning_edit: "O item não foi editado.",
     warning_delete: "O item não foi deletado.",
     warning_copy: "O id não foi copiado.",
     // error
+    error_restore: "Houve um erro ao restaurar o item.",
     error_create: "Houve um erro ao criar o item.",
     error_edit: "Houve um erro ao editar o item.",
     error_delete: "Houve um erro ao deletar o item.",
@@ -707,6 +712,7 @@ const TranslateEn = {
     required_fields: "Fields marked with an asterisk are required",
   },
   components: {
+    restore: "Restore",
     other: "Other",
     others: "Others",
     document: "Document",
@@ -778,6 +784,7 @@ const TranslateEn = {
     help: "Get help",
     edit: "Edit",
     delete: "Delete",
+    delete_permanently: "Delete Permanently",
     import: "Import",
     export: "Export",
     back: "Back",
@@ -1218,6 +1225,7 @@ const TranslateEn = {
     warning_error: "Oops!",
     loading: "Loading...",
     // success
+    success_restore: "The item was restored.",
     success_find: "The item was found.",
     success_download: "The item has been downloaded.",
     success_copy: "The id was copied.",
@@ -1227,12 +1235,14 @@ const TranslateEn = {
     success_delete: "The item was deleted.",
     success_workspace: "The workspace was selected.",
     // warning
+    warning_restore: "Item not restored.",
     warning_find: "Item not found.",
     warning_create: "The item was not created.",
     warning_edit: "The item not been edited.",
     warning_delete: "The item was not deleted.",
     warning_copy: "The id was not copied.",
     // error
+    error_restore: "An error ocurred while restored the item.",
     error_create: "An error occurred while creating the item.",
     error_edit: "An error occurred while editing the item.",
     error_delete: "An error occurred while deleting the item.",
