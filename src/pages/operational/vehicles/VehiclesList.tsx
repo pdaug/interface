@@ -1,6 +1,7 @@
 import {
-  Trash,
   Plus,
+  Trash,
+  CarProfile,
   CopySimple,
   PencilSimple,
   QuestionMark,
@@ -247,6 +248,18 @@ const VehiclesList = function () {
           onClick={() => navigate("/f/vehicles/inspect")}
         />
 
+        <Button
+          category="Info"
+          text={t.vehicle.maintenance}
+          onClick={() => navigate("/f/vehicles/maintenance")}
+        />
+
+        <Button
+          category="Info"
+          text={t.vehicle.refuel}
+          onClick={() => navigate("/f/vehicles/refuel")}
+        />
+
         <div style={{ minWidth: 200, maxWidth: 256 }}>
           <InputInterval
             label=""
@@ -372,9 +385,14 @@ const VehiclesList = function () {
                 );
                 return (
                   <Profile
-                    name={brand}
                     padding={false}
+                    photoIcon={CarProfile}
                     photo={brandFinded?.image || ""}
+                    name={
+                      brand.toLowerCase() === "other"
+                        ? t.components.other
+                        : brand
+                    }
                   />
                 );
               },

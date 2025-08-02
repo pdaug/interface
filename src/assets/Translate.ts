@@ -244,6 +244,8 @@ const TranslatePt = {
     private: "Privado",
     document_private: "Este documento está privado",
     not_public: "Este documento não está publico",
+    recycle_bin: "Lixeira",
+    open_recycle_bin: "Abrir a lixeira",
   },
   employee: {
     employee: "Colaborador",
@@ -632,6 +634,8 @@ const TranslatePt = {
     subtitle: "Preencha os campos abaixo para criar ou editar o veículo",
     document: "Documento (RENAVAM)",
     document_placeholder: "1234567890",
+    maintenance: "Manutenção",
+    refuel: "Abastecimento",
   },
   workspace: {
     workspaces: "Organizações",
@@ -900,6 +904,8 @@ const TranslateEn = {
     private: "Private",
     document_private: "This document is private",
     not_public: "This document is not public",
+    recycle_bin: "Recycle bin",
+    open_recycle_bin: "Open recycle bin",
   },
   employee: {
     employee: "Employee",
@@ -1239,7 +1245,7 @@ const TranslateEn = {
     motocycle: "Motocycle",
     pickup: "Pickup",
     truck: "Truck",
-    passenger: "passenger",
+    passenger: "Passenger",
     commercial: "Commercial",
     cargo_light: "Light cargo",
     cargo: "Cargo",
@@ -1281,6 +1287,8 @@ const TranslateEn = {
     year: "Year",
     document: "Document (ID Vehicle)",
     document_placeholder: "1234567890",
+    maintenance: "Maintenance",
+    refuel: "Refuel",
   },
   workspace: {
     workspaces: "Workspaces",
