@@ -2,7 +2,7 @@ import { toast } from "sonner";
 import { Descendant } from "slate";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
-import { Robot } from "@phosphor-icons/react";
+import { MagicWand, Robot, Translate } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // apis
@@ -34,6 +34,7 @@ import { NodesToHtml, HtmlToImage } from "../../../utils/Preview";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Input, InputSelect } from "../../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import { SettingsLanguages } from "../../../assets/Settings";
 
 // TODO: text with ai
 // TODO: correct with ai
@@ -391,16 +392,55 @@ const DocumentsEditor = function () {
                     />
                   </Horizontal>
 
-                  <Horizontal internal={1}>
-                    <Button
-                      type="button"
-                      IconSize={20}
-                      Icon={Robot}
-                      category="Info"
-                      className="flex1"
-                      text="Text com AI"
-                    />
-                  </Horizontal>
+                  <Vertical internal={0.4}>
+                    <div>Translate</div>
+
+                    <Horizontal internal={1}>
+                      <InputSelect
+                        required
+                        label=""
+                        name="theme"
+                        disabled={loading}
+                        id="settings_language"
+                        empty={t.stacks.no_option}
+                        options={SettingsLanguages}
+                        value={"en"}
+                        onChange={function () {
+                          return;
+                        }}
+                      />
+                      <Button
+                        text=""
+                        type="button"
+                        IconSize={20}
+                        Icon={Translate}
+                        category="Neutral"
+                      />
+                    </Horizontal>
+                  </Vertical>
+
+                  <Vertical internal={0.4}>
+                    <div>Artificial Intelligence</div>
+
+                    <Horizontal internal={1}>
+                      <Button
+                        type="button"
+                        IconSize={20}
+                        Icon={Robot}
+                        category="Info"
+                        className="flex1"
+                        text="Text com AI"
+                      />
+                      <Button
+                        type="button"
+                        IconSize={20}
+                        Icon={MagicWand}
+                        category="Info"
+                        className="flex1"
+                        text="Correct"
+                      />
+                    </Horizontal>
+                  </Vertical>
                 </Vertical>
               </Horizontal>
             </Vertical>
