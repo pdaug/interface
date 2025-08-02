@@ -46,6 +46,11 @@ button {
   font-family: "Lato", sans-serif;
 }
 
+html,
+body {
+  overscroll-behavior: none;
+}
+
 html {
   font-size: 12pt;
   scroll-behavior: smooth;
