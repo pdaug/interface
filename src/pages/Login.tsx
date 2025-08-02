@@ -198,11 +198,12 @@ const Login = function () {
   return (
     <Center
       styles={{
-        background: `radial-gradient(ellipse at 20% 20%, #fff 0%, transparent 70%),
+        background: instance?.colorPrimary || "var(--backgroundColor)",
+        backgroundImage: `radial-gradient(ellipse at 20% 20%, #fff 0%, transparent 70%),
   radial-gradient(ellipse at 60% 20%, #fafafa 0%, transparent 70%),
   radial-gradient(ellipse at 100% 20%, ${instance?.colorPrimary || "var(--backgroundColor)"} 0%, transparent 70%),
   radial-gradient(ellipse at 100% 100%, ${instance?.colorSecondary || "var(--backgroundColor)"} 0%, transparent 70%),
-  radial-gradient(ellipse at 20% 100%, #aaa 0%, transparent 70%);`,
+  radial-gradient(ellipse at 20% 100%, #aaa 0%, transparent 70%)`,
       }}
     >
       <form onSubmit={OnSubmit}>
