@@ -1,5 +1,4 @@
 import {
-  Robot,
   TextAa,
   TextHOne,
   TextHTwo,
@@ -30,6 +29,7 @@ import {
 } from "slate-react";
 import {
   Node,
+  Text,
   Editor,
   BaseText,
   Transforms,
@@ -37,7 +37,6 @@ import {
   Descendant,
   createEditor,
   Element as ElementSlate,
-  Text,
 } from "slate";
 import { HistoryEditor, withHistory } from "slate-history";
 
@@ -52,7 +51,7 @@ import Button from "../buttons/Button";
 import Tooltip from "../tooltips/Tooltip";
 import { InputSelect } from "../inputs/Input";
 
-const actionsList = ["ai", "undo", "redo"] as const;
+const actionsList = ["undo", "redo"] as const;
 const typesList = ["title", "subtitle", "paragraph"] as const;
 const alignsList = ["left", "center", "right", "justify"] as const;
 const stylesList = ["bold", "italic", "underline", "strikethrough"] as const;
@@ -84,15 +83,15 @@ const Element = function ({
     style.fontFamily = fontList[element.font as keyof typeof fontList];
   if ("type" in element && element.type === "title")
     return (
-      <h1 style={style} {...attributes}>
+      <div style={{ ...style, fontSize: "24pt" }} {...attributes}>
         {children}
-      </h1>
+      </div>
     );
   if ("type" in element && element.type === "subtitle")
     return (
-      <h2 style={style} {...attributes}>
+      <div style={{ ...style, fontSize: "18pt" }} {...attributes}>
         {children}
-      </h2>
+      </div>
     );
   return (
     <div style={style} {...attributes}>
@@ -289,7 +288,6 @@ export const RichTextTool = function ({ format, Icon }: RichTextToolProps) {
 };
 
 const RichTextActionIcons: Record<ActionProps, IconPhosphor> = {
-  ai: Robot,
   undo: ArrowCounterClockwise,
   redo: ArrowClockwise,
 };
@@ -311,7 +309,6 @@ export const RichTextAction = function ({ action }: RichTextActionProps) {
   const disabled: Record<ActionProps, boolean> = {
     undo: !canUndo,
     redo: !canRedo,
-    ai: true,
   };
 
   const onMouseDown: Record<
@@ -332,16 +329,11 @@ export const RichTextAction = function ({ action }: RichTextActionProps) {
       }
       return;
     },
-    ai: function (event) {
-      event.preventDefault();
-      return;
-    },
   };
 
   const textAction: Record<ActionProps, string> = {
     redo: "",
     undo: "",
-    ai: t.document.ai_text,
   };
 
   if (!actionsList.includes(action)) {

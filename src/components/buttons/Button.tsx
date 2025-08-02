@@ -21,6 +21,7 @@ export type ButtonIconPosition = "left" | "right";
 export type ButtonProps = {
   text: React.ReactNode;
   category: ButtonCategories;
+  className?: string;
   id?: string;
   name?: string;
   disabled?: boolean;
@@ -40,6 +41,7 @@ const Button = function ({
   name,
   type,
   category,
+  className,
   Icon,
   IconSize,
   IconWeight,
@@ -60,7 +62,7 @@ const Button = function ({
       onClick={onClick}
       disabled={disabled}
       onMouseDown={onMouseDown}
-      className={`button button${category} ${onlyIcon ? "buttonOnlyIcon" : ""}`}
+      className={`button button${category} ${onlyIcon ? "buttonOnlyIcon" : ""} ${className || ""}`}
     >
       {Icon && IconPosition === "left" && (
         <Icon weight={IconWeight} size={IconSize} />

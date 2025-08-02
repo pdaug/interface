@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import { Descendant } from "slate";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
+import { Robot } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // apis
@@ -236,150 +237,173 @@ const DocumentsEditor = function () {
             return;
           }}
         >
-          <form
-            onSubmit={onSubmit}
-            style={{ display: "flex" }}
-            className="flex1"
-          >
-            <Horizontal internal={1} styles={{ flex: 1 }}>
-              <Vertical internal={1} styles={{ flex: 1 }}>
-                <Horizontal styles={{ alignItems: "flex-end" }} internal={1}>
-                  <Input
-                    required
-                    min={3}
-                    max={256}
-                    name="name"
-                    id="document_name"
-                    label={t.document.name}
-                    value={form?.name || ""}
-                    placeholder={t.document?.name_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.name = event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                  <InputSelect
-                    required
-                    name="isPublic"
-                    id="document_is_public"
-                    label={t.document.is_public}
-                    empty={t.stacks.no_option}
-                    styles={{ maxWidth: 180 }}
-                    value={String(Boolean(form?.isPublic))}
-                    options={[
-                      {
-                        id: "true",
-                        value: "true",
-                        text: t.components.yes,
-                      },
-                      {
-                        id: "false",
-                        value: "false",
-                        text: t.components.no,
-                      },
-                    ]}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.isPublic = event?.currentTarget?.value === "true";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                  <InputSelect
-                    required
-                    name="category"
-                    id="document_category"
-                    styles={{ maxWidth: 180 }}
-                    empty={t.stacks.no_option}
-                    label={t.components.category}
-                    value={form?.category || "document"}
-                    options={[
-                      {
-                        id: "email",
-                        value: "email",
-                        text: t.components.email,
-                      },
-                      {
-                        id: "message",
-                        value: "message",
-                        text: t.components.message,
-                      },
-                      {
-                        id: "sms",
-                        value: "sms",
-                        text: t.components.sms,
-                      },
-                      {
-                        id: "document",
-                        value: "document",
-                        text: t.components.document,
-                      },
-                    ]}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.category = (event?.currentTarget?.value ||
-                        "document") as TypeDocumentCategory;
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                  <Button
-                    type="button"
-                    disabled={loading}
-                    category="Neutral"
-                    text={t.components.close}
-                    onClick={function () {
-                      OpenDialog({
-                        title: t.dialog.title_close,
-                        description: t.dialog.description_close,
-                        category: "Danger",
-                        confirmText: t.components.close,
-                        onConfirm: function () {
-                          navigate("/f/documents");
-                          CloseDialog();
-                          return;
-                        },
-                      });
-                      return;
-                    }}
-                  />
-                  <Button
-                    type="submit"
-                    category="Success"
-                    disabled={loading}
-                    text={id ? t.components.edit : t.components.save}
-                  />
-                </Horizontal>
+          <form onSubmit={onSubmit} className="flex flex1">
+            <Vertical internal={1} className="flex flex1">
+              {/* toolbar */}
 
-                <Horizontal internal={0.4}>
-                  <RichTextAction action="undo" />
-                  <RichTextAction action="redo" />
-                  <div style={{ width: 8 }}></div>
-                  <RichTextColor />
-                  <div style={{ width: 8 }}></div>
-                  <RichTextFont />
-                  <div style={{ width: 8 }}></div>
-                  <RichTextTool format="bold" />
-                  <RichTextTool format="italic" />
-                  <RichTextTool format="underline" />
-                  <RichTextTool format="strikethrough" />
-                  <div style={{ width: 8 }}></div>
-                  <RichTextTool format="title" />
-                  <RichTextTool format="subtitle" />
-                  <div style={{ width: 8 }}></div>
-                  <RichTextTool format="left" />
-                  <RichTextTool format="center" />
-                  <RichTextTool format="right" />
-                  <RichTextTool format="justify" />
-                  <div className="flex1"></div>
-                  <RichTextAction action="ai" />
-                </Horizontal>
+              <Horizontal internal={0.4}>
+                <RichTextAction action="undo" />
+                <RichTextAction action="redo" />
+                <div style={{ width: 8 }}></div>
+                <RichTextColor />
+                <div style={{ width: 8 }}></div>
+                <RichTextFont />
+                <div style={{ width: 8 }}></div>
+                <RichTextTool format="bold" />
+                <RichTextTool format="italic" />
+                <RichTextTool format="underline" />
+                <RichTextTool format="strikethrough" />
+                <div style={{ width: 8 }}></div>
+                <RichTextTool format="title" />
+                <RichTextTool format="subtitle" />
+                <div style={{ width: 8 }}></div>
+                <RichTextTool format="left" />
+                <RichTextTool format="center" />
+                <RichTextTool format="right" />
+                <RichTextTool format="justify" />
+                <div className="flex1"></div>
+              </Horizontal>
 
+              <Horizontal internal={1} className="flex flex1">
+                {/* editor */}
                 <RichText />
-              </Vertical>
-            </Horizontal>
+
+                {/* inspect */}
+                <Vertical
+                  internal={1}
+                  styles={{ minWidth: 300, maxWidth: 300 }}
+                >
+                  <Horizontal>
+                    <Input
+                      required
+                      min={3}
+                      max={256}
+                      name="name"
+                      id="document_name"
+                      label={t.document.name}
+                      value={form?.name || ""}
+                      placeholder={t.document?.name_placeholder}
+                      onChange={function (event) {
+                        const newForm = { ...form };
+                        newForm.name = event.currentTarget?.value || "";
+                        setForm(newForm);
+                        return;
+                      }}
+                    />
+                  </Horizontal>
+
+                  <Horizontal internal={1}>
+                    <InputSelect
+                      required
+                      name="isPublic"
+                      id="document_is_public"
+                      label={t.document.is_public}
+                      empty={t.stacks.no_option}
+                      styles={{ maxWidth: 180 }}
+                      value={String(Boolean(form?.isPublic))}
+                      options={[
+                        {
+                          id: "true",
+                          value: "true",
+                          text: t.components.yes,
+                        },
+                        {
+                          id: "false",
+                          value: "false",
+                          text: t.components.no,
+                        },
+                      ]}
+                      onChange={function (event) {
+                        const newForm = { ...form };
+                        newForm.isPublic =
+                          event?.currentTarget?.value === "true";
+                        setForm(newForm);
+                        return;
+                      }}
+                    />
+                    <InputSelect
+                      required
+                      name="category"
+                      id="document_category"
+                      styles={{ maxWidth: 180 }}
+                      empty={t.stacks.no_option}
+                      label={t.components.category}
+                      value={form?.category || "document"}
+                      options={[
+                        {
+                          id: "email",
+                          value: "email",
+                          text: t.components.email,
+                        },
+                        {
+                          id: "message",
+                          value: "message",
+                          text: t.components.message,
+                        },
+                        {
+                          id: "sms",
+                          value: "sms",
+                          text: t.components.sms,
+                        },
+                        {
+                          id: "document",
+                          value: "document",
+                          text: t.components.document,
+                        },
+                      ]}
+                      onChange={function (event) {
+                        const newForm = { ...form };
+                        newForm.category = (event?.currentTarget?.value ||
+                          "document") as TypeDocumentCategory;
+                        setForm(newForm);
+                        return;
+                      }}
+                    />
+                  </Horizontal>
+
+                  <Horizontal internal={1}>
+                    <Button
+                      type="submit"
+                      className="flex1"
+                      category="Success"
+                      disabled={loading}
+                      text={id ? t.components.edit : t.components.save}
+                    />
+                    <Button
+                      type="button"
+                      disabled={loading}
+                      category="Neutral"
+                      text={t.components.close}
+                      onClick={function () {
+                        OpenDialog({
+                          title: t.dialog.title_close,
+                          description: t.dialog.description_close,
+                          category: "Danger",
+                          confirmText: t.components.close,
+                          onConfirm: function () {
+                            navigate("/f/documents");
+                            CloseDialog();
+                            return;
+                          },
+                        });
+                        return;
+                      }}
+                    />
+                  </Horizontal>
+
+                  <Horizontal internal={1}>
+                    <Button
+                      type="button"
+                      IconSize={20}
+                      Icon={Robot}
+                      category="Info"
+                      className="flex1"
+                      text="Text com AI"
+                    />
+                  </Horizontal>
+                </Vertical>
+              </Horizontal>
+            </Vertical>
           </form>
         </RichTextContext>
       ) : (
