@@ -1,0 +1,23 @@
+.richTextColor {
+  appearance: none;
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
+  cursor: pointer;
+  height: 34px;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  width: 64px;
+}
+
+.richTextColor::-webkit-color-swatch-wrapper {
+  border-radius: var(--borderRadius);
+  padding: 4px !important;
+}
+
+.richTextColor::-webkit-color-swatch {
+  border: none !important;
+  border-radius: var(--borderRadius);
+}

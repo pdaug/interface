@@ -36,8 +36,12 @@ import {
   Descendant,
   createEditor,
   Element as ElementSlate,
+  Text,
 } from "slate";
 import { HistoryEditor, withHistory } from "slate-history";
+
+// style
+import "./RichText.css";
 
 // hooks
 import useTranslate from "../../hooks/useTranslate";
@@ -89,6 +93,12 @@ const Element = function ({
 
 // transformer
 const Leaf = function ({ attributes, children, leaf }: RenderLeafProps) {
+  if ("color" in leaf && leaf.color)
+    children = (
+      <span {...attributes} style={{ color: leaf.color as string }}>
+        {children}
+      </span>
+    );
   if ("bold" in leaf && leaf.bold) children = <b>{children}</b>;
   if ("italic" in leaf && leaf.italic) children = <i>{children}</i>;
   if ("underline" in leaf && leaf.underline) children = <u>{children}</u>;
@@ -349,6 +359,54 @@ export const RichTextAction = function ({ action }: RichTextActionProps) {
         category={action === "undo" || action === "redo" ? "Neutral" : "Info"}
       />
     </Tooltip>
+  );
+};
+
+// component
+export const RichTextColor = function () {
+  const editor = useSlate();
+
+  const [match] = Array.from(
+    Editor.nodes(editor, {
+      match: function (node) {
+        const hasText = Text.isText(node);
+        const hasColor = "color" in node && node.color !== undefined;
+        return hasText && hasColor;
+      },
+      mode: "lowest",
+    }),
+  );
+
+  const color =
+    match?.[0] && "color" in match[0] && typeof match[0].color === "string"
+      ? match[0].color
+      : "#000000";
+
+  return (
+    <input
+      type="color"
+      value={color}
+      id="rich_text_color"
+      name="richTextColor"
+      className="richTextColor"
+      onChange={function (event) {
+        const newColor = event.currentTarget?.value || "#0000000";
+        if (!editor.selection) return;
+        Transforms.setNodes(
+          editor,
+          {
+            color: newColor,
+          } as Partial<Node>,
+          {
+            split: true,
+            match: function (node) {
+              return Text.isText(node);
+            },
+          },
+        );
+        return;
+      }}
+    />
   );
 };
 

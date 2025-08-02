@@ -23,6 +23,7 @@ import {
   RichTextTool,
   RichTextAction,
   RichTextContext,
+  RichTextColor,
 } from "../../../components/richtext/RichText";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
@@ -341,6 +342,8 @@ const DocumentsEditor = function () {
                 <Horizontal internal={0.4}>
                   <RichTextAction action="undo" />
                   <RichTextAction action="redo" />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextColor />
                   <div style={{ width: 8 }}></div>
                   <RichTextTool format="bold" />
                   <RichTextTool format="italic" />
