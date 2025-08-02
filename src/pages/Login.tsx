@@ -68,6 +68,14 @@ const Login = function () {
       if (subdomain && parts.length >= 3) {
         const response = await apis.Instance.search<TypeInstance>(subdomain);
         if (!response.data?.result) return;
+        const favicon: HTMLLinkElement | null =
+          document.querySelector("link[rel*='icon']");
+        if (favicon) {
+          favicon.type = "image/x-icon";
+          favicon.rel = "shortcut icon";
+          favicon.href = response.data.result?.favicon || "";
+        }
+        document.title = response.data.result?.companyName || "Forza Sistemas";
         saveInstance(response.data.result);
         setForm({
           ...form,
