@@ -1,18 +1,24 @@
 import "./Align.css";
 
 export type AlignCenterProps = {
+  styles?: React.CSSProperties;
+  className?: string;
   children: React.ReactNode;
 };
 
-const Center = function ({ children }: AlignCenterProps) {
-  return <div className="alignCenter">{children}</div>;
+const Center = function ({ children, styles, className }: AlignCenterProps) {
+  return (
+    <div className={`alignCenter ${className || ""}`} style={styles}>
+      {children}
+    </div>
+  );
 };
 
 export type AlignElementProps = {
   external?: number;
   internal?: number;
-  styles?: React.CSSProperties;
   children: React.ReactNode;
+  styles?: React.CSSProperties;
   className?: string;
   onClick?: () => void;
 };

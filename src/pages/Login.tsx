@@ -188,7 +188,11 @@ const Login = function () {
   };
 
   return (
-    <Center>
+    <Center
+      styles={{
+        background: `linear-gradient(90deg, ${instance?.colorPrimary || "var(--backgroundColor)"} 0%, ${instance?.colorSecondary || "var(--backgroundColor)"} 100%)`,
+      }}
+    >
       <form onSubmit={OnSubmit}>
         <Wrapper
           styles={{ width: "35rem" }}
