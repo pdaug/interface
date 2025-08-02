@@ -30,7 +30,7 @@
 .toastDanger {
   background: var(--dangerColor);
   background-color: var(--dangerColor);
-  border-color: var(--danger-dark);
+  border-color: var(--dangerDark);
   color: white;
 }
 
