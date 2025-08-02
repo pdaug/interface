@@ -26,6 +26,7 @@ import {
   ReactEditor,
   RenderLeafProps,
   RenderElementProps,
+  RenderPlaceholderProps,
 } from "slate-react";
 import {
   Node,
@@ -49,6 +50,7 @@ import useTranslate from "../../hooks/useTranslate";
 // components
 import Button from "../buttons/Button";
 import Tooltip from "../tooltips/Tooltip";
+import { InputSelect } from "../inputs/Input";
 
 const actionsList = ["ai", "undo", "redo"] as const;
 const typesList = ["title", "subtitle", "paragraph"] as const;
@@ -64,6 +66,12 @@ export type ActionProps = (typeof actionsList)[number];
 
 export type EditorCustom = BaseEditor & ReactEditor & HistoryEditor;
 
+const fontList = {
+  sans: `"Lato", sans-serif`,
+  serif: `"Libre Baskerville", serif`,
+  mono: `"Inconsolata", monospaced`,
+};
+
 // transformer
 const Element = function ({
   element,
@@ -72,6 +80,8 @@ const Element = function ({
 }: RenderElementProps) {
   const style: React.CSSProperties = {};
   if ("align" in element) style.textAlign = element.align as FormatAligns;
+  if ("font" in element && typeof element.font === "string")
+    style.fontFamily = fontList[element.font as keyof typeof fontList];
   if ("type" in element && element.type === "title")
     return (
       <h1 style={style} {...attributes}>
@@ -410,6 +420,77 @@ export const RichTextColor = function () {
   );
 };
 
+// component
+export const RichTextFont = function () {
+  const editor = useSlate();
+
+  const [match] = Array.from(
+    Editor.nodes(editor, {
+      match: function (node) {
+        const hasFont = "font" in node && node.font !== undefined;
+        return hasFont;
+      },
+      mode: "lowest",
+    }),
+  );
+
+  const font =
+    match?.[0] && "font" in match[0] && typeof match[0].font === "string"
+      ? match[0].font
+      : "sans";
+
+  // change font family all text in slate editor
+  useEffect(
+    function () {
+      const slateStrings = document.querySelectorAll(
+        "[data-slate-string='true']",
+      );
+      for (const element of slateStrings)
+        (element as HTMLElement).style.fontFamily =
+          fontList[font as keyof typeof fontList];
+    },
+    [editor.children, font],
+  );
+
+  return (
+    <InputSelect
+      label=""
+      empty=""
+      value={font}
+      id="rich_text_font"
+      name="RichTextFont"
+      styles={{ maxWidth: 128 }}
+      options={[
+        {
+          id: "sans",
+          value: "sans",
+          text: "Sans",
+        },
+        {
+          id: "serif",
+          value: "serif",
+          text: "Serif",
+        },
+        {
+          id: "mono",
+          value: "mono",
+          text: "Mono",
+        },
+      ]}
+      onChange={function (event) {
+        const newFont = event.currentTarget?.value || "sans";
+        Transforms.setNodes(editor, { font: newFont } as Partial<Node>, {
+          at: [],
+          match: function (node) {
+            return ElementSlate.isElement(node);
+          },
+        });
+        return;
+      }}
+    />
+  );
+};
+
 export type RichTextContextProps = {
   content: Descendant[];
   setContent: (content: Descendant[]) => void;
@@ -429,6 +510,12 @@ export const RichTextContext = function ({
     return editorHistory;
   }, []);
 
+  // focus auto
+  useEffect(function () {
+    ReactEditor.focus(editor);
+    return;
+  }, []);
+
   return (
     <Slate
       editor={editor}
@@ -438,6 +525,7 @@ export const RichTextContext = function ({
               {
                 type: "paragraph",
                 align: "left",
+                font: "sans",
                 children: [{ text: "" }],
               } as Descendant,
             ]
@@ -456,12 +544,23 @@ export const RichTextContext = function ({
 // component
 export const RichText = function () {
   useRichTextActions();
+  const t = useTranslate();
 
   return (
     <Editable
-      placeholder="Enter some plain text..."
       renderLeaf={Leaf}
       renderElement={Element}
+      placeholder={t.document.placeholder}
+      renderPlaceholder={function ({
+        children,
+        attributes,
+      }: RenderPlaceholderProps) {
+        return (
+          <div {...attributes}>
+            <p>{children}</p>
+          </div>
+        );
+      }}
       style={{
         flex: 1,
         background: "var(--foregroundColor)",

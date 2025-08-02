@@ -24,6 +24,7 @@ import {
   RichTextAction,
   RichTextContext,
   RichTextColor,
+  RichTextFont,
 } from "../../../components/richtext/RichText";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
@@ -200,7 +201,20 @@ const DocumentsEditor = function () {
               {
                 id: "documents",
                 label: t.document.documents,
-                url: "/f/documents",
+                onClick: function () {
+                  OpenDialog({
+                    category: "Danger",
+                    title: t.dialog.title_close,
+                    description: t.dialog.description_close,
+                    confirmText: t.components.close,
+                    onConfirm: function () {
+                      navigate("/f/documents");
+                      CloseDialog();
+                      return;
+                    },
+                  });
+                  return;
+                },
               },
               {
                 id: "document",
@@ -344,6 +358,8 @@ const DocumentsEditor = function () {
                   <RichTextAction action="redo" />
                   <div style={{ width: 8 }}></div>
                   <RichTextColor />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextFont />
                   <div style={{ width: 8 }}></div>
                   <RichTextTool format="bold" />
                   <RichTextTool format="italic" />

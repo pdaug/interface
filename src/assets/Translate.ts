@@ -220,6 +220,7 @@ const TranslatePt = {
     description_close: "Deseja realmente fechar este item?",
   },
   document: {
+    placeholder: "Digite aqui o conteúdo do seu documento...",
     document: "Documento",
     documents: "Documentos",
     new: "Novo documento",
@@ -873,6 +874,7 @@ const TranslateEn = {
     description_close: "Do you really want close this item?",
   },
   document: {
+    placeholder: "Type here the document content...",
     document: "Document",
     documents: "Documents",
     new: "New document",

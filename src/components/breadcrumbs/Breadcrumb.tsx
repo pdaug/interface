@@ -12,6 +12,7 @@ export type BreadcrumbLinks = {
   urlExternal?: boolean;
   target?: React.HTMLAttributeAnchorTarget;
   styles?: React.CSSProperties;
+  onClick?: React.MouseEventHandler;
 }[];
 
 export type BreadcrumbProps = {
@@ -23,28 +24,34 @@ const Breadcrumb = function ({ links }: BreadcrumbProps) {
 
   return (
     <div className="breadcrumb">
-      {links?.map(function (
-        { id, label, url, urlExternal, target, styles },
-        index,
-      ) {
+      {links?.map(function (link, index) {
         return (
-          <React.Fragment key={id}>
+          <React.Fragment key={link.id}>
             {index != 0 && links.length != index && (
               <CaretRight weight="bold" size={20} />
             )}
-            <div id={id}>
-              {url ? (
-                urlExternal ? (
-                  <a href={url} style={styles} target={target}>
-                    {label}
-                  </a>
-                ) : (
-                  <a href="#" style={styles} onClick={() => navigate(url)}>
-                    {label}
-                  </a>
-                )
-              ) : (
-                <span style={styles}>{label}</span>
+            <div id={link.id}>
+              {link.url && link.urlExternal && (
+                <a href={link.url} style={link.styles} target={link.target}>
+                  {link.label}
+                </a>
+              )}
+              {link.url && !link.urlExternal && (
+                <a
+                  href="#"
+                  style={link.styles}
+                  onClick={() => navigate(link.url as string)}
+                >
+                  {link.label}
+                </a>
+              )}
+              {link.onClick && (
+                <a href="#" style={link.styles} onClick={link.onClick}>
+                  {link.label}
+                </a>
+              )}
+              {!link.url && !link.onClick && (
+                <span style={link.styles}>{link.label}</span>
               )}
             </div>
           </React.Fragment>
