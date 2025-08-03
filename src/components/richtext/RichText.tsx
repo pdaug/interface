@@ -549,14 +549,19 @@ export const RichTextContext = function ({
   );
 };
 
+export type RichTextProps = {
+  readOnly?: boolean;
+};
+
 // component
-export const RichText = function () {
+export const RichText = function ({ readOnly }: RichTextProps) {
   useRichTextActions();
   const t = useTranslate();
 
   return (
     <Editable
       renderLeaf={Leaf}
+      readOnly={readOnly}
       renderElement={Element}
       placeholder={t.document.placeholder}
       renderPlaceholder={function ({

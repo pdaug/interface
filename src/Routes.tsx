@@ -16,7 +16,7 @@ import ErrorPage from "./pages/ErrorPage";
 import financial from "./pages/financial";
 import operational from "./pages/operational";
 import administrative from "./pages/administrative";
-import DocumentsPage from "./pages/tool/documents/DocumentsPage";
+import DocumentsShare from "./pages/tool/documents/DocumentsShare";
 
 const Router = createBrowserRouter([
   {
@@ -26,7 +26,7 @@ const Router = createBrowserRouter([
   },
   {
     path: "/share/document/:id",
-    Component: DocumentsPage,
+    Component: DocumentsShare,
   },
   {
     path: "f",

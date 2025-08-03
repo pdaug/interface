@@ -1,12 +1,17 @@
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
 import { Descendant } from "slate";
+import React, { useEffect, useState } from "react";
+import { ImageBroken } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // apis
 import apis from "../../../apis";
 
+// utils
+import PhoneNumber from "../../../utils/PhoneNumber";
+
 // types
+import { TypeInstance } from "../../../types/Instance";
 import { TypeDocument } from "../../../types/Documents";
 
 // hooks
@@ -19,11 +24,11 @@ import {
   RichText,
   RichTextContext,
 } from "../../../components/richtext/RichText";
+import Avatar from "../../../components/avatars/Avatar";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import { TypeInstance } from "../../../types/Instance";
 
-const DocumentsPage = function () {
+const DocumentsShare = function () {
   const t = useTranslate();
   const play = useSounds();
   const { id } = useParams();
@@ -44,10 +49,9 @@ const DocumentsPage = function () {
         if (!response.data?.result) return;
         setInstance(response.data.result);
       } else {
-        setInstance({
-          name: "test",
-          companyName: "",
-        });
+        const response = await apis.Instance.search<TypeInstance>("test");
+        if (!response.data?.result) return;
+        setInstance(response.data.result);
       }
     } catch (err) {
       console.error("[src/pages/tool/documents/DocumentsPage.tsx]", err);
@@ -112,7 +116,7 @@ const DocumentsPage = function () {
   );
 
   return (
-    <Vertical external={1}>
+    <Vertical external={1} internal={1}>
       {loading ? (
         <Wrapper>
           <Horizontal className="justify-center">
@@ -128,14 +132,56 @@ const DocumentsPage = function () {
         </Wrapper>
       ) : documentFile ? (
         documentFile.isPublic ? (
-          <RichTextContext
-            content={documentFile?.content as Descendant[]}
-            setContent={function () {
-              return;
-            }}
-          >
-            <RichText />
-          </RichTextContext>
+          <React.Fragment>
+            <Horizontal internal={1} className="items-center">
+              <Avatar
+                label=""
+                size={[12, 24]}
+                Icon={ImageBroken}
+                photo={instance?.logoLarge ?? undefined}
+              />
+              <Vertical internal={0.2}>
+                <div
+                  style={{
+                    color: instance?.colorPrimary,
+                    fontSize: "var(--textSubtitle)",
+                  }}
+                >
+                  {instance?.companyName}
+                </div>
+                <div style={{ fontSize: "var(--textSmall)" }}>
+                  <a
+                    href={`tel:${instance?.companyMobile}`}
+                    style={{ color: instance?.colorSecondary }}
+                  >
+                    {PhoneNumber.Internacional(instance?.companyMobile || "")}
+                  </a>
+                  <br />
+                  <a
+                    href={`tel:${instance?.companyPhone}`}
+                    style={{ color: instance?.colorSecondary }}
+                  >
+                    {PhoneNumber.Internacional(instance?.companyPhone || "")}
+                  </a>
+                  <br />
+                  <a
+                    href={`mailto:${instance?.companyPhone}`}
+                    style={{ color: instance?.colorSecondary }}
+                  >
+                    {instance?.companyEmail}
+                  </a>
+                </div>
+              </Vertical>
+            </Horizontal>
+            <RichTextContext
+              content={documentFile?.content as Descendant[]}
+              setContent={function () {
+                return;
+              }}
+            >
+              <RichText readOnly />
+            </RichTextContext>
+          </React.Fragment>
         ) : (
           <Wrapper>
             <Horizontal className="justify-center">
@@ -168,4 +214,4 @@ const DocumentsPage = function () {
   );
 };
 
-export default DocumentsPage;
+export default DocumentsShare;
