@@ -7,7 +7,6 @@ import useTranslate from "../../../hooks/useTranslate";
 
 // components
 import Badge from "../../../components/badges/Badge";
-import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
@@ -24,33 +23,6 @@ const IntegrationsHome = function () {
         <h2>{t.integration.integrations}</h2>
       </Horizontal>
 
-      <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
-        <Horizontal internal={1}>
-          <Button
-            text={t.components.help}
-            category="Neutral"
-            Icon={QuestionMark}
-            onClick={function () {
-              OpenDialog({
-                width: 700,
-                category: "Success",
-                title: t.components.help,
-                cancelText: t.components.close,
-                description: (
-                  <iframe
-                    height={400}
-                    style={{ border: "none", width: "100%" }}
-                    src="https://www.youtube.com/embed/L-yA7-puosA"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  />
-                ),
-              });
-              return;
-            }}
-          />
-        </Horizontal>
-      </Horizontal>
-
       <Vertical internal={1}>
         <Horizontal>{t.integration.sales}</Horizontal>
 
@@ -58,11 +30,36 @@ const IntegrationsHome = function () {
           <Wrapper
             actions={[
               {
-                id: "mercadolibre",
+                id: "mercadolibre_settings",
                 category: "Neutral",
                 text: t.integration.setup,
                 Icon: GearSix,
                 disabled: true,
+              },
+              {
+                text: "",
+                disabled: true,
+                onlyIcon: true,
+                id: "mercadolibre_help",
+                category: "Neutral",
+                Icon: QuestionMark,
+                onClick: function () {
+                  OpenDialog({
+                    width: 700,
+                    category: "Success",
+                    title: t.components.help,
+                    cancelText: t.components.close,
+                    description: (
+                      <iframe
+                        height={400}
+                        style={{ border: "none", width: "100%" }}
+                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      />
+                    ),
+                  });
+                  return;
+                },
               },
             ]}
           >
@@ -107,6 +104,31 @@ const IntegrationsHome = function () {
                 Icon: GearSix,
                 disabled: true,
               },
+              {
+                text: "",
+                disabled: true,
+                onlyIcon: true,
+                id: "mercadolibre_help",
+                category: "Neutral",
+                Icon: QuestionMark,
+                onClick: function () {
+                  OpenDialog({
+                    width: 700,
+                    category: "Success",
+                    title: t.components.help,
+                    cancelText: t.components.close,
+                    description: (
+                      <iframe
+                        height={400}
+                        style={{ border: "none", width: "100%" }}
+                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      />
+                    ),
+                  });
+                  return;
+                },
+              },
             ]}
           >
             <Vertical internal={1}>
@@ -143,6 +165,31 @@ const IntegrationsHome = function () {
                 text: t.integration.setup,
                 Icon: GearSix,
                 disabled: true,
+              },
+              {
+                text: "",
+                disabled: true,
+                onlyIcon: true,
+                id: "mercadolibre_help",
+                category: "Neutral",
+                Icon: QuestionMark,
+                onClick: function () {
+                  OpenDialog({
+                    width: 700,
+                    category: "Success",
+                    title: t.components.help,
+                    cancelText: t.components.close,
+                    description: (
+                      <iframe
+                        height={400}
+                        style={{ border: "none", width: "100%" }}
+                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      />
+                    ),
+                  });
+                  return;
+                },
               },
             ]}
           >
@@ -182,6 +229,31 @@ const IntegrationsHome = function () {
                 text: t.integration.setup,
                 Icon: GearSix,
                 disabled: true,
+              },
+              {
+                text: "",
+                disabled: true,
+                onlyIcon: true,
+                id: "mercadolibre_help",
+                category: "Neutral",
+                Icon: QuestionMark,
+                onClick: function () {
+                  OpenDialog({
+                    width: 700,
+                    category: "Success",
+                    title: t.components.help,
+                    cancelText: t.components.close,
+                    description: (
+                      <iframe
+                        height={400}
+                        style={{ border: "none", width: "100%" }}
+                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      />
+                    ),
+                  });
+                  return;
+                },
               },
             ]}
           >
@@ -226,6 +298,31 @@ const IntegrationsHome = function () {
                 Icon: GearSix,
                 disabled: true,
               },
+              {
+                text: "",
+                disabled: true,
+                onlyIcon: true,
+                id: "mercadolibre_help",
+                category: "Neutral",
+                Icon: QuestionMark,
+                onClick: function () {
+                  OpenDialog({
+                    width: 700,
+                    category: "Success",
+                    title: t.components.help,
+                    cancelText: t.components.close,
+                    description: (
+                      <iframe
+                        height={400}
+                        style={{ border: "none", width: "100%" }}
+                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      />
+                    ),
+                  });
+                  return;
+                },
+              },
             ]}
           >
             <Vertical internal={1}>
@@ -262,6 +359,31 @@ const IntegrationsHome = function () {
                 text: t.integration.setup,
                 Icon: GearSix,
                 disabled: true,
+              },
+              {
+                text: "",
+                disabled: true,
+                onlyIcon: true,
+                id: "mercadolibre_help",
+                category: "Neutral",
+                Icon: QuestionMark,
+                onClick: function () {
+                  OpenDialog({
+                    width: 700,
+                    category: "Success",
+                    title: t.components.help,
+                    cancelText: t.components.close,
+                    description: (
+                      <iframe
+                        height={400}
+                        style={{ border: "none", width: "100%" }}
+                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      />
+                    ),
+                  });
+                  return;
+                },
               },
             ]}
           >
@@ -304,6 +426,31 @@ const IntegrationsHome = function () {
                 Icon: GearSix,
                 disabled: true,
               },
+              {
+                text: "",
+                disabled: true,
+                onlyIcon: true,
+                id: "mercadolibre_help",
+                category: "Neutral",
+                Icon: QuestionMark,
+                onClick: function () {
+                  OpenDialog({
+                    width: 700,
+                    category: "Success",
+                    title: t.components.help,
+                    cancelText: t.components.close,
+                    description: (
+                      <iframe
+                        height={400}
+                        style={{ border: "none", width: "100%" }}
+                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      />
+                    ),
+                  });
+                  return;
+                },
+              },
             ]}
           >
             <Vertical internal={1}>
@@ -342,6 +489,30 @@ const IntegrationsHome = function () {
                 onClick: function () {
                   toast.warning(t.toast.warning_error, {
                     description: t.stacks.no_integration,
+                  });
+                  return;
+                },
+              },
+              {
+                text: "",
+                onlyIcon: true,
+                id: "mercadolibre_help",
+                category: "Neutral",
+                Icon: QuestionMark,
+                onClick: function () {
+                  OpenDialog({
+                    width: 700,
+                    category: "Success",
+                    title: t.components.help,
+                    cancelText: t.components.close,
+                    description: (
+                      <iframe
+                        height={400}
+                        style={{ border: "none", width: "100%" }}
+                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      />
+                    ),
                   });
                   return;
                 },
