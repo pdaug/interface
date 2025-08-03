@@ -1,16 +1,27 @@
 import { Descendant } from "slate";
 import html2canvas from "html2canvas";
 
+// components
+import { fontBasicList } from "../components/richtext/RichText";
+
 const NodesToHtml = function (nodes: Descendant[]): string {
   const content = new Array<string>();
+  let fontFamily = null;
   for (const node of nodes) {
+    if ("font" in node && node.font)
+      fontFamily = fontBasicList[node.font as keyof typeof fontBasicList];
     if ("text" in node) {
       let text = node.text;
-      if ("bold" in node && node.bold) text = `<b>${text}</b>`;
-      if ("italic" in node && node.italic) text = `<i>${text}</i>`;
-      if ("underline" in node && node.underline) text = `<u>${text}</u>`;
+      if ("color" in node && node.color)
+        text = `<span style="color:${node.color};font-family:${fontFamily};">${text}</span>`;
+      if ("bold" in node && node.bold)
+        text = `<b style="font-family:${fontFamily};">${text}</b>`;
+      if ("italic" in node && node.italic)
+        text = `<i style="font-family:${fontFamily};">${text}</i>`;
+      if ("underline" in node && node.underline)
+        text = `<u style="font-family:${fontFamily};">${text}</u>`;
       if ("strikethrough" in node && node.strikethrough)
-        text = `<s>${text}</s>`;
+        text = `<s style="font-family:${fontFamily};">${text}</s>`;
       content.push(text);
       continue;
     }
@@ -19,15 +30,15 @@ const NodesToHtml = function (nodes: Descendant[]): string {
     const children = NodesToHtml(node.children);
     if ("type" in node && node.type === "title")
       content.push(
-        `<h1 style="font-size:22px;margin:12px 0;text-align:${textAlign};">${children}</h1>`,
+        `<h1 style="font-size:22px;font-family:${fontFamily};margin:12px 0;text-align:${textAlign};">${children}</h1>`,
       );
     else if ("type" in node && node.type === "subtitle")
       content.push(
-        `<h2 style="font-size:18px;margin:10px 0;text-align:${textAlign};">${children}</h2>`,
+        `<h2 style="font-size:18px;font-family:${fontFamily};margin:10px 0;text-align:${textAlign};">${children}</h2>`,
       );
     else
       content.push(
-        `<p style="font-size:14px;margin:8px 0;text-align:${textAlign};">${children}</p>`,
+        `<p style="font-size:14px;font-family:${fontFamily};margin:8px 0;text-align:${textAlign};">${children}</p>`,
       );
   }
   return content.join("");
@@ -45,6 +56,7 @@ const HtmlToImage = async function (
     background?: string;
   },
 ): Promise<string> {
+  await document.fonts.ready;
   const container = document.createElement("div");
   container.style.position = "fixed";
   container.style.left = "-9999px";
@@ -61,8 +73,6 @@ const HtmlToImage = async function (
     backgroundColor: "#fff",
     scale: options?.scale || 1,
     logging: false,
-    removeContainer: true,
-    imageTimeout: 0,
   });
   document.body.removeChild(container);
   const base64 = canvas.toDataURL(

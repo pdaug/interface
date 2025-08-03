@@ -2,8 +2,8 @@ import { toast } from "sonner";
 import { Descendant } from "slate";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
-import { MagicWand, Robot, Translate } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
+import { MagicWand, Robot, Translate } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -61,6 +61,8 @@ const DocumentsEditor = function () {
     userId: user.id,
     workspaceId,
   });
+
+  console.log(form.content);
 
   // fetch document
   useAsync(async function () {

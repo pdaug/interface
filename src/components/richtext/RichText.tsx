@@ -51,10 +51,25 @@ import Button from "../buttons/Button";
 import Tooltip from "../tooltips/Tooltip";
 import { InputSelect } from "../inputs/Input";
 
-const actionsList = ["undo", "redo"] as const;
-const typesList = ["title", "subtitle", "paragraph"] as const;
-const alignsList = ["left", "center", "right", "justify"] as const;
-const stylesList = ["bold", "italic", "underline", "strikethrough"] as const;
+export const stylesList = [
+  "bold",
+  "italic",
+  "underline",
+  "strikethrough",
+] as const;
+export const fontList = {
+  sans: `"Lato", sans-serif`,
+  serif: `"Libre Baskerville", serif`,
+  mono: `"Inconsolata", monospaced`,
+};
+export const fontBasicList = {
+  sans: `sans-serif`,
+  serif: `serif`,
+  mono: `monospace`,
+};
+export const actionsList = ["undo", "redo"] as const;
+export const typesList = ["title", "subtitle", "paragraph"] as const;
+export const alignsList = ["left", "center", "right", "justify"] as const;
 
 export type FormatTypes = (typeof typesList)[number];
 export type FormatStyles = (typeof stylesList)[number];
@@ -64,12 +79,6 @@ export type FormatProps = FormatStyles | FormatTypes | FormatAligns;
 export type ActionProps = (typeof actionsList)[number];
 
 export type EditorCustom = BaseEditor & ReactEditor & HistoryEditor;
-
-const fontList = {
-  sans: `"Lato", sans-serif`,
-  serif: `"Libre Baskerville", serif`,
-  mono: `"Inconsolata", monospaced`,
-};
 
 // transformer
 const Element = function ({
@@ -471,10 +480,17 @@ export const RichTextFont = function () {
       ]}
       onChange={function (event) {
         const newFont = event.currentTarget?.value || "sans";
+        // apply leaf
+        Transforms.setNodes(editor, { font: newFont } as Partial<Node>, {
+          match: Text.isText,
+          split: true,
+        });
+        // apply element
         Transforms.setNodes(editor, { font: newFont } as Partial<Node>, {
           at: [],
           match: function (node) {
-            return ElementSlate.isElement(node);
+            const hasElement = ElementSlate.isElement(node);
+            return hasElement;
           },
         });
         return;
