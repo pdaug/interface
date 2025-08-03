@@ -45,7 +45,6 @@ import Profile from "../../../components/profiles/Profile";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
-// TODO: fix plate
 // TODO: search fipe
 // TODO: add outflow fuel
 const VehiclesInspect = function () {

@@ -283,13 +283,21 @@ const CustomersList = function () {
               label: t.customer.name,
               handler: function (data) {
                 return (
-                  <Profile
-                    photoCircle
-                    photoSize={4}
-                    padding={false}
-                    name={data.name as string}
-                    photo={(data.photo as string) ?? undefined}
-                  />
+                  <div
+                    className="cursor"
+                    onClick={function () {
+                      navigate(`/f/customers/inspect/${data.id}`);
+                      return;
+                    }}
+                  >
+                    <Profile
+                      photoCircle
+                      photoSize={4}
+                      padding={false}
+                      name={data.name as string}
+                      photo={(data.photo as string) ?? undefined}
+                    />
+                  </div>
                 );
               },
             },

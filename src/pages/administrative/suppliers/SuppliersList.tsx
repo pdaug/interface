@@ -279,7 +279,22 @@ const SuppliersList = function () {
                 );
               },
             },
-            companyName: { label: t.supplier.company_name },
+            companyName: {
+              label: t.supplier.company_name,
+              handler: function (data) {
+                return (
+                  <div
+                    className="cursor"
+                    onClick={function () {
+                      navigate(`/f/suppliers/inspect/${data.id}`);
+                      return;
+                    }}
+                  >
+                    {data?.companyName as string}
+                  </div>
+                );
+              },
+            },
             description: {
               label: t.supplier.description,
               handler: function (data) {

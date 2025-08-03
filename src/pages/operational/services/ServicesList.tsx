@@ -307,7 +307,22 @@ const ServicesList = function () {
                 );
               },
             },
-            name: { label: t.service.name },
+            name: {
+              label: t.service.name,
+              handler: function (data) {
+                return (
+                  <div
+                    className="cursor"
+                    onClick={function () {
+                      navigate(`/f/services/inspect/${data.id}`);
+                      return;
+                    }}
+                  >
+                    {data.name as string}
+                  </div>
+                );
+              },
+            },
             description: {
               label: t.components.description,
               handler: function (data) {

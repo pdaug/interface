@@ -283,13 +283,21 @@ const EmployeesList = function () {
               label: t.employee.name,
               handler: function (data) {
                 return (
-                  <Profile
-                    photoCircle
-                    photoSize={4}
-                    padding={false}
-                    name={data.name as string}
-                    photo={(data.photo as string) ?? undefined}
-                  />
+                  <div
+                    className="cursor"
+                    onClick={function () {
+                      navigate(`/f/employees/inspect/${data.id}`);
+                      return;
+                    }}
+                  >
+                    <Profile
+                      photoCircle
+                      photoSize={4}
+                      padding={false}
+                      name={data.name as string}
+                      photo={(data.photo as string) ?? undefined}
+                    />
+                  </div>
                 );
               },
             },

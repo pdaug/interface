@@ -538,7 +538,22 @@ const ProductsList = function () {
                   );
                 },
               },
-              name: { label: t.product.name },
+              name: {
+                label: t.product.name,
+                handler: function (data) {
+                  return (
+                    <div
+                      className="cursor"
+                      onClick={function () {
+                        navigate(`/f/products/inspect/${data.id}`);
+                        return;
+                      }}
+                    >
+                      {data?.name as string}
+                    </div>
+                  );
+                },
+              },
               description: {
                 label: t.components.description,
                 handler: function (data) {

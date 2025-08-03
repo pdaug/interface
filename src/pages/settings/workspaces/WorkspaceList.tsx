@@ -327,7 +327,22 @@ const WorkspaceList = function () {
                 );
               },
             },
-            name: { label: t.workspace.name },
+            name: {
+              label: t.workspace.name,
+              handler: function (data) {
+                return (
+                  <div
+                    className="cursor"
+                    onClick={function () {
+                      navigate(`/f/workspaces/inspect/${data.id}`);
+                      return;
+                    }}
+                  >
+                    {data.name as string}
+                  </div>
+                );
+              },
+            },
             description: {
               label: t.components.description,
               handler: function (data) {

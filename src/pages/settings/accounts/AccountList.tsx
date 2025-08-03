@@ -355,7 +355,22 @@ const AccountList = function () {
                 );
               },
             },
-            name: { label: t.account.name },
+            name: {
+              label: t.account.name,
+              handler: function (data) {
+                return (
+                  <div
+                    className="cursor"
+                    onClick={function () {
+                      navigate(`/f/accounts/inspect/${data.id}`);
+                      return;
+                    }}
+                  >
+                    {data.name as string}
+                  </div>
+                );
+              },
+            },
             holder: { label: t.account.holder },
             bankName: { label: t.account.bank_name },
             bankAgency: { label: t.account.bank_agency },

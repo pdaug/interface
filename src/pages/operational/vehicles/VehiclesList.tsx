@@ -407,7 +407,22 @@ const VehiclesList = function () {
                 );
               },
             },
-            name: { label: t.vehicle.name },
+            name: {
+              label: t.vehicle.name,
+              handler: function (data) {
+                return (
+                  <div
+                    className="cursor"
+                    onClick={function () {
+                      navigate(`/f/vehicles/inspect/${data.id}`);
+                      return;
+                    }}
+                  >
+                    {data.name as string}
+                  </div>
+                );
+              },
+            },
             description: {
               label: t.components.description,
               handler: function (data) {
