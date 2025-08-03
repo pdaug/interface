@@ -835,6 +835,13 @@ const SuppliersInspect = function () {
                   styles={{ flex: 1, fontSize: "var(--textSmall)" }}
                 />
               </Horizontal>
+
+              <iframe
+                src="https://maps.google.com/maps?q=-23.55052,-46.633308&z=15&output=embed&maptype=satellite"
+                width="600"
+                height="450"
+                loading="lazy"
+              ></iframe>
             </Vertical>
           </Wrapper>
 

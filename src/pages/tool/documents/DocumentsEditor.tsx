@@ -271,7 +271,7 @@ const DocumentsEditor = function () {
                 {/* inspect */}
                 <Vertical
                   internal={1}
-                  styles={{ minWidth: 300, maxWidth: 300 }}
+                  styles={{ minWidth: 280, maxWidth: 280 }}
                 >
                   <Horizontal>
                     <Input

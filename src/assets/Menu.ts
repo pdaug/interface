@@ -4,7 +4,14 @@ export const MenuOptions = [
   {
     id: "financial",
     icon: Table,
-    items: ["dashboard", "orders", "inflows", "outflows", "statements"],
+    items: [
+      "dashboard",
+      "orders",
+      "inflows",
+      "outflows",
+      "recurring",
+      "statements",
+    ],
   },
   {
     id: "administrative",
@@ -19,6 +26,6 @@ export const MenuOptions = [
   {
     id: "tools",
     icon: Wrench,
-    items: ["documents", "schedules"],
+    items: ["automations", "documents", "schedules"],
   },
 ];
