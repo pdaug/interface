@@ -44,6 +44,7 @@ const Badge = function ({
       name={name}
       value={value}
       onChange={onChange}
+      style={{ cursor: "pointer" }}
       className={`badge badge${category}`}
     >
       {options.map(function ({ id, value, label }) {

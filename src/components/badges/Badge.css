@@ -13,6 +13,7 @@
   overflow: hidden;
   outline: none;
   padding: 2px 0.8rem;
+  text-align: center;
 }
 
 .badge::-ms-expand {

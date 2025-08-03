@@ -1,10 +1,9 @@
 import {
-  Trash,
   Plus,
+  Trash,
   CopySimple,
   PencilSimple,
   QuestionMark,
-  // DownloadSimple,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -16,7 +15,6 @@ import { endOfDay, startOfYear } from "date-fns";
 import apis from "../../../apis";
 
 // utils
-// import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
 import PhoneNumber from "../../../utils/PhoneNumber";
 
@@ -52,7 +50,7 @@ const EmployeesList = function () {
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { token, instance, workspaces, workspaceId } = useSystem();
+  const { user, token, instance, workspaces, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -67,7 +65,7 @@ const EmployeesList = function () {
 
   const [searchDebounced] = useDebounce(search, 500);
 
-  // TODO: formatter docuemtn and phonenumber
+  // TODO: format document
   const FetchEmployees = async function () {
     setLoading(true);
     try {
@@ -137,6 +135,7 @@ const EmployeesList = function () {
           />
         </h2>
       </Horizontal>
+
       <Horizontal internal={1} styles={{ overflow: "hidden" }}>
         <Button
           Icon={Plus}
@@ -193,6 +192,7 @@ const EmployeesList = function () {
           />
         </Tooltip>
       </Horizontal>
+
       <Vertical internal={1} styles={{ flex: 1 }}>
         <Table
           border
@@ -206,9 +206,60 @@ const EmployeesList = function () {
                 return (
                   <Badge
                     category={data.status ? "Success" : "Danger"}
-                    value={
-                      data.status ? t.components.active : t.components.inactive
-                    }
+                    value={String(data.status)}
+                    options={[
+                      {
+                        id: "true",
+                        value: "true",
+                        label: t.components.active,
+                      },
+                      {
+                        id: "false",
+                        value: "false",
+                        label: t.components.inactive,
+                      },
+                    ]}
+                    onChange={async function (event) {
+                      try {
+                        if (data.id === user.id) {
+                          play("alert");
+                          toast.warning(t.toast.warning_error, {
+                            description: t.employee.not_change_status,
+                          });
+                          return;
+                        }
+                        const response = await apis.User.update(
+                          token,
+                          instance.name,
+                          data.id,
+                          {
+                            status: event.currentTarget?.value === "true",
+                          },
+                        );
+                        if (!response.data?.result || response.status !== 200) {
+                          play("alert");
+                          toast.warning(t.toast.warning_error, {
+                            description: t.toast.warning_edit,
+                          });
+                          return;
+                        }
+                        play("ok");
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_edit,
+                        });
+                        await FetchEmployees();
+                      } catch (err) {
+                        play("alert");
+                        toast.error(t.toast.warning_error, {
+                          description: t.toast.error_edit,
+                        });
+                        console.error(
+                          "[src/pages/administrative/employees/EmployeesList.tsx]",
+                          err,
+                        );
+                      }
+                      return;
+                    }}
                   />
                 );
               },

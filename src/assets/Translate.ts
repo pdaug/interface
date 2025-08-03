@@ -280,6 +280,7 @@ const TranslatePt = {
     schedules_title: "Horários reservados",
     schedules_description:
       "Todos os horários que foram reservados na agenda deste colaborador",
+    not_change_status: "Não é permitido desativar o próprio usuário",
   },
   integration: {
     integration: "Integração",
@@ -948,6 +949,7 @@ const TranslateEn = {
     schedules_title: "Schedules",
     schedules_description:
       "All schedules that reservade in schedule list in this employee",
+    not_change_status: "It is not allowed to deactivate the user himself",
   },
   integration: {
     integration: "Integration",

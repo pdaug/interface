@@ -36,10 +36,10 @@ import { Input } from "../../../components/inputs/Input";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import Profile from "../../../components/profiles/Profile";
 import { useDialog } from "../../../components/dialogs/Dialog";
+import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 
 const pageSize = 10;
 
@@ -82,7 +82,7 @@ const AccountList = function () {
           description: t.stacks.no_find_item,
         });
         console.warn(
-          "[src/pages/settings/accounts/AccountInspect.tsx]",
+          "[src/pages/settings/accounts/AccountList.tsx]",
           response.data,
         );
         return;
@@ -95,7 +95,7 @@ const AccountList = function () {
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/settings/accounts/AccountInspect.tsx]", err);
+      console.error("[src/pages/settings/accounts/AccountList.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -128,6 +128,7 @@ const AccountList = function () {
           />
         </h2>
       </Horizontal>
+
       <Horizontal internal={1}>
         <Button
           Icon={Plus}
@@ -170,6 +171,7 @@ const AccountList = function () {
           />
         </Tooltip>
       </Horizontal>
+
       <Vertical internal={1}>
         <Table
           border
@@ -285,9 +287,54 @@ const AccountList = function () {
                 return (
                   <Badge
                     category={data.status ? "Success" : "Danger"}
-                    value={
-                      data.status ? t.components.active : t.components.inactive
-                    }
+                    value={String(data.status)}
+                    options={[
+                      {
+                        id: "true",
+                        value: "true",
+                        label: t.components.active,
+                      },
+                      {
+                        id: "false",
+                        value: "false",
+                        label: t.components.inactive,
+                      },
+                    ]}
+                    onChange={async function (event) {
+                      try {
+                        const response = await apis.Account.update(
+                          token,
+                          instance.name,
+                          data.id,
+                          {
+                            status: event.currentTarget?.value === "true",
+                          },
+                          workspaceId,
+                        );
+                        if (!response.data?.result || response.status !== 200) {
+                          play("alert");
+                          toast.warning(t.toast.warning_error, {
+                            description: t.toast.warning_edit,
+                          });
+                          return;
+                        }
+                        play("ok");
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_edit,
+                        });
+                        await FetchAccounts();
+                      } catch (err) {
+                        play("alert");
+                        toast.error(t.toast.warning_error, {
+                          description: t.toast.error_edit,
+                        });
+                        console.error(
+                          "[src/pages/settings/accounts/AccountList.tsx]",
+                          err,
+                        );
+                      }
+                      return;
+                    }}
                   />
                 );
               },
@@ -345,6 +392,7 @@ const AccountList = function () {
             },
           }}
         />
+
         <Pagination
           display
           pageCurrent={page}

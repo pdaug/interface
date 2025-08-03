@@ -104,6 +104,7 @@ const WorkspaceList = function () {
       <Horizontal>
         <h2>{t.workspace.workspaces}</h2>
       </Horizontal>
+
       <Horizontal internal={1}>
         <Button
           Icon={Plus}
@@ -146,6 +147,7 @@ const WorkspaceList = function () {
           />
         </Tooltip>
       </Horizontal>
+
       <Vertical internal={1}>
         <Table
           border
@@ -267,9 +269,60 @@ const WorkspaceList = function () {
                 return (
                   <Badge
                     category={data.status ? "Success" : "Danger"}
-                    value={
-                      data.status ? t.components.active : t.components.inactive
-                    }
+                    value={String(data.status)}
+                    options={[
+                      {
+                        id: "true",
+                        value: "true",
+                        label: t.components.active,
+                      },
+                      {
+                        id: "false",
+                        value: "false",
+                        label: t.components.inactive,
+                      },
+                    ]}
+                    onChange={async function (event) {
+                      if (workspaceId === data.id) {
+                        play("alert");
+                        toast.warning(t.toast.warning_error, {
+                          description: t.workspace.not_change_status,
+                        });
+                        return;
+                      }
+                      try {
+                        const response = await apis.Workspace.update(
+                          token,
+                          instance.name,
+                          data.id,
+                          {
+                            status: event.currentTarget?.value === "true",
+                          },
+                        );
+                        if (!response.data?.result || response.status !== 200) {
+                          play("alert");
+                          toast.warning(t.toast.warning_error, {
+                            description: t.toast.warning_edit,
+                          });
+                          return;
+                        }
+                        play("ok");
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_edit,
+                        });
+                        await FetchWorkspaces();
+                      } catch (err) {
+                        play("alert");
+                        toast.error(t.toast.warning_error, {
+                          description: t.toast.error_edit,
+                        });
+                        console.error(
+                          "[src/pages/settings/workspaces/WorkspaceList.tsx]",
+                          err,
+                        );
+                      }
+                      return;
+                    }}
                   />
                 );
               },
