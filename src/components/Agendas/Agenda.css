@@ -1,0 +1,68 @@
+.rbc-month-view {
+  border: 1px solid var(--borderColor) !important;
+  border-radius: var(--borderRadius) !important;
+}
+
+.rbc-header {
+  border-color: var(--borderColor) !important;
+  font-size: var(--textRegular) !important;
+  font-weight: 400 !important;
+}
+
+.rbc-day-bg {
+  background: var(--foregroundColor) !important;
+}
+
+.rbc-off-range-bg {
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
+}
+
+.rbc-off-range {
+  color: var(--borderDark) !important;
+}
+
+.rbc-day-bg + .rbc-day-bg {
+  border-left: 1px solid var(--borderColor) !important;
+}
+
+.rbc-toolbar button {
+  border-color: var(--borderColor) !important;
+}
+
+.rbc-event {
+  background: var(--infoColor) !important;
+  background-color: var(--infoColor) !important;
+  border-radius: var(--borderRadius) !important;
+}
+
+.rbc-active {
+  background: var(--infoColor) !important;
+  background-color: var(--infoColor) !important;
+  border-color: var(--infoDark) !important;
+  box-shadow: none !important;
+  color: white !important;
+  background-image: none !important;
+}
+
+.rbc-toolbar button.rbc-active {
+  border-color: var(--infoDark) !important;
+}
+
+.rbc-day-bg.rbc-today {
+  background: var(--warningLight) !important;
+}
+
+.rbc-now.rbc-current {
+  color: var(--warningDark) !important;
+}
+
+.rbc-event.rbc-selected {
+  background: var(--infoDark) !important;
+  background-color: var(--infoDark) !important;
+}
+
+.rbc-selected-cell {
+  background: var(--successLight) !important;
+  background-color: var(--successLight) !important;
+}
