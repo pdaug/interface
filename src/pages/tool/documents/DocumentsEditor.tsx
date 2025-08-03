@@ -361,6 +361,65 @@ const DocumentsEditor = function () {
                     />
                   </Horizontal>
 
+                  <Vertical internal={0.4}>
+                    <div style={{ fontSize: "var(--textSmall)" }}>
+                      {t.components.translate}
+                    </div>
+
+                    <Horizontal internal={1}>
+                      <InputSelect
+                        required
+                        disabled
+                        label=""
+                        value={"en"}
+                        name="translate"
+                        id="document_translate"
+                        empty={t.stacks.no_option}
+                        options={SettingsLanguages}
+                        onChange={function () {
+                          return;
+                        }}
+                      />
+                      <Button
+                        text=""
+                        disabled
+                        type="button"
+                        IconSize={20}
+                        Icon={Translate}
+                        category="Neutral"
+                      />
+                    </Horizontal>
+                  </Vertical>
+
+                  <Vertical internal={0.4}>
+                    <div style={{ fontSize: "var(--textSmall)" }}>
+                      {t.components.ai_long}
+                    </div>
+
+                    <Horizontal internal={1}>
+                      <Button
+                        disabled
+                        Icon={Robot}
+                        type="button"
+                        IconSize={20}
+                        className="flex1"
+                        category="Neutral"
+                        text={t.document.ai_text}
+                      />
+                      <Button
+                        disabled
+                        type="button"
+                        IconSize={20}
+                        Icon={MagicWand}
+                        className="flex1"
+                        category="Neutral"
+                        text={t.document.ai_correct}
+                      />
+                    </Horizontal>
+                  </Vertical>
+
+                  <div></div>
+
                   <Horizontal internal={1}>
                     <Button
                       type="submit"
@@ -390,56 +449,6 @@ const DocumentsEditor = function () {
                       }}
                     />
                   </Horizontal>
-
-                  <Vertical internal={0.4}>
-                    <div>Translate</div>
-
-                    <Horizontal internal={1}>
-                      <InputSelect
-                        required
-                        label=""
-                        name="theme"
-                        disabled={loading}
-                        id="settings_language"
-                        empty={t.stacks.no_option}
-                        options={SettingsLanguages}
-                        value={"en"}
-                        onChange={function () {
-                          return;
-                        }}
-                      />
-                      <Button
-                        text=""
-                        type="button"
-                        IconSize={20}
-                        Icon={Translate}
-                        category="Neutral"
-                      />
-                    </Horizontal>
-                  </Vertical>
-
-                  <Vertical internal={0.4}>
-                    <div>Artificial Intelligence</div>
-
-                    <Horizontal internal={1}>
-                      <Button
-                        type="button"
-                        IconSize={20}
-                        Icon={Robot}
-                        category="Info"
-                        className="flex1"
-                        text="Text com AI"
-                      />
-                      <Button
-                        type="button"
-                        IconSize={20}
-                        Icon={MagicWand}
-                        category="Info"
-                        className="flex1"
-                        text="Correct"
-                      />
-                    </Horizontal>
-                  </Vertical>
                 </Vertical>
               </Horizontal>
             </Vertical>
