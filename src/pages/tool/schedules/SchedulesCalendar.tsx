@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { endOfDay, format, startOfDay } from "date-fns";
+import { endOfDay, format, isSameDay, startOfDay, subDays } from "date-fns";
 
 // hooks
 import useSystem from "../../../hooks/useSystem";
@@ -82,6 +82,42 @@ const SchedulesCalendar = function () {
         start: new Date("2025-08-01T12:00:00Z"),
         end: new Date("2025-08-01T13:00:00Z"),
       },
+      {
+        id: "123",
+        title: "Teste",
+        category: "note",
+        priority: "medium",
+        description: "nothing",
+        start: new Date("2025-08-01T14:00:00Z"),
+        end: new Date("2025-08-01T14:30:00Z"),
+      },
+      {
+        id: "123",
+        title: "Teste",
+        category: "note",
+        priority: "medium",
+        description: "nothing",
+        start: new Date("2025-08-01T15:00:00Z"),
+        end: new Date("2025-08-01T16:30:00Z"),
+      },
+      {
+        id: "123",
+        title: "Teste",
+        category: "note",
+        priority: "medium",
+        description: "nothing",
+        start: new Date("2025-08-01T18:00:00Z"),
+        end: new Date("2025-08-01T18:30:00Z"),
+      },
+      {
+        id: "123",
+        title: "Teste",
+        category: "note",
+        priority: "medium",
+        description: "nothing",
+        start: new Date("2025-08-01T19:00:00Z"),
+        end: new Date("2025-08-01T21:00:00Z"),
+      },
     ]);
     return;
   }, []);
@@ -123,18 +159,33 @@ const SchedulesCalendar = function () {
             setForm(schedule as TypeSchedule);
             return;
           }}
+          onShowMore={function (event) {
+            console.log(event);
+            return;
+          }}
           onSelectSlot={function (slot) {
+            if (isSameDay(slot.start, slot.end)) {
+              setForm({
+                ...initialForm,
+                start: startOfDay(slot.start),
+                end: endOfDay(slot.start),
+              });
+              return;
+            }
             setForm({
               ...initialForm,
               start: startOfDay(slot.start),
-              end: endOfDay(slot.start),
+              end: endOfDay(subDays(slot.end, 1)),
             });
             return;
           }}
         />
 
         <Vertical internal={1} styles={{ width: 360 }}>
-          <Wrapper styles={{ flex: "none" }}>
+          <Wrapper
+            styles={{ flex: "none" }}
+            contentStyles={{ padding: "0.6rem" }}
+          >
             <Horizontal internal={0.6} className="items-center">
               <div
                 style={{
@@ -192,8 +243,11 @@ const SchedulesCalendar = function () {
             </Horizontal>
           </Wrapper>
 
-          <Wrapper styles={{ flex: "none" }}>
-            <Vertical internal={1}>
+          <Wrapper
+            styles={{ flex: "none" }}
+            contentStyles={{ padding: "0.6rem" }}
+          >
+            <Vertical internal={0.6}>
               <Input
                 required
                 min={3}
@@ -212,7 +266,7 @@ const SchedulesCalendar = function () {
               />
               <InputText
                 max={256}
-                height={4}
+                height={2}
                 name="description"
                 label="Description"
                 value={form.description}
