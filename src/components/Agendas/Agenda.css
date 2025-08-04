@@ -1,42 +1,21 @@
+/* CONTAINER */
 .rbc-month-view {
   border: 1px solid var(--borderColor) !important;
   border-radius: var(--borderRadius) !important;
+  overflow: hidden;
 }
 
-.rbc-header {
-  border-color: var(--borderColor) !important;
-  font-size: var(--textRegular) !important;
-  font-weight: 400 !important;
-}
-
-.rbc-day-bg {
+/* TOOLBAR */
+.rbc-btn-group button {
   background: var(--foregroundColor) !important;
-}
-
-.rbc-off-range-bg {
-  background: var(--backgroundColor) !important;
-  background-color: var(--backgroundColor) !important;
-}
-
-.rbc-off-range {
-  color: var(--borderDark) !important;
-}
-
-.rbc-day-bg + .rbc-day-bg {
-  border-left: 1px solid var(--borderColor) !important;
+  background-color: var(--foregroundColor) !important;
 }
 
 .rbc-toolbar button {
   border-color: var(--borderColor) !important;
 }
 
-.rbc-event {
-  background: var(--infoColor) !important;
-  background-color: var(--infoColor) !important;
-  border-radius: var(--borderRadius) !important;
-}
-
-.rbc-active {
+.rbc-toolbar button.rbc-active {
   background: var(--infoColor) !important;
   background-color: var(--infoColor) !important;
   border-color: var(--infoDark) !important;
@@ -45,21 +24,66 @@
   background-image: none !important;
 }
 
-.rbc-toolbar button.rbc-active {
-  border-color: var(--infoDark) !important;
+/* CONTENT */
+.rbc-header {
+  background: var(--foregroundColor) !important;
+  background-color: var(--foregroundColor) !important;
+  font-size: var(--textRegular) !important;
+  font-weight: 400 !important;
 }
 
-.rbc-day-bg.rbc-today {
-  background: var(--warningLight) !important;
+.rbc-header + .rbc-header {
+  border-left: 1px solid var(--borderColor) !important;
 }
 
-.rbc-now.rbc-current {
-  color: var(--warningDark) !important;
+.rbc-month-row + .rbc-month-row {
+  border-top: 1px solid var(--borderColor) !important;
 }
 
+.rbc-day-bg {
+  /* dates common */
+  background: var(--foregroundColor) !important;
+}
+
+.rbc-day-bg + .rbc-day-bg {
+  border-left: 1px solid var(--borderColor) !important;
+}
+
+.rbc-off-range-bg {
+  /* dates off */
+  background: var(--backgroundColor) !important;
+  background-color: var(--backgroundColor) !important;
+  border-color: var(--borderColor) !important;
+}
+
+.rbc-off-range {
+  /* dates off text */
+  color: var(--borderDark) !important;
+  border-color: var(--borderColor) !important;
+}
+
+.rbc-event {
+  background: var(--infoColor) !important;
+  background-color: var(--infoColor) !important;
+  border: 1px solid var(--infoDark) !important;
+  border-radius: var(--borderRadius) !important;
+  margin: 0 4px !important;
+  width: auto !important;
+}
+
+/*
 .rbc-event.rbc-selected {
   background: var(--infoDark) !important;
   background-color: var(--infoDark) !important;
+}
+*/
+
+.rbc-day-bg.rbc-today {
+  background: var(--infoLight) !important;
+}
+
+.rbc-now.rbc-current {
+  color: var(--infoDark) !important;
 }
 
 .rbc-selected-cell {

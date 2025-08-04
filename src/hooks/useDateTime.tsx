@@ -20,8 +20,15 @@ const useDateTime = function () {
     return formatted;
   };
 
-  const instanceTime = function (source: Date | number | string): string {
+  const instanceTime = function (
+    source: Date | number | string,
+    removeSeconds?: boolean,
+  ): string {
     const datetime = new Date(source);
+    if (removeSeconds) {
+      const formatted = format(datetime, TimeFormat.slice(0, -3));
+      return formatted;
+    }
     const formatted = format(datetime, TimeFormat);
     return formatted;
   };
