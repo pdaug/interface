@@ -269,187 +269,199 @@ const DocumentsEditor = function () {
                 <RichText />
 
                 {/* inspect */}
-                <Vertical
-                  internal={1}
-                  styles={{ minWidth: 280, maxWidth: 280 }}
+                <div
+                  style={{
+                    position: "sticky",
+                    top: 0,
+                  }}
                 >
-                  <Horizontal>
-                    <Input
-                      required
-                      min={3}
-                      max={256}
-                      name="name"
-                      id="document_name"
-                      label={t.document.name}
-                      value={form?.name || ""}
-                      placeholder={t.document?.name_placeholder}
-                      onChange={function (event) {
-                        const newForm = { ...form };
-                        newForm.name = event.currentTarget?.value || "";
-                        setForm(newForm);
-                        return;
-                      }}
-                    />
-                  </Horizontal>
-
-                  <Horizontal internal={1}>
-                    <InputSelect
-                      required
-                      name="isPublic"
-                      id="document_is_public"
-                      label={t.document.is_public}
-                      empty={t.stacks.no_option}
-                      styles={{ maxWidth: 180 }}
-                      value={String(Boolean(form?.isPublic))}
-                      options={[
-                        {
-                          id: "true",
-                          value: "true",
-                          text: t.components.yes,
-                        },
-                        {
-                          id: "false",
-                          value: "false",
-                          text: t.components.no,
-                        },
-                      ]}
-                      onChange={function (event) {
-                        const newForm = { ...form };
-                        newForm.isPublic =
-                          event?.currentTarget?.value === "true";
-                        setForm(newForm);
-                        return;
-                      }}
-                    />
-                    <InputSelect
-                      required
-                      name="category"
-                      id="document_category"
-                      styles={{ maxWidth: 180 }}
-                      empty={t.stacks.no_option}
-                      label={t.components.category}
-                      value={form?.category || "document"}
-                      options={[
-                        {
-                          id: "email",
-                          value: "email",
-                          text: t.components.email,
-                        },
-                        {
-                          id: "message",
-                          value: "message",
-                          text: t.components.message,
-                        },
-                        {
-                          id: "sms",
-                          value: "sms",
-                          text: t.components.sms,
-                        },
-                        {
-                          id: "document",
-                          value: "document",
-                          text: t.components.document,
-                        },
-                      ]}
-                      onChange={function (event) {
-                        const newForm = { ...form };
-                        newForm.category = (event?.currentTarget?.value ||
-                          "document") as TypeDocumentCategory;
-                        setForm(newForm);
-                        return;
-                      }}
-                    />
-                  </Horizontal>
-
-                  <Vertical internal={0.4}>
-                    <div style={{ fontSize: "var(--textSmall)" }}>
-                      {t.components.translate}
-                    </div>
+                  <Vertical
+                    internal={1}
+                    styles={{
+                      position: "sticky",
+                      top: 0,
+                      minWidth: 280,
+                      maxWidth: 280,
+                    }}
+                  >
+                    <Horizontal>
+                      <Input
+                        required
+                        min={3}
+                        max={256}
+                        name="name"
+                        id="document_name"
+                        label={t.document.name}
+                        value={form?.name || ""}
+                        placeholder={t.document?.name_placeholder}
+                        onChange={function (event) {
+                          const newForm = { ...form };
+                          newForm.name = event.currentTarget?.value || "";
+                          setForm(newForm);
+                          return;
+                        }}
+                      />
+                    </Horizontal>
 
                     <Horizontal internal={1}>
                       <InputSelect
                         required
-                        disabled
-                        label=""
-                        value={"en"}
-                        name="translate"
-                        id="document_translate"
+                        name="isPublic"
+                        id="document_is_public"
+                        label={t.document.is_public}
                         empty={t.stacks.no_option}
-                        options={SettingsLanguages}
-                        onChange={function () {
+                        styles={{ maxWidth: 180 }}
+                        value={String(Boolean(form?.isPublic))}
+                        options={[
+                          {
+                            id: "true",
+                            value: "true",
+                            text: t.components.yes,
+                          },
+                          {
+                            id: "false",
+                            value: "false",
+                            text: t.components.no,
+                          },
+                        ]}
+                        onChange={function (event) {
+                          const newForm = { ...form };
+                          newForm.isPublic =
+                            event?.currentTarget?.value === "true";
+                          setForm(newForm);
                           return;
                         }}
                       />
-                      <Button
-                        text=""
-                        disabled
-                        type="button"
-                        IconSize={20}
-                        Icon={Translate}
-                        category="Neutral"
+                      <InputSelect
+                        required
+                        name="category"
+                        id="document_category"
+                        styles={{ maxWidth: 180 }}
+                        empty={t.stacks.no_option}
+                        label={t.components.category}
+                        value={form?.category || "document"}
+                        options={[
+                          {
+                            id: "email",
+                            value: "email",
+                            text: t.components.email,
+                          },
+                          {
+                            id: "message",
+                            value: "message",
+                            text: t.components.message,
+                          },
+                          {
+                            id: "sms",
+                            value: "sms",
+                            text: t.components.sms,
+                          },
+                          {
+                            id: "document",
+                            value: "document",
+                            text: t.components.document,
+                          },
+                        ]}
+                        onChange={function (event) {
+                          const newForm = { ...form };
+                          newForm.category = (event?.currentTarget?.value ||
+                            "document") as TypeDocumentCategory;
+                          setForm(newForm);
+                          return;
+                        }}
                       />
                     </Horizontal>
-                  </Vertical>
 
-                  <Vertical internal={0.4}>
-                    <div style={{ fontSize: "var(--textSmall)" }}>
-                      {t.components.ai_long}
-                    </div>
+                    <Vertical internal={0.4}>
+                      <div style={{ fontSize: "var(--textSmall)" }}>
+                        {t.components.translate}
+                      </div>
+
+                      <Horizontal internal={1}>
+                        <InputSelect
+                          required
+                          disabled
+                          label=""
+                          value={"en"}
+                          name="translate"
+                          id="document_translate"
+                          empty={t.stacks.no_option}
+                          options={SettingsLanguages}
+                          onChange={function () {
+                            return;
+                          }}
+                        />
+                        <Button
+                          text=""
+                          disabled
+                          type="button"
+                          IconSize={20}
+                          Icon={Translate}
+                          category="Neutral"
+                        />
+                      </Horizontal>
+                    </Vertical>
+
+                    <Vertical internal={0.4}>
+                      <div style={{ fontSize: "var(--textSmall)" }}>
+                        {t.components.ai_long}
+                      </div>
+
+                      <Horizontal internal={1}>
+                        <Button
+                          disabled
+                          Icon={Robot}
+                          type="button"
+                          IconSize={20}
+                          className="flex1"
+                          category="Neutral"
+                          text={t.document.ai_text}
+                        />
+                        <Button
+                          disabled
+                          type="button"
+                          IconSize={20}
+                          Icon={MagicWand}
+                          className="flex1"
+                          category="Neutral"
+                          text={t.document.ai_correct}
+                        />
+                      </Horizontal>
+                    </Vertical>
+
+                    <div></div>
 
                     <Horizontal internal={1}>
                       <Button
-                        disabled
-                        Icon={Robot}
-                        type="button"
-                        IconSize={20}
+                        type="submit"
                         className="flex1"
-                        category="Neutral"
-                        text={t.document.ai_text}
+                        category="Success"
+                        disabled={loading}
+                        text={id ? t.components.edit : t.components.save}
                       />
                       <Button
-                        disabled
                         type="button"
-                        IconSize={20}
-                        Icon={MagicWand}
-                        className="flex1"
+                        disabled={loading}
                         category="Neutral"
-                        text={t.document.ai_correct}
+                        text={t.components.close}
+                        onClick={function () {
+                          OpenDialog({
+                            title: t.dialog.title_close,
+                            description: t.dialog.description_close,
+                            category: "Danger",
+                            confirmText: t.components.close,
+                            onConfirm: function () {
+                              navigate("/f/documents");
+                              CloseDialog();
+                              return;
+                            },
+                          });
+                          return;
+                        }}
                       />
                     </Horizontal>
                   </Vertical>
-
-                  <div></div>
-
-                  <Horizontal internal={1}>
-                    <Button
-                      type="submit"
-                      className="flex1"
-                      category="Success"
-                      disabled={loading}
-                      text={id ? t.components.edit : t.components.save}
-                    />
-                    <Button
-                      type="button"
-                      disabled={loading}
-                      category="Neutral"
-                      text={t.components.close}
-                      onClick={function () {
-                        OpenDialog({
-                          title: t.dialog.title_close,
-                          description: t.dialog.description_close,
-                          category: "Danger",
-                          confirmText: t.components.close,
-                          onConfirm: function () {
-                            navigate("/f/documents");
-                            CloseDialog();
-                            return;
-                          },
-                        });
-                        return;
-                      }}
-                    />
-                  </Horizontal>
-                </Vertical>
+                </div>
               </Horizontal>
             </Vertical>
           </form>
