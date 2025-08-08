@@ -41,7 +41,7 @@ const Wrapper = function ({
     <div className="wrapper" style={styles}>
       {title && (
         <div className="wrapperHeader">
-          <Horizontal className="items-center">
+          <Horizontal className="itemsCenter">
             <Vertical styles={{ flex: 1 }}>
               <div className="wrapperHeaderTitle">{title}</div>
               {description && (

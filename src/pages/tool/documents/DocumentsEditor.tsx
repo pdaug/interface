@@ -469,7 +469,7 @@ const DocumentsEditor = function () {
       ) : (
         <Vertical>
           <Wrapper>
-            <Horizontal className="justify-center">
+            <Horizontal className="justifyCenter">
               <i
                 style={{
                   color: "var(--textLight)",

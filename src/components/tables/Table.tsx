@@ -103,7 +103,7 @@ const Table = function ({
         </div>
       </div>
       {loading ? (
-        <Horizontal external={1} className="justify-center">
+        <Horizontal external={1} className="justifyCenter">
           <i
             style={{ color: "var(--textLight)", fontSize: "var(--textSmall)" }}
           >
@@ -111,7 +111,7 @@ const Table = function ({
           </i>
         </Horizontal>
       ) : data.length === 0 ? (
-        <Horizontal external={1} className="justify-center">
+        <Horizontal external={1} className="justifyCenter">
           <i
             style={{ color: "var(--textLight)", fontSize: "var(--textSmall)" }}
           >

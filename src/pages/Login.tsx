@@ -230,7 +230,7 @@ const Login = function () {
         >
           <Vertical internal={1}>
             {instance && instance?.logoLarge && (
-              <Horizontal className="justify-center">
+              <Horizontal className="justifyCenter">
                 <img
                   alt="logo large"
                   style={{ height: "6rem" }}

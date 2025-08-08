@@ -237,7 +237,7 @@ const VehiclesInspect = function () {
             title={id ? t.vehicle.title_edit : t.vehicle.title_create}
             description={t.vehicle.subtitle}
           >
-            <Horizontal internal={1} className="items-center">
+            <Horizontal internal={1} className="itemsCenter">
               <Avatar
                 label=""
                 size={14}

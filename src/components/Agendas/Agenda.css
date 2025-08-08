@@ -63,12 +63,23 @@
 }
 
 .rbc-event {
-  background: var(--infoColor) !important;
-  background-color: var(--infoColor) !important;
-  border: 1px solid var(--infoDark) !important;
+  background: var(--foregroundColor) !important;
+  background-color: var(--foregroundColor) !important;
+  border: 1px solid var(--borderColor) !important;
   border-radius: var(--borderRadius) !important;
+  color: var(--textLight) !important;
+  font-size: var(--textSmall) !important;
   margin: 0 4px !important;
   width: auto !important;
+}
+
+.rbc-toolbar-label {
+  text-align: right !important;
+  font-size: var(--textHighlight);
+}
+
+.rbc-row-segment button {
+  color: var(--infoColor) !important;
 }
 
 /*
@@ -89,4 +100,30 @@
 .rbc-selected-cell {
   background: var(--successLight) !important;
   background-color: var(--successLight) !important;
+}
+
+/**/
+
+.agendaDate {
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
+  overflow: hidden;
+  width: 64px;
+  min-width: 64px;
+}
+
+.agendaDateMonth {
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
+  border-bottom: 1px solid var(--borderColor);
+  font-size: var(--textSmall);
+  padding: 4px;
+  text-align: center;
+}
+
+.agendaDateDay {
+  font-size: var(--textSubtitle);
+  font-weight: bold;
+  padding: 8px;
+  text-align: center;
 }

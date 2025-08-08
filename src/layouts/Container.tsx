@@ -17,6 +17,7 @@ import Version from "../components/version/Version";
 import { useDialog } from "../components/dialogs/Dialog";
 import { Horizontal, Vertical } from "../components/aligns/Align";
 import { InputSelect, InputSelectOptions } from "../components/inputs/Input";
+import useSounds from "../hooks/useSounds";
 
 const Container = function () {
   const {
@@ -29,6 +30,7 @@ const Container = function () {
     selectWorkspace,
   } = useSystem();
   const t = useTranslate();
+  const play = useSounds();
   const navigate = useNavigate();
   const { OpenDialog, CloseDialog } = useDialog();
 
@@ -112,6 +114,7 @@ const Container = function () {
         .then(function (response) {
           // no data
           if (response.status !== 200 || !response.data?.result?.id) {
+            play("logout");
             toast.error(t.toast.warning_error, {
               description: t.stacks.no_token,
             });
@@ -124,6 +127,7 @@ const Container = function () {
             (typeof response.data.result.expiresAt === "string" &&
               new Date(response.data.result.expiresAt) < new Date())
           ) {
+            play("logout");
             toast.error(t.toast.warning_error, {
               description: t.stacks.session_expired,
             });
@@ -133,6 +137,7 @@ const Container = function () {
           return;
         })
         .catch(function (err) {
+          play("logout");
           console.error("[src/layouts/Container.tsx]", err);
           toast.error(t.toast.warning_error, {
             description: t.stacks.session_expired,

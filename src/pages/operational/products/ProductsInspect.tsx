@@ -534,7 +534,7 @@ const ProductsInspect = function () {
                 })}
                 {form.category === "variant" && (
                   <Vertical
-                    className="items-center justify-center"
+                    className="itemsCenter justifyCenter"
                     styles={{
                       minWidth: 200,
                     }}

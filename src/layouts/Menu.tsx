@@ -189,7 +189,7 @@ const Menu = function () {
                           href={item.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex1 items-center"
+                          className="flex1 itemsCenter"
                           style={{
                             fontSize: "var(--textSmall)",
                             gap: "0.2rem",

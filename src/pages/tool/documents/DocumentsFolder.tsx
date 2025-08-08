@@ -423,7 +423,7 @@ const DocumentsFolder = function () {
                       </React.Fragment>
                     }
                   >
-                    <Horizontal className="flex items-center">
+                    <Horizontal className="flex itemsCenter">
                       <div
                         className="flex1"
                         onClick={function () {
@@ -448,7 +448,7 @@ const DocumentsFolder = function () {
               })
             ) : (
               <Wrapper>
-                <Horizontal className="justify-center">
+                <Horizontal className="justifyCenter">
                   <i
                     style={{
                       color: "var(--textLight)",

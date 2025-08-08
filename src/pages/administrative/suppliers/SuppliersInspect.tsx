@@ -802,12 +802,12 @@ const SuppliersInspect = function () {
                       />
                     </Horizontal>
                     {index + 1 !== form.addresses?.length && (
-                      <hr className="w-full" />
+                      <hr className="wFull" />
                     )}
                   </Vertical>
                 );
               })}
-              <Horizontal internal={1} className="items-center">
+              <Horizontal internal={1} className="itemsCenter">
                 <Button
                   type="button"
                   category="Success"

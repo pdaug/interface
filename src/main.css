@@ -154,19 +154,23 @@ code {
   display: flex;
 }
 
-.items-center {
-  align-items: center;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
 .flex1 {
   flex: 1;
 }
 
-.w-full {
+.itemsCenter {
+  align-items: center;
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+.overflowHidden {
+  overflow: hidden;
+}
+
+.wFull {
   width: 100%;
 }
 

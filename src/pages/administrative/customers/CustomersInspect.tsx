@@ -271,7 +271,7 @@ const CustomersInspect = function () {
         <Vertical internal={1}>
           <Horizontal internal={1}>
             <Wrapper styles={{ minWidth: "40%" }}>
-              <Horizontal internal={1} className="items-center">
+              <Horizontal internal={1} className="itemsCenter">
                 <Avatar
                   label=""
                   size={14}
@@ -901,12 +901,12 @@ const CustomersInspect = function () {
                       />
                     </Horizontal>
                     {index + 1 !== form.addresses?.length && (
-                      <hr className="w-full" />
+                      <hr className="wFull" />
                     )}
                   </Vertical>
                 );
               })}
-              <Horizontal internal={1} className="items-center">
+              <Horizontal internal={1} className="itemsCenter">
                 <Button
                   type="button"
                   category="Success"

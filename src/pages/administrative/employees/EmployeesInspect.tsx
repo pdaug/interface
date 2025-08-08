@@ -243,7 +243,7 @@ const EmployeesInspect = function () {
               styles={{ maxWidth: "40%" }}
               contentStyles={{ display: "flex" }}
             >
-              <Horizontal internal={1} className="flex1 items-center">
+              <Horizontal internal={1} className="flex1 itemsCenter">
                 <Avatar
                   label=""
                   size={14}
@@ -285,7 +285,7 @@ const EmployeesInspect = function () {
             >
               <Vertical
                 internal={0.4}
-                className="items-center"
+                className="itemsCenter"
                 styles={{ height: 96 }}
               >
                 <span
@@ -703,6 +703,8 @@ const EmployeesInspect = function () {
               />
             </Horizontal>
           </Wrapper>
+
+          <div style={{ height: 128 }}></div>
         </Vertical>
       </form>
     </React.Fragment>

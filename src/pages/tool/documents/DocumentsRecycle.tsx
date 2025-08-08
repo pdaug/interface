@@ -272,7 +272,7 @@ const DocumentsRecycle = function () {
                       </React.Fragment>
                     }
                   >
-                    <Horizontal className="flex items-center">
+                    <Horizontal className="flex itemsCenter">
                       <div className="flex1">{document.name}</div>
                       <Dropdown values={getOptions} data={document}>
                         <div style={{ cursor: "pointer" }}>
@@ -285,7 +285,7 @@ const DocumentsRecycle = function () {
               })
             ) : (
               <Wrapper>
-                <Horizontal className="justify-center">
+                <Horizontal className="justifyCenter">
                   <i
                     style={{
                       color: "var(--textLight)",

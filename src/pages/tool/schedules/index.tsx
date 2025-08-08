@@ -1,9 +1,9 @@
 // pages
-import SchedulesCalendar from "./SchedulesCalendar";
+import SchedulesPanel from "./SchedulesPanel";
 
 export default [
   {
     index: true,
-    Component: SchedulesCalendar,
+    Component: SchedulesPanel,
   },
 ];

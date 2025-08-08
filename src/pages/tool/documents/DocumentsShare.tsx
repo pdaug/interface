@@ -119,7 +119,7 @@ const DocumentsShare = function () {
     <Vertical external={1} internal={1}>
       {loading ? (
         <Wrapper>
-          <Horizontal className="justify-center">
+          <Horizontal className="justifyCenter">
             <i
               style={{
                 color: "var(--textLight)",
@@ -133,7 +133,7 @@ const DocumentsShare = function () {
       ) : documentFile ? (
         documentFile.isPublic ? (
           <React.Fragment>
-            <Horizontal internal={1} className="items-center">
+            <Horizontal internal={1} className="itemsCenter">
               <Avatar
                 label=""
                 size={[12, 24]}
@@ -184,7 +184,7 @@ const DocumentsShare = function () {
           </React.Fragment>
         ) : (
           <Wrapper>
-            <Horizontal className="justify-center">
+            <Horizontal className="justifyCenter">
               <i
                 style={{
                   color: "var(--textLight)",
@@ -198,7 +198,7 @@ const DocumentsShare = function () {
         )
       ) : (
         <Wrapper>
-          <Horizontal className="justify-center">
+          <Horizontal className="justifyCenter">
             <i
               style={{
                 color: "var(--textLight)",
