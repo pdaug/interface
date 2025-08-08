@@ -1,3 +1,6 @@
+import { forwardRef } from "react";
+
+// styles
 import "./Align.css";
 
 export type AlignCenterProps = {
@@ -43,24 +46,27 @@ const Vertical = function ({
   );
 };
 
-const Horizontal = function ({
-  external,
-  internal,
-  styles,
-  className,
-  children,
-  onClick,
-}: AlignElementProps) {
-  const style = { gap: `${internal}rem`, margin: `${external}rem`, ...styles };
+const Horizontal = forwardRef<HTMLDivElement, AlignElementProps>(function (
+  { external, internal, styles, className, children, onClick },
+  ref,
+) {
+  const style = {
+    gap: `${internal}rem`,
+    margin: `${external}rem`,
+    ...styles,
+  };
   return (
     <div
-      className={`alignHorizontal ${className || ""}`}
+      ref={ref}
       style={style}
       onClick={onClick}
+      className={`alignHorizontal ${className || ""}`}
     >
       {children}
     </div>
   );
-};
+});
+
+Horizontal.displayName = "Horizontal";
 
 export { Center, Vertical, Horizontal };

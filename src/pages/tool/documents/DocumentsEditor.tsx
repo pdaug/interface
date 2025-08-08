@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { Descendant } from "slate";
 import { AxiosError } from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MagicWand, Robot, Translate } from "@phosphor-icons/react";
 
@@ -40,7 +40,6 @@ import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Input, InputSelect } from "../../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
-// TODO: hovering toolbar
 const DocumentsEditor = function () {
   const t = useTranslate();
   const play = useSounds();
@@ -50,6 +49,7 @@ const DocumentsEditor = function () {
   const { OpenDialog, CloseDialog } = useDialog();
   const { token, user, instance, workspaces, workspaceId } = useSystem();
 
+  const toolbarRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [form, setForm] = useState<Partial<TypeDocument>>({
@@ -62,7 +62,28 @@ const DocumentsEditor = function () {
     workspaceId,
   });
 
-  console.log(form.content);
+  useEffect(function () {
+    const OnScroll = function () {
+      if (!toolbarRef.current) return;
+      const rect = toolbarRef.current.getBoundingClientRect();
+      console.log(rect);
+      const isSticky = rect.top === 16;
+      if (isSticky) {
+        toolbarRef.current.style.border = "1px solid var(--borderColor)";
+        toolbarRef.current.style.marginLeft = "16px";
+      } else {
+        toolbarRef.current.style.border = "none";
+        toolbarRef.current.style.marginLeft = "0px";
+      }
+      return;
+    };
+    window.addEventListener("wheel", OnScroll);
+    OnScroll();
+    return function () {
+      window.removeEventListener("wheel", OnScroll);
+      return;
+    };
+  }, []);
 
   // fetch document
   useAsync(async function () {
@@ -241,27 +262,43 @@ const DocumentsEditor = function () {
           <form onSubmit={onSubmit} className="flex flex1">
             <Vertical internal={1} className="flex flex1">
               {/* toolbar */}
-              <Horizontal internal={0.4}>
-                <RichTextAction action="undo" />
-                <RichTextAction action="redo" />
-                <div style={{ width: 8 }}></div>
-                <RichTextColor />
-                <div style={{ width: 8 }}></div>
-                <RichTextFont />
-                <div style={{ width: 8 }}></div>
-                <RichTextTool format="bold" />
-                <RichTextTool format="italic" />
-                <RichTextTool format="underline" />
-                <RichTextTool format="strikethrough" />
-                <div style={{ width: 8 }}></div>
-                <RichTextTool format="title" />
-                <RichTextTool format="subtitle" />
-                <div style={{ width: 8 }}></div>
-                <RichTextTool format="left" />
-                <RichTextTool format="center" />
-                <RichTextTool format="right" />
-                <RichTextTool format="justify" />
-                <div className="flex1"></div>
+              <Horizontal
+                styles={{
+                  position: "sticky",
+                  top: 0,
+                  zIndex: 9,
+                }}
+              >
+                <Horizontal
+                  ref={toolbarRef}
+                  internal={0.4}
+                  styles={{
+                    background: "var(--backgroundColor)",
+                    backgroundColor: "var(--backgroundColor)",
+                    borderRadius: "var(--borderRadius)",
+                    padding: "0.4rem",
+                  }}
+                >
+                  <RichTextAction action="undo" />
+                  <RichTextAction action="redo" />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextColor />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextFont />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextTool format="bold" />
+                  <RichTextTool format="italic" />
+                  <RichTextTool format="underline" />
+                  <RichTextTool format="strikethrough" />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextTool format="title" />
+                  <RichTextTool format="subtitle" />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextTool format="left" />
+                  <RichTextTool format="center" />
+                  <RichTextTool format="right" />
+                  <RichTextTool format="justify" />
+                </Horizontal>
               </Horizontal>
 
               <Horizontal internal={1} className="flex flex1">
@@ -269,12 +306,7 @@ const DocumentsEditor = function () {
                 <RichText />
 
                 {/* inspect */}
-                <div
-                  style={{
-                    position: "sticky",
-                    top: 0,
-                  }}
-                >
+                <div style={{ position: "sticky", top: 0 }}>
                   <Vertical
                     internal={1}
                     styles={{
