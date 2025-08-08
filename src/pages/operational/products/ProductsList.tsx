@@ -405,6 +405,10 @@ const ProductsList = function () {
                         </Dropdown>
                       </React.Fragment>
                     }
+                    onDoubleClick={function () {
+                      navigate(`/f/products/inspect/${product.id}`);
+                      return;
+                    }}
                   >
                     <div>{product.name}</div>
                     <div
