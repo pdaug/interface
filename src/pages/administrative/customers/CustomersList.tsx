@@ -170,7 +170,6 @@ const CustomersList = function () {
             return;
           }}
         />
-        {/* <Button category="Neutral" text={t.components.import} /> */}
         <Button
           category="Neutral"
           disabled={!selected.length}
@@ -469,10 +468,11 @@ const CustomersList = function () {
                   confirmText: t.components.delete,
                   onConfirm: async function () {
                     try {
-                      const response = await apis.User.delete(
+                      const response = await apis.Customer.delete(
                         token,
                         instance.name,
                         data.id as string,
+                        workspaceId,
                       );
                       if (!response.data?.result) {
                         play("alert");

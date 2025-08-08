@@ -127,3 +127,8 @@
   padding: 8px;
   text-align: center;
 }
+
+.agendaDateDescription {
+  color: var(--textLight);
+  font-size: var(--textSmall);
+}
