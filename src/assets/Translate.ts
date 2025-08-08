@@ -469,6 +469,7 @@ const TranslatePt = {
     high: "Alta",
     start_date: "Data e hora inicial",
     end_date: "Date e hora final",
+    more: "mais",
   },
   service: {
     service: "Serviço",
@@ -1177,6 +1178,7 @@ const TranslateEn = {
     high: "High",
     start_date: "Start date",
     end_date: "End date",
+    more: "more",
   },
   service: {
     service: "Service",

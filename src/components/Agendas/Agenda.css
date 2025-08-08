@@ -63,11 +63,11 @@
 }
 
 .rbc-event {
-  background: var(--foregroundColor) !important;
-  background-color: var(--foregroundColor) !important;
-  border: 1px solid var(--borderColor) !important;
+  background: var(--infoColor) !important;
+  background-color: var(--infoColor) !important;
+  border: 1px solid var(--infoDark) !important;
   border-radius: var(--borderRadius) !important;
-  color: var(--textLight) !important;
+  color: white !important;
   font-size: var(--textSmall) !important;
   margin: 0 4px !important;
   width: auto !important;
@@ -87,14 +87,16 @@
   background: var(--infoDark) !important;
   background-color: var(--infoDark) !important;
 }
-*/
 
 .rbc-day-bg.rbc-today {
-  background: var(--infoLight) !important;
+  background: var(--foregroundColor) !important;
+  background-color: var(--foregroundColor) !important;
 }
+*/
 
 .rbc-now.rbc-current {
   color: var(--infoDark) !important;
+  font-weight: bold !important;
 }
 
 .rbc-selected-cell {
@@ -105,27 +107,44 @@
 /**/
 
 .agendaDate {
-  border: 1px solid var(--borderColor);
+  border: 1px solid var(--infoColor);
   border-radius: var(--borderRadius);
   overflow: hidden;
   width: 64px;
   min-width: 64px;
 }
 
-.agendaDateMonth {
-  background: var(--backgroundColor);
-  background-color: var(--backgroundColor);
-  border-bottom: 1px solid var(--borderColor);
+.agendaDatePast {
+  border: 1px solid var(--borderColor) !important;
+}
+
+.agendaDate .agendaDateMonth {
+  background: var(--infoColor);
+  background-color: var(--infoColor);
+  border-bottom: 1px solid var(--infoColor);
+  color: white;
   font-size: var(--textSmall);
   padding: 4px;
   text-align: center;
 }
 
-.agendaDateDay {
+.agendaDatePast .agendaDateMonth {
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
+  border-bottom: 1px solid var(--borderColor);
+  color: var(--textColor);
+}
+
+.agendaDate .agendaDateDay {
+  color: var(--infoDark);
   font-size: var(--textSubtitle);
   font-weight: bold;
   padding: 8px;
   text-align: center;
+}
+
+.agendaDatePast .agendaDateDay {
+  color: var(--textColor) !important;
 }
 
 .agendaDateDescription {

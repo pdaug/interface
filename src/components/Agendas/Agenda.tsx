@@ -40,6 +40,8 @@ export const AgendaDate = function ({
   const { instance } = useSystem();
   const { instanceTime, instanceDateTime } = useDateTime();
 
+  const isPast = new Date(end) < new Date();
+
   const locale = locales?.[instance.language as keyof typeof locales];
 
   const isSameDayStartEnd = isSameDay(start, end);
@@ -52,7 +54,7 @@ export const AgendaDate = function ({
   return (
     <Wrapper styles={{ flex: "none" }} contentStyles={{ padding: "0.4rem" }}>
       <Horizontal internal={1} className="itemsCenter">
-        <div className="agendaDate">
+        <div className={`agendaDate ${isPast ? "agendaDatePast" : ""}`}>
           <div className="agendaDateMonth">
             {format(date, "MMM", { locale })}
           </div>
@@ -81,6 +83,7 @@ export const AgendaDate = function ({
 };
 
 export const Agenda = function (props: Omit<CalendarProps, "localizer">) {
+  const t = useTranslate();
   const { instance } = useSystem();
 
   const locale = locales?.[instance.language as keyof typeof locales];
@@ -102,21 +105,29 @@ export const Agenda = function (props: Omit<CalendarProps, "localizer">) {
   return (
     <Calendar
       {...props}
-      messages={{
-        allDay: "Dia inteiro",
-        previous: "Anterior",
-        next: "Próximo",
-        today: "Hoje",
-        month: "Mês",
-        week: "Semana",
-        day: "Dia",
-        agenda: "Agenda",
-        date: "Data",
-        time: "Hora",
-        event: "Evento",
-        noEventsInRange: "Nenhum evento neste período.",
-      }}
       localizer={localizer}
+      messages={{
+        allDay: t.schedule.all_day,
+        previous: t.schedule.previous,
+        next: t.schedule.next,
+        today: t.schedule.today,
+        month: t.schedule.month,
+        week: t.schedule.week,
+        day: t.schedule.day,
+        agenda: t.schedule.agenda,
+        date: t.schedule.date,
+        time: t.schedule.time,
+        event: t.schedule.event,
+        noEventsInRange: t.schedule.no_events_in_range,
+        showMore: (total) => `+${total} ${t.schedule.more}`,
+      }}
+      eventPropGetter={function (_event, _start, end) {
+        const isPast = new Date(end) < new Date();
+        const style = {
+          opacity: isPast ? 0.4 : 1,
+        };
+        return { style };
+      }}
     />
   );
 };

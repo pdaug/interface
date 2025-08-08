@@ -78,8 +78,8 @@ const SchedulesPanel = function () {
         category: "note",
         priority: "medium",
         description: "nothing",
-        start: new Date("2025-08-01T12:00:00Z"),
-        end: new Date("2025-08-01T13:00:00Z"),
+        start: new Date("2025-08-10T12:00:00Z"),
+        end: new Date("2025-08-10T13:00:00Z"),
       },
       {
         id: "2",
