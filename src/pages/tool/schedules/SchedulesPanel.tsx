@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { endOfDay, format, isSameDay, startOfDay, subDays } from "date-fns";
 
+// types
+import {
+  TypeSchedule,
+  TypeScheduleCategory,
+  TypeSchedulePriority,
+} from "../../../types/Schedules";
+
+// assets
+import {
+  ScheduleCategoriesOptions,
+  SchedulePrioritiesOptions,
+} from "../../../assets/Schedules";
+
 // hooks
 import useSystem from "../../../hooks/useSystem";
 import useTranslate from "../../../hooks/useTranslate";
@@ -16,41 +29,6 @@ import Wrapper from "../../../components/wrapper/Wrapper";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Agenda, AgendaDate } from "../../../components/Agendas/Agenda";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-
-const ScheduleCategoriesOptions = [
-  "task",
-  "note",
-  "event",
-  "remind",
-  "deadline",
-  "work",
-  "reserved",
-  "meeting",
-];
-
-export type TypeScheduleCategory =
-  | "task"
-  | "note"
-  | "event"
-  | "remind"
-  | "deadline"
-  | "work"
-  | "reserved"
-  | "meeting";
-
-const SchedulePrioritiesOptions = ["low", "medium", "high"];
-
-export type TypeSchedulePriority = "low" | "medium" | "high";
-
-export type TypeSchedule = {
-  id?: string;
-  title: string;
-  description: string;
-  category: TypeScheduleCategory;
-  priority: TypeSchedulePriority;
-  start: Date;
-  end: Date;
-};
 
 const SchedulesPanel = function () {
   const t = useTranslate();
