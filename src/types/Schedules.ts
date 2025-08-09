@@ -8,7 +8,12 @@ export type TypeScheduleCategory =
   | "reserved"
   | "meeting";
 
-export type TypeSchedulePriority = "low" | "medium" | "high";
+export type TypeSchedulePriority =
+  | "none"
+  | "low"
+  | "medium"
+  | "high"
+  | "critical";
 
 export type TypeSchedule = {
   id?: string;
@@ -18,4 +23,5 @@ export type TypeSchedule = {
   priority: TypeSchedulePriority;
   start: Date;
   end: Date;
+  userId: string;
 };

@@ -21,6 +21,34 @@ const locales = {
   pt: ptBR,
 };
 
+export const AgendaEvents = {
+  none: {
+    background: "var(--backgroundColor)",
+    border: "1px solid var(--borderColor)",
+    color: "var(--textColor)",
+  },
+  low: {
+    background: "var(--successColor)",
+    border: "1px solid var(--successDark)",
+    color: "white",
+  },
+  medium: {
+    background: "var(--infoColor)",
+    border: "1px solid var(--infoDark)",
+    color: "white",
+  },
+  high: {
+    background: "var(--warningColor)",
+    border: "1px solid var(--warningDark)",
+    color: "white",
+  },
+  critical: {
+    background: "var(--dangerColor)",
+    border: "1px solid var(--dangerDark)",
+    color: "white",
+  },
+};
+
 export type AgendaDateProps = {
   date: Date;
   title: React.ReactNode;
@@ -121,10 +149,19 @@ export const Agenda = function (props: Omit<CalendarProps, "localizer">) {
         noEventsInRange: t.schedule.no_events_in_range,
         showMore: (total) => `+${total} ${t.schedule.more}`,
       }}
-      eventPropGetter={function (_event, _start, end) {
-        const isPast = new Date(end) < new Date();
+      eventPropGetter={function (event) {
+        if (!("priority" in event) || !event.priority) return {};
+        const isPast = new Date(event?.end || 0) < new Date();
+        const AgendaEventPriority =
+          AgendaEvents[
+            (event?.priority as keyof typeof AgendaEvents) || "none"
+          ];
         const style = {
-          opacity: isPast ? 0.4 : 1,
+          opacity: isPast ? 0.5 : 1,
+          background: AgendaEventPriority.background,
+          backgroundColor: AgendaEventPriority.background,
+          border: AgendaEventPriority.border,
+          color: AgendaEventPriority.color,
         };
         return { style };
       }}

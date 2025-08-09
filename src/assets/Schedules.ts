@@ -9,4 +9,15 @@ export const ScheduleCategoriesOptions = [
   "meeting",
 ];
 
-export const SchedulePrioritiesOptions = ["low", "medium", "high"];
+// none -> neutral
+// low -> success
+// medium -> info
+// high -> warning
+// critical -> danger
+export const SchedulePrioritiesOptions = [
+  "none",
+  "low",
+  "medium",
+  "high",
+  "critical",
+];

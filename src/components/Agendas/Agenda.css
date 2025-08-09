@@ -63,11 +63,7 @@
 }
 
 .rbc-event {
-  background: var(--infoColor) !important;
-  background-color: var(--infoColor) !important;
-  border: 1px solid var(--infoDark) !important;
   border-radius: var(--borderRadius) !important;
-  color: white !important;
   font-size: var(--textSmall) !important;
   margin: 0 4px !important;
   width: auto !important;
@@ -105,7 +101,6 @@
 }
 
 /**/
-
 .agendaDate {
   border: 1px solid var(--infoColor);
   border-radius: var(--borderRadius);
@@ -114,11 +109,7 @@
   min-width: 64px;
 }
 
-.agendaDatePast {
-  border: 1px solid var(--borderColor) !important;
-}
-
-.agendaDate .agendaDateMonth {
+.agendaDateMonth {
   background: var(--infoColor);
   background-color: var(--infoColor);
   border-bottom: 1px solid var(--infoColor);
@@ -128,23 +119,12 @@
   text-align: center;
 }
 
-.agendaDatePast .agendaDateMonth {
-  background: var(--backgroundColor);
-  background-color: var(--backgroundColor);
-  border-bottom: 1px solid var(--borderColor);
-  color: var(--textColor);
-}
-
-.agendaDate .agendaDateDay {
+.agendaDateDay {
   color: var(--infoDark);
   font-size: var(--textSubtitle);
   font-weight: bold;
   padding: 8px;
   text-align: center;
-}
-
-.agendaDatePast .agendaDateDay {
-  color: var(--textColor) !important;
 }
 
 .agendaDateDescription {

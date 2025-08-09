@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import React, { useState } from "react";
+import { Pencil } from "@phosphor-icons/react";
 import { endOfDay, format, isSameDay, startOfDay, subDays } from "date-fns";
 
-// types
-import {
-  TypeSchedule,
-  TypeScheduleCategory,
-  TypeSchedulePriority,
-} from "../../../types/Schedules";
+// apis
+import apis from "../../../apis";
 
 // assets
 import {
@@ -14,8 +13,19 @@ import {
   SchedulePrioritiesOptions,
 } from "../../../assets/Schedules";
 
+// types
+import {
+  TypeSchedule,
+  TypeScheduleCategory,
+  TypeSchedulePriority,
+} from "../../../types/Schedules";
+import { ApiResponsePaginate } from "../../../types/Api";
+
 // hooks
+import useAsync from "../../../hooks/useAsync";
+import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
+import useSchema from "../../../hooks/useSchema";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
@@ -26,170 +36,198 @@ import {
 } from "../../../components/inputs/Input";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
+import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Agenda, AgendaDate } from "../../../components/Agendas/Agenda";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const SchedulesPanel = function () {
   const t = useTranslate();
-  const { workspaceId, workspaces } = useSystem();
+  const play = useSounds();
+  const Schema = useSchema();
+  const { OpenDialog, CloseDialog } = useDialog();
+  const { user, token, instance, workspaceId, workspaces } = useSystem();
 
   const initialForm: TypeSchedule = {
     id: "",
     title: "",
     category: "note",
-    priority: "medium",
+    priority: "none",
     description: "",
     start: startOfDay(new Date()),
     end: new Date(),
+    userId: user.id,
   };
 
+  const [loading, setLoading] = useState<boolean>(true);
   const [form, setForm] = useState<TypeSchedule>(initialForm);
   const [selected, setSelected] = useState<TypeSchedule[]>([]);
   const [schedules, setSchedules] = useState<TypeSchedule[]>([]);
 
-  useEffect(function () {
-    setSchedules([
-      {
-        id: "1",
-        title: "Proin ornare quam sit amet augue porttitor consectetur.",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-10T12:00:00Z"),
-        end: new Date("2025-08-10T13:00:00Z"),
+  const FetchSchedules = async function () {
+    setLoading(true);
+    try {
+      const response = await apis.Schedule.list<
+        ApiResponsePaginate<TypeSchedule>
+      >(
+        token,
+        instance.name,
+        {
+          pageSize: 999,
+          pageCurrent: 1,
+        },
+        workspaceId,
+      );
+      if (!response.data?.result?.items) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.warn(
+          "[src/pages/tool/schedules/SchedulesPanel.tsx]",
+          response.data,
+        );
+        return;
+      }
+      const parse = response.data.result.items?.map(function (item) {
+        return {
+          ...item,
+          start: new Date(item.start),
+          end: item?.end ? new Date(item.end) : null,
+        };
+      });
+      setSchedules(parse as TypeSchedule[]);
+      return;
+    } catch (err) {
+      play("alert");
+      toast.error(t.toast.warning_error, {
+        description: t.stacks.no_find_item,
+      });
+      console.error("[src/pages/tool/schedules/SchedulesPanel.tsx]", err);
+      return;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const DeleteAction = async function (data: TypeSchedule) {
+    OpenDialog({
+      category: "Danger",
+      title: t.dialog.title_delete,
+      description: t.dialog.description_delete,
+      confirmText: t.components.delete,
+      onConfirm: async function () {
+        try {
+          const response = await apis.Schedule.delete(
+            token,
+            instance.name,
+            data.id as string,
+            workspaceId,
+          );
+          if (!response.data?.result) {
+            play("alert");
+            toast.warning(t.toast.warning_error, {
+              description: t.toast.error_delete,
+            });
+            return;
+          }
+          play("ok");
+          toast.success(t.toast.success, {
+            description: t.toast.success_delete,
+          });
+          CloseDialog();
+          await FetchSchedules();
+          return;
+        } catch (err) {
+          play("alert");
+          toast.error(t.toast.warning_error, {
+            description: t.toast.error_delete,
+          });
+          console.error("[src/pages/tool/schedules/SchedulesPanel.tsx]", err);
+          return;
+        }
       },
-      {
-        id: "2",
-        title:
-          " Sed vitae nibh vitae dui malesuada tristique. Suspendisse bibendum diam nulla, eu feugiat dui consequat nec.",
-        category: "note",
-        priority: "medium",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis sem lorem, fringilla interdum ante vulputate et. In hac habitasse platea dictumst. In ut tellus et dui bibendum sodales nec et velit. Integer quis ipsum sit amet sapien mollis varius eu a ipsum. Nulla id metus facilisis, consequat ipsum at, vestibulum orci. Donec consequat tortor non vehicula feugiat. In dignissim facilisis leo, et iaculis ex placerat ac. Nunc feugiat vulputate orci, nec ornare tellus blandit a. In nibh dui, laoreet vitae egestas quis, placerat eget urna. Sed arcu erat, iaculis non justo nec, pharetra suscipit neque. Sed rhoncus nulla augue, eget malesuada dui congue ut. Aliquam et justo scelerisque diam placerat mollis a sit amet eros. Nullam mollis nunc quis pellentesque aliquet. Vestibulum id vehicula arcu. Vestibulum sit amet justo orci.",
-        start: new Date("2025-08-01T14:00:00Z"),
-        end: new Date("2025-08-02T14:30:00Z"),
-      },
-      {
-        id: "3",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T15:00:00Z"),
-        end: new Date("2025-08-01T16:30:00Z"),
-      },
-      {
-        id: "4",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T18:00:00Z"),
-        end: new Date("2025-08-01T18:30:00Z"),
-      },
-      {
-        id: "5",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T19:00:00Z"),
-        end: new Date("2025-08-01T21:00:00Z"),
-      },
-      {
-        id: "6",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T19:00:00Z"),
-        end: new Date("2025-08-01T21:00:00Z"),
-      },
-      {
-        id: "7",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T19:00:00Z"),
-        end: new Date("2025-08-01T21:00:00Z"),
-      },
-      {
-        id: "8",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T19:00:00Z"),
-        end: new Date("2025-08-01T21:00:00Z"),
-      },
-      {
-        id: "9",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T19:00:00Z"),
-        end: new Date("2025-08-01T21:00:00Z"),
-      },
-      {
-        id: "10",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T19:00:00Z"),
-        end: new Date("2025-08-01T21:00:00Z"),
-      },
-      {
-        id: "11",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T19:00:00Z"),
-        end: new Date("2025-08-01T21:00:00Z"),
-      },
-      {
-        id: "12",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T19:00:00Z"),
-        end: new Date("2025-08-01T21:00:00Z"),
-      },
-      {
-        id: "13",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T19:00:00Z"),
-        end: new Date("2025-08-01T21:00:00Z"),
-      },
-      {
-        id: "14",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T19:00:00Z"),
-        end: new Date("2025-08-01T21:00:00Z"),
-      },
-      {
-        id: "15",
-        title: "Teste",
-        category: "note",
-        priority: "medium",
-        description: "nothing",
-        start: new Date("2025-08-01T19:00:00Z"),
-        end: new Date("2025-08-01T21:00:00Z"),
-      },
-    ]);
+    });
     return;
-  }, []);
+  };
+
+  // fetch schedules
+  useAsync(FetchSchedules, [workspaceId]);
+
+  const OnSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setLoading(true);
+    const toastId = toast.loading(t.components.loading);
+    try {
+      // is editing
+      if (form.id) {
+        const response = await apis.Schedule.update(
+          token,
+          instance.name,
+          form.id,
+          form,
+          workspaceId,
+        );
+        if (!response.data?.result || response.status !== 200) {
+          play("alert");
+          setLoading(false);
+          toast.dismiss(toastId);
+          toast.warning(t.toast.warning_error, {
+            description: t.toast.warning_edit,
+          });
+          return;
+        }
+        play("ok");
+        toast.dismiss(toastId);
+        toast.success(t.toast.success, {
+          description: t.toast.success_edit,
+        });
+        await FetchSchedules();
+        setLoading(false);
+        return;
+      }
+      // is creating
+      const response = await apis.Schedule.create<TypeSchedule>(
+        token,
+        instance.name,
+        form,
+        workspaceId,
+      );
+      if (!response.data?.result || response.status !== 201) {
+        play("alert");
+        toast.dismiss(toastId);
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_create,
+        });
+        setLoading(false);
+        return;
+      }
+      play("ok");
+      toast.dismiss(toastId);
+      toast.success(t.toast.success, {
+        description: t.toast.success_create,
+      });
+      await FetchSchedules();
+      setLoading(false);
+      return;
+    } catch (err) {
+      setLoading(false);
+      play("alert");
+      toast.dismiss(toastId);
+      console.error("[src/pages/tool/schedules/SchedulesPanel.tsx]", err);
+      if (
+        err instanceof AxiosError &&
+        err.response?.data?.result?.message === "schema_incorrect"
+      ) {
+        Schema(err.response.data.result.err);
+        return;
+      }
+      toast.error(t.toast.warning_error, {
+        description: form.id ? t.toast.error_edit : t.toast.error_create,
+      });
+      return;
+    }
+  };
 
   return (
     <React.Fragment>
@@ -255,7 +293,11 @@ const SchedulesPanel = function () {
 
         <Vertical internal={1} className="flex1 overflowHidden">
           {!selected.length ? (
-            <React.Fragment>
+            <form
+              className="flex"
+              onSubmit={OnSubmit}
+              style={{ flexDirection: "column", gap: "1rem" }}
+            >
               <AgendaDate
                 date={form.start}
                 title={form.title}
@@ -271,6 +313,7 @@ const SchedulesPanel = function () {
                     min={3}
                     max={64}
                     name="title"
+                    disabled={loading}
                     value={form.title}
                     id="calendar_title"
                     label={t.schedule.title}
@@ -285,6 +328,7 @@ const SchedulesPanel = function () {
                   <InputText
                     max={256}
                     height={4}
+                    disabled={loading}
                     name="description"
                     value={form.description}
                     id="calendar_description"
@@ -301,6 +345,7 @@ const SchedulesPanel = function () {
                     <InputSelect
                       required
                       name="category"
+                      disabled={loading}
                       id="calendar_category"
                       value={form.category}
                       empty={t.stacks.no_items}
@@ -328,6 +373,7 @@ const SchedulesPanel = function () {
                     <InputSelect
                       required
                       name="priority"
+                      disabled={loading}
                       id="calendar_priority"
                       value={form.priority}
                       empty={t.stacks.no_items}
@@ -356,6 +402,7 @@ const SchedulesPanel = function () {
                   <Input
                     required
                     name="start"
+                    disabled={loading}
                     id="calendar_start"
                     type="datetime-local"
                     placeholder="yyyy-MM-dd"
@@ -374,6 +421,7 @@ const SchedulesPanel = function () {
                     required
                     name="end"
                     id="calendar_end"
+                    disabled={loading}
                     type="datetime-local"
                     placeholder="yyyy-MM-dd"
                     label={t.schedule.end_date}
@@ -385,13 +433,29 @@ const SchedulesPanel = function () {
                       return;
                     }}
                   />
-                  <Button
-                    category={form.id ? "Info" : "Success"}
-                    text={form.id ? t.components.edit : t.components.save}
-                  />
+                  <Horizontal internal={1}>
+                    <Button
+                      type="submit"
+                      IconSize={16}
+                      className="flex1"
+                      disabled={loading}
+                      Icon={form.id ? Pencil : undefined}
+                      category={form.id ? "Neutral" : "Success"}
+                      text={form.id ? t.components.edit : t.components.save}
+                    />
+                    {form.id && (
+                      <Button
+                        type="button"
+                        disabled={loading}
+                        category="Danger"
+                        text={t.components.remove}
+                        onClick={() => DeleteAction(form)}
+                      />
+                    )}
+                  </Horizontal>
                 </Vertical>
               </Wrapper>
-            </React.Fragment>
+            </form>
           ) : (
             <Vertical internal={1} styles={{ overflow: "auto" }}>
               {selected?.map(function (schedule) {

@@ -205,6 +205,7 @@ const DocumentsFolder = function () {
         }
       },
     });
+    return;
   };
 
   const ShareAction = function (_: React.MouseEvent, data: unknown) {

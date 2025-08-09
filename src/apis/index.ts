@@ -17,6 +17,7 @@ import Instance from "./internal/Instance";
 import Customer from "./internal/Customer";
 import WhatsApp from "./internal/WhatsApp";
 import Supplier from "./internal/Supplier";
+import Schedule from "./internal/Schedule";
 import Workspace from "./internal/Workspace";
 import DocumentApi from "./internal/Document";
 
@@ -32,6 +33,7 @@ export default {
   Login,
   Order,
   Product,
+  Schedule,
   Service,
   Session,
   Settings,
