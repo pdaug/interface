@@ -299,6 +299,7 @@ const SchedulesPanel = function () {
               style={{ flexDirection: "column", gap: "1rem" }}
             >
               <AgendaDate
+                priority={form.priority}
                 date={form.start}
                 title={form.title}
                 description={form.description}
@@ -460,25 +461,24 @@ const SchedulesPanel = function () {
             <Vertical internal={1} styles={{ overflow: "auto" }}>
               {selected?.map(function (schedule) {
                 return (
-                  <AgendaDate
+                  <div
                     key={schedule.id}
-                    date={schedule.start}
-                    description={schedule.description}
-                    start={schedule.start}
-                    end={schedule.end}
-                    title={
-                      <a
-                        href="#"
-                        onClick={function () {
-                          setForm(schedule);
-                          setSelected([]);
-                          return;
-                        }}
-                      >
-                        {schedule.title}
-                      </a>
-                    }
-                  />
+                    style={{ cursor: "pointer" }}
+                    onClick={function () {
+                      setForm(schedule);
+                      setSelected([]);
+                      return;
+                    }}
+                  >
+                    <AgendaDate
+                      date={schedule.start}
+                      priority={schedule.priority}
+                      description={schedule.description}
+                      start={schedule.start}
+                      end={schedule.end}
+                      title={schedule.title}
+                    />
+                  </div>
                 );
               })}
             </Vertical>

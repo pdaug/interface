@@ -5,6 +5,9 @@ import { Calendar, CalendarProps, dateFnsLocalizer } from "react-big-calendar";
 // styles
 import "./Agenda.css";
 
+// types
+import { TypeSchedulePriority } from "../../types/Schedules";
+
 // components
 import Wrapper from "../wrapper/Wrapper";
 import { Horizontal, Vertical } from "../aligns/Align";
@@ -25,31 +28,37 @@ export const AgendaEvents = {
   none: {
     background: "var(--backgroundColor)",
     border: "1px solid var(--borderColor)",
+    secondary: "var(--textColor)",
     color: "var(--textColor)",
   },
   low: {
     background: "var(--successColor)",
     border: "1px solid var(--successDark)",
+    secondary: "var(--successDark)",
     color: "white",
   },
   medium: {
     background: "var(--infoColor)",
     border: "1px solid var(--infoDark)",
+    secondary: "var(--infoDark)",
     color: "white",
   },
   high: {
     background: "var(--warningColor)",
     border: "1px solid var(--warningDark)",
+    secondary: "var(--warningDark)",
     color: "white",
   },
   critical: {
     background: "var(--dangerColor)",
     border: "1px solid var(--dangerDark)",
+    secondary: "var(--dangerDark)",
     color: "white",
   },
 };
 
 export type AgendaDateProps = {
+  priority: TypeSchedulePriority;
   date: Date;
   title: React.ReactNode;
   description: string;
@@ -58,6 +67,7 @@ export type AgendaDateProps = {
 };
 
 export const AgendaDate = function ({
+  priority,
   date,
   title,
   description,
@@ -68,8 +78,6 @@ export const AgendaDate = function ({
   const { instance } = useSystem();
   const { instanceTime, instanceDateTime } = useDateTime();
 
-  const isPast = new Date(end) < new Date();
-
   const locale = locales?.[instance.language as keyof typeof locales];
 
   const isSameDayStartEnd = isSameDay(start, end);
@@ -79,14 +87,35 @@ export const AgendaDate = function ({
       ? `${description.slice(0, 128)}...`
       : description || t.schedule.no_description;
 
+  const AgendaEventPriority =
+    AgendaEvents[(priority as keyof typeof AgendaEvents) || "none"];
+
   return (
     <Wrapper styles={{ flex: "none" }} contentStyles={{ padding: "0.4rem" }}>
       <Horizontal internal={1} className="itemsCenter">
-        <div className={`agendaDate ${isPast ? "agendaDatePast" : ""}`}>
-          <div className="agendaDateMonth">
+        <div
+          className="agendaDate"
+          style={{ border: AgendaEventPriority.border }}
+        >
+          <div
+            className="agendaDateMonth"
+            style={{
+              background: AgendaEventPriority.background,
+              backgroundColor: AgendaEventPriority.background,
+              borderBottom: AgendaEventPriority.border,
+              color: AgendaEventPriority.color,
+            }}
+          >
             {format(date, "MMM", { locale })}
           </div>
-          <div className="agendaDateDay">{format(date, "dd")}</div>
+          <div
+            className="agendaDateDay"
+            style={{
+              color: AgendaEventPriority.secondary,
+            }}
+          >
+            {format(date, "dd")}
+          </div>
         </div>
         <Vertical internal={0.2} className="ellipses">
           <div className="ellipses">{title || t.schedule.no_title}</div>

@@ -102,7 +102,6 @@
 
 /**/
 .agendaDate {
-  border: 1px solid var(--infoColor);
   border-radius: var(--borderRadius);
   overflow: hidden;
   width: 64px;
@@ -110,17 +109,12 @@
 }
 
 .agendaDateMonth {
-  background: var(--infoColor);
-  background-color: var(--infoColor);
-  border-bottom: 1px solid var(--infoColor);
-  color: white;
   font-size: var(--textSmall);
   padding: 4px;
   text-align: center;
 }
 
 .agendaDateDay {
-  color: var(--infoDark);
   font-size: var(--textSubtitle);
   font-weight: bold;
   padding: 8px;
