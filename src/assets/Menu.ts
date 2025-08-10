@@ -1,17 +1,10 @@
-import { Cube, Table, Wrench, SuitcaseSimple } from "@phosphor-icons/react";
+import { Table, Wrench, Package, SuitcaseSimple } from "@phosphor-icons/react";
 
 export const MenuOptions = [
   {
     id: "financial",
     icon: Table,
-    items: [
-      "dashboard",
-      "orders",
-      "inflows",
-      "outflows",
-      "recurring",
-      "statements",
-    ],
+    items: ["dashboard", "inflows", "outflows", "recurring"],
   },
   {
     id: "administrative",
@@ -19,9 +12,14 @@ export const MenuOptions = [
     items: ["customers", "suppliers", "employees"],
   },
   {
-    id: "operational",
-    icon: Cube,
-    items: ["products", "services", "vehicles"],
+    id: "products",
+    icon: Package,
+    items: ["list", "sales"],
+  },
+  {
+    id: "services",
+    icon: SuitcaseSimple,
+    items: ["list", "orders", "vehicles"],
   },
   {
     id: "tools",

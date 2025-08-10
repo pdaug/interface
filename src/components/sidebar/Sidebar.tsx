@@ -13,14 +13,15 @@ export type SidebarMenuItem = {
   onClick?: () => void;
 };
 
-export type SidebarOptions =
+export type SidebarOptions = (
   | {
       id: string;
       name: string;
       Icon?: IconPhosphor;
       items: SidebarMenuItem[];
-    }[]
-  | SidebarMenuItem[];
+    }
+  | SidebarMenuItem
+)[];
 
 export type SidebarProps = {
   selected: string;

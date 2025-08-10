@@ -2,17 +2,19 @@ import {
   Plug,
   Info,
   House,
+  Truck,
+  Table,
   Check,
+  Wrench,
   SignOut,
   GearSix,
   CaretDown,
   CreditCard,
+  SuitcaseSimple,
+  ShoppingBagOpen,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-
-// assets
-import { MenuOptions } from "../assets/Menu";
 
 // package
 import { version as versionFrontend } from "../../package.json";
@@ -23,10 +25,10 @@ import useSounds from "../hooks/useSounds";
 import useTranslate from "../hooks/useTranslate";
 
 // components
-import Sidebar from "../components/sidebar/Sidebar";
 import { Vertical } from "../components/aligns/Align";
 import { useDialog } from "../components/dialogs/Dialog";
 import { DropdownValue } from "../components/dropdowns/Dropdown";
+import Sidebar, { SidebarOptions } from "../components/sidebar/Sidebar";
 
 const Menu = function () {
   const {
@@ -92,20 +94,118 @@ const Menu = function () {
     },
   };
 
-  const options = MenuOptions.map(function (option) {
-    return {
-      id: option.id,
-      name: t.menu[option.id as keyof typeof t.menu],
-      Icon: option.icon,
-      items: option.items.map(function (item) {
-        return {
-          id: `/f/${item}`,
-          label: t.menu[item as keyof typeof t.menu],
-          onClick: () => navigate(`/f/${item}`),
-        };
-      }),
-    };
-  });
+  const MenuOptions: SidebarOptions = [
+    {
+      id: "dashboard",
+      label: t.menu.dashboard,
+      onClick: () => navigate("/f"),
+    },
+    {
+      id: "financial",
+      name: t.menu.financial,
+      Icon: Table,
+      items: [
+        {
+          id: "inflow",
+          label: t.menu.inflows,
+          onClick: () => navigate("/f/inflows"),
+        },
+        {
+          id: "outflows",
+          label: t.menu.outflows,
+          onClick: () => navigate("/f/outflows"),
+        },
+        {
+          id: "recurrences",
+          label: t.menu.recurrences,
+          onClick: () => navigate("/f/recurrences"),
+        },
+      ],
+    },
+    {
+      id: "administrative",
+      name: t.menu.administrative,
+      Icon: SuitcaseSimple,
+      items: [
+        {
+          id: "customers",
+          label: t.menu.customers,
+          onClick: () => navigate("/f/customers"),
+        },
+        {
+          id: "suppliers",
+          label: t.menu.suppliers,
+          onClick: () => navigate("/f/suppliers"),
+        },
+        {
+          id: "employees",
+          label: t.menu.employees,
+          onClick: () => navigate("/f/employees"),
+        },
+      ],
+    },
+    {
+      id: "products",
+      name: t.menu.products,
+      Icon: ShoppingBagOpen,
+      items: [
+        {
+          id: "list",
+          label: t.menu.products,
+          onClick: () => navigate("/f/products"),
+        },
+        {
+          id: "sales",
+          label: t.menu.sales,
+          onClick: () => navigate("/f/sales"),
+        },
+      ],
+    },
+    {
+      id: "services",
+      name: t.menu.services,
+      Icon: Truck,
+      items: [
+        {
+          id: "list",
+          label: t.menu.services,
+          onClick: () => navigate("/f/services"),
+        },
+        {
+          id: "orders",
+          label: t.menu.orders,
+          onClick: () => navigate("/f/orders"),
+        },
+        {
+          id: "vehicles",
+          label: t.menu.vehicles,
+          onClick: () => navigate("/f/vehicles"),
+        },
+      ],
+    },
+    {
+      id: "tools",
+      name: t.menu.tools,
+      Icon: Wrench,
+      items: [
+        {
+          id: "automations",
+          label: t.menu.automations,
+          onClick: () => navigate("/f/automations"),
+        },
+        {
+          id: "documents",
+          label: t.menu.documents,
+          onClick: () => navigate("/f/documents"),
+        },
+        {
+          id: "schedules",
+          label: t.menu.schedules,
+          onClick: () => navigate("/f/schedules"),
+        },
+      ],
+    },
+  ];
 
   const footer = {
     name: user.name as string,
@@ -234,7 +334,7 @@ const Menu = function () {
     <Sidebar
       selected={location.pathname}
       header={header}
-      options={options}
+      options={MenuOptions}
       footer={footer}
     />
   );

@@ -3,23 +3,23 @@ import { endOfDay, startOfYear } from "date-fns";
 import { QuestionMark, DownloadSimple } from "@phosphor-icons/react";
 
 // types
-import { TypeInputInterval } from "../../../types/Components";
+import { TypeInputInterval } from "../types/Components";
 
 // hooks
-import useSystem from "../../../hooks/useSystem";
-import useTranslate from "../../../hooks/useTranslate";
+import useSystem from "../hooks/useSystem";
+import useTranslate from "../hooks/useTranslate";
 
 // components
-import Stats from "../../../components/stats/Stats";
-import Button from "../../../components/buttons/Button";
-import Wrapper from "../../../components/wrapper/Wrapper";
-import Tooltip from "../../../components/tooltips/Tooltip";
-import { ChartLine } from "../../../components/charts/Chart";
-import Dropdown from "../../../components/dropdowns/Dropdown";
-import { Horizontal } from "../../../components/aligns/Align";
-import { useDialog } from "../../../components/dialogs/Dialog";
-import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
-import { InputInterval, InputSelect } from "../../../components/inputs/Input";
+import Stats from "../components/stats/Stats";
+import Button from "../components/buttons/Button";
+import Wrapper from "../components/wrapper/Wrapper";
+import Tooltip from "../components/tooltips/Tooltip";
+import { ChartLine } from "../components/charts/Chart";
+import Dropdown from "../components/dropdowns/Dropdown";
+import { Horizontal } from "../components/aligns/Align";
+import { useDialog } from "../components/dialogs/Dialog";
+import Breadcrumb from "../components/breadcrumbs/Breadcrumb";
+import { InputInterval, InputSelect } from "../components/inputs/Input";
 
 const Dashboard = function () {
   const t = useTranslate();

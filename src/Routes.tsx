@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import settings from "./pages/settings";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
+import Dashboard from "./pages/Dashboard";
 import financial from "./pages/financial";
 import operational from "./pages/operational";
 import administrative from "./pages/administrative";
@@ -33,6 +34,10 @@ const Router = createBrowserRouter([
     element: <Container />,
     errorElement: <ErrorPage />,
     children: [
+      {
+        index: true,
+        Component: Dashboard,
+      },
       ...financial,
       ...settings,
       ...operational,
