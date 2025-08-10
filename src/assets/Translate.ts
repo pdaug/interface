@@ -154,10 +154,10 @@ const TranslatePt = {
     customer: "Cliente",
     customers: "Clientes",
     new: "Novo cliente",
-    name: "Nome do cliente",
+    name: "Nome do cliente/Razão Social",
     name_placeholder: "Ex. Fulano de Tal",
     description: "Descrição",
-    description_placeholder: "Ex. Aqui está o meu novo cliente...",
+    description_placeholder: "Ex. Preencha aqui a descrição sobre o cliente...",
     document: "Documento",
     mobile: "Número de celular",
     mobile_placeholder: "+55 (11) 98888-7777",
@@ -176,12 +176,8 @@ const TranslatePt = {
     subtitle_addresses:
       "Preencha os campos com os dados do endereço do cliente",
     no_delete_address: "Não é possível deletar todos os endereços",
-    stats_inflows_title: "Total de entradas",
-    stats_inflows_description: "Entradas vinda deste cliente",
-    interactions: "Interações",
-    stats_interactions_title: "Total de interações",
-    stats_interactions_description:
-      "Interações que este cliente teve ao todo no sistema",
+    stats_inflows_title: "Total de receitas",
+    stats_inflows_description: "Receitas vinda a partir deste cliente",
   },
   dashboard: {
     dashboard: "Painel",

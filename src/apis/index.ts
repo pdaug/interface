@@ -1,6 +1,7 @@
 // apis external
 import PostalCode from "./external/PostalCode";
 import CompanyData from "./external/CompanyData";
+import AddressPosition from "./external/Address";
 
 // apis internal
 import User from "./internal/User";
@@ -24,6 +25,7 @@ import DocumentApi from "./internal/Document";
 export default {
   // external
   PostalCode,
+  AddressPosition,
   CompanyData,
   // internal
   Account,

@@ -3,7 +3,7 @@ import axios from "axios";
 // types
 import { ApiAddressProps, ApiAddressResult } from "../../types/Api";
 
-const CompanyData = function (
+const AddressPosition = function (
   address: ApiAddressProps,
   polygon = 1,
   format = "jsonv2",
@@ -13,4 +13,4 @@ const CompanyData = function (
   return axios.get<ApiAddressResult>(url);
 };
 
-export default CompanyData;
+export default AddressPosition;

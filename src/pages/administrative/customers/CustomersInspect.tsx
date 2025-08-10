@@ -1,8 +1,8 @@
 import {
   UserList,
   Asterisk,
+  HandCoins,
   MapTrifold,
-  Storefront,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -36,9 +36,9 @@ import useTranslate from "../../../hooks/useTranslate";
 import {
   Input,
   InputFile,
+  InputText,
   InputMask,
   InputSelect,
-  InputText,
 } from "../../../components/inputs/Input";
 import Stats from "../../../components/stats/Stats";
 import Avatar from "../../../components/avatars/Avatar";
@@ -61,6 +61,7 @@ const CustomersInspect = function () {
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
   const [photoTemp, setPhotoTemp] = useState<File | null>(null);
+  const [position, setPosition] = useState<[number, number] | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeCustomer>>({
@@ -94,6 +95,45 @@ const CustomersInspect = function () {
         return form.userId === userLocal.id;
       })
     : null;
+
+  // get position
+  useAsync(
+    async function () {
+      const addressFirst = form.addresses?.[0];
+      if (!addressFirst) return;
+      if (!addressFirst.street || !addressFirst.number || !addressFirst.city)
+        return;
+      try {
+        const response = await apis.AddressPosition(addressFirst);
+        if (
+          !response.data ||
+          !response.data?.[0]?.lat ||
+          !response.data?.[0]?.lon
+        ) {
+          console.warn(
+            "[src/pages/administrative/customers/CustomersInspect.tsx]",
+            response.data,
+          );
+          return;
+        }
+        setPosition([
+          parseFloat(String(response.data[0].lat)),
+          parseFloat(String(response.data[0].lon)),
+        ]);
+      } catch (err) {
+        console.error(
+          "[src/pages/administrative/customers/CustomersInspect.tsx]",
+          err,
+        );
+      }
+      return;
+    },
+    [
+      form.addresses?.[0]?.street,
+      form.addresses?.[0]?.number,
+      form.addresses?.[0]?.city,
+    ],
+  );
 
   // fetch customer
   useAsync(async function () {
@@ -267,6 +307,7 @@ const CustomersInspect = function () {
           />
         </h2>
       </Horizontal>
+
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Horizontal internal={1}>
@@ -309,26 +350,18 @@ const CustomersInspect = function () {
             </Wrapper>
 
             <Stats
-              metric={0.1}
+              Icon={HandCoins}
+              metric={0}
               metricStatus="Up"
               metricLocale={instance.language}
               metricOptions={{ style: "percent" }}
               title={t.customer.stats_inflows_title}
-              value={500}
+              value={0}
               valueLocale={instance.language}
               valueOptions={{ style: "currency", currency: instance.currency }}
               footer={t.customer.stats_inflows_description}
-            />
-
-            <Stats
-              metric={0.08}
-              metricStatus="Down"
-              metricLocale={instance.language}
-              metricOptions={{ style: "percent" }}
-              title={t.customer.stats_interactions_title}
-              value={2}
-              valueUnit={t.customer.interactions}
-              footer={t.customer.stats_interactions_description}
+              styles={{ alignItems: "center", display: "flex" }}
+              stylesContainer={{ flex: 1 }}
             />
           </Horizontal>
 
@@ -652,7 +685,7 @@ const CustomersInspect = function () {
                 </Horizontal>
               )}
               <Callout
-                Icon={Storefront}
+                Icon={UserList}
                 IconSize={16}
                 category="Info"
                 text={
@@ -670,271 +703,280 @@ const CustomersInspect = function () {
             title={id ? t.customer.title_addresses : t.customer.title_addresses}
             description={t.customer.subtitle_addresses}
           >
-            <Vertical internal={1}>
-              {form.addresses?.map(function (_, index) {
-                return (
-                  <Vertical key={`addresses-${index}`} internal={1}>
-                    <Horizontal
-                      internal={1}
-                      styles={{ alignItems: "flex-end" }}
-                    >
-                      <div style={{ maxWidth: 96 }}>
-                        <Input
-                          readOnly
-                          label="Id"
-                          placeholder=""
-                          value={String(index + 1)}
-                          onChange={function () {
+            <Horizontal internal={1}>
+              <Vertical internal={1} className="flex1">
+                {form.addresses?.map(function (_, index) {
+                  return (
+                    <Vertical internal={1} key={`address-${index}`}>
+                      <Horizontal
+                        internal={1}
+                        styles={{ alignItems: "flex-end" }}
+                      >
+                        <InputMask
+                          required
+                          mask={MaskPostalCode}
+                          disabled={loading && Boolean(id)}
+                          name={`addresses[${index}].postalCode`}
+                          label={t.components.address_postal_code}
+                          id={`customer_addresses_${index}_postal_code`}
+                          value={form?.addresses?.[index].postalCode || ""}
+                          placeholder={
+                            t.components.address_postal_code_placeholder
+                          }
+                          onChange={async function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            const postalCodeRaw =
+                              event.currentTarget?.value || "";
+                            const postalCode = postalCodeRaw.replace(/\D/g, "");
+                            newForm.addresses[index].postalCode = postalCode;
+                            if (postalCode.length === 8) {
+                              const toastId = toast.loading(
+                                t.components.loading,
+                              );
+                              try {
+                                const response =
+                                  await apis.PostalCode(postalCode);
+                                newForm.addresses[index].street =
+                                  response.data?.street ||
+                                  newForm.addresses[index].street;
+                                newForm.addresses[index].city =
+                                  response.data?.city ||
+                                  newForm.addresses[index].city;
+                                newForm.addresses[index].neighborhood =
+                                  response.data?.neighborhood ||
+                                  newForm.addresses[index].neighborhood;
+                                newForm.addresses[index].state =
+                                  response.data?.state ||
+                                  newForm.addresses[index].state;
+                                toast.dismiss(toastId);
+                                play("ok");
+                                toast.success(t.toast.success, {
+                                  description: t.toast.success_find,
+                                });
+                              } catch (err) {
+                                console.error(
+                                  "[src/pages/administrative/customers/CustomerInspect.tsx]",
+                                  err,
+                                );
+                                toast.dismiss(toastId);
+                                play("alert");
+                                toast.warning(t.toast.warning_error, {
+                                  description: t.toast.warning_find,
+                                });
+                              }
+                            }
+                            setForm(newForm);
                             return;
                           }}
                         />
-                      </div>
-                      <InputMask
-                        required
-                        mask={MaskPostalCode}
-                        disabled={loading && Boolean(id)}
-                        name={`addresses[${index}].postalCode`}
-                        label={t.components.address_postal_code}
-                        id={`customer_addresses_${index}_postal_code`}
-                        value={form?.addresses?.[index].postalCode || ""}
-                        placeholder={
-                          t.components.address_postal_code_placeholder
-                        }
-                        onChange={async function (event) {
-                          const newForm = { ...form };
-                          if (!newForm.addresses?.[index]) return;
-                          const postalCodeRaw =
-                            event.currentTarget?.value || "";
-                          const postalCode = postalCodeRaw.replace(/\D/g, "");
-                          newForm.addresses[index].postalCode = postalCode;
-                          if (postalCode.length === 8) {
-                            const toastId = toast.loading(t.components.loading);
-                            try {
-                              const response =
-                                await apis.PostalCode(postalCode);
-                              newForm.addresses[index].street =
-                                response.data?.street ||
-                                newForm.addresses[index].street;
-                              newForm.addresses[index].city =
-                                response.data?.city ||
-                                newForm.addresses[index].city;
-                              newForm.addresses[index].neighborhood =
-                                response.data?.neighborhood ||
-                                newForm.addresses[index].neighborhood;
-                              newForm.addresses[index].state =
-                                response.data?.state ||
-                                newForm.addresses[index].state;
-                              toast.dismiss(toastId);
-                              play("ok");
-                              toast.success(t.toast.success, {
-                                description: t.toast.success_find,
-                              });
-                            } catch (err) {
-                              console.error(
-                                "[src/pages/administrative/customers/CustomerInspect.tsx]",
-                                err,
-                              );
-                              toast.dismiss(toastId);
+                        <Input
+                          min={4}
+                          max={64}
+                          required
+                          disabled={loading && Boolean(id)}
+                          name={`addresses[${index}].street`}
+                          id={`customer_addresses_${index}_street`}
+                          value={form?.addresses?.[index].street || ""}
+                          label={t.components.address_street}
+                          placeholder={t.components.address_street_placeholder}
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].street =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          category="Danger"
+                          text={t.components.remove}
+                          onClick={function () {
+                            if (index === 0) {
                               play("alert");
                               toast.warning(t.toast.warning_error, {
-                                description: t.toast.warning_find,
+                                description: t.customer.no_delete_address,
                               });
-                            }
-                          }
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                      <Input
-                        min={4}
-                        max={64}
-                        required
-                        disabled={loading && Boolean(id)}
-                        name={`addresses[${index}].street`}
-                        id={`customer_addresses_${index}_street`}
-                        value={form?.addresses?.[index].street || ""}
-                        label={t.components.address_street}
-                        placeholder={t.components.address_street_placeholder}
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm.addresses?.[index]) return;
-                          newForm.addresses[index].street =
-                            event.currentTarget?.value || "";
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                      <Button
-                        type="button"
-                        category="Danger"
-                        text={t.components.remove}
-                        onClick={function () {
-                          if (index === 0) {
-                            play("alert");
-                            toast.warning(t.toast.warning_error, {
-                              description: t.customer.no_delete_address,
-                            });
-                            return;
-                          }
-                          OpenDialog({
-                            category: "Danger",
-                            title: t.dialog.title_delete,
-                            description: t.dialog.description_delete,
-                            confirmText: t.components.remove,
-                            onConfirm: function () {
-                              const newForm = { ...form };
-                              newForm.addresses?.splice(index, 1);
-                              setForm(newForm);
-                              play("ok");
-                              toast.success(t.toast.success, {
-                                description: t.toast.success_delete,
-                              });
-                              CloseDialog();
                               return;
-                            },
-                          });
-                        }}
-                      />
-                    </Horizontal>
-                    <Horizontal internal={1}>
-                      <Input
-                        min={1}
-                        max={8}
-                        required
-                        disabled={loading && Boolean(id)}
-                        label={t.components.address_number}
-                        name={`addresses[${index}].number`}
-                        id={`customer_addresses_${index}_number`}
-                        value={form?.addresses?.[index].number || ""}
-                        placeholder={t.components.address_number_placeholder}
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm.addresses?.[index]) return;
-                          newForm.addresses[index].number =
-                            event.currentTarget?.value || "";
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                      <Input
-                        max={32}
-                        disabled={loading && Boolean(id)}
-                        label={t.components.address_complement}
-                        name={`addresses[${index}].complement`}
-                        id={`customer_addresses_${index}_complement`}
-                        value={form?.addresses?.[index].complement || ""}
-                        placeholder={
-                          t.components.address_complement_placeholder
-                        }
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm.addresses?.[index]) return;
-                          newForm.addresses[index].complement =
-                            event.currentTarget?.value || "";
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                      <Input
-                        max={64}
-                        disabled={loading && Boolean(id)}
-                        label={t.components.address_neighborhood}
-                        name={`addresses[${index}].neighborhood`}
-                        id={`customer_addresses_${index}_neighborhood`}
-                        value={form?.addresses?.[index].neighborhood || ""}
-                        placeholder={
-                          t.components.address_neighborhood_placeholder
-                        }
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm.addresses?.[index]) return;
-                          newForm.addresses[index].neighborhood =
-                            event.currentTarget?.value || "";
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                    </Horizontal>
-                    <Horizontal internal={1}>
-                      <Input
-                        min={2}
-                        max={64}
-                        required
-                        disabled={loading && Boolean(id)}
-                        name={`addresses[${index}].city`}
-                        label={t.components.address_city}
-                        id={`customer_addresses_${index}_city`}
-                        value={form?.addresses?.[index].city || ""}
-                        placeholder={t.components.address_city_placeholder}
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm.addresses?.[index]) return;
-                          newForm.addresses[index].city =
-                            event.currentTarget?.value || "";
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                      <InputSelect
-                        required
-                        empty={t.stacks.no_option}
-                        disabled={loading && Boolean(id)}
-                        name={`addresses[${index}].state`}
-                        label={t.components.address_state}
-                        id={`customer_addresses_${index}_state`}
-                        value={form?.addresses?.[index].state || ""}
-                        options={SettingsAddressState.map(function (state) {
-                          return {
-                            id: state.code,
-                            value: state.code,
-                            text: state.name,
-                          };
-                        })}
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm.addresses?.[index]) return;
-                          newForm.addresses[index].state =
-                            event.currentTarget?.value || "";
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                    </Horizontal>
-                    {index + 1 !== form.addresses?.length && (
-                      <hr className="wFull" />
-                    )}
-                  </Vertical>
-                );
-              })}
-              <Horizontal internal={1} className="itemsCenter">
-                <Button
-                  type="button"
-                  category="Success"
-                  text={t.components.add}
-                  onClick={function () {
-                    const newForm = { ...form };
-                    newForm.addresses?.push({
-                      street: "",
-                      number: "",
-                      complement: "",
-                      neighborhood: "",
-                      postalCode: "",
-                      city: "",
-                      state: "",
-                    });
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <Callout
-                  Icon={MapTrifold}
-                  IconSize={16}
-                  category="Info"
-                  text={t.callout.postal_code_search}
-                  styles={{ flex: 1, fontSize: "var(--textSmall)" }}
-                />
-              </Horizontal>
-            </Vertical>
+                            }
+                            OpenDialog({
+                              category: "Danger",
+                              title: t.dialog.title_delete,
+                              description: t.dialog.description_delete,
+                              confirmText: t.components.remove,
+                              onConfirm: function () {
+                                const newForm = { ...form };
+                                newForm.addresses?.splice(index, 1);
+                                setForm(newForm);
+                                play("ok");
+                                toast.success(t.toast.success, {
+                                  description: t.toast.success_delete,
+                                });
+                                CloseDialog();
+                                return;
+                              },
+                            });
+                          }}
+                        />
+                      </Horizontal>
+                      <Horizontal internal={1}>
+                        <Input
+                          min={1}
+                          max={8}
+                          required
+                          disabled={loading && Boolean(id)}
+                          label={t.components.address_number}
+                          name={`addresses[${index}].number`}
+                          id={`customer_addresses_${index}_number`}
+                          value={form?.addresses?.[index].number || ""}
+                          placeholder={t.components.address_number_placeholder}
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].number =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+                        <Input
+                          max={32}
+                          disabled={loading && Boolean(id)}
+                          label={t.components.address_complement}
+                          name={`addresses[${index}].complement`}
+                          id={`customer_addresses_${index}_complement`}
+                          value={form?.addresses?.[index].complement || ""}
+                          placeholder={
+                            t.components.address_complement_placeholder
+                          }
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].complement =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+                        <Input
+                          max={64}
+                          disabled={loading && Boolean(id)}
+                          label={t.components.address_neighborhood}
+                          name={`addresses[${index}].neighborhood`}
+                          id={`customer_addresses_${index}_neighborhood`}
+                          value={form?.addresses?.[index].neighborhood || ""}
+                          placeholder={
+                            t.components.address_neighborhood_placeholder
+                          }
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].neighborhood =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+                      </Horizontal>
+                      <Horizontal internal={1}>
+                        <Input
+                          min={2}
+                          max={64}
+                          required
+                          disabled={loading && Boolean(id)}
+                          name={`addresses[${index}].city`}
+                          label={t.components.address_city}
+                          id={`customer_addresses_${index}_city`}
+                          value={form?.addresses?.[index].city || ""}
+                          placeholder={t.components.address_city_placeholder}
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].city =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+                        <InputSelect
+                          required
+                          empty={t.stacks.no_option}
+                          disabled={loading && Boolean(id)}
+                          name={`addresses[${index}].state`}
+                          label={t.components.address_state}
+                          id={`customer_addresses_${index}_state`}
+                          value={form?.addresses?.[index].state || ""}
+                          options={SettingsAddressState.map(function (state) {
+                            return {
+                              id: state.code,
+                              value: state.code,
+                              text: state.name,
+                            };
+                          })}
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].state =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+                      </Horizontal>
+                      {index + 1 !== form.addresses?.length && (
+                        <hr className="wFull" />
+                      )}
+                    </Vertical>
+                  );
+                })}
+
+                <Horizontal
+                  internal={1}
+                  styles={{ justifyContent: "flex-end" }}
+                >
+                  <Button
+                    type="button"
+                    category="Success"
+                    text={t.components.add}
+                    onClick={function () {
+                      const newForm = { ...form };
+                      newForm.addresses?.push({
+                        street: "",
+                        number: "",
+                        complement: "",
+                        neighborhood: "",
+                        postalCode: "",
+                        city: "",
+                        state: "",
+                      });
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                </Horizontal>
+
+                <div>
+                  <Callout
+                    Icon={MapTrifold}
+                    IconSize={16}
+                    category="Info"
+                    text={t.callout.postal_code_search}
+                    styles={{ flex: 1, fontSize: "var(--textSmall)" }}
+                  />
+                </div>
+              </Vertical>
+
+              {position && (
+                <iframe
+                  loading="lazy"
+                  width="25%"
+                  height={320}
+                  src={`https://maps.google.com/maps?q=${position.join(",")}&z=15&output=embed&maptype=satellite`}
+                ></iframe>
+              )}
+            </Horizontal>
           </Wrapper>
 
           <Callout
@@ -962,6 +1004,8 @@ const CustomersInspect = function () {
               />
             </Horizontal>
           </Wrapper>
+
+          <div style={{ height: 128 }}></div>
         </Vertical>
       </form>
     </React.Fragment>
