@@ -273,7 +273,7 @@ const SuppliersInspect = function () {
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   options={[
                     {
                       id: "true",
@@ -301,7 +301,7 @@ const SuppliersInspect = function () {
                   id="supplier_name"
                   value={form?.name || ""}
                   label={t.supplier.name}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.supplier.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -318,7 +318,7 @@ const SuppliersInspect = function () {
                   id="supplier_document_1"
                   label={t.supplier.document_1}
                   value={form?.document1 || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.supplier.document_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -333,7 +333,7 @@ const SuppliersInspect = function () {
                   id="supplier_document_2"
                   label={t.supplier.document_2}
                   value={form?.document2 || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.supplier.document_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -351,7 +351,7 @@ const SuppliersInspect = function () {
                   id="supplier_description"
                   value={form?.description || ""}
                   label={t.components.description}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.supplier.description_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -430,7 +430,7 @@ const SuppliersInspect = function () {
                   id="supplier_company_name"
                   label={t.supplier.company_name}
                   value={form?.companyName || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.supplier.company_name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -444,7 +444,7 @@ const SuppliersInspect = function () {
                   name="companyDocument"
                   label={t.supplier.document_1}
                   id="supplier_company_document"
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   value={form?.companyDocument || ""}
                   placeholder={t.supplier.document_placeholder}
                   onChange={async function (event) {
@@ -455,6 +455,7 @@ const SuppliersInspect = function () {
                       "",
                     );
                     if (companyDocument.length === 14) {
+                      setLoading(true);
                       const toastId = toast.loading(t.components.loading);
                       try {
                         const response =
@@ -501,6 +502,8 @@ const SuppliersInspect = function () {
                         toast.warning(t.toast.warning_error, {
                           description: t.toast.warning_find,
                         });
+                      } finally {
+                        setLoading(false);
                       }
                     }
                     newForm.companyDocument = companyDocument;
@@ -518,13 +521,14 @@ const SuppliersInspect = function () {
                   label={t.supplier.mobile}
                   id="supplier_company_mobile"
                   value={form?.companyMobile || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.supplier.mobile_placeholder}
                   onChange={async function (event) {
                     const newForm = { ...form };
                     const companyMobileRaw = event.currentTarget?.value || "";
                     const companyMobile = companyMobileRaw.replace(/\D/g, "");
                     if (companyMobile.length === 13) {
+                      setLoading(true);
                       const toastId = toast.loading(t.components.loading);
                       try {
                         const responseWhatsApp = await apis.WhatsApp.contact({
@@ -553,6 +557,8 @@ const SuppliersInspect = function () {
                         toast.warning(t.toast.warning_error, {
                           description: t.toast.warning_find,
                         });
+                      } finally {
+                        setLoading(false);
                       }
                     }
                     newForm.companyMobile = companyMobile;
@@ -566,7 +572,7 @@ const SuppliersInspect = function () {
                   label={t.supplier.phone_1}
                   id="supplier_company_phone"
                   value={form?.companyPhone || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.supplier.mobile_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -583,7 +589,7 @@ const SuppliersInspect = function () {
                   label={t.supplier.email}
                   id="supplier_company_email"
                   value={form?.companyEmail || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.supplier.email_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -625,7 +631,7 @@ const SuppliersInspect = function () {
                         <InputMask
                           required
                           mask={MaskPostalCode}
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           name={`addresses[${index}].postalCode`}
                           label={t.components.address_postal_code}
                           id={`supplier_addresses_${index}_postal_code`}
@@ -641,6 +647,7 @@ const SuppliersInspect = function () {
                             const postalCode = postalCodeRaw.replace(/\D/g, "");
                             newForm.addresses[index].postalCode = postalCode;
                             if (postalCode.length === 8) {
+                              setLoading(true);
                               const toastId = toast.loading(
                                 t.components.loading,
                               );
@@ -674,6 +681,8 @@ const SuppliersInspect = function () {
                                 toast.warning(t.toast.warning_error, {
                                   description: t.toast.warning_find,
                                 });
+                              } finally {
+                                setLoading(false);
                               }
                             }
                             setForm(newForm);
@@ -684,7 +693,7 @@ const SuppliersInspect = function () {
                           min={4}
                           max={64}
                           required
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           name={`addresses[${index}].street`}
                           id={`supplier_addresses_${index}_street`}
                           value={form?.addresses?.[index].street || ""}
@@ -737,7 +746,7 @@ const SuppliersInspect = function () {
                           min={1}
                           max={8}
                           required
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           label={t.components.address_number}
                           name={`addresses[${index}].number`}
                           id={`supplier_addresses_${index}_number`}
@@ -754,7 +763,7 @@ const SuppliersInspect = function () {
                         />
                         <Input
                           max={32}
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           label={t.components.address_complement}
                           name={`addresses[${index}].complement`}
                           id={`supplier_addresses_${index}_complement`}
@@ -773,7 +782,7 @@ const SuppliersInspect = function () {
                         />
                         <Input
                           max={64}
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           label={t.components.address_neighborhood}
                           name={`addresses[${index}].neighborhood`}
                           id={`supplier_addresses_${index}_neighborhood`}
@@ -797,7 +806,7 @@ const SuppliersInspect = function () {
                           min={2}
                           max={64}
                           required
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           name={`addresses[${index}].city`}
                           label={t.components.address_city}
                           id={`supplier_addresses_${index}_city`}
@@ -815,7 +824,7 @@ const SuppliersInspect = function () {
                         <InputSelect
                           required
                           empty={t.stacks.no_option}
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           name={`addresses[${index}].state`}
                           label={t.components.address_state}
                           id={`supplier_addresses_${index}_state`}
