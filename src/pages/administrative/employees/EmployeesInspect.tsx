@@ -1,8 +1,8 @@
 import { toast } from "sonner";
-import { AxiosError } from "axios";
 import React, { useState } from "react";
-import { Asterisk, MapTrifold, User } from "@phosphor-icons/react";
+import axios, { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { Asterisk, MapTrifold, User, UserList } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -53,6 +53,7 @@ const EmployeesInspect = function () {
     useSystem();
 
   const [photoTemp, setPhotoTemp] = useState<File | null>(null);
+  const [position, setPosition] = useState<[number, number] | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeUser>>({
@@ -106,6 +107,43 @@ const EmployeesInspect = function () {
       setLoading(false);
     }
   }, []);
+
+  // get position
+  useAsync(
+    async function () {
+      if (!form.addressStreet || !form.addressNumber || !form.addressCity)
+        return;
+      try {
+        const response = await apis.AddressPosition({
+          street: form.addressStreet,
+          number: form.addressNumber,
+          city: form.addressCity,
+        });
+        if (
+          !response.data ||
+          !response.data?.[0]?.lat ||
+          !response.data?.[0]?.lon
+        ) {
+          console.warn(
+            "[src/pages/administrative/employees/EmployeesInspect.tsx]",
+            response.data,
+          );
+          return;
+        }
+        setPosition([
+          parseFloat(String(response.data[0].lat)),
+          parseFloat(String(response.data[0].lon)),
+        ]);
+      } catch (err) {
+        console.error(
+          "[src/pages/administrative/employees/EmployeesInspect.tsx]",
+          err,
+        );
+      }
+      return;
+    },
+    [form.addressStreet, form.addressNumber, form.addressCity],
+  );
 
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -433,9 +471,58 @@ const EmployeesInspect = function () {
                   value={form?.mobile || ""}
                   disabled={loading && Boolean(id)}
                   placeholder={t.employee.phone_placeholder}
-                  onChange={function (event) {
+                  onChange={async function (event) {
                     const newForm = { ...form };
-                    newForm.mobile = event.currentTarget?.value || "";
+                    const mobileRaw = event.currentTarget?.value || "";
+                    const mobile = mobileRaw.replace(/\D/g, "");
+                    if (mobile.length === 13) {
+                      const toastId = toast.loading(t.components.loading);
+                      try {
+                        const responseWhatsApp = await apis.WhatsApp.contact({
+                          number: mobile,
+                        });
+                        newForm.name =
+                          !newForm.name?.length &&
+                          responseWhatsApp.data.result?.name
+                            ? responseWhatsApp.data.result?.name
+                            : newForm.name;
+                        if (responseWhatsApp.data.result?.photoUrl) {
+                          const responsePhoto = await axios.get(
+                            responseWhatsApp.data.result?.photoUrl,
+                            {
+                              responseType: "blob",
+                            },
+                          );
+                          const mimeType =
+                            responsePhoto.headers["content-type"] ||
+                            "image/jpeg";
+                          const newPhoto = new File(
+                            [responsePhoto.data],
+                            "employee",
+                            {
+                              type: mimeType,
+                            },
+                          );
+                          setPhotoTemp(newPhoto);
+                        }
+                        play("ok");
+                        toast.dismiss(toastId);
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_find,
+                        });
+                      } catch (err) {
+                        console.error(
+                          "[src/pages/administrative/employees/EmployeesInspect.tsx]",
+                          err,
+                        );
+                        toast.dismiss(toastId);
+                        play("alert");
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.warning_find,
+                        });
+                      }
+                    }
+                    newForm.mobile = mobile;
                     setForm(newForm);
                     return;
                   }}
@@ -459,6 +546,7 @@ const EmployeesInspect = function () {
                   }}
                 />
               </Horizontal>
+
               {Boolean(id) && (
                 <Horizontal internal={1}>
                   <Input
@@ -500,6 +588,14 @@ const EmployeesInspect = function () {
                   />
                 </Horizontal>
               )}
+
+              <Callout
+                Icon={UserList}
+                IconSize={16}
+                category="Info"
+                text={t.callout.person_mobile_search}
+                styles={{ fontSize: "var(--textSmall)" }}
+              />
             </Vertical>
           </Wrapper>
 
@@ -507,175 +603,186 @@ const EmployeesInspect = function () {
             title={id ? t.employee.title_address : t.employee.title_address}
             description={t.employee.subtitle_address}
           >
-            <Vertical internal={1}>
-              <Horizontal internal={1}>
-                <InputMask
-                  required
-                  mask={MaskPostalCode}
-                  name="addressPostalCode"
-                  id="employee_address_postal_code"
-                  disabled={loading && Boolean(id)}
-                  value={form?.addressPostalCode || ""}
-                  label={t.components.address_postal_code}
-                  placeholder={t.components.address_postal_code_placeholder}
-                  onChange={async function (event) {
-                    const newForm = { ...form };
-                    const postalCodeRaw = event.currentTarget?.value || "";
-                    const postalCode = postalCodeRaw.replace(/\D/g, "");
-                    newForm.addressPostalCode = postalCode;
-                    if (postalCode.length === 8) {
-                      const toastId = toast.loading(t.components.loading);
-                      try {
-                        const response = await apis.PostalCode(postalCode);
-                        newForm.addressStreet =
-                          response.data?.street || newForm.addressStreet;
-                        newForm.addressCity =
-                          response.data?.city || newForm.addressCity;
-                        newForm.addressNeighborhood =
-                          response.data?.neighborhood ||
-                          newForm.addressNeighborhood;
-                        newForm.addressState =
-                          response.data?.state || newForm.addressState;
-                        toast.dismiss(toastId);
-                        play("ok");
-                        toast.success(t.toast.success, {
-                          description: t.toast.success_find,
-                        });
-                      } catch (err) {
-                        console.error(
-                          "[src/pages/settings/SettingsPanel.tsx]",
-                          err,
-                        );
-                        toast.dismiss(toastId);
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.toast.warning_find,
-                        });
+            <Horizontal internal={1}>
+              <Vertical internal={1} className="flex1">
+                <Horizontal internal={1}>
+                  <InputMask
+                    required
+                    mask={MaskPostalCode}
+                    name="addressPostalCode"
+                    id="employee_address_postal_code"
+                    disabled={loading && Boolean(id)}
+                    value={form?.addressPostalCode || ""}
+                    label={t.components.address_postal_code}
+                    placeholder={t.components.address_postal_code_placeholder}
+                    onChange={async function (event) {
+                      const newForm = { ...form };
+                      const postalCodeRaw = event.currentTarget?.value || "";
+                      const postalCode = postalCodeRaw.replace(/\D/g, "");
+                      newForm.addressPostalCode = postalCode;
+                      if (postalCode.length === 8) {
+                        const toastId = toast.loading(t.components.loading);
+                        try {
+                          const response = await apis.PostalCode(postalCode);
+                          newForm.addressStreet =
+                            response.data?.street || newForm.addressStreet;
+                          newForm.addressCity =
+                            response.data?.city || newForm.addressCity;
+                          newForm.addressNeighborhood =
+                            response.data?.neighborhood ||
+                            newForm.addressNeighborhood;
+                          newForm.addressState =
+                            response.data?.state || newForm.addressState;
+                          toast.dismiss(toastId);
+                          play("ok");
+                          toast.success(t.toast.success, {
+                            description: t.toast.success_find,
+                          });
+                        } catch (err) {
+                          console.error(
+                            "[src/pages/settings/SettingsPanel.tsx]",
+                            err,
+                          );
+                          toast.dismiss(toastId);
+                          play("alert");
+                          toast.warning(t.toast.warning_error, {
+                            description: t.toast.warning_find,
+                          });
+                        }
                       }
-                    }
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <Input
-                  min={4}
-                  max={64}
-                  required
-                  name="addressStreet"
-                  id="employee_address_street"
-                  disabled={loading && Boolean(id)}
-                  value={form?.addressStreet || ""}
-                  label={t.components.address_street}
-                  placeholder={t.components.address_street_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.addressStreet = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-              <Horizontal internal={1}>
-                <Input
-                  min={1}
-                  max={8}
-                  required
-                  name="addressNumber"
-                  id="employee_address_number"
-                  disabled={loading && Boolean(id)}
-                  value={form?.addressNumber || ""}
-                  label={t.components.address_number}
-                  placeholder={t.components.address_number_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.addressNumber = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <Input
-                  max={32}
-                  name="addressComplement"
-                  id="employee_address_complement"
-                  disabled={loading && Boolean(id)}
-                  value={form?.addressComplement || ""}
-                  label={t.components.address_complement}
-                  placeholder={t.components.address_complement_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.addressComplement =
-                      event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <Input
+                    min={4}
+                    max={64}
+                    required
+                    name="addressStreet"
+                    id="employee_address_street"
+                    disabled={loading && Boolean(id)}
+                    value={form?.addressStreet || ""}
+                    label={t.components.address_street}
+                    placeholder={t.components.address_street_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressStreet = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                </Horizontal>
+                <Horizontal internal={1}>
+                  <Input
+                    min={1}
+                    max={8}
+                    required
+                    name="addressNumber"
+                    id="employee_address_number"
+                    disabled={loading && Boolean(id)}
+                    value={form?.addressNumber || ""}
+                    label={t.components.address_number}
+                    placeholder={t.components.address_number_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressNumber = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <Input
+                    max={32}
+                    name="addressComplement"
+                    id="employee_address_complement"
+                    disabled={loading && Boolean(id)}
+                    value={form?.addressComplement || ""}
+                    label={t.components.address_complement}
+                    placeholder={t.components.address_complement_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressComplement =
+                        event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
 
-                <Input
-                  max={64}
-                  name="addressNeighborhood"
-                  id="employee_address_neighborhood"
-                  disabled={loading && Boolean(id)}
-                  value={form?.addressNeighborhood || ""}
-                  label={t.components.address_neighborhood}
-                  placeholder={t.components.address_neighborhood_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.addressNeighborhood =
-                      event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
+                  <Input
+                    max={64}
+                    name="addressNeighborhood"
+                    id="employee_address_neighborhood"
+                    disabled={loading && Boolean(id)}
+                    value={form?.addressNeighborhood || ""}
+                    label={t.components.address_neighborhood}
+                    placeholder={t.components.address_neighborhood_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressNeighborhood =
+                        event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                </Horizontal>
+                <Horizontal internal={1}>
+                  <Input
+                    min={2}
+                    max={64}
+                    required
+                    name="addressCity"
+                    id="employee_address_city"
+                    value={form?.addressCity || ""}
+                    disabled={loading && Boolean(id)}
+                    label={t.components.address_city}
+                    placeholder={t.components.address_city_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressCity = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <InputSelect
+                    required
+                    name="addressState"
+                    empty={t.stacks.no_option}
+                    id="employee_address_state"
+                    value={form?.addressState || ""}
+                    disabled={loading && Boolean(id)}
+                    label={t.components.address_state}
+                    options={SettingsAddressState.map(function (state) {
+                      return {
+                        id: state.code,
+                        value: state.code,
+                        text: state.name,
+                      };
+                    })}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressState = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                </Horizontal>
+                <Callout
+                  Icon={MapTrifold}
+                  IconSize={16}
+                  category="Info"
+                  text={t.callout.postal_code_search}
+                  styles={{ fontSize: "var(--textSmall)" }}
                 />
-              </Horizontal>
-              <Horizontal internal={1}>
-                <Input
-                  min={2}
-                  max={64}
-                  required
-                  name="addressCity"
-                  id="employee_address_city"
-                  value={form?.addressCity || ""}
-                  disabled={loading && Boolean(id)}
-                  label={t.components.address_city}
-                  placeholder={t.components.address_city_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.addressCity = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <InputSelect
-                  required
-                  name="addressState"
-                  empty={t.stacks.no_option}
-                  id="employee_address_state"
-                  value={form?.addressState || ""}
-                  disabled={loading && Boolean(id)}
-                  label={t.components.address_state}
-                  options={SettingsAddressState.map(function (state) {
-                    return {
-                      id: state.code,
-                      value: state.code,
-                      text: state.name,
-                    };
-                  })}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.addressState = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-              <Callout
-                Icon={MapTrifold}
-                IconSize={16}
-                category="Info"
-                text={t.callout.postal_code_search}
-                styles={{ fontSize: "var(--textSmall)" }}
-              />
-            </Vertical>
+              </Vertical>
+
+              {position && (
+                <iframe
+                  loading="lazy"
+                  width="25%"
+                  height={320}
+                  src={`https://maps.google.com/maps?q=${position.join(",")}&z=15&output=embed&maptype=satellite`}
+                ></iframe>
+              )}
+            </Horizontal>
           </Wrapper>
 
           <Callout
@@ -698,7 +805,7 @@ const EmployeesInspect = function () {
               />
               <Button
                 type="submit"
-                category="Success"
+                category={id ? "Info" : "Success"}
                 text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>

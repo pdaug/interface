@@ -102,7 +102,7 @@ const SuppliersInspect = function () {
           !response.data?.[0]?.lon
         ) {
           console.warn(
-            "[src/pages/administrative/customers/CustomersInspect.tsx]",
+            "[src/pages/administrative/suppliers/SuppliersInspect.tsx]",
             response.data,
           );
           return;
@@ -113,7 +113,7 @@ const SuppliersInspect = function () {
         ]);
       } catch (err) {
         console.error(
-          "[src/pages/administrative/customers/CustomersInspect.tsx]",
+          "[src/pages/administrative/suppliers/SuppliersInspect.tsx]",
           err,
         );
       }

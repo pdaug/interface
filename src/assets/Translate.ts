@@ -264,7 +264,7 @@ const TranslatePt = {
     mobile: "Número de celular",
     email: "Email",
     address: "Endereço",
-    document_1: "Documento (CPF/CNPJ)",
+    document_1: "Documento (CPF)",
     document_2: "Documento (RG)",
     document_placeholder: "123.456.789-10",
     phone: "Número de telefone",
