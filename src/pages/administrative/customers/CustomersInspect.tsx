@@ -330,7 +330,7 @@ const CustomersInspect = function () {
                   id="customer_photo"
                   helper="PNG, JPG e JPEG"
                   label={t.components.photo}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   accept="image/png, image/jpg, image/jpeg"
                   onChange={function (event) {
                     const file = event.currentTarget.files?.[0] || null;
@@ -378,7 +378,7 @@ const CustomersInspect = function () {
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   options={[
                     {
                       id: "true",
@@ -406,7 +406,7 @@ const CustomersInspect = function () {
                   id="customer_name"
                   value={form?.name || ""}
                   label={t.customer.name}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.customer.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -422,13 +422,14 @@ const CustomersInspect = function () {
                   id="customer_mobile"
                   label={t.customer.mobile}
                   value={form?.mobile || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.customer.mobile_placeholder}
                   onChange={async function (event) {
                     const newForm = { ...form };
                     const mobileRaw = event.currentTarget?.value || "";
                     const mobile = mobileRaw.replace(/\D/g, "");
                     if (mobile.length === 13) {
+                      setLoading(true);
                       const toastId = toast.loading(t.components.loading);
                       try {
                         const responseWhatsApp = await apis.WhatsApp.contact({
@@ -476,6 +477,8 @@ const CustomersInspect = function () {
                         toast.warning(t.toast.warning_error, {
                           description: t.toast.warning_find,
                         });
+                      } finally {
+                        setLoading(false);
                       }
                     }
                     newForm.mobile = mobile;
@@ -484,6 +487,7 @@ const CustomersInspect = function () {
                   }}
                 />
               </Horizontal>
+
               <Horizontal internal={1}>
                 <InputMask
                   name="document1"
@@ -491,7 +495,7 @@ const CustomersInspect = function () {
                   id="customer_document_1"
                   label={t.customer.document_1}
                   value={form?.document1 || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.customer.document_placeholder}
                   onChange={async function (event) {
                     const newForm = { ...form };
@@ -555,7 +559,7 @@ const CustomersInspect = function () {
                   id="customer_document_2"
                   label={t.customer.document_2}
                   value={form?.document2 || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.customer.document_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -565,6 +569,7 @@ const CustomersInspect = function () {
                   }}
                 />
               </Horizontal>
+
               <Horizontal internal={1}>
                 <InputMask
                   name="phone1"
@@ -572,7 +577,7 @@ const CustomersInspect = function () {
                   id="customer_phone_1"
                   label={t.customer.phone_1}
                   value={form?.phone1 || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.customer.mobile_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -587,7 +592,7 @@ const CustomersInspect = function () {
                   id="customer_phone_2"
                   label={t.customer.phone_2}
                   value={form?.phone2 || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.customer.mobile_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -604,7 +609,7 @@ const CustomersInspect = function () {
                   id="customer_email"
                   value={form?.email || ""}
                   label={t.customer.email}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.customer.email_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -614,6 +619,7 @@ const CustomersInspect = function () {
                   }}
                 />
               </Horizontal>
+
               <Horizontal internal={1}>
                 <InputText
                   max={256}
@@ -622,7 +628,7 @@ const CustomersInspect = function () {
                   id="customer_description"
                   value={form?.description || ""}
                   label={t.components.description}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.customer.description_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -632,6 +638,7 @@ const CustomersInspect = function () {
                   }}
                 />
               </Horizontal>
+
               {Boolean(id) && (
                 <Horizontal internal={1}>
                   <div
@@ -684,6 +691,7 @@ const CustomersInspect = function () {
                   />
                 </Horizontal>
               )}
+
               <Callout
                 Icon={UserList}
                 IconSize={16}
@@ -715,7 +723,7 @@ const CustomersInspect = function () {
                         <InputMask
                           required
                           mask={MaskPostalCode}
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           name={`addresses[${index}].postalCode`}
                           label={t.components.address_postal_code}
                           id={`customer_addresses_${index}_postal_code`}
@@ -731,6 +739,7 @@ const CustomersInspect = function () {
                             const postalCode = postalCodeRaw.replace(/\D/g, "");
                             newForm.addresses[index].postalCode = postalCode;
                             if (postalCode.length === 8) {
+                              setLoading(true);
                               const toastId = toast.loading(
                                 t.components.loading,
                               );
@@ -764,6 +773,8 @@ const CustomersInspect = function () {
                                 toast.warning(t.toast.warning_error, {
                                   description: t.toast.warning_find,
                                 });
+                              } finally {
+                                setLoading(false);
                               }
                             }
                             setForm(newForm);
@@ -774,7 +785,7 @@ const CustomersInspect = function () {
                           min={4}
                           max={64}
                           required
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           name={`addresses[${index}].street`}
                           id={`customer_addresses_${index}_street`}
                           value={form?.addresses?.[index].street || ""}
@@ -792,6 +803,7 @@ const CustomersInspect = function () {
                         <Button
                           type="button"
                           category="Danger"
+                          disabled={loading}
                           text={t.components.remove}
                           onClick={function () {
                             if (index === 0) {
@@ -826,7 +838,7 @@ const CustomersInspect = function () {
                           min={1}
                           max={8}
                           required
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           label={t.components.address_number}
                           name={`addresses[${index}].number`}
                           id={`customer_addresses_${index}_number`}
@@ -843,7 +855,7 @@ const CustomersInspect = function () {
                         />
                         <Input
                           max={32}
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           label={t.components.address_complement}
                           name={`addresses[${index}].complement`}
                           id={`customer_addresses_${index}_complement`}
@@ -862,7 +874,7 @@ const CustomersInspect = function () {
                         />
                         <Input
                           max={64}
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           label={t.components.address_neighborhood}
                           name={`addresses[${index}].neighborhood`}
                           id={`customer_addresses_${index}_neighborhood`}
@@ -885,7 +897,7 @@ const CustomersInspect = function () {
                           min={2}
                           max={64}
                           required
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           name={`addresses[${index}].city`}
                           label={t.components.address_city}
                           id={`customer_addresses_${index}_city`}
@@ -903,7 +915,7 @@ const CustomersInspect = function () {
                         <InputSelect
                           required
                           empty={t.stacks.no_option}
-                          disabled={loading && Boolean(id)}
+                          disabled={loading}
                           name={`addresses[${index}].state`}
                           label={t.components.address_state}
                           id={`customer_addresses_${index}_state`}
@@ -939,6 +951,7 @@ const CustomersInspect = function () {
                   <Button
                     type="button"
                     category="Success"
+                    disabled={loading}
                     text={t.components.add}
                     onClick={function () {
                       const newForm = { ...form };
