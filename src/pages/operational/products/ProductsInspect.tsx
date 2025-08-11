@@ -64,7 +64,7 @@ const ProductsInspect = function () {
 
   const [productTemp, setProductTemp] = useState<(File | null)[]>([]);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [form, setForm] = useState<Partial<TypeProduct>>({
     status: true,
     name: "",
@@ -283,6 +283,7 @@ const ProductsInspect = function () {
           />
         </h2>
       </Horizontal>
+
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Wrapper
@@ -298,7 +299,7 @@ const ProductsInspect = function () {
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   options={[
                     {
                       id: "true",
@@ -326,7 +327,7 @@ const ProductsInspect = function () {
                   id="product_name"
                   value={form?.name || ""}
                   label={t.product.name}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.product.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -336,6 +337,7 @@ const ProductsInspect = function () {
                   }}
                 />
               </Horizontal>
+
               <Horizontal internal={1}>
                 <InputSelect
                   required
@@ -343,7 +345,7 @@ const ProductsInspect = function () {
                   id="product_type"
                   label={t.product.type}
                   empty={t.stacks.no_option}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   value={form?.type || "physical"}
                   options={ProductTypeOptions.map(function (option) {
                     return {
@@ -366,7 +368,7 @@ const ProductsInspect = function () {
                   id="product_category"
                   label={t.product.category}
                   empty={t.stacks.no_option}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   value={form?.category || "single"}
                   options={ProductCategoryOptions.map(function (option) {
                     return {
@@ -384,6 +386,7 @@ const ProductsInspect = function () {
                   }}
                 />
               </Horizontal>
+
               <Horizontal>
                 <InputText
                   max={256}
@@ -392,7 +395,7 @@ const ProductsInspect = function () {
                   id="product_description"
                   value={form?.description || ""}
                   label={t.components.description}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.product.description_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -402,6 +405,7 @@ const ProductsInspect = function () {
                   }}
                 />
               </Horizontal>
+
               {Boolean(id) && (
                 <Horizontal internal={1}>
                   <div
@@ -483,6 +487,7 @@ const ProductsInspect = function () {
                             <Button
                               type="button"
                               category="Danger"
+                              disabled={loading}
                               text={t.components.remove}
                               onClick={function () {
                                 if (form.variants?.length === 1) {
@@ -517,14 +522,14 @@ const ProductsInspect = function () {
                         </React.Fragment>
                       }
                     >
-                      <div>{form.name || "\u200B"}</div>
+                      <div>{variant?.name || "\u200B"}</div>
                       <div
                         style={{
                           color: "var(--textLight)",
                           fontSize: "var(--textSmall)",
                         }}
                       >
-                        {variant?.name || "\u200B"}
+                        {form.name || "\u200B"}
                       </div>
                       <div style={{ fontSize: "var(--textHighlight)" }}>
                         {Currency(variant?.price || 0)}
@@ -542,6 +547,7 @@ const ProductsInspect = function () {
                     <Button
                       type="button"
                       category="Success"
+                      disabled={loading}
                       text={t.components.add}
                       onClick={function () {
                         const newForm = { ...form };
@@ -561,6 +567,7 @@ const ProductsInspect = function () {
               </Horizontal>
 
               {form.variants?.map(function (variant, index) {
+                if (form.category === "single" && index > 0) return;
                 return (
                   <Horizontal
                     internal={1}
@@ -597,7 +604,7 @@ const ProductsInspect = function () {
                       required
                       label={t.product.variant_name}
                       name={`variant.${index}.name`}
-                      disabled={loading && Boolean(id)}
+                      disabled={loading}
                       id={`product_variant_${index}_name`}
                       placeholder={t.product.variant_name_placeholder}
                       value={form?.variants?.[index].name || ""}
@@ -615,7 +622,7 @@ const ProductsInspect = function () {
                       placeholder="0.00"
                       label={t.product.price}
                       name={`variant.${index}.price`}
-                      disabled={loading && Boolean(id)}
+                      disabled={loading}
                       id={`product_variant_${index}_price`}
                       value={form?.variants?.[index].price || "0.00"}
                       onChange={function (value) {
@@ -1137,11 +1144,13 @@ const ProductsInspect = function () {
               <Button
                 type="submit"
                 disabled={loading}
-                category="Success"
+                category={id ? "Info" : "Success"}
                 text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>
           </Wrapper>
+
+          <div style={{ height: 128 }}></div>
         </Vertical>
       </form>
     </React.Fragment>
