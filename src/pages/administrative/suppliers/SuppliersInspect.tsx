@@ -711,6 +711,7 @@ const SuppliersInspect = function () {
                         <Button
                           type="button"
                           category="Danger"
+                          disabled={loading}
                           text={t.components.remove}
                           onClick={function () {
                             if (index === 0) {
@@ -861,6 +862,7 @@ const SuppliersInspect = function () {
                   <Button
                     type="button"
                     category="Success"
+                    disabled={loading}
                     text={t.components.add}
                     onClick={function () {
                       const newForm = { ...form };
