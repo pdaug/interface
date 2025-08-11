@@ -63,7 +63,7 @@ const CustomersInspect = function () {
   const [photoTemp, setPhotoTemp] = useState<File | null>(null);
   const [position, setPosition] = useState<[number, number] | null>(null);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [form, setForm] = useState<Partial<TypeCustomer>>({
     id: "",
     status: true,
@@ -991,6 +991,7 @@ const CustomersInspect = function () {
               <Button
                 type="button"
                 category="Neutral"
+                disabled={loading}
                 text={t.components.cancel}
                 onClick={function () {
                   navigate("/f/customers");
@@ -999,7 +1000,8 @@ const CustomersInspect = function () {
               />
               <Button
                 type="submit"
-                category="Success"
+                disabled={loading}
+                category={id ? "Info" : "Success"}
                 text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>

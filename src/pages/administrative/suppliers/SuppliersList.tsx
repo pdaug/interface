@@ -454,10 +454,11 @@ const SuppliersList = function () {
                   confirmText: t.components.delete,
                   onConfirm: async function () {
                     try {
-                      const response = await apis.User.delete(
+                      const response = await apis.Supplier.delete(
                         token,
                         instance.name,
                         data.id as string,
+                        workspaceId,
                       );
                       if (!response.data?.result) {
                         play("alert");
