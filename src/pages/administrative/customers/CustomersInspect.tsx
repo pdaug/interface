@@ -174,6 +174,7 @@ const CustomersInspect = function () {
 
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setLoading(true);
     try {
       // is editing
       if (id) {
@@ -276,6 +277,8 @@ const CustomersInspect = function () {
         description: id ? t.toast.error_edit : t.toast.error_create,
       });
       return;
+    } finally {
+      setLoading(false);
     }
   };
 
