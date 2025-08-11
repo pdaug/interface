@@ -52,10 +52,10 @@ const EmployeesInspect = function () {
   const { user, token, instance, workspaces, workspaceId, saveUser } =
     useSystem();
 
+  const [loading, setLoading] = useState<boolean>(false);
   const [photoTemp, setPhotoTemp] = useState<File | null>(null);
   const [position, setPosition] = useState<[number, number] | null>(null);
 
-  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<Partial<TypeUser>>({
     id: "",
     status: true,
@@ -274,6 +274,7 @@ const EmployeesInspect = function () {
           />
         </h2>
       </Horizontal>
+
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Horizontal internal={1}>
@@ -298,7 +299,7 @@ const EmployeesInspect = function () {
                   id="employee_photo"
                   helper="PNG, JPG e JPEG"
                   label={t.employee.photo}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   accept="image/png, image/jpg, image/jpeg"
                   onChange={function (event) {
                     const file = event.currentTarget.files?.[0] || null;
@@ -347,11 +348,11 @@ const EmployeesInspect = function () {
                 <InputSelect
                   required
                   name="status"
+                  disabled={loading}
                   id="employee_status"
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
-                  disabled={loading && Boolean(id)}
                   options={[
                     {
                       id: "true",
@@ -379,7 +380,7 @@ const EmployeesInspect = function () {
                   id="employee_name"
                   value={form?.name || ""}
                   label={t.employee.name}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.employee.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -394,7 +395,7 @@ const EmployeesInspect = function () {
                   id="employee_role"
                   label={t.employee.role}
                   empty={t.stacks.no_option}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   value={form?.role || "collaborator"}
                   options={UserRoles.map(function (option) {
                     return {
@@ -413,6 +414,7 @@ const EmployeesInspect = function () {
                   }}
                 />
               </Horizontal>
+
               <Horizontal internal={1}>
                 <InputMask
                   required
@@ -421,7 +423,7 @@ const EmployeesInspect = function () {
                   id="employee_document_1"
                   label={t.employee.document_1}
                   value={form?.document1 || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.employee.document_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -436,7 +438,7 @@ const EmployeesInspect = function () {
                   id="employee_document_2"
                   label={t.employee.document_2}
                   value={form?.document2 || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.employee.document_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -446,6 +448,7 @@ const EmployeesInspect = function () {
                   }}
                 />
               </Horizontal>
+
               <Horizontal internal={1}>
                 <InputMask
                   name="phone"
@@ -453,7 +456,7 @@ const EmployeesInspect = function () {
                   id="employee_phone"
                   label={t.employee.phone}
                   value={form?.phone || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.employee.phone_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -469,13 +472,14 @@ const EmployeesInspect = function () {
                   id="employee_mobile"
                   label={t.employee.mobile}
                   value={form?.mobile || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.employee.phone_placeholder}
                   onChange={async function (event) {
                     const newForm = { ...form };
                     const mobileRaw = event.currentTarget?.value || "";
                     const mobile = mobileRaw.replace(/\D/g, "");
                     if (mobile.length === 13) {
+                      setLoading(true);
                       const toastId = toast.loading(t.components.loading);
                       try {
                         const responseWhatsApp = await apis.WhatsApp.contact({
@@ -520,6 +524,8 @@ const EmployeesInspect = function () {
                         toast.warning(t.toast.warning_error, {
                           description: t.toast.warning_find,
                         });
+                      } finally {
+                        setLoading(false);
                       }
                     }
                     newForm.mobile = mobile;
@@ -536,7 +542,7 @@ const EmployeesInspect = function () {
                   id="employee_email"
                   value={form?.email || ""}
                   label={t.employee.email}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.employee.email_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -611,7 +617,7 @@ const EmployeesInspect = function () {
                     mask={MaskPostalCode}
                     name="addressPostalCode"
                     id="employee_address_postal_code"
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     value={form?.addressPostalCode || ""}
                     label={t.components.address_postal_code}
                     placeholder={t.components.address_postal_code_placeholder}
@@ -621,6 +627,7 @@ const EmployeesInspect = function () {
                       const postalCode = postalCodeRaw.replace(/\D/g, "");
                       newForm.addressPostalCode = postalCode;
                       if (postalCode.length === 8) {
+                        setLoading(true);
                         const toastId = toast.loading(t.components.loading);
                         try {
                           const response = await apis.PostalCode(postalCode);
@@ -648,6 +655,8 @@ const EmployeesInspect = function () {
                           toast.warning(t.toast.warning_error, {
                             description: t.toast.warning_find,
                           });
+                        } finally {
+                          setLoading(false);
                         }
                       }
                       setForm(newForm);
@@ -660,7 +669,7 @@ const EmployeesInspect = function () {
                     required
                     name="addressStreet"
                     id="employee_address_street"
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     value={form?.addressStreet || ""}
                     label={t.components.address_street}
                     placeholder={t.components.address_street_placeholder}
@@ -672,6 +681,7 @@ const EmployeesInspect = function () {
                     }}
                   />
                 </Horizontal>
+
                 <Horizontal internal={1}>
                   <Input
                     min={1}
@@ -679,7 +689,7 @@ const EmployeesInspect = function () {
                     required
                     name="addressNumber"
                     id="employee_address_number"
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     value={form?.addressNumber || ""}
                     label={t.components.address_number}
                     placeholder={t.components.address_number_placeholder}
@@ -694,7 +704,7 @@ const EmployeesInspect = function () {
                     max={32}
                     name="addressComplement"
                     id="employee_address_complement"
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     value={form?.addressComplement || ""}
                     label={t.components.address_complement}
                     placeholder={t.components.address_complement_placeholder}
@@ -711,7 +721,7 @@ const EmployeesInspect = function () {
                     max={64}
                     name="addressNeighborhood"
                     id="employee_address_neighborhood"
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     value={form?.addressNeighborhood || ""}
                     label={t.components.address_neighborhood}
                     placeholder={t.components.address_neighborhood_placeholder}
@@ -724,6 +734,7 @@ const EmployeesInspect = function () {
                     }}
                   />
                 </Horizontal>
+
                 <Horizontal internal={1}>
                   <Input
                     min={2}
@@ -732,7 +743,7 @@ const EmployeesInspect = function () {
                     name="addressCity"
                     id="employee_address_city"
                     value={form?.addressCity || ""}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     label={t.components.address_city}
                     placeholder={t.components.address_city_placeholder}
                     onChange={function (event) {
@@ -748,7 +759,7 @@ const EmployeesInspect = function () {
                     empty={t.stacks.no_option}
                     id="employee_address_state"
                     value={form?.addressState || ""}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     label={t.components.address_state}
                     options={SettingsAddressState.map(function (state) {
                       return {
@@ -765,6 +776,7 @@ const EmployeesInspect = function () {
                     }}
                   />
                 </Horizontal>
+
                 <Callout
                   Icon={MapTrifold}
                   IconSize={16}
@@ -797,6 +809,7 @@ const EmployeesInspect = function () {
               <Button
                 type="button"
                 category="Neutral"
+                disabled={loading}
                 text={t.components.cancel}
                 onClick={function () {
                   navigate("/f/employees");
@@ -805,6 +818,7 @@ const EmployeesInspect = function () {
               />
               <Button
                 type="submit"
+                disabled={loading}
                 category={id ? "Info" : "Success"}
                 text={id ? t.components.edit : t.components.save}
               />
