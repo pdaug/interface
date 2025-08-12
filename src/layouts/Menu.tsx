@@ -120,6 +120,11 @@ const Menu = function () {
           label: t.menu.recurrences,
           onClick: () => navigate("/f/recurrences"),
         },
+        {
+          id: "statements",
+          label: t.menu.statements,
+          onClick: () => navigate("/f/statements"),
+        },
       ],
     },
     {
