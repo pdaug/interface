@@ -48,7 +48,7 @@ const ServicesInspect = function () {
   const { instanceDateTime } = useDateTime();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [form, setForm] = useState<Partial<TypeService>>({
     status: true,
     name: "",
@@ -106,6 +106,7 @@ const ServicesInspect = function () {
 
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setLoading(true);
     try {
       // is editing
       if (id) {
@@ -167,6 +168,8 @@ const ServicesInspect = function () {
         description: id ? t.toast.error_edit : t.toast.error_create,
       });
       return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -213,7 +216,7 @@ const ServicesInspect = function () {
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   options={[
                     {
                       id: "true",
@@ -241,7 +244,7 @@ const ServicesInspect = function () {
                   id="service_name"
                   value={form?.name || ""}
                   label={t.service.name}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.service.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -258,7 +261,7 @@ const ServicesInspect = function () {
                   id="service_type"
                   label={t.service.type}
                   empty={t.stacks.no_option}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   value={form?.type || "physical"}
                   options={ServiceType.map(function (option) {
                     return {
@@ -281,7 +284,7 @@ const ServicesInspect = function () {
                   empty={t.stacks.no_option}
                   id="service_pricing_method"
                   label={t.service.pricing_method}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   value={form?.pricingMethod || "hourly"}
                   options={ServiceMethods.map(function (option) {
                     return {
@@ -304,7 +307,7 @@ const ServicesInspect = function () {
                   name="pricingValue"
                   id="service_pricing_value"
                   label={t.service.pricing_value}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   value={form?.pricingValue || "0.00"}
                   onChange={function (value) {
                     const newForm = { ...form };
@@ -322,7 +325,7 @@ const ServicesInspect = function () {
                   id="service_description"
                   value={form?.description || ""}
                   label={t.components.description}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.service.description_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -399,6 +402,7 @@ const ServicesInspect = function () {
               <Button
                 type="button"
                 category="Neutral"
+                disabled={loading}
                 text={t.components.cancel}
                 onClick={function () {
                   navigate("/f/services");
@@ -407,7 +411,8 @@ const ServicesInspect = function () {
               />
               <Button
                 type="submit"
-                category="Success"
+                disabled={loading}
+                category={id ? "Info" : "Success"}
                 text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>

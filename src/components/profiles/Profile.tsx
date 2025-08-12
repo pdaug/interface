@@ -6,9 +6,9 @@ import Avatar from "../avatars/Avatar";
 import Dropdown, { DropdownProps } from "../dropdowns/Dropdown";
 
 export type ProfileProps = {
-  name: string;
+  name: React.ReactNode;
   border?: boolean;
-  description?: string;
+  description?: React.ReactNode;
   photo?: string;
   photoSize?: number;
   photoCircle?: boolean;
@@ -38,7 +38,7 @@ const Profile = function ({
     >
       <div>
         <Avatar
-          label={name}
+          label={String(name)}
           photo={photo}
           size={photoSize}
           Icon={photoIcon}

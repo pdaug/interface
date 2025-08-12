@@ -55,7 +55,7 @@ const SettingsPanel = function () {
   const navigate = useNavigate();
   const { token, instance, saveInstance } = useSystem();
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [logoTemp, setLogoTemp] = useState<File | null>(null);
   const [faviconTemp, setFaviconTemp] = useState<File | null>(null);
   const [logoLargeTemp, setLogoLargeTemp] = useState<File | null>(null);
@@ -125,6 +125,7 @@ const SettingsPanel = function () {
 
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setLoading(true);
     const toastId = toast.loading(t.components.loading);
     try {
       let logoUrl = null;
@@ -214,6 +215,8 @@ const SettingsPanel = function () {
       toast.error(t.toast.warning_error, {
         description: t.toast.error_edit,
       });
+    } finally {
+      setLoading(false);
     }
     toast.dismiss(toastId);
     return;
@@ -867,11 +870,13 @@ const SettingsPanel = function () {
                 type="button"
                 onClick={onCancel}
                 category="Neutral"
+                disabled={loading}
                 text={t.components.cancel}
               />
               <Button
                 type="submit"
-                category="Success"
+                category="Info"
+                disabled={loading}
                 text={t.components.edit}
               />
             </Horizontal>

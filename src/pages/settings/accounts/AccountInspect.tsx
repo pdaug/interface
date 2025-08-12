@@ -44,7 +44,7 @@ const AccountInspect = function () {
   const { instanceDateTime } = useDateTime();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [form, setForm] = useState<Partial<TypeAccount>>({
     status: true,
     name: "",
@@ -101,6 +101,7 @@ const AccountInspect = function () {
 
   const onSubmit = async function (event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setLoading(true);
     try {
       // is editing
       if (id) {
@@ -159,6 +160,8 @@ const AccountInspect = function () {
         description: id ? t.toast.error_edit : t.toast.error_create,
       });
       return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -190,6 +193,7 @@ const AccountInspect = function () {
           />
         </h2>
       </Horizontal>
+
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Wrapper
@@ -205,7 +209,7 @@ const AccountInspect = function () {
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   options={[
                     {
                       id: "true",
@@ -233,7 +237,7 @@ const AccountInspect = function () {
                   id="account_name"
                   value={form?.name || ""}
                   label={t.account.name}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.account.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -247,7 +251,7 @@ const AccountInspect = function () {
                   id="account_is_coorporate"
                   empty={t.stacks.no_option}
                   label={t.account.is_coorporate}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   value={String(form?.isCoorporate)}
                   options={[
                     {
@@ -270,6 +274,7 @@ const AccountInspect = function () {
                   }}
                 />
               </Horizontal>
+
               <Horizontal internal={1}>
                 <Input
                   min={1}
@@ -279,7 +284,7 @@ const AccountInspect = function () {
                   id="account_holder"
                   value={form?.holder || ""}
                   label={t.account.holder}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.account.holder_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -293,7 +298,7 @@ const AccountInspect = function () {
                   mask={MaskDocument1}
                   name="holderDocument1"
                   id="account_holder_document_1"
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   value={form?.holderDocument1 || ""}
                   label={t.account.holder_document_1}
                   placeholder={t.account.holder_document_placeholder}
@@ -308,7 +313,7 @@ const AccountInspect = function () {
                   mask={MaskDocument2}
                   name="holderDocument2"
                   id="account_holder_document_2"
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   value={form?.holderDocument2 || ""}
                   label={t.account.holder_document_2}
                   placeholder={t.account.holder_document_placeholder}
@@ -320,6 +325,7 @@ const AccountInspect = function () {
                   }}
                 />
               </Horizontal>
+
               <Horizontal internal={1}>
                 <Input
                   readOnly
@@ -339,7 +345,7 @@ const AccountInspect = function () {
                   empty={t.stacks.no_option}
                   label={t.account.bank_name}
                   value={form?.bankCode || ""}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   options={BanksSafely.map(function (bank) {
                     return {
                       id: bank.code,
@@ -367,7 +373,7 @@ const AccountInspect = function () {
                   id="account_bank_agency"
                   value={form?.bankAgency || ""}
                   label={t.account.bank_agency}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.account.bank_number_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -384,7 +390,7 @@ const AccountInspect = function () {
                   id="account_bank_account"
                   value={form?.bankAccount || ""}
                   label={t.account.bank_account}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.account.bank_number_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -394,6 +400,7 @@ const AccountInspect = function () {
                   }}
                 />
               </Horizontal>
+
               {Boolean(id) && (
                 <Horizontal internal={1}>
                   <div
@@ -465,6 +472,7 @@ const AccountInspect = function () {
               <Button
                 type="button"
                 category="Neutral"
+                disabled={loading}
                 text={t.components.cancel}
                 onClick={function () {
                   navigate("/f/accounts");
@@ -473,7 +481,8 @@ const AccountInspect = function () {
               />
               <Button
                 type="submit"
-                category="Success"
+                disabled={loading}
+                category={id ? "Info" : "Success"}
                 text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>

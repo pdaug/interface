@@ -41,7 +41,7 @@ const WorkspaceInspect = function () {
   const { instanceDateTime } = useDateTime();
   const { token, instance, workspaceId } = useSystem();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [form, setForm] = useState<Partial<TypeWorkspace>>({
     status: true,
     name: "",
@@ -82,6 +82,7 @@ const WorkspaceInspect = function () {
 
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setLoading(true);
     try {
       // is editing
       if (id) {
@@ -144,6 +145,8 @@ const WorkspaceInspect = function () {
         description: id ? t.toast.error_edit : t.toast.error_create,
       });
       return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -152,6 +155,7 @@ const WorkspaceInspect = function () {
       <Horizontal>
         <h2>{t.workspace.workspaces}</h2>
       </Horizontal>
+
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Wrapper
@@ -167,7 +171,7 @@ const WorkspaceInspect = function () {
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   options={[
                     {
                       id: "true",
@@ -195,7 +199,7 @@ const WorkspaceInspect = function () {
                   id="workspace_name"
                   value={form?.name || ""}
                   label={t.workspace.name}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.workspace.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -210,7 +214,7 @@ const WorkspaceInspect = function () {
                   id="workspace_category"
                   label={t.components.category}
                   empty={t.stacks.no_option}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   value={form?.category || "departments"}
                   options={WorkspaceCategoryOptions.map(function (option) {
                     return {
@@ -227,6 +231,7 @@ const WorkspaceInspect = function () {
                   }}
                 />
               </Horizontal>
+
               <Horizontal>
                 <InputText
                   max={256}
@@ -235,7 +240,7 @@ const WorkspaceInspect = function () {
                   id="workspace_description"
                   value={form?.description || ""}
                   label={t.components.description}
-                  disabled={loading && Boolean(id)}
+                  disabled={loading}
                   placeholder={t.workspace.description_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -245,6 +250,7 @@ const WorkspaceInspect = function () {
                   }}
                 />
               </Horizontal>
+
               {Boolean(id) && (
                 <Horizontal internal={1}>
                   <Input
@@ -305,6 +311,7 @@ const WorkspaceInspect = function () {
               <Button
                 type="button"
                 category="Neutral"
+                disabled={loading}
                 text={t.components.cancel}
                 onClick={function () {
                   navigate("/f/workspaces");
@@ -313,7 +320,8 @@ const WorkspaceInspect = function () {
               />
               <Button
                 type="submit"
-                category="Success"
+                disabled={loading}
+                category={id ? "Info" : "Success"}
                 text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>

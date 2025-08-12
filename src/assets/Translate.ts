@@ -685,6 +685,8 @@ const TranslatePt = {
     document_placeholder: "1234567890",
     maintenance: "Manutenção",
     refuel: "Abastecimento",
+    no_brand: "Sem marca",
+    no_model: "Sem modelo",
   },
   workspace: {
     workspaces: "Organizações",
@@ -1391,6 +1393,8 @@ const TranslateEn = {
     document_placeholder: "1234567890",
     maintenance: "Maintenance",
     refuel: "Refuel",
+    no_brand: "No brand",
+    no_model: "No model",
   },
   workspace: {
     workspaces: "Workspaces",

@@ -452,13 +452,27 @@ const VehiclesList = function () {
                     name={
                       brand.toLowerCase() === "other"
                         ? t.components.other
-                        : brand
+                        : brand || (
+                            <i style={{ color: "var(--textLight)" }}>
+                              {t.vehicle.no_brand}
+                            </i>
+                          )
                     }
                   />
                 );
               },
             },
-            model: { label: t.vehicle.model },
+            model: {
+              label: t.vehicle.model,
+              handler: function (data) {
+                if (data.model) return data.model as string;
+                return (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.vehicle.no_model}
+                  </i>
+                );
+              },
+            },
             user: {
               label: t.components.user,
               handler: function (data) {

@@ -200,6 +200,8 @@ const VehiclesInspect = function () {
         description: id ? t.toast.error_edit : t.toast.error_create,
       });
       return;
+    } finally {
+      setLoading(true);
     }
   };
 
@@ -231,6 +233,7 @@ const VehiclesInspect = function () {
           />
         </h2>
       </Horizontal>
+
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Wrapper
@@ -258,7 +261,7 @@ const VehiclesInspect = function () {
                     empty={t.stacks.no_option}
                     value={String(form.status)}
                     label={t.components.status}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     options={[
                       {
                         id: "true",
@@ -286,7 +289,7 @@ const VehiclesInspect = function () {
                     id="vehicle_name"
                     value={form?.name || ""}
                     label={t.vehicle.name}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     placeholder={t.vehicle.name_placeholder}
                     onChange={function (event) {
                       const newForm = { ...form };
@@ -301,7 +304,7 @@ const VehiclesInspect = function () {
                     id="vehicle_category"
                     label={t.vehicle.category}
                     empty={t.stacks.no_option}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     value={form?.category || "passenger"}
                     options={VehicleCategoryOptions.map(function (option) {
                       return {
@@ -329,7 +332,7 @@ const VehiclesInspect = function () {
                     id="vehicle_document"
                     value={form?.document || ""}
                     label={t.vehicle.document}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     placeholder={t.vehicle.document_placeholder}
                     onChange={function (event) {
                       const newForm = { ...form };
@@ -370,7 +373,7 @@ const VehiclesInspect = function () {
                     id="vehicle_plate"
                     label={t.vehicle.plate}
                     value={form?.plate || ""}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     placeholder={
                       t.vehicle?.[
                         `plate_${form.plateType}_placeholder` as keyof typeof t.vehicle
@@ -397,7 +400,7 @@ const VehiclesInspect = function () {
                     id="vehicle_chassi"
                     value={form?.chassi || ""}
                     label={t.vehicle.chassi}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     placeholder={t.vehicle.document_placeholder}
                     onChange={function (event) {
                       const newForm = { ...form };
@@ -414,7 +417,7 @@ const VehiclesInspect = function () {
                     id="vehicle_color"
                     label={t.vehicle.color}
                     value={form?.color || "#000000"}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     onChange={function (event) {
                       const newForm = { ...form };
                       newForm.color = event.currentTarget?.value || "#000000";
@@ -428,7 +431,7 @@ const VehiclesInspect = function () {
                     label={t.vehicle.brand}
                     value={form?.brand?.toLowerCase() || ""}
                     empty={t.stacks.no_option}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     options={[
                       ...VehicleBrandsOptions.map(function (brand) {
                         const brandName = brand.name.replace("_", " ");
@@ -452,28 +455,13 @@ const VehiclesInspect = function () {
                       return;
                     }}
                   />
-                  {/* <Input
-                  max={32}
-                  name="brand"
-                  id="vehicle_brand"
-                  value={form?.brand || ""}
-                  label={t.vehicle.brand}
-                  disabled={loading && Boolean(id)}
-                  placeholder={t.vehicle.brand_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.brand = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                /> */}
                   <Input
                     max={32}
                     name="model"
                     id="vehicle_model"
                     value={form?.model || ""}
                     label={t.vehicle.model}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     placeholder={t.vehicle.model_placeholder}
                     onChange={function (event) {
                       const newForm = { ...form };
@@ -489,7 +477,7 @@ const VehiclesInspect = function () {
                     id="vehicle_year"
                     placeholder="2000"
                     label={t.vehicle.year}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     value={String(form?.year || new Date().getFullYear())}
                     onChange={function (event) {
                       const newForm = { ...form };
@@ -510,7 +498,7 @@ const VehiclesInspect = function () {
                     id="vehicle_description"
                     value={form?.description || ""}
                     label={t.components.description}
-                    disabled={loading && Boolean(id)}
+                    disabled={loading}
                     placeholder={t.vehicle.description_placeholder}
                     onChange={function (event) {
                       const newForm = { ...form };
@@ -599,7 +587,7 @@ const VehiclesInspect = function () {
               <Button
                 type="submit"
                 disabled={loading}
-                category="Success"
+                category={id ? "Info" : "Success"}
                 text={id ? t.components.edit : t.components.save}
               />
             </Horizontal>
