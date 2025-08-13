@@ -40,13 +40,14 @@ import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Agenda, AgendaDate } from "../../../components/Agendas/Agenda";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import Profile from "../../../components/profiles/Profile";
 
 const SchedulesPanel = function () {
   const t = useTranslate();
   const play = useSounds();
   const Schema = useSchema();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { user, token, instance, workspaceId, workspaces } = useSystem();
+  const { user, users, token, instance, workspaceId, workspaces } = useSystem();
 
   const initialForm: TypeSchedule = {
     id: "",
@@ -63,6 +64,12 @@ const SchedulesPanel = function () {
   const [form, setForm] = useState<TypeSchedule>(initialForm);
   const [selected, setSelected] = useState<TypeSchedule[]>([]);
   const [schedules, setSchedules] = useState<TypeSchedule[]>([]);
+
+  const userFinded = form.userId
+    ? users.find(function (userLocal) {
+        return form.userId === userLocal.id;
+      })
+    : null;
 
   const FetchSchedules = async function () {
     setLoading(true);
@@ -433,6 +440,13 @@ const SchedulesPanel = function () {
                       setForm(newForm);
                       return;
                     }}
+                  />
+                  <Profile
+                    photoCircle
+                    padding={false}
+                    photo={userFinded?.photo || ""}
+                    description={userFinded?.email || ""}
+                    name={userFinded?.name || t.components.unknown}
                   />
                   <Horizontal internal={1}>
                     <Button
