@@ -555,7 +555,8 @@ const TranslatePt = {
     session_expired: "A sessão expirou",
     no_address: "Sem endereço",
     // limit
-    limit_user: "Limite de usuários atingido",
+    limit_workspace: "Limite de organizações foi atingida",
+    limit_user: "Limite de usuários foi atingida",
     wrong_file_format: "O arquivo está com o formato errado",
     limit_image_5mb: "A imagem excede o limite de 5MB",
     // fields
@@ -1297,6 +1298,7 @@ const TranslateEn = {
     session_expired: "Your sessions is expired",
     no_address: "No address",
     // limit
+    limit_workspace: "Workspace limit reached",
     limit_user: "User limit reached",
     wrong_file_format: "The file has the wrong format",
     limit_image_5mb: "The image file exceeds the 5MB limit",

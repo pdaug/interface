@@ -136,6 +136,15 @@ const WorkspaceInspect = function () {
       );
       if (
         err instanceof AxiosError &&
+        err.response?.data?.result?.message === "over_limit_workspace"
+      ) {
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.limit_workspace,
+        });
+        return;
+      }
+      if (
+        err instanceof AxiosError &&
         err.response?.data?.result?.message === "schema_incorrect"
       ) {
         Schema(err.response.data.result.err);
