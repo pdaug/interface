@@ -235,6 +235,15 @@ const EmployeesInspect = function () {
       );
       if (
         err instanceof AxiosError &&
+        err.response?.data?.result?.message === "over_limit_user"
+      ) {
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.limit_user,
+        });
+        return;
+      }
+      if (
+        err instanceof AxiosError &&
         err.response?.data?.result?.message === "schema_incorrect"
       ) {
         Schema(err.response.data.result.err);
