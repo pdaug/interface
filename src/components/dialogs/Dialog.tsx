@@ -23,10 +23,10 @@ export type DialogContextProps = {
   category: ButtonCategories;
   confirmIcon?: PhosphorIcon;
   confirmText?: string;
-  onConfirm?: () => void;
+  onConfirm?: (() => void) | (() => Promise<void>);
   Icon?: PhosphorIcon;
   cancelText?: string;
-  onCancel?: () => void;
+  onCancel?: (() => void) | (() => Promise<void>);
   width?: number | string;
 };
 
@@ -96,6 +96,8 @@ export const DialogElement = function () {
   const { dialogProps, CloseDialog } = useDialog();
   const dialogContainerRef = useRef<HTMLDivElement | null>(null);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   useEffect(function () {
     const HandleClickButton = function (event: MouseEvent) {
       if (
@@ -139,16 +141,29 @@ export const DialogElement = function () {
           <Button
             type="button"
             category="Neutral"
+            disabled={loading}
             text={dialogProps.cancelText || t.components.cancel}
-            onClick={dialogProps?.onCancel || CloseDialog}
+            onClick={async function () {
+              setLoading(true);
+              if (dialogProps.onCancel) await dialogProps?.onCancel();
+              CloseDialog();
+              setLoading(false);
+              return;
+            }}
           />
           {dialogProps.confirmText && (
             <Button
               type="submit"
+              disabled={loading}
               Icon={dialogProps.confirmIcon}
               text={dialogProps.confirmText}
               category={dialogProps.category}
-              onClick={dialogProps.onConfirm}
+              onClick={async function () {
+                setLoading(true);
+                if (dialogProps.onConfirm) await dialogProps?.onConfirm();
+                setLoading(false);
+                return;
+              }}
             />
           )}
         </div>
