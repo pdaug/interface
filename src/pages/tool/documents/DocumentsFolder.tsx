@@ -666,7 +666,7 @@ const DocumentsFolder = function () {
                 <Button
                   Icon={Trash}
                   IconSize={20}
-                  category="Warning"
+                  category="Danger"
                   text={t.document.open_recycle_bin}
                   onClick={function () {
                     navigate("/f/documents/recycle");
