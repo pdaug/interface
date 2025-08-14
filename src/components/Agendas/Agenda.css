@@ -42,7 +42,8 @@
 
 .rbc-day-bg {
   /* dates common */
-  background: var(--foregroundColor) !important;
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
 }
 
 .rbc-day-bg + .rbc-day-bg {
@@ -51,8 +52,8 @@
 
 .rbc-off-range-bg {
   /* dates off */
-  background: var(--backgroundColor) !important;
-  background-color: var(--backgroundColor) !important;
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
   border-color: var(--borderColor) !important;
 }
 
@@ -85,14 +86,23 @@
 }
 
 .rbc-day-bg.rbc-today {
-  background: var(--foregroundColor) !important;
-  background-color: var(--foregroundColor) !important;
+  background: var(--infoLight) !important;
+  background-color: var(--infoLight) !important;
 }
 */
 
 .rbc-now.rbc-current {
-  color: var(--infoDark) !important;
+  padding-top: 5px;
+}
+
+.rbc-now.rbc-current button {
+  background: var(--infoColor) !important;
+  background-color: var(--infoColor) !important;
+  border-radius: var(--borderRadius) !important;
+  color: white !important;
+  height: 32px;
   font-weight: bold !important;
+  width: 32px;
 }
 
 .rbc-selected-cell {

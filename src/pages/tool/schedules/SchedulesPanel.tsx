@@ -185,6 +185,7 @@ const SchedulesPanel = function () {
           return;
         }
         play("ok");
+        setForm(initialForm);
         toast.dismiss(toastId);
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
@@ -210,6 +211,7 @@ const SchedulesPanel = function () {
         return;
       }
       play("ok");
+      setForm(initialForm);
       toast.dismiss(toastId);
       toast.success(t.toast.success, {
         description: t.toast.success_create,
@@ -264,6 +266,7 @@ const SchedulesPanel = function () {
         <Vertical internal={1} styles={{ width: "65%" }}>
           <Agenda
             selectable
+            selected={[form.start, form.end]}
             endAccessor="end"
             events={schedules}
             defaultView="month"

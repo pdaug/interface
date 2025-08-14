@@ -1,5 +1,14 @@
 import { enUS, ptBR } from "date-fns/locale";
-import { format, getDay, isSameDay, parse, startOfWeek } from "date-fns";
+import {
+  endOfDay,
+  format,
+  getDay,
+  isSameDay,
+  isWithinInterval,
+  parse,
+  startOfDay,
+  startOfWeek,
+} from "date-fns";
 import { Calendar, CalendarProps, dateFnsLocalizer } from "react-big-calendar";
 
 // styles
@@ -139,7 +148,9 @@ export const AgendaDate = function ({
   );
 };
 
-export const Agenda = function (props: Omit<CalendarProps, "localizer">) {
+export const Agenda = function (
+  props: Omit<CalendarProps, "localizer"> & { selected: [Date, Date] },
+) {
   const t = useTranslate();
   const { instance } = useSystem();
 
@@ -177,6 +188,29 @@ export const Agenda = function (props: Omit<CalendarProps, "localizer">) {
         event: t.schedule.event,
         noEventsInRange: t.schedule.no_events_in_range,
         showMore: (total) => `+${total} ${t.schedule.more}`,
+      }}
+      dayPropGetter={function (date) {
+        const isSelected = isWithinInterval(date, {
+          start: startOfDay(
+            Array.isArray(props.selected) ? props.selected[0] : props.selected,
+          ),
+          end: endOfDay(
+            Array.isArray(props.selected)
+              ? props.selected[props.selected.length - 1]
+              : props.selected,
+          ),
+        });
+        if (isSelected) {
+          return {
+            className: "selected",
+            style: {
+              background: "var(--infoLight)",
+              backgroundColor: "var(--infoLight)",
+            },
+          };
+        }
+
+        return {};
       }}
       eventPropGetter={function (event) {
         if (!("priority" in event) || !event.priority) return {};
