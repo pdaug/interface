@@ -7,6 +7,9 @@ import { Asterisk, MapTrifold, User, UserList } from "@phosphor-icons/react";
 // apis
 import apis from "../../../apis";
 
+// utils
+import { GenerateId } from "../../../utils/GenerateId";
+
 // types
 import { TypeUser, TypeUserRole } from "../../../types/User";
 
@@ -149,6 +152,7 @@ const EmployeesInspect = function () {
     event.preventDefault();
     setLoading(true);
     try {
+      const hash = GenerateId();
       // is editing
       if (id) {
         // upload photo temp
@@ -165,7 +169,8 @@ const EmployeesInspect = function () {
               quality: 100,
             },
           );
-          form.photo = responseUploadImage.data?.result || null;
+          const userPhoto = responseUploadImage.data?.result;
+          form.photo = userPhoto ? `${userPhoto}&hash=${hash}` : null;
         }
         const response = await apis.User.update<TypeUser>(
           token,
@@ -216,7 +221,8 @@ const EmployeesInspect = function () {
             quality: 100,
           },
         );
-        form.photo = responseUploadImage.data?.result || null;
+        const userPhoto = responseUploadImage.data?.result;
+        form.photo = userPhoto ? `${userPhoto}&hash=${hash}` : null;
       }
       await apis.User.update(token, instance.name, response.data.result.id, {
         photo: form.photo,

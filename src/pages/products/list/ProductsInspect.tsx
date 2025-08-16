@@ -13,6 +13,9 @@ import {
   ProductCategoryOptions,
 } from "../../../assets/Product";
 
+// utils
+import { GenerateId } from "../../../utils/GenerateId";
+
 // types
 import {
   TypeProduct,
@@ -136,6 +139,7 @@ const ProductsInspect = function () {
     setLoading(true);
     const toastId = toast.loading(t.components.loading);
     try {
+      const hash = GenerateId();
       // is editing
       if (id && form.id) {
         // upload product temp
@@ -154,7 +158,10 @@ const ProductsInspect = function () {
               quality: 80,
             },
           );
-          form.variants[index].photo = responseUploadImage.data?.result || null;
+          const variantPhoto = responseUploadImage.data?.result;
+          form.variants[index].photo = variantPhoto
+            ? `${variantPhoto}&hash=${hash}`
+            : null;
         }
         const response = await apis.Product.update(
           token,
@@ -210,7 +217,10 @@ const ProductsInspect = function () {
             quality: 80,
           },
         );
-        form.variants[index].photo = responseUploadImage.data?.result || null;
+        const variantPhoto = responseUploadImage.data?.result;
+        form.variants[index].photo = variantPhoto
+          ? `${variantPhoto}&hash=${hash}`
+          : null;
       }
       await apis.Product.update(
         token,
