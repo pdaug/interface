@@ -4,12 +4,18 @@ import {
   format,
   getDay,
   isSameDay,
+  isToday,
   isWithinInterval,
   parse,
   startOfDay,
   startOfWeek,
 } from "date-fns";
-import { Calendar, CalendarProps, dateFnsLocalizer } from "react-big-calendar";
+import {
+  Calendar,
+  CalendarProps,
+  dateFnsLocalizer,
+  ToolbarProps,
+} from "react-big-calendar";
 
 // styles
 import "./Agenda.css";
@@ -25,6 +31,7 @@ import { Horizontal, Vertical } from "../aligns/Align";
 import useSystem from "../../hooks/useSystem";
 import useDateTime from "../../hooks/useDateTime";
 import useTranslate from "../../hooks/useTranslate";
+import Button from "../buttons/Button";
 
 const locales = {
   "en-US": enUS,
@@ -170,10 +177,47 @@ export const Agenda = function (
     locales,
   });
 
+  const AgendaToolbar = function ({ label, onNavigate, date }: ToolbarProps) {
+    return (
+      <Horizontal
+        internal={1}
+        className="itemsCenter"
+        styles={{ paddingBottom: "1rem" }}
+      >
+        <span className="flex1" style={{ textTransform: "capitalize" }}>
+          {label}
+        </span>
+
+        <Horizontal internal={0.4}>
+          <Button
+            category="Neutral"
+            text={t.schedule.previous}
+            onClick={() => onNavigate("PREV")}
+          />
+
+          <Button
+            category={isToday(date) ? "Info" : "Neutral"}
+            text={t.schedule.today}
+            onClick={() => onNavigate("TODAY")}
+          />
+
+          <Button
+            category="Neutral"
+            text={t.schedule.next}
+            onClick={() => onNavigate("NEXT")}
+          />
+        </Horizontal>
+      </Horizontal>
+    );
+  };
+
   return (
     <Calendar
       {...props}
       localizer={localizer}
+      components={{
+        toolbar: AgendaToolbar,
+      }}
       messages={{
         allDay: t.schedule.all_day,
         previous: t.schedule.previous,
