@@ -228,7 +228,10 @@ const SuppliersInspect = function () {
       });
       return;
     } finally {
-      setLoading(false);
+      // delay to not duplicate when save
+      setTimeout(function () {
+        setLoading(false);
+      }, 500);
     }
   };
 

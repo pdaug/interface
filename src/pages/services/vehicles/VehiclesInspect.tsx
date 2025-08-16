@@ -141,7 +141,6 @@ const VehiclesInspect = function () {
         );
         if (!response.data?.result || response.status !== 200) {
           play("alert");
-          setLoading(false);
           toast.dismiss(toastId);
           toast.warning(t.toast.warning_error, {
             description: t.toast.warning_edit,
@@ -154,7 +153,6 @@ const VehiclesInspect = function () {
           description: t.toast.success_edit,
         });
         navigate("/f/vehicles");
-        setLoading(false);
         return;
       }
       // is creating
@@ -170,7 +168,6 @@ const VehiclesInspect = function () {
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_create,
         });
-        setLoading(false);
         return;
       }
       play("ok");
@@ -179,10 +176,8 @@ const VehiclesInspect = function () {
         description: t.toast.success_create,
       });
       navigate("/f/vehicles");
-      setLoading(false);
       return;
     } catch (err) {
-      setLoading(false);
       play("alert");
       toast.dismiss(toastId);
       console.error(
@@ -201,7 +196,10 @@ const VehiclesInspect = function () {
       });
       return;
     } finally {
-      setLoading(true);
+      // delay to not duplicate when save
+      setTimeout(function () {
+        setLoading(false);
+      }, 500);
     }
   };
 

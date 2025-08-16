@@ -145,7 +145,6 @@ const DocumentsEditor = function () {
         );
         if (!response.data?.result || response.status !== 200) {
           play("alert");
-          setLoading(false);
           toast.dismiss(toastId);
           toast.warning(t.toast.warning_error, {
             description: t.toast.warning_edit,
@@ -158,7 +157,6 @@ const DocumentsEditor = function () {
           description: t.toast.success_edit,
         });
         navigate("/f/documents");
-        setLoading(false);
         return;
       }
       // is creating
@@ -177,7 +175,6 @@ const DocumentsEditor = function () {
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_create,
         });
-        setLoading(false);
         return;
       }
       play("ok");
@@ -186,10 +183,8 @@ const DocumentsEditor = function () {
         description: t.toast.success_create,
       });
       navigate("/f/documents");
-      setLoading(false);
       return;
     } catch (err) {
-      setLoading(false);
       play("alert");
       toast.dismiss(toastId);
       console.error("[src/pages/tool/documents/DocumentsEditor.tsx]", err);
@@ -204,6 +199,11 @@ const DocumentsEditor = function () {
         description: id ? t.toast.error_edit : t.toast.error_create,
       });
       return;
+    } finally {
+      // delay to not duplicate when save
+      setTimeout(function () {
+        setLoading(false);
+      }, 500);
     }
   };
 

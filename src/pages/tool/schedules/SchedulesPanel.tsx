@@ -177,7 +177,6 @@ const SchedulesPanel = function () {
         );
         if (!response.data?.result || response.status !== 200) {
           play("alert");
-          setLoading(false);
           toast.dismiss(toastId);
           toast.warning(t.toast.warning_error, {
             description: t.toast.warning_edit,
@@ -191,7 +190,6 @@ const SchedulesPanel = function () {
           description: t.toast.success_edit,
         });
         await FetchSchedules();
-        setLoading(false);
         return;
       }
       // is creating
@@ -207,7 +205,6 @@ const SchedulesPanel = function () {
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_create,
         });
-        setLoading(false);
         return;
       }
       play("ok");
@@ -217,10 +214,8 @@ const SchedulesPanel = function () {
         description: t.toast.success_create,
       });
       await FetchSchedules();
-      setLoading(false);
       return;
     } catch (err) {
-      setLoading(false);
       play("alert");
       toast.dismiss(toastId);
       console.error("[src/pages/tool/schedules/SchedulesPanel.tsx]", err);
@@ -235,6 +230,11 @@ const SchedulesPanel = function () {
         description: form.id ? t.toast.error_edit : t.toast.error_create,
       });
       return;
+    } finally {
+      // delay to not duplicate when save
+      setTimeout(function () {
+        setLoading(false);
+      }, 500);
     }
   };
 
