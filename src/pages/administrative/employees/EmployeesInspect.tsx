@@ -662,7 +662,7 @@ const EmployeesInspect = function () {
                           });
                         } catch (err) {
                           console.error(
-                            "[src/pages/settings/SettingsPanel.tsx]",
+                            "[src/pages/administrative/employees/EmployeesInspect.tsx]",
                             err,
                           );
                           toast.dismiss(toastId);

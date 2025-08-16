@@ -269,7 +269,7 @@ const AccountList = function () {
                         description: t.toast.error_delete,
                       });
                       console.error(
-                        "[src/pages/settings/accounts/AccountInspect.tsx]",
+                        "[src/pages/settings/accounts/AccountList.tsx]",
                         err,
                       );
                       return;

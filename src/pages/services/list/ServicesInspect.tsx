@@ -93,10 +93,7 @@ const ServicesInspect = function () {
       toast.warning(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error(
-        "[src/pages/operational/services/ServicesInspect.tsx]",
-        err,
-      );
+      console.error("[src/pages/services/list/ServicesInspect.tsx]", err);
       navigate("/f/services");
       return;
     } finally {
@@ -153,10 +150,7 @@ const ServicesInspect = function () {
       return;
     } catch (err) {
       play("alert");
-      console.error(
-        "[src/pages/operational/services/ServicesInspect.tsx]",
-        err,
-      );
+      console.error("[src/pages/services/list/ServicesInspect.tsx]", err);
       if (
         err instanceof AxiosError &&
         err.response?.data?.result?.message === "schema_incorrect"

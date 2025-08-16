@@ -106,7 +106,7 @@ const ProductsList = function () {
           description: t.stacks.no_find_item,
         });
         console.warn(
-          "[src/pages/operational/products/ProductsList.tsx]",
+          "[src/pages/products/list/ProductsList.tsx]",
           response.data,
         );
         return;
@@ -119,7 +119,7 @@ const ProductsList = function () {
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/operational/products/ProductsList.tsx]", err);
+      console.error("[src/pages/products/list/ProductsList.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -217,10 +217,7 @@ const ProductsList = function () {
               toast.error(t.toast.warning_error, {
                 description: t.toast.error_delete,
               });
-              console.error(
-                "[src/pages/settings/workspaces/WorkspaceList.tsx]",
-                err,
-              );
+              console.error("[src/pages/products/list/ProductList.tsx]", err);
               return;
             }
           },
@@ -500,7 +497,7 @@ const ProductsList = function () {
                             description: t.toast.error_edit,
                           });
                           console.error(
-                            "[src/pages/operational/products/ProductsList.tsx]",
+                            "[src/pages/products/list/ProductsList.tsx]",
                             err,
                           );
                         }

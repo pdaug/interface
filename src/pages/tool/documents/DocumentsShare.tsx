@@ -54,7 +54,7 @@ const DocumentsShare = function () {
         setInstance(response.data.result);
       }
     } catch (err) {
-      console.error("[src/pages/tool/documents/DocumentsPage.tsx]", err);
+      console.error("[src/pages/tool/documents/DocumentsShare.tsx]", err);
     }
   }, []);
 
@@ -104,7 +104,7 @@ const DocumentsShare = function () {
         toast.error(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        console.error("[src/pages/tool/documents/DocumentsPage.tsx]", err);
+        console.error("[src/pages/tool/documents/DocumentsShare.tsx]", err);
         setLoading(false);
         return;
       } finally {

@@ -94,7 +94,7 @@ const VehiclesList = function () {
           description: t.stacks.no_find_item,
         });
         console.warn(
-          "[src/pages/operational/vehicles/VehiclesList.tsx]",
+          "[src/pages/services/vehicles/VehiclesList.tsx]",
           response.data,
         );
         return;
@@ -107,7 +107,7 @@ const VehiclesList = function () {
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/operational/vehicles/VehiclesList.tsx]", err);
+      console.error("[src/pages/services/vehicles/VehiclesList.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -206,7 +206,7 @@ const VehiclesList = function () {
                 description: t.toast.error_delete,
               });
               console.error(
-                "[src/pages/operational/vehicles/VehiclesList.tsx]",
+                "[src/pages/services/vehicles/VehiclesList.tsx]",
                 err,
               );
               return;
@@ -382,7 +382,7 @@ const VehiclesList = function () {
                           description: t.toast.error_edit,
                         });
                         console.error(
-                          "[src/pages/operational/vehicles/VehiclesList.tsx]",
+                          "[src/pages/services/vehicles/VehiclesList.tsx]",
                           err,
                         );
                       }

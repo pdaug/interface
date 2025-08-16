@@ -112,10 +112,7 @@ const VehiclesInspect = function () {
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error(
-        "[src/pages/operational/vehicles/VehiclesInspect.tsx]",
-        err,
-      );
+      console.error("[src/pages/services/vehicles/VehiclesInspect.tsx]", err);
       navigate("/f/vehicles");
       setLoading(false);
       return;
@@ -180,10 +177,7 @@ const VehiclesInspect = function () {
     } catch (err) {
       play("alert");
       toast.dismiss(toastId);
-      console.error(
-        "[src/pages/operational/vehicles/VehiclesInspect.tsx]",
-        err,
-      );
+      console.error("[src/pages/services/vehicles/VehiclesInspect.tsx]", err);
       if (
         err instanceof AxiosError &&
         err.response?.data?.result?.message === "schema_incorrect"

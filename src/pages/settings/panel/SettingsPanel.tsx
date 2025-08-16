@@ -109,7 +109,7 @@ const SettingsPanel = function () {
       toast.error(t.toast.warning_error, {
         description: t.toast.warning_find,
       });
-      console.error("[src/pages/settings/SettingsPanel.tsx]", err);
+      console.error("[src/pages/settings/panel/SettingsPanel.tsx]", err);
       toast.dismiss(toastId);
       setLoading(false);
       return;
@@ -211,7 +211,7 @@ const SettingsPanel = function () {
         }
       }
       play("alert");
-      console.error("[src/pages/settings/SettingsPanel.tsx]", err);
+      console.error("[src/pages/settings/panel/SettingsPanel.tsx]", err);
       toast.error(t.toast.warning_error, {
         description: t.toast.error_edit,
       });
@@ -722,7 +722,7 @@ const SettingsPanel = function () {
                         });
                       } catch (err) {
                         console.error(
-                          "[src/pages/settings/SettingsPanel.tsx]",
+                          "[src/pages/settings/panel/SettingsPanel.tsx]",
                           err,
                         );
                         toast.dismiss(toastId);

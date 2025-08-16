@@ -81,7 +81,7 @@ const OrdersList = function () {
           description: t.stacks.no_find_item,
         });
         console.warn(
-          "[src/pages/financial/orders/OrdersList.tsx]",
+          "[src/pages/services/orders/OrdersList.tsx]",
           response.data,
         );
         return;
@@ -94,7 +94,7 @@ const OrdersList = function () {
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/financial/orders/OrdersList.tsx]", err);
+      console.error("[src/pages/services/orders/OrdersList.tsx]", err);
       return;
     } finally {
       setLoading(false);

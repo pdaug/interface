@@ -66,7 +66,6 @@ const DocumentsEditor = function () {
     const OnScroll = function () {
       if (!toolbarRef.current) return;
       const rect = toolbarRef.current.getBoundingClientRect();
-      console.log(rect);
       const isSticky = rect.top === 16;
       if (isSticky) {
         toolbarRef.current.style.border = "1px solid var(--borderColor)";

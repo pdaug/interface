@@ -92,7 +92,7 @@ const ServicesList = function () {
           description: t.stacks.no_find_item,
         });
         console.warn(
-          "[src/pages/operational/services/ServicesList.tsx]",
+          "[src/pages/services/list/ServicesList.tsx]",
           response.data,
         );
         return;
@@ -105,7 +105,7 @@ const ServicesList = function () {
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/operational/services/ServicesList.tsx]", err);
+      console.error("[src/pages/services/list/ServicesList.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -267,7 +267,7 @@ const ServicesList = function () {
                           description: t.toast.error_edit,
                         });
                         console.error(
-                          "[src/pages/operational/services/ServicesList.tsx]",
+                          "[src/pages/services/list/ServicesList.tsx]",
                           err,
                         );
                       }
@@ -464,7 +464,7 @@ const ServicesList = function () {
                         description: t.toast.error_delete,
                       });
                       console.error(
-                        "[src/pages/operational/services/ServicesList.tsx]",
+                        "[src/pages/services/list/ServicesList.tsx]",
                         err,
                       );
                       return;
