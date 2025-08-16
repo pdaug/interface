@@ -8,7 +8,6 @@ const useSchema = function () {
 
   const Schema = function (err: string[]): void {
     const errors = [];
-    console.log(err);
     for (const item of err) {
       const splitted = item.split(".");
       const path = splitted.slice(1, -1).join(".");

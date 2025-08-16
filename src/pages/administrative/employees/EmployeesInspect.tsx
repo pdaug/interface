@@ -52,8 +52,16 @@ const EmployeesInspect = function () {
   const Schema = useSchema();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
-  const { user, token, instance, workspaces, workspaceId, saveUser } =
-    useSystem();
+  const {
+    user,
+    users,
+    token,
+    instance,
+    workspaces,
+    workspaceId,
+    setUsers,
+    saveUser,
+  } = useSystem();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [photoTemp, setPhotoTemp] = useState<File | null>(null);
@@ -187,6 +195,18 @@ const EmployeesInspect = function () {
         }
         // if user update it is yourself
         if (id === user.id) saveUser(response.data.result);
+        // update user
+        const usersClone = [...users];
+        const userIndex = usersClone.findIndex(function (userLocal) {
+          return userLocal.id === id;
+        });
+        if (userIndex > -1) {
+          usersClone[userIndex] = {
+            ...usersClone[userIndex],
+            ...form,
+          };
+          setUsers(usersClone);
+        }
         play("ok");
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
