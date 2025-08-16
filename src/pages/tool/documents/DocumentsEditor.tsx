@@ -62,6 +62,7 @@ const DocumentsEditor = function () {
     workspaceId,
   });
 
+  // toolbar scroll too
   useEffect(function () {
     const OnScroll = function () {
       if (!toolbarRef.current) return;
@@ -80,6 +81,21 @@ const DocumentsEditor = function () {
     OnScroll();
     return function () {
       window.removeEventListener("wheel", OnScroll);
+      return;
+    };
+  }, []);
+
+  // check will close tab
+  useEffect(function () {
+    const handleBeforeUnload = function (event: BeforeUnloadEvent) {
+      event.preventDefault();
+      event.returnValue = "";
+      return;
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return function () {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       return;
     };
   }, []);
