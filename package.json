@@ -1,7 +1,7 @@
 {
   "name": "interface",
   "private": true,
-  "version": "0.64",
+  "version": "0.65",
   "type": "module",
   "homepage": "https://pdaug.github.io/interface/",
   "scripts": {
