@@ -15,9 +15,10 @@ import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import Dashboard from "./pages/Dashboard";
 import financial from "./pages/financial";
-import operational from "./pages/operational";
 import administrative from "./pages/administrative";
 import DocumentsShare from "./pages/tool/documents/DocumentsShare";
+import services from "./pages/services";
+import products from "./pages/products";
 
 const Router = createBrowserRouter([
   {
@@ -40,7 +41,8 @@ const Router = createBrowserRouter([
       },
       ...financial,
       ...settings,
-      ...operational,
+      ...services,
+      ...products,
       ...administrative,
       ...tool,
     ],
