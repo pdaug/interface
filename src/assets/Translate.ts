@@ -86,6 +86,8 @@ const TranslatePt = {
     center: "Centralizar",
     right: "Direita",
     justify: "Justificar",
+    ol: "Lista ordenada",
+    ul: "Lista desordenada",
     // format
     json: "Formato JSON",
     xlsx: "Planilha Excel",
@@ -804,6 +806,8 @@ const TranslateEn = {
     center: "Center",
     right: "Right",
     justify: "Justify",
+    ol: "Ordened list",
+    ul: "Unordered list",
     // format
     json: "Format JSON",
     xlsx: "Sheets Excel",

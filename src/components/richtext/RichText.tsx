@@ -13,6 +13,9 @@ import {
   TextStrikethrough,
   Icon as IconPhosphor,
   ArrowCounterClockwise,
+  ListNumbers,
+  List,
+  ListBullets,
 } from "@phosphor-icons/react";
 import React, { useEffect, useMemo } from "react";
 
@@ -37,6 +40,7 @@ import {
   Descendant,
   createEditor,
   Element as ElementSlate,
+  NodeEntry,
 } from "slate";
 import { HistoryEditor, withHistory } from "slate-history";
 
@@ -70,11 +74,17 @@ export const fontBasicList = {
 export const actionsList = ["undo", "redo"] as const;
 export const typesList = ["title", "subtitle", "paragraph"] as const;
 export const alignsList = ["left", "center", "right", "justify"] as const;
+export const itemsList = ["ul", "ol", "li"] as const;
 
 export type FormatTypes = (typeof typesList)[number];
 export type FormatStyles = (typeof stylesList)[number];
 export type FormatAligns = (typeof alignsList)[number];
-export type FormatProps = FormatStyles | FormatTypes | FormatAligns;
+export type FormatItems = (typeof itemsList)[number];
+export type FormatProps =
+  | FormatStyles
+  | FormatTypes
+  | FormatAligns
+  | FormatItems;
 
 export type ActionProps = (typeof actionsList)[number];
 
@@ -101,6 +111,24 @@ const Element = function ({
       <div style={{ ...style, fontSize: "18pt" }} {...attributes}>
         {children}
       </div>
+    );
+  if ("type" in element && element.type === "ul")
+    return (
+      <ul style={style} {...attributes}>
+        {children}
+      </ul>
+    );
+  if ("type" in element && element.type === "ol")
+    return (
+      <ol style={style} {...attributes}>
+        {children}
+      </ol>
+    );
+  if ("type" in element && element.type === "li")
+    return (
+      <li style={style} {...attributes}>
+        {children}
+      </li>
     );
   return (
     <div style={style} {...attributes}>
@@ -163,6 +191,22 @@ const isStyled = function (editor: EditorCustom, format: FormatStyles) {
   return marks ? marks[format as keyof Omit<BaseText, "text">] === true : false;
 };
 
+// checker
+const isList = function (
+  editor: Editor,
+  format: FormatItems,
+): [boolean, NodeEntry<Node>] {
+  const [match] = Editor.nodes(editor, {
+    match: function (node) {
+      const notEditor = !Editor.isEditor(node);
+      const isElement = ElementSlate.isElement(node);
+      const hasList = "type" in node && node.type === format;
+      return notEditor && isElement && hasList;
+    },
+  });
+  return [Boolean(match), match];
+};
+
 // toggle
 const toggleFormat = function (editor: EditorCustom, format: FormatProps) {
   if (stylesList.includes(format as FormatStyles)) {
@@ -203,6 +247,77 @@ const toggleFormat = function (editor: EditorCustom, format: FormatProps) {
       },
     );
   }
+
+  if (itemsList.includes(format as FormatItems)) {
+    if (format === "li") return;
+
+    const [listEntry] = Editor.nodes(editor, {
+      match: function (node) {
+        const notEditor = !Editor.isEditor(node);
+        const isElement = ElementSlate.isElement(node);
+        const isList =
+          "type" in node && node.type
+            ? itemsList.includes(node.type as FormatItems)
+            : false;
+        return notEditor && isElement && isList;
+      },
+      mode: "lowest",
+    });
+
+    if (listEntry) {
+      Transforms.setNodes(
+        editor,
+        { type: "paragraph" } as Partial<ElementSlate>,
+        {
+          match: function (node) {
+            const notEditor = !Editor.isEditor(node);
+            const isElement = ElementSlate.isElement(node);
+            const isListItem =
+              "type" in node && node.type ? node.type === "li" : false;
+            return notEditor && isElement && isListItem;
+          },
+          mode: "lowest",
+        },
+      );
+
+      Transforms.unwrapNodes(editor, {
+        match: function (node) {
+          const notEditor = !Editor.isEditor(node);
+          const isElement = ElementSlate.isElement(node);
+          const isList =
+            "type" in node && node.type
+              ? itemsList.includes(node.type as FormatItems)
+              : false;
+          return notEditor && isElement && isList;
+        },
+        split: true,
+      });
+    } else {
+      Transforms.setNodes(editor, { type: "li" } as Partial<ElementSlate>, {
+        match: function (node) {
+          const isElement = ElementSlate.isElement(node);
+          const isBlock = Editor.isBlock(editor, node as ElementSlate);
+          return isElement && isBlock;
+        },
+        mode: "lowest",
+      });
+
+      Transforms.wrapNodes(
+        editor,
+        { type: format, children: [] } as ElementSlate,
+        {
+          match: function (node) {
+            const isElement = ElementSlate.isElement(node);
+            const isListItem =
+              "type" in node && node.type ? node.type === "li" : false;
+            return isElement && isListItem;
+          },
+          split: true,
+        },
+      );
+    }
+    return;
+  }
 };
 
 const RichTextToolIcons: Record<FormatProps, IconPhosphor> = {
@@ -217,6 +332,9 @@ const RichTextToolIcons: Record<FormatProps, IconPhosphor> = {
   center: TextAlignCenter,
   right: TextAlignRight,
   justify: TextAlignJustify,
+  ol: ListNumbers,
+  ul: ListBullets,
+  li: List,
 };
 
 export type RichTextToolProps = {
@@ -269,7 +387,8 @@ export const RichTextTool = function ({ format, Icon }: RichTextToolProps) {
   const hasSelected =
     isStyled(editor as EditorCustom, format as string as FormatStyles) ||
     isAligned(editor as EditorCustom, format as string as FormatAligns) ||
-    isTyped(editor as EditorCustom, format as string as FormatTypes);
+    isTyped(editor as EditorCustom, format as string as FormatTypes) ||
+    isList(editor as EditorCustom, format as string as FormatItems)[0];
 
   return (
     <Tooltip

@@ -313,6 +313,9 @@ const DocumentsEditor = function () {
                   <RichTextTool format="center" />
                   <RichTextTool format="right" />
                   <RichTextTool format="justify" />
+                  <div style={{ width: 8 }}></div>
+                  <RichTextTool format="ul" />
+                  <RichTextTool format="ol" />
                 </Horizontal>
               </Horizontal>
 
