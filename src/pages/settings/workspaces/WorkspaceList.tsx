@@ -65,7 +65,7 @@ const WorkspaceList = function () {
         ApiResponsePaginate<TypeWorkspace>
       >(token, instance.name, {
         pageSize,
-        pageCurrent: page,
+        pageCurrent: searchDebounced ? 1 : page,
         searchField: "name",
         search: searchDebounced,
       });

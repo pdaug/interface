@@ -35,7 +35,7 @@ import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
-const pageSize = 100;
+const pageSize = 99;
 
 const DocumentsRecycle = function () {
   const t = useTranslate();

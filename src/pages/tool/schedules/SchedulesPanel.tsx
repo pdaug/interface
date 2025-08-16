@@ -80,7 +80,7 @@ const SchedulesPanel = function () {
         token,
         instance.name,
         {
-          pageSize: 999,
+          pageSize: 99,
           pageCurrent: 1,
         },
         workspaceId,

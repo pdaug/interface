@@ -113,7 +113,7 @@ const DocumentsFolder = function () {
         instance.name,
         {
           pageSize,
-          pageCurrent: page,
+          pageCurrent: searchDebounced ? 1 : page,
           searchField: "name",
           search: searchDebounced,
         },

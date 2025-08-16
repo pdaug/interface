@@ -80,7 +80,7 @@ const VehiclesList = function () {
         instance.name,
         {
           pageSize,
-          pageCurrent: page,
+          pageCurrent: searchDebounced ? 1 : page,
           searchField: "name",
           search: searchDebounced,
           dateStart: interval.start ? interval.start.toISOString() : undefined,
