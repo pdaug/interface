@@ -9,7 +9,9 @@ const NodesToHtml = function (nodes: Descendant[]): string {
   let fontFamily = null;
   for (const node of nodes) {
     if ("font" in node && node.font)
-      fontFamily = fontBasicList[node.font as keyof typeof fontBasicList];
+      fontFamily =
+        fontBasicList?.[node.font as keyof typeof fontBasicList] ||
+        "sans-serif";
     if ("text" in node) {
       let text = node.text;
       if ("color" in node && node.color)
@@ -35,6 +37,18 @@ const NodesToHtml = function (nodes: Descendant[]): string {
     else if ("type" in node && node.type === "subtitle")
       content.push(
         `<h2 style="font-size:18px;font-family:${fontFamily};margin:10px 0;text-align:${textAlign};">${children}</h2>`,
+      );
+    else if ("type" in node && node.type === "ul")
+      content.push(
+        `<ul style="font-family:${fontFamily};text-align:${textAlign};">${children}</ul>`,
+      );
+    else if ("type" in node && node.type === "ol")
+      content.push(
+        `<ol style="font-family:${fontFamily};text-align:${textAlign};">${children}</ol>`,
+      );
+    else if ("type" in node && node.type === "li")
+      content.push(
+        `<li style="font-family:${fontFamily};text-align:${textAlign};">${children}</li>`,
       );
     else
       content.push(
