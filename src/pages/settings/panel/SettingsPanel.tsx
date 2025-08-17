@@ -7,6 +7,9 @@ import { Asterisk, ImageBroken, MapTrifold } from "@phosphor-icons/react";
 // apis
 import apis from "../../../apis";
 
+// utils
+import { GenerateId } from "../../../utils/GenerateId";
+
 // types
 import {
   TypeSettings,
@@ -127,6 +130,7 @@ const SettingsPanel = function () {
     event.preventDefault();
     setLoading(true);
     const toastId = toast.loading(t.components.loading);
+    const hash = GenerateId();
     try {
       let logoUrl = null;
       let faviconUrl = null;
@@ -144,7 +148,8 @@ const SettingsPanel = function () {
             quality: 100,
           },
         );
-        logoUrl = responseUploadImage.data?.result || null;
+        const logoResult = responseUploadImage.data?.result;
+        logoUrl = logoResult ? `${logoResult}&hash=${hash}` : null;
       }
       // upload favicon temp
       if (faviconTemp) {
@@ -159,7 +164,8 @@ const SettingsPanel = function () {
             quality: 100,
           },
         );
-        faviconUrl = responseUploadImage.data?.result || null;
+        const faviconResult = responseUploadImage.data?.result;
+        faviconUrl = faviconResult ? `${faviconResult}&hash=${hash}` : null;
       }
       // upload logo large temp
       if (logoLargeTemp) {
@@ -174,7 +180,10 @@ const SettingsPanel = function () {
             quality: 100,
           },
         );
-        logoLargeUrl = responseUploadImage.data?.result || null;
+        const logoLargeResult = responseUploadImage.data?.result;
+        logoLargeUrl = logoLargeResult
+          ? `${logoLargeResult}&hash=${hash}`
+          : null;
       }
       // save instance
       form.logo = logoUrl || instance.logo;
