@@ -75,6 +75,11 @@ const TranslatePt = {
     all: "Todos",
     photo: "Foto",
     image: "Imagem",
+    // actions
+    insert: "Inserir",
+    create: "Criar",
+    read: "Ler",
+    update: "Atualizar",
     // editor
     bold: "Negrito",
     italic: "Itálico",
@@ -514,6 +519,8 @@ const TranslatePt = {
   },
   stacks: {
     // no
+    no_action: "Nenhuma ação encontrada",
+    no_entity: "Nenhum módulo encontrado",
     no_email: "Sem email",
     no_document: "Sem documento",
     no_find_item: "O item não foi encontrado",
@@ -635,6 +642,13 @@ const TranslatePt = {
     schedules_description:
       "Todos os horários que foram reservados na agenda deste usuário",
     not_change_status: "Não é permitido desativar o próprio usuário",
+    // audit
+    to_audit: "Auditar",
+    audit: "Auditoria",
+    userId: "Responsável",
+    action: "Ação",
+    entity: "Módulo",
+    workspace: "Organização",
   },
   vehicle: {
     vehicle: "Veículo",
@@ -795,6 +809,11 @@ const TranslateEn = {
     all: "All",
     photo: "Photo",
     image: "Image",
+    // actions
+    insert: "Insert",
+    create: "Create",
+    read: "Read",
+    update: "Update",
     // editor
     bold: "Bold",
     italic: "Italic",
@@ -1260,6 +1279,8 @@ const TranslateEn = {
   },
   stacks: {
     // no
+    no_action: "No ação found",
+    no_entity: "No module found",
     no_email: "No email",
     no_document: "No document",
     no_find_item: "The item was not found",
@@ -1348,6 +1369,13 @@ const TranslateEn = {
     schedules_description:
       "All schedules that reservade in schedule list in this user",
     not_change_status: "It is not allowed to deactivate the user himself",
+    // audit
+    to_audit: "To audit",
+    audit: "Audit",
+    userId: "Responsable",
+    action: "Action",
+    entity: "Module",
+    workspace: "Workspace",
   },
   vehicle: {
     vehicle: "Vehicle",

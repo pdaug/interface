@@ -5,6 +5,7 @@ import AddressPosition from "./external/Address";
 
 // apis internal
 import User from "./internal/User";
+import Audit from "./internal/Audit";
 import Order from "./internal/Order";
 import Login from "./internal/Login";
 import Upload from "./internal/Upload";
@@ -29,6 +30,7 @@ export default {
   CompanyData,
   // internal
   Account,
+  Audit,
   Customer,
   DocumentApi,
   Instance,

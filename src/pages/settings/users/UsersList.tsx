@@ -1,6 +1,7 @@
 import {
   Plus,
   Trash,
+  Newspaper,
   CopySimple,
   PencilSimple,
   QuestionMark,
@@ -363,21 +364,16 @@ const UsersList = function () {
                 return;
               },
             },
-            // {
-            //   id: "download",
-            //   Icon: DownloadSimple,
-            //   label: t.components.download,
-            //   onClick: function (_: React.MouseEvent, data: unknown) {
-            //     if (data && typeof data === "object" && "id" in data) {
-            //       Download.JSON(data, `employee-${data.id}.json`);
-            //       play("ok");
-            //       toast.success(t.toast.success, {
-            //         description: t.toast.success_download,
-            //       });
-            //     }
-            //     return;
-            //   },
-            // },
+            {
+              id: "audit",
+              Icon: Newspaper,
+              label: t.user.to_audit,
+              onClick: function (_: React.MouseEvent, data: unknown) {
+                if (data && typeof data === "object" && "id" in data)
+                  navigate(`/f/users/audit/${data.id}`);
+                return;
+              },
+            },
             {
               id: "edit",
               Icon: PencilSimple,

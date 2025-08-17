@@ -23,3 +23,12 @@ export type TypeUser = {
   updatedAt: string | null;
   deletedAt: string | null;
 };
+
+export type TypeUserAudit = {
+  userId: string;
+  action: string;
+  module: string;
+  snapshot?: unknown;
+  workspaceId?: string;
+  createdAt: string;
+};
