@@ -44,7 +44,7 @@ import { Input, InputInterval } from "../../../components/inputs/Input";
 
 const pageSize = 10;
 
-const EmployeesList = function () {
+const UsersList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const EmployeesList = function () {
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
-  const [employees, setEmployees] = useState<TypeUser[]>([]);
+  const [users, setUsers] = useState<TypeUser[]>([]);
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: startOfYear(new Date()),
     end: endOfDay(new Date()),
@@ -66,7 +66,7 @@ const EmployeesList = function () {
   const [searchDebounced] = useDebounce(search, 500);
 
   // TODO: format document
-  const FetchEmployees = async function () {
+  const FetchUsers = async function () {
     setLoading(true);
     try {
       const response = await apis.User.list<ApiResponsePaginate<TypeUser>>(
@@ -86,13 +86,10 @@ const EmployeesList = function () {
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        console.warn(
-          "[src/pages/administrative/employees/EmployeesList.tsx]",
-          response.data,
-        );
+        console.warn("[src/pages/settings/users/UsersList.tsx]", response.data);
         return;
       }
-      setEmployees(response.data.result.items);
+      setUsers(response.data.result.items);
       setTotal(response.data.result.pagination.total);
       return;
     } catch (err) {
@@ -100,18 +97,15 @@ const EmployeesList = function () {
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error(
-        "[src/pages/administrative/employees/EmployeesList.tsx]",
-        err,
-      );
+      console.error("[src/pages/settings/users/UsersList.tsx]", err);
       return;
     } finally {
       setLoading(false);
     }
   };
 
-  // fetch employees
-  useAsync(FetchEmployees, [interval, page, searchDebounced]);
+  // fetch users
+  useAsync(FetchUsers, [interval, page, searchDebounced]);
 
   return (
     <React.Fragment>
@@ -128,8 +122,8 @@ const EmployeesList = function () {
                 url: "/f/",
               },
               {
-                id: "employees",
-                label: t.employee.employees,
+                id: "users",
+                label: t.user.users,
               },
             ]}
           />
@@ -140,8 +134,8 @@ const EmployeesList = function () {
         <Button
           Icon={Plus}
           category="Success"
-          text={t.employee.new}
-          onClick={() => navigate("/f/employees/inspect")}
+          text={t.user.new}
+          onClick={() => navigate("/f/users/inspect")}
         />
         <div style={{ minWidth: 200, maxWidth: 256 }}>
           <InputInterval
@@ -197,7 +191,7 @@ const EmployeesList = function () {
         <Table
           border
           loading={loading}
-          data={employees as TableData[]}
+          data={users as TableData[]}
           columns={{
             status: {
               label: t.components.status,
@@ -224,7 +218,7 @@ const EmployeesList = function () {
                         if (data.id === user.id) {
                           play("alert");
                           toast.warning(t.toast.warning_error, {
-                            description: t.employee.not_change_status,
+                            description: t.user.not_change_status,
                           });
                           return;
                         }
@@ -247,14 +241,14 @@ const EmployeesList = function () {
                         toast.success(t.toast.success, {
                           description: t.toast.success_edit,
                         });
-                        await FetchEmployees();
+                        await FetchUsers();
                       } catch (err) {
                         play("alert");
                         toast.error(t.toast.warning_error, {
                           description: t.toast.error_edit,
                         });
                         console.error(
-                          "[src/pages/administrative/employees/EmployeesList.tsx]",
+                          "[src/pages/settings/users/UsersList.tsx]",
                           err,
                         );
                       }
@@ -265,7 +259,7 @@ const EmployeesList = function () {
               },
             },
             role: {
-              label: t.employee.role,
+              label: t.user.role,
               maxWidth: "96px",
               handler: function (data) {
                 return (
@@ -280,13 +274,13 @@ const EmployeesList = function () {
               },
             },
             name: {
-              label: t.employee.name,
+              label: t.user.name,
               handler: function (data) {
                 return (
                   <div
                     className="cursor"
                     onClick={function () {
-                      navigate(`/f/employees/inspect/${data.id}`);
+                      navigate(`/f/users/inspect/${data.id}`);
                       return;
                     }}
                   >
@@ -301,9 +295,9 @@ const EmployeesList = function () {
                 );
               },
             },
-            document1: { label: t.employee.document },
+            document1: { label: t.user.document },
             mobile: {
-              label: t.employee.mobile,
+              label: t.user.mobile,
               handler: function (data) {
                 return (
                   <a
@@ -317,7 +311,7 @@ const EmployeesList = function () {
               },
             },
             email: {
-              label: t.employee.email,
+              label: t.user.email,
               handler: function (data) {
                 return (
                   <a
@@ -331,7 +325,7 @@ const EmployeesList = function () {
               },
             },
             address: {
-              label: t.employee.address,
+              label: t.user.address,
               handler: function (data) {
                 return `${data?.addressStreet}, ${data?.addressNumber}, ${data?.addressCity} - ${data?.addressState}`;
               },
@@ -390,7 +384,7 @@ const EmployeesList = function () {
               label: t.components.edit,
               onClick: function (_: React.MouseEvent, data: unknown) {
                 if (data && typeof data === "object" && "id" in data)
-                  navigate(`/f/employees/inspect/${data.id}`);
+                  navigate(`/f/users/inspect/${data.id}`);
                 return;
               },
             },
@@ -427,7 +421,7 @@ const EmployeesList = function () {
                         description: t.toast.success_delete,
                       });
                       CloseDialog();
-                      await FetchEmployees();
+                      await FetchUsers();
                       return;
                     } catch (err) {
                       play("alert");
@@ -435,7 +429,7 @@ const EmployeesList = function () {
                         description: t.toast.error_delete,
                       });
                       console.error(
-                        "[src/pages/administrative/employees/EmployeesList.tsx]",
+                        "[src/pages/settings/users/UsersList.tsx]",
                         err,
                       );
                       return;
@@ -458,4 +452,4 @@ const EmployeesList = function () {
   );
 };
 
-export default EmployeesList;
+export default UsersList;

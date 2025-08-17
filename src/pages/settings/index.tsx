@@ -1,4 +1,5 @@
 // pages
+import users from "./users";
 import accounts from "./accounts";
 import workspaces from "./workspaces";
 import integrations from "./integrations";
@@ -8,6 +9,10 @@ export default [
   {
     path: "settings",
     Component: SettingsPanel,
+  },
+  {
+    path: "users",
+    children: users,
   },
   {
     path: "accounts",

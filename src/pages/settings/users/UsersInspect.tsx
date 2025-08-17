@@ -45,7 +45,7 @@ import Callout from "../../../components/callouts/Callout";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
-const EmployeesInspect = function () {
+const UsersInspect = function () {
   const t = useTranslate();
   const play = useSounds();
   const { id } = useParams();
@@ -87,7 +87,7 @@ const EmployeesInspect = function () {
     addressState: "",
   });
 
-  // fetch employee
+  // fetch users
   useAsync(async function () {
     if (!id) return;
     setLoading(true);
@@ -98,7 +98,7 @@ const EmployeesInspect = function () {
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        navigate("/f/employees");
+        navigate("/f/users");
         return;
       }
       setForm(response.data.result);
@@ -108,11 +108,8 @@ const EmployeesInspect = function () {
       toast.warning(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error(
-        "[src/pages/administrative/employees/EmployeesInspect.tsx]",
-        err,
-      );
-      navigate("/f/employees");
+      console.error("[src/pages/settings/users/UsersInspect.tsx]", err);
+      navigate("/f/users");
       return;
     } finally {
       setLoading(false);
@@ -136,7 +133,7 @@ const EmployeesInspect = function () {
           !response.data?.[0]?.lon
         ) {
           console.warn(
-            "[src/pages/administrative/employees/EmployeesInspect.tsx]",
+            "[src/pages/settings/users/UsersInspect.tsx]",
             response.data,
           );
           return;
@@ -146,10 +143,7 @@ const EmployeesInspect = function () {
           parseFloat(String(response.data[0].lon)),
         ]);
       } catch (err) {
-        console.error(
-          "[src/pages/administrative/employees/EmployeesInspect.tsx]",
-          err,
-        );
+        console.error("[src/pages/settings/users/UsersInspect.tsx]", err);
       }
       return;
     },
@@ -211,7 +205,7 @@ const EmployeesInspect = function () {
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
         });
-        navigate("/f/employees");
+        navigate("/f/users");
         return;
       }
       // is creating
@@ -251,14 +245,11 @@ const EmployeesInspect = function () {
       toast.success(t.toast.success, {
         description: t.toast.success_create,
       });
-      navigate("/f/employees");
+      navigate("/f/users");
       return;
     } catch (err) {
       play("alert");
-      console.error(
-        "[src/pages/administrative/employees/EmployeesInspect.tsx]",
-        err,
-      );
+      console.error("[src/pages/settings/users/UsersInspect.tsx]", err);
       if (
         err instanceof AxiosError &&
         err.response?.data?.result?.message === "over_limit_user"
@@ -302,14 +293,14 @@ const EmployeesInspect = function () {
                 url: "/f/",
               },
               {
-                id: "employees",
-                label: t.employee.employees,
-                url: "/f/employees",
+                id: "users",
+                label: t.user.users,
+                url: "/f/users",
               },
               {
-                id: "employee",
+                id: "user",
                 label: form?.name || t.components.empty_name,
-                url: `/f/employees/inspect${id ? `/${id}` : ""}`,
+                url: `/f/users/inspect${id ? `/${id}` : ""}`,
               },
             ]}
           />
@@ -337,9 +328,9 @@ const EmployeesInspect = function () {
                 <InputFile
                   name="photo"
                   value={photoTemp}
-                  id="employee_photo"
+                  id="user_photo"
                   helper="PNG, JPG e JPEG"
-                  label={t.employee.photo}
+                  label={t.user.photo}
                   disabled={loading}
                   accept="image/png, image/jpg, image/jpeg"
                   onChange={function (event) {
@@ -360,8 +351,8 @@ const EmployeesInspect = function () {
             </Wrapper>
 
             <Wrapper
-              title={t.employee.schedules_title}
-              description={t.employee.schedules_description}
+              title={t.user.schedules_title}
+              description={t.user.schedules_description}
             >
               <Vertical
                 internal={0.4}
@@ -381,8 +372,8 @@ const EmployeesInspect = function () {
           </Horizontal>
 
           <Wrapper
-            title={id ? t.employee.title_edit : t.employee.title_create}
-            description={t.employee.subtitle}
+            title={id ? t.user.title_edit : t.user.title_create}
+            description={t.user.subtitle}
           >
             <Vertical internal={1}>
               <Horizontal internal={1}>
@@ -390,7 +381,7 @@ const EmployeesInspect = function () {
                   required
                   name="status"
                   disabled={loading}
-                  id="employee_status"
+                  id="user_status"
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
@@ -418,11 +409,11 @@ const EmployeesInspect = function () {
                   max={32}
                   required
                   name="name"
-                  id="employee_name"
+                  id="user_name"
                   value={form?.name || ""}
-                  label={t.employee.name}
+                  label={t.user.name}
                   disabled={loading}
-                  placeholder={t.employee.name_placeholder}
+                  placeholder={t.user.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.name = event.currentTarget?.value || "";
@@ -433,8 +424,8 @@ const EmployeesInspect = function () {
                 <InputSelect
                   required
                   name="role"
-                  id="employee_role"
-                  label={t.employee.role}
+                  id="user_role"
+                  label={t.user.role}
                   empty={t.stacks.no_option}
                   disabled={loading}
                   value={form?.role || "collaborator"}
@@ -461,11 +452,11 @@ const EmployeesInspect = function () {
                   required
                   name="document1"
                   mask={MaskDocument1}
-                  id="employee_document_1"
-                  label={t.employee.document_1}
+                  id="user_document_1"
+                  label={t.user.document_1}
                   value={form?.document1 || ""}
                   disabled={loading}
-                  placeholder={t.employee.document_placeholder}
+                  placeholder={t.user.document_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.document1 = event.currentTarget?.value || "";
@@ -476,11 +467,11 @@ const EmployeesInspect = function () {
                 <InputMask
                   name="document2"
                   mask={MaskDocument2}
-                  id="employee_document_2"
-                  label={t.employee.document_2}
+                  id="user_document_2"
+                  label={t.user.document_2}
                   value={form?.document2 || ""}
                   disabled={loading}
-                  placeholder={t.employee.document_placeholder}
+                  placeholder={t.user.document_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.document2 = event.currentTarget?.value || "";
@@ -494,11 +485,11 @@ const EmployeesInspect = function () {
                 <InputMask
                   name="phone"
                   mask={MaskPhone}
-                  id="employee_phone"
-                  label={t.employee.phone}
+                  id="user_phone"
+                  label={t.user.phone}
                   value={form?.phone || ""}
                   disabled={loading}
-                  placeholder={t.employee.phone_placeholder}
+                  placeholder={t.user.phone_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.phone = event.currentTarget?.value || "";
@@ -510,11 +501,11 @@ const EmployeesInspect = function () {
                   required
                   name="mobile"
                   mask={MaskPhone}
-                  id="employee_mobile"
-                  label={t.employee.mobile}
+                  id="user_mobile"
+                  label={t.user.mobile}
                   value={form?.mobile || ""}
                   disabled={loading}
-                  placeholder={t.employee.phone_placeholder}
+                  placeholder={t.user.phone_placeholder}
                   onChange={async function (event) {
                     const newForm = { ...form };
                     const mobileRaw = event.currentTarget?.value || "";
@@ -543,7 +534,7 @@ const EmployeesInspect = function () {
                             "image/jpeg";
                           const newPhoto = new File(
                             [responsePhoto.data],
-                            "employee",
+                            "user",
                             {
                               type: mimeType,
                             },
@@ -557,7 +548,7 @@ const EmployeesInspect = function () {
                         });
                       } catch (err) {
                         console.error(
-                          "[src/pages/administrative/employees/EmployeesInspect.tsx]",
+                          "[src/pages/settings/users/UsersInspect.tsx]",
                           err,
                         );
                         toast.dismiss(toastId);
@@ -580,11 +571,11 @@ const EmployeesInspect = function () {
                   required
                   type="email"
                   name="email"
-                  id="employee_email"
+                  id="user_email"
                   value={form?.email || ""}
-                  label={t.employee.email}
+                  label={t.user.email}
                   disabled={loading}
-                  placeholder={t.employee.email_placeholder}
+                  placeholder={t.user.email_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.email = event.currentTarget?.value || "";
@@ -647,8 +638,8 @@ const EmployeesInspect = function () {
           </Wrapper>
 
           <Wrapper
-            title={id ? t.employee.title_address : t.employee.title_address}
-            description={t.employee.subtitle_address}
+            title={id ? t.user.title_address : t.user.title_address}
+            description={t.user.subtitle_address}
           >
             <Horizontal internal={1}>
               <Vertical internal={1} className="flex1">
@@ -657,7 +648,7 @@ const EmployeesInspect = function () {
                     required
                     mask={MaskPostalCode}
                     name="addressPostalCode"
-                    id="employee_address_postal_code"
+                    id="user_address_postal_code"
                     disabled={loading}
                     value={form?.addressPostalCode || ""}
                     label={t.components.address_postal_code}
@@ -688,7 +679,7 @@ const EmployeesInspect = function () {
                           });
                         } catch (err) {
                           console.error(
-                            "[src/pages/administrative/employees/EmployeesInspect.tsx]",
+                            "[src/pages/settings/users/UsersInspect.tsx]",
                             err,
                           );
                           toast.dismiss(toastId);
@@ -709,7 +700,7 @@ const EmployeesInspect = function () {
                     max={64}
                     required
                     name="addressStreet"
-                    id="employee_address_street"
+                    id="user_address_street"
                     disabled={loading}
                     value={form?.addressStreet || ""}
                     label={t.components.address_street}
@@ -729,7 +720,7 @@ const EmployeesInspect = function () {
                     max={8}
                     required
                     name="addressNumber"
-                    id="employee_address_number"
+                    id="user_address_number"
                     disabled={loading}
                     value={form?.addressNumber || ""}
                     label={t.components.address_number}
@@ -744,7 +735,7 @@ const EmployeesInspect = function () {
                   <Input
                     max={32}
                     name="addressComplement"
-                    id="employee_address_complement"
+                    id="user_address_complement"
                     disabled={loading}
                     value={form?.addressComplement || ""}
                     label={t.components.address_complement}
@@ -761,7 +752,7 @@ const EmployeesInspect = function () {
                   <Input
                     max={64}
                     name="addressNeighborhood"
-                    id="employee_address_neighborhood"
+                    id="user_address_neighborhood"
                     disabled={loading}
                     value={form?.addressNeighborhood || ""}
                     label={t.components.address_neighborhood}
@@ -782,7 +773,7 @@ const EmployeesInspect = function () {
                     max={64}
                     required
                     name="addressCity"
-                    id="employee_address_city"
+                    id="user_address_city"
                     value={form?.addressCity || ""}
                     disabled={loading}
                     label={t.components.address_city}
@@ -798,7 +789,7 @@ const EmployeesInspect = function () {
                     required
                     name="addressState"
                     empty={t.stacks.no_option}
-                    id="employee_address_state"
+                    id="user_address_state"
                     value={form?.addressState || ""}
                     disabled={loading}
                     label={t.components.address_state}
@@ -853,7 +844,7 @@ const EmployeesInspect = function () {
                 disabled={loading}
                 text={t.components.cancel}
                 onClick={function () {
-                  navigate("/f/employees");
+                  navigate("/f/users");
                   return;
                 }}
               />
@@ -873,4 +864,4 @@ const EmployeesInspect = function () {
   );
 };
 
-export default EmployeesInspect;
+export default UsersInspect;

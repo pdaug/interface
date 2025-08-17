@@ -12,6 +12,7 @@ import {
   CreditCard,
   SuitcaseSimple,
   ShoppingBagOpen,
+  Users,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -142,11 +143,6 @@ const Menu = function () {
           label: t.menu.suppliers,
           onClick: () => navigate("/f/suppliers"),
         },
-        {
-          id: "employees",
-          label: t.menu.employees,
-          onClick: () => navigate("/f/employees"),
-        },
       ],
     },
     {
@@ -235,6 +231,12 @@ const Menu = function () {
           Icon: CreditCard,
           label: t.menu.accounts,
           onClick: () => navigate("/f/accounts"),
+        },
+        {
+          id: "users",
+          Icon: Users,
+          label: t.menu.users,
+          onClick: () => navigate("/f/users"),
         },
         {
           id: "integrations",
