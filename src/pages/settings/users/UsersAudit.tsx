@@ -6,6 +6,9 @@ import { useNavigate, useParams } from "react-router-dom";
 // apis
 import apis from "../../../apis";
 
+// utils
+import Download from "../../../utils/Download";
+
 // assets
 import { UserRoles } from "../../../assets/User";
 
@@ -23,13 +26,12 @@ import useTranslate from "../../../hooks/useTranslate";
 import Button from "../../../components/buttons/Button";
 import Avatar from "../../../components/avatars/Avatar";
 import Wrapper from "../../../components/wrapper/Wrapper";
+import Tooltip from "../../../components/tooltips/Tooltip";
+import Profile from "../../../components/profiles/Profile";
 import Table, { TableData } from "../../../components/tables/Table";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Input, InputSelect } from "../../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Tooltip from "../../../components/tooltips/Tooltip";
-import Profile from "../../../components/profiles/Profile";
-import Download from "../../../utils/Download";
 import Badge, { BadgeCategories } from "../../../components/badges/Badge";
 
 const UsersAudit = function () {
@@ -299,17 +301,15 @@ const UsersAudit = function () {
                   label: t.user.action,
                   maxWidth: 128,
                   handler: function (data) {
-                    return t.components?.[
-                      data.action as keyof typeof t.components
-                    ] ? (
+                    const actionTranslated =
+                      t.user?.[data.action as keyof typeof t.user];
+                    return actionTranslated ? (
                       <Badge
+                        value={actionTranslated}
                         category={
                           (badgeAction?.[
                             data.action as keyof typeof badgeAction
                           ] as BadgeCategories) || "Info"
-                        }
-                        value={
-                          t.components[data.action as keyof typeof t.components]
                         }
                       />
                     ) : (

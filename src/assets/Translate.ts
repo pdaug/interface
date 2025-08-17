@@ -75,11 +75,6 @@ const TranslatePt = {
     all: "Todos",
     photo: "Foto",
     image: "Imagem",
-    // actions
-    insert: "Inserir",
-    create: "Criar",
-    read: "Ler",
-    update: "Atualizar",
     // editor
     bold: "Negrito",
     italic: "Itálico",
@@ -644,6 +639,11 @@ const TranslatePt = {
       "Todos os horários que foram reservados na agenda deste usuário",
     not_change_status: "Não é permitido desativar o próprio usuário",
     // audit
+    insert: "Criado",
+    create: "Criado",
+    read: "Consultado",
+    update: "Atualizado",
+    delete: "Deletado",
     to_audit: "Auditar",
     audit: "Auditoria",
     userId: "Responsável",
@@ -811,11 +811,6 @@ const TranslateEn = {
     all: "All",
     photo: "Photo",
     image: "Image",
-    // actions
-    insert: "Insert",
-    create: "Create",
-    read: "Read",
-    update: "Update",
     // editor
     bold: "Bold",
     italic: "Italic",
@@ -1373,6 +1368,11 @@ const TranslateEn = {
       "All schedules that reservade in schedule list in this user",
     not_change_status: "It is not allowed to deactivate the user himself",
     // audit
+    insert: "Created",
+    create: "Created",
+    read: "Read",
+    update: "Updated",
+    delete: "Deleted",
     to_audit: "To audit",
     audit: "Audit",
     userId: "Responsable",
