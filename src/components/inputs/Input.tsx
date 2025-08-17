@@ -1,6 +1,7 @@
-import React, { forwardRef } from "react";
 import { withMask } from "use-mask-input";
+import React, { forwardRef } from "react";
 import DatePicker, { CalendarContainer } from "react-datepicker";
+import { endOfDay, isSameDay, isToday, startOfDay, subDays } from "date-fns";
 
 // locale
 import { ptBR, enUS } from "date-fns/locale";
@@ -12,13 +13,14 @@ registerLocale("en", enUS);
 import "./Input.css";
 import "./InputInterval.css";
 
+// components
+import Button from "../buttons/Button";
+import { Horizontal, Vertical } from "../aligns/Align";
+
 // hooks
 import useSystem from "../../hooks/useSystem";
 import useDateTime from "../../hooks/useDateTime";
 import useTranslate from "../../hooks/useTranslate";
-import { endOfDay, isSameDay, isToday, startOfDay, subDays } from "date-fns";
-import { Horizontal, Vertical } from "../aligns/Align";
-import Button from "../buttons/Button";
 
 export type InputProps = {
   id?: string;
@@ -711,7 +713,33 @@ const InputMoney = function ({
             event.preventDefault();
             return;
           }}
+          onSelect={function (event) {
+            event.currentTarget.setSelectionRange(
+              value.length || 0,
+              value.length || 0,
+            );
+            return;
+          }}
+          onFocus={function (event) {
+            event.currentTarget.setSelectionRange(
+              value.length || 0,
+              value.length || 0,
+            );
+            return;
+          }}
           onKeyDown={function (event) {
+            event.currentTarget.setSelectionRange(
+              value.length || 0,
+              value.length || 0,
+            );
+            if (
+              event.key === "ArrowUp" ||
+              event.key === "ArrowLeft" ||
+              event.key === "ArrowRight"
+            ) {
+              event.preventDefault();
+              return;
+            }
             const valueParsed = Number(value);
             if (valueParsed === 0 && event.key === "0") return;
             if (event.key === "Backspace" || event.key === "Delete") {
