@@ -38,6 +38,21 @@ const Dropdown = function ({ children, values, data }: DropdownProps) {
     return;
   };
 
+  // on scroll
+  useEffect(function () {
+    const OnScroll = function () {
+      setDropdownOpen(false);
+      return;
+    };
+    window.addEventListener("wheel", OnScroll);
+    OnScroll();
+    return function () {
+      window.removeEventListener("wheel", OnScroll);
+      return;
+    };
+  }, []);
+
+  // position dropdown
   useEffect(
     function () {
       if (!dropdownOpen || !dropdownContentRef.current) return;
@@ -58,6 +73,7 @@ const Dropdown = function ({ children, values, data }: DropdownProps) {
     [dropdownOpen],
   );
 
+  // close auto dropdown
   useEffect(function () {
     const HandleClickButton = function (event: MouseEvent) {
       if (
