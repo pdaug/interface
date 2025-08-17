@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import React, { useState } from "react";
-import { User } from "@phosphor-icons/react";
+import { ClockClockwise, DownloadSimple, User } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // apis
@@ -29,6 +29,8 @@ import { Input, InputSelect } from "../../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import Profile from "../../../components/profiles/Profile";
+import Download from "../../../utils/Download";
+import Badge, { BadgeCategories } from "../../../components/badges/Badge";
 
 const UsersAudit = function () {
   const t = useTranslate();
@@ -42,6 +44,12 @@ const UsersAudit = function () {
 
   const [form, setForm] = useState<Partial<TypeUser>>({});
   const [audits, setAudits] = useState<TypeUserAudit[]>([]);
+
+  const badgeAction = {
+    insert: "Success",
+    update: "Info",
+    delete: "Danger",
+  };
 
   // fetch users
   useAsync(async function () {
@@ -88,6 +96,10 @@ const UsersAudit = function () {
           toast.warning(t.toast.warning_error, {
             description: t.toast.warning_find,
           });
+          console.error(
+            "[src/pages/settings/users/UsersInspect.tsx]",
+            response?.data?.result?.items,
+          );
           return;
         }
         setAudits(response.data.result.items || []);
@@ -102,6 +114,30 @@ const UsersAudit = function () {
     },
     [id],
   );
+
+  const DowloadAction = async function () {
+    if (!audits || !audits.length) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.no_items,
+      });
+      return;
+    }
+    try {
+      Download.JSON(audits, `audits.json`);
+      play("ok");
+      toast.success(t.toast.success, {
+        description: t.toast.success_download,
+      });
+    } catch (err) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.no_items,
+      });
+      console.error("[src/pages/settings/users/UsersAudit.tsx]", err);
+    }
+    return;
+  };
 
   return (
     <React.Fragment>
@@ -257,19 +293,45 @@ const UsersAudit = function () {
 
           <Wrapper>
             <Table
+              data={audits as unknown as TableData[]}
               columns={{
                 action: {
                   label: t.user.action,
+                  maxWidth: 128,
                   handler: function (data) {
                     return t.components?.[
                       data.action as keyof typeof t.components
                     ] ? (
-                      <div>
-                        {t.components[data.action as keyof typeof t.components]}
-                      </div>
+                      <Badge
+                        category={
+                          (badgeAction?.[
+                            data.action as keyof typeof badgeAction
+                          ] as BadgeCategories) || "Info"
+                        }
+                        value={
+                          t.components[data.action as keyof typeof t.components]
+                        }
+                      />
                     ) : (
                       <i style={{ color: "var(--textLight)" }}>
                         {t.stacks.no_action}
+                      </i>
+                    );
+                  },
+                },
+                name: {
+                  label: t.user.snapshot_name,
+                  handler: function (data) {
+                    const snapshot =
+                      data.snapshot && typeof data.snapshot === "object"
+                        ? (data.snapshot as Record<string, unknown>)
+                        : null;
+                    const snapshotName = snapshot?.name || snapshot?.title;
+                    return snapshotName ? (
+                      <div>{JSON.stringify(snapshotName)}</div>
+                    ) : (
+                      <i style={{ color: "var(--textLight)" }}>
+                        {t.stacks.no_name}
                       </i>
                     );
                   },
@@ -295,7 +357,20 @@ const UsersAudit = function () {
                       },
                     );
                     return workspaceFinded ? (
-                      <div>{workspaceFinded.name}</div>
+                      <Vertical>
+                        <span style={{ lineHeight: 1 }}>
+                          {workspaceFinded.name}
+                        </span>
+                        <span
+                          style={{
+                            lineHeight: 1,
+                            color: "var(--textLight)",
+                            fontSize: "var(--textSmall)",
+                          }}
+                        >
+                          {workspaceFinded.description || ""}
+                        </span>
+                      </Vertical>
                     ) : (
                       <i style={{ color: "var(--textLight)" }}>
                         {t.stacks.no_workspace}
@@ -336,7 +411,37 @@ const UsersAudit = function () {
                   },
                 },
               }}
-              data={audits as unknown as TableData[]}
+              options={[
+                {
+                  id: "download",
+                  Icon: DownloadSimple,
+                  label: t.components.download,
+                  onClick: function (_: React.MouseEvent, data: unknown) {
+                    if (data && typeof data === "object" && "id" in data) {
+                      Download.JSON(data, `audit-${data.id}.json`);
+                      play("ok");
+                      toast.success(t.toast.success, {
+                        description: t.toast.success_download,
+                      });
+                    }
+                    return;
+                  },
+                },
+                {
+                  id: "restore",
+                  Icon: ClockClockwise,
+                  label: t.components.restore,
+                  styles: { color: "var(--dangerColor)" },
+                  IconColor: "var(--dangerColor)",
+                  onClick: async function () {
+                    play("alert");
+                    toast.warning(t.toast.warning_error, {
+                      description: t.integration.wip,
+                    });
+                    return;
+                  },
+                },
+              ]}
             />
           </Wrapper>
 
@@ -353,9 +458,10 @@ const UsersAudit = function () {
                 }}
               />
               <Button
-                type="submit"
+                type="button"
                 category="Info"
                 disabled={loading}
+                onClick={DowloadAction}
                 text={t.components.download}
               />
             </Horizontal>

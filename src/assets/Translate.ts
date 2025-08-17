@@ -519,6 +519,7 @@ const TranslatePt = {
   },
   stacks: {
     // no
+    no_name: "Sem nome",
     no_action: "Nenhuma ação encontrada",
     no_entity: "Nenhum módulo encontrado",
     no_email: "Sem email",
@@ -648,6 +649,7 @@ const TranslatePt = {
     userId: "Responsável",
     action: "Ação",
     entity: "Módulo",
+    snapshot_name: "Nome",
     workspace: "Organização",
   },
   vehicle: {
@@ -1279,6 +1281,7 @@ const TranslateEn = {
   },
   stacks: {
     // no
+    no_name: "No name",
     no_action: "No ação found",
     no_entity: "No module found",
     no_email: "No email",
@@ -1375,6 +1378,7 @@ const TranslateEn = {
     userId: "Responsable",
     action: "Action",
     entity: "Module",
+    snapshot_name: "Name",
     workspace: "Workspace",
   },
   vehicle: {

@@ -838,6 +838,18 @@ const UsersInspect = function () {
 
           <Wrapper>
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
+              {id && (
+                <Button
+                  type="button"
+                  category="Neutral"
+                  disabled={loading}
+                  text={t.user.audit}
+                  onClick={function () {
+                    navigate(`/f/users/audit/${id}`);
+                    return;
+                  }}
+                />
+              )}
               <Button
                 type="button"
                 category="Neutral"
