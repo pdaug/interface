@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { ApiResponse } from "../types/Api";
 
 export const ApiBase = axios.create({
-  baseURL: "https://api.forzasistemas.com",
+  baseURL: "http://157.90.236.144/",
   timeout: 30000,
 });
 
@@ -28,6 +28,8 @@ export const ApiBaseCrud = function (path: string) {
       Authorization: string,
       instance: string,
       params?: {
+        orderField?: string;
+        orderSort?: string;
         pageSize?: number;
         pageCurrent?: number;
         search?: string;
