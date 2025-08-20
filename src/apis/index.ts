@@ -5,6 +5,7 @@ import AddressPosition from "./external/Address";
 
 // apis internal
 import User from "./internal/User";
+import Sale from "./internal/Sale";
 import Audit from "./internal/Audit";
 import Order from "./internal/Order";
 import Login from "./internal/Login";
@@ -37,6 +38,7 @@ export default {
   Login,
   Order,
   Product,
+  Sale,
   Schedule,
   Service,
   Session,

@@ -177,8 +177,8 @@ const UsersAudit = function () {
       <div>
         <Vertical internal={1}>
           <Wrapper
-            title={id ? t.user.title_edit : t.user.title_create}
-            description={t.user.subtitle}
+            title={t.user.title_audit}
+            description={t.user.subtitle_audit}
           >
             <Horizontal internal={1}>
               <Avatar
@@ -293,157 +293,157 @@ const UsersAudit = function () {
             </Horizontal>
           </Wrapper>
 
-          <Wrapper>
-            <Table
-              data={audits as unknown as TableData[]}
-              columns={{
-                action: {
-                  label: t.user.action,
-                  maxWidth: 128,
-                  handler: function (data) {
-                    const actionTranslated =
-                      t.user?.[data.action as keyof typeof t.user];
-                    return actionTranslated ? (
-                      <Badge
-                        value={actionTranslated}
-                        category={
-                          (badgeAction?.[
-                            data.action as keyof typeof badgeAction
-                          ] as BadgeCategories) || "Info"
-                        }
-                      />
-                    ) : (
-                      <i style={{ color: "var(--textLight)" }}>
-                        {t.stacks.no_action}
-                      </i>
-                    );
-                  },
+          <Table
+            border
+            headless
+            nonselect
+            loading={loading}
+            data={audits as unknown as TableData[]}
+            columns={{
+              action: {
+                label: t.user.action,
+                maxWidth: 128,
+                handler: function (data) {
+                  const actionTranslated =
+                    t.user?.[data.action as keyof typeof t.user];
+                  return actionTranslated ? (
+                    <Badge
+                      value={actionTranslated}
+                      category={
+                        (badgeAction?.[
+                          data.action as keyof typeof badgeAction
+                        ] as BadgeCategories) || "Info"
+                      }
+                    />
+                  ) : (
+                    <i style={{ color: "var(--textLight)" }}>
+                      {t.stacks.no_action}
+                    </i>
+                  );
                 },
-                name: {
-                  label: t.user.snapshot_name,
-                  handler: function (data) {
-                    const snapshot =
-                      data.snapshot && typeof data.snapshot === "object"
-                        ? (data.snapshot as Record<string, unknown>)
-                        : null;
-                    const snapshotName = snapshot?.name || snapshot?.title;
-                    return snapshotName ? (
-                      <div>{JSON.stringify(snapshotName)}</div>
-                    ) : (
-                      <i style={{ color: "var(--textLight)" }}>
-                        {t.stacks.no_name}
-                      </i>
-                    );
-                  },
+              },
+              name: {
+                label: t.user.snapshot_name,
+                handler: function (data) {
+                  const snapshot =
+                    data.snapshot && typeof data.snapshot === "object"
+                      ? (data.snapshot as Record<string, unknown>)
+                      : null;
+                  const snapshotName = snapshot?.name || snapshot?.title;
+                  return snapshotName ? (
+                    <div>{JSON.stringify(snapshotName)}</div>
+                  ) : (
+                    <i style={{ color: "var(--textLight)" }}>
+                      {t.stacks.no_name}
+                    </i>
+                  );
                 },
-                entity: {
-                  label: t.user.entity,
-                  handler: function (data) {
-                    return t.menu?.[data.entity as keyof typeof t.menu] ? (
-                      <div>{t.menu[data.entity as keyof typeof t.menu]}</div>
-                    ) : (
-                      <i style={{ color: "var(--textLight)" }}>
-                        {t.stacks.no_entity}
-                      </i>
-                    );
-                  },
+              },
+              entity: {
+                label: t.user.entity,
+                handler: function (data) {
+                  return t.menu?.[data.entity as keyof typeof t.menu] ? (
+                    <div>{t.menu[data.entity as keyof typeof t.menu]}</div>
+                  ) : (
+                    <i style={{ color: "var(--textLight)" }}>
+                      {t.stacks.no_entity}
+                    </i>
+                  );
                 },
-                workspaceId: {
-                  label: t.user.workspace,
-                  handler: function (data) {
-                    const workspaceFinded = workspaces?.find(
-                      function (workspace) {
-                        return workspace.id === data.workspaceId;
-                      },
-                    );
-                    return workspaceFinded ? (
-                      <Vertical>
-                        <span style={{ lineHeight: 1 }}>
-                          {workspaceFinded.name}
-                        </span>
-                        <span
-                          style={{
-                            lineHeight: 1,
-                            color: "var(--textLight)",
-                            fontSize: "var(--textSmall)",
-                          }}
-                        >
-                          {workspaceFinded.description || ""}
-                        </span>
-                      </Vertical>
-                    ) : (
-                      <i style={{ color: "var(--textLight)" }}>
-                        {t.stacks.no_workspace}
-                      </i>
-                    );
-                  },
-                },
-                userId: {
-                  label: t.user.userId,
-                  handler: function (data) {
-                    const userFinded = users?.find(function (user) {
-                      return user.id === data.userId;
-                    });
-                    return (
-                      <Tooltip
-                        content={
-                          t.components[userFinded?.role || "collaborator"]
-                        }
+              },
+              workspaceId: {
+                label: t.user.workspace,
+                handler: function (data) {
+                  const workspaceFinded = workspaces?.find(
+                    function (workspace) {
+                      return workspace.id === data.workspaceId;
+                    },
+                  );
+                  return workspaceFinded ? (
+                    <Vertical>
+                      <span style={{ lineHeight: 1 }}>
+                        {workspaceFinded.name}
+                      </span>
+                      <span
+                        style={{
+                          lineHeight: 1,
+                          color: "var(--textLight)",
+                          fontSize: "var(--textSmall)",
+                        }}
                       >
-                        <Profile
-                          photoCircle
-                          photoSize={3}
-                          padding={false}
-                          styles={{ lineHeight: 1 }}
-                          photo={userFinded?.photo || ""}
-                          description={userFinded?.email || ""}
-                          name={userFinded?.name || t.components.unknown}
-                        />
-                      </Tooltip>
-                    );
-                  },
+                        {workspaceFinded.description || ""}
+                      </span>
+                    </Vertical>
+                  ) : (
+                    <i style={{ color: "var(--textLight)" }}>
+                      {t.stacks.no_workspace}
+                    </i>
+                  );
                 },
-                createdAt: {
-                  label: t.components.created_at,
-                  handler: function (data) {
-                    const datetime = instanceDateTime(data.createdAt as string);
-                    return datetime;
-                  },
+              },
+              userId: {
+                label: t.user.user_id,
+                handler: function (data) {
+                  const userFinded = users?.find(function (user) {
+                    return user.id === data.userId;
+                  });
+                  return (
+                    <Tooltip
+                      content={t.components[userFinded?.role || "collaborator"]}
+                    >
+                      <Profile
+                        photoCircle
+                        photoSize={3}
+                        padding={false}
+                        styles={{ lineHeight: 1 }}
+                        photo={userFinded?.photo || ""}
+                        description={userFinded?.email || ""}
+                        name={userFinded?.name || t.components.unknown}
+                      />
+                    </Tooltip>
+                  );
                 },
-              }}
-              options={[
-                {
-                  id: "download",
-                  Icon: DownloadSimple,
-                  label: t.components.download,
-                  onClick: function (_: React.MouseEvent, data: unknown) {
-                    if (data && typeof data === "object" && "id" in data) {
-                      Download.JSON(data, `audit-${data.id}.json`);
-                      play("ok");
-                      toast.success(t.toast.success, {
-                        description: t.toast.success_download,
-                      });
-                    }
-                    return;
-                  },
+              },
+              createdAt: {
+                label: t.components.created_at,
+                handler: function (data) {
+                  const datetime = instanceDateTime(data.createdAt as string);
+                  return datetime;
                 },
-                {
-                  id: "restore",
-                  Icon: ClockClockwise,
-                  label: t.components.restore,
-                  styles: { color: "var(--dangerColor)" },
-                  IconColor: "var(--dangerColor)",
-                  onClick: async function () {
-                    play("alert");
-                    toast.warning(t.toast.warning_error, {
-                      description: t.integration.wip,
+              },
+            }}
+            options={[
+              {
+                id: "download",
+                Icon: DownloadSimple,
+                label: t.components.download,
+                onClick: function (_: React.MouseEvent, data: unknown) {
+                  if (data && typeof data === "object" && "id" in data) {
+                    Download.JSON(data, `audit-${data.id}.json`);
+                    play("ok");
+                    toast.success(t.toast.success, {
+                      description: t.toast.success_download,
                     });
-                    return;
-                  },
+                  }
+                  return;
                 },
-              ]}
-            />
-          </Wrapper>
+              },
+              {
+                id: "restore",
+                Icon: ClockClockwise,
+                label: t.components.restore,
+                styles: { color: "var(--dangerColor)" },
+                IconColor: "var(--dangerColor)",
+                onClick: async function () {
+                  play("alert");
+                  toast.warning(t.toast.warning_error, {
+                    description: t.integration.wip,
+                  });
+                  return;
+                },
+              },
+            ]}
+          />
 
           <Wrapper>
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>

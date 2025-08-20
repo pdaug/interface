@@ -33,11 +33,13 @@ export type TableProps = {
   data: TableData[];
   columns: TableColumn;
   border?: boolean;
+  headless?: boolean;
   selected?: string[];
   setSelected?: React.Dispatch<React.SetStateAction<string[]>>;
   options?: DropdownValue[];
   styles?: React.CSSProperties;
   loading?: boolean;
+  nonselect?: boolean;
 };
 
 const Table = function ({
@@ -49,6 +51,8 @@ const Table = function ({
   options,
   styles,
   loading,
+  headless,
+  nonselect,
 }: TableProps) {
   const t = useTranslate();
 
@@ -60,48 +64,58 @@ const Table = function ({
 
   return (
     <div style={styles} className={`table ${border ? "tableBorder" : ""}`}>
-      <div className="tableHead">
-        <div className="tableHeadRow">
-          <div style={{ maxWidth: "min-content" }} className="tableHeadData">
-            <InputCheck
-              value={isSelectedRowsId}
-              onChange={function () {
-                if (isSelectedRowsId) setSelected?.([]);
-                else setSelected?.(rowsId);
-                return;
-              }}
-              options={[
-                {
-                  id: "all",
-                  value: "all",
-                  label: "",
-                },
-              ]}
-            />
-          </div>
-          {Object.entries(columns)?.map(function (
-            [columnKey, columnValue],
-            index,
-          ) {
-            return (
+      {!headless && (
+        <div className="tableHead">
+          <div className="tableHeadRow">
+            {!nonselect && (
+              <div
+                style={{ maxWidth: "min-content" }}
+                className="tableHeadData"
+              >
+                <InputCheck
+                  value={isSelectedRowsId}
+                  onChange={function () {
+                    if (isSelectedRowsId) setSelected?.([]);
+                    else setSelected?.(rowsId);
+                    return;
+                  }}
+                  options={[
+                    {
+                      id: "all",
+                      value: "all",
+                      label: "",
+                    },
+                  ]}
+                />
+              </div>
+            )}
+            {Object.entries(columns)?.map(function (
+              [columnKey, columnValue],
+              index,
+            ) {
+              return (
+                <div
+                  className="tableHeadData"
+                  key={`${columnKey}-${index}`}
+                  style={{ maxWidth: columnValue?.maxWidth }}
+                >
+                  {columnValue.label}
+                </div>
+              );
+            })}
+            {options && (
               <div
                 className="tableHeadData"
-                key={`${columnKey}-${index}`}
-                style={{ maxWidth: columnValue?.maxWidth }}
+                style={{ maxWidth: "min-content" }}
               >
-                {columnValue.label}
+                <div style={{ opacity: 0 }}>
+                  <DotsThreeOutline weight="fill" />
+                </div>
               </div>
-            );
-          })}
-          {options && (
-            <div className="tableHeadData" style={{ maxWidth: "min-content" }}>
-              <div style={{ opacity: 0 }}>
-                <DotsThreeOutline weight="fill" />
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      )}
       {loading ? (
         <Horizontal external={1} className="justifyCenter">
           <i
@@ -126,22 +140,24 @@ const Table = function ({
                 key={`${row.id}-${indexRow}`}
                 className={`tableBodyRow ${selected?.includes(row.id) ? "tableBodyRowSelected" : ""}`}
               >
-                <div
-                  className="tableBodyData"
-                  style={{ maxWidth: "min-content" }}
-                >
-                  <InputCheck
-                    value={selected || []}
-                    onChange={setSelected}
-                    options={[
-                      {
-                        id: row.id,
-                        value: row.id,
-                        label: "",
-                      },
-                    ]}
-                  />
-                </div>
+                {!nonselect && (
+                  <div
+                    className="tableBodyData"
+                    style={{ maxWidth: "min-content" }}
+                  >
+                    <InputCheck
+                      value={selected || []}
+                      onChange={setSelected}
+                      options={[
+                        {
+                          id: row.id,
+                          value: row.id,
+                          label: "",
+                        },
+                      ]}
+                    />
+                  </div>
+                )}
                 {Object.entries(columns)?.map(function (
                   [columnKey, columnValue],
                   indexColumn,
