@@ -4,7 +4,9 @@ import axios, { AxiosRequestConfig } from "axios";
 import { ApiResponse } from "../types/Api";
 
 export const ApiBase = axios.create({
-  baseURL: "https://api.forzasistemas.com/",
+  baseURL: import.meta.env.DEV
+    ? "http://localhost:3000/"
+    : "https://api.forzasistemas.com/",
   timeout: 30000,
 });
 

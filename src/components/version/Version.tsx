@@ -23,7 +23,7 @@ const Version = function () {
   return (
     <div className="version">
       <span>{versionFrontend}</span>
-      <span>_</span>
+      <span>.</span>
       <span>{versionBackend}</span>
     </div>
   );
