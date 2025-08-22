@@ -1,4 +1,4 @@
-// import { toast } from "sonner";
+import { toast } from "sonner";
 import { useEffect } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 
@@ -6,11 +6,11 @@ import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import Menu from "./Menu";
 
 // apis
-// import apis from "../apis";
+import apis from "../apis";
 
 // hooks
 import useSystem from "../hooks/useSystem";
-// import useSounds from "../hooks/useSounds";
+import useSounds from "../hooks/useSounds";
 import useTranslate from "../hooks/useTranslate";
 
 // components
@@ -30,7 +30,7 @@ const Container = function () {
     selectWorkspace,
   } = useSystem();
   const t = useTranslate();
-  // const play = useSounds();
+  const play = useSounds();
   const navigate = useNavigate();
   const { OpenDialog, CloseDialog } = useDialog();
 
@@ -106,50 +106,50 @@ const Container = function () {
   );
 
   // checker session
-  // useEffect(
-  //   function () {
-  //     apis.Session.check<Record<string, unknown>>(instance.name, token, {
-  //       token,
-  //     })
-  //       .then(function (response) {
-  //         // no data
-  //         if (response.status !== 200 || !response.data?.result?.id) {
-  //           play("logout");
-  //           toast.error(t.toast.warning_error, {
-  //             description: t.stacks.no_token,
-  //           });
-  //           navigate("/");
-  //           clear();
-  //         }
-  //         // expired
-  //         if (
-  //           response.status === 401 ||
-  //           (typeof response.data.result.expiresAt === "string" &&
-  //             new Date(response.data.result.expiresAt) < new Date())
-  //         ) {
-  //           play("logout");
-  //           toast.error(t.toast.warning_error, {
-  //             description: t.stacks.session_expired,
-  //           });
-  //           navigate("/");
-  //           clear();
-  //         }
-  //         return;
-  //       })
-  //       .catch(function (err) {
-  //         play("logout");
-  //         console.error("[src/layouts/Container.tsx]", err);
-  //         toast.error(t.toast.warning_error, {
-  //           description: t.stacks.session_expired,
-  //         });
-  //         navigate("/");
-  //         clear();
-  //         return;
-  //       });
-  //     return;
-  //   },
-  //   [location.pathname],
-  // );
+  useEffect(
+    function () {
+      apis.Session.check<Record<string, unknown>>(instance.name, token, {
+        token,
+      })
+        .then(function (response) {
+          // no data
+          if (response.status !== 200 || !response.data?.result?.id) {
+            play("logout");
+            toast.error(t.toast.warning_error, {
+              description: t.stacks.no_token,
+            });
+            navigate("/");
+            clear();
+          }
+          // expired
+          if (
+            response.status === 401 ||
+            (typeof response.data.result.expiresAt === "string" &&
+              new Date(response.data.result.expiresAt) < new Date())
+          ) {
+            play("logout");
+            toast.error(t.toast.warning_error, {
+              description: t.stacks.session_expired,
+            });
+            navigate("/");
+            clear();
+          }
+          return;
+        })
+        .catch(function (err) {
+          play("logout");
+          console.error("[src/layouts/Container.tsx]", err);
+          toast.error(t.toast.warning_error, {
+            description: t.stacks.session_expired,
+          });
+          navigate("/");
+          clear();
+          return;
+        });
+      return;
+    },
+    [location.pathname],
+  );
 
   return (
     <Horizontal styles={{ height: "100vh" }}>

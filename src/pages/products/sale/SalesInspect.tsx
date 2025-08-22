@@ -20,6 +20,7 @@ import {
   TypeSaleStage,
   TypeSaleDetails,
   TypeSaleShippingMethod,
+  TypeSaleProduct,
 } from "../../../types/Sale";
 import { TypeProduct } from "../../../types/Product";
 import { TypeCustomer } from "../../../types/Customers";
@@ -30,6 +31,7 @@ import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
 import useSounds from "../../../hooks/useSounds";
 import useSchema from "../../../hooks/useSchema";
+import useCurrency from "../../../hooks/useCurrency";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
@@ -40,22 +42,22 @@ import {
   InputMask,
   InputSelect,
 } from "../../../components/inputs/Input";
+import Sheets from "../../../components/sheets/Sheets";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Profile from "../../../components/profiles/Profile";
 import Callout from "../../../components/callouts/Callout";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import useCurrency from "../../../hooks/useCurrency";
 
 const SalesInspect = function () {
   const t = useTranslate();
   const play = useSounds();
   const { id } = useParams();
   const Schema = useSchema();
+  const Currency = useCurrency();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
-  const Currency = useCurrency();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -479,375 +481,157 @@ const SalesInspect = function () {
             </Vertical>
           </Wrapper>
 
-          <Wrapper>
-            <Vertical internal={1}>
-              {form.products?.map(function (_, index) {
-                const productFind = products.find(function (product) {
-                  return product.id === form.products?.[index].productId;
+          <Sheets
+            rows={form?.products || []}
+            footer={
+              <div>
+                <span>{t.product.products}: </span>
+                <span>
+                  {Currency(
+                    form.products?.reduce((acc, product) => {
+                      const price = Number(product.price) || 0;
+                      const quantity = product.quantity || 0;
+                      return acc + price * quantity;
+                    }, 0) || 0,
+                  )}
+                </span>
+              </div>
+            }
+            add={function () {
+              setForm(function (prevState) {
+                const newForm = { ...prevState };
+                newForm.products?.push({
+                  productId: products[0].id,
+                  productName: products[0].name,
+                  quantity: 1,
+                  variantId: products[0].variants[0].id,
+                  variantName: products[0].variants[0].name,
+                  price: products[0].variants[0].price,
                 });
+                return newForm;
+              });
+              return;
+            }}
+            remove={function (index) {
+              setForm(function (prevState) {
+                const newForm = { ...prevState };
+                newForm.products?.splice(index, 1);
+                return newForm;
+              });
+              return;
+            }}
+            formatter={{
+              productId: {
+                type: "select",
+                options: function () {
+                  return products?.map(function (product) {
+                    return {
+                      id: product.id,
+                      value: product.id,
+                      text: product.name,
+                    };
+                  });
+                },
+                onChange: function (row, index) {
+                  setForm(function (prevState) {
+                    const newForm = { ...prevState };
 
-                const variantFind = productFind?.variants.find(
-                  function (variant) {
-                    return variant.id === form.products?.[index].variantId;
-                  },
-                );
+                    if (!newForm?.products || !newForm.products?.[index])
+                      return newForm;
 
-                const quantity = form.products?.[index].quantity || 1;
-
-                const subtotal = variantFind
-                  ? parseFloat(variantFind.price) * quantity
-                  : 0;
-
-                return (
-                  <Vertical key={`product-${index}`} internal={1}>
-                    <Horizontal
-                      internal={1}
-                      styles={{ alignItems: "flex-end" }}
-                    >
-                      <InputSelect
-                        required
-                        name="productId"
-                        disabled={loading}
-                        label={t.product.product}
-                        empty={t.stacks.no_option}
-                        id={`sale_product_${index}_product_id`}
-                        value={form.products?.[index].productId || ""}
-                        options={products.map(function (product) {
-                          return {
-                            id: product.id,
-                            value: product.id,
-                            text: product.name,
-                          };
-                        })}
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm.products?.[index]) return;
-                          const productId = event.currentTarget?.value || "";
-                          const finded = products.find(function (product) {
-                            return product.id === productId;
-                          });
-                          if (finded) {
-                            newForm.products[index].productId = finded.id;
-                            newForm.products[index].productName = finded.name;
-                            newForm.products[index].variantId =
-                              finded.variants[0].id;
-                            newForm.products[index].price =
-                              finded.variants[0].price;
-                            setForm(newForm);
-                          }
-                          return;
-                        }}
-                      />
-                      <InputSelect
-                        required
-                        name="variantId"
-                        disabled={loading}
-                        empty={t.stacks.no_option}
-                        label={t.product.variant_name}
-                        id={`sale_product_${index}_variant_id`}
-                        value={form.products?.[index].variantId || ""}
-                        options={(productFind?.variants || []).map(
-                          function (variant) {
-                            return {
-                              id: variant.id,
-                              value: variant.id,
-                              text: variant.name,
-                            };
-                          },
-                        )}
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm.products?.[index]) return;
-                          const variantId = event.currentTarget?.value || "";
-                          const finded = productFind?.variants?.find(
-                            function (variant) {
-                              return variant.id === variantId;
-                            },
-                          );
-                          if (!finded) return;
-                          newForm.products[index].variantId = finded.id;
-                          newForm.products[index].variantName = finded.name;
-                          newForm.products[index].price = finded.price;
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                      <Input
-                        required
-                        min={1}
-                        max={9999}
-                        type="number"
-                        name="price"
-                        disabled={loading}
-                        label={t.sale.quantity}
-                        id={`sale_product_${index}_quantity`}
-                        placeholder={t.sale.quantity_placeholder}
-                        value={String(form.products?.[index].quantity || "")}
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm?.products?.[index]) return;
-                          const quantity = Number(
-                            event.currentTarget?.value || "",
-                          );
-                          newForm.products[index].quantity = quantity;
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                      <Input
-                        readOnly
-                        type="number"
-                        name="total"
-                        placeholder=""
-                        disabled={loading}
-                        label={t.sale.subtotal}
-                        value={subtotal.toFixed(2)}
-                        id={`sale_product_${index}_subtotal`}
-                        onChange={function () {
-                          return;
-                        }}
-                      />
-                      <Button
-                        type="button"
-                        category="Danger"
-                        text={t.components.remove}
-                        onClick={function () {
-                          const newForm = { ...form };
-                          newForm.products?.splice(index, 1);
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                    </Horizontal>
-                  </Vertical>
-                );
-              })}
-
-              <Horizontal
-                internal={1}
-                styles={{
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <div>
-                  <span>{t.product.products}: </span>
-                  <span>
-                    {Currency(
-                      form.products?.reduce((acc, product) => {
-                        const price = Number(product.price) || 0;
-                        const quantity = product.quantity || 0;
-                        return acc + price * quantity;
-                      }, 0) || 0,
-                    )}
-                  </span>
-                </div>
-                <Button
-                  type="button"
-                  category="Success"
-                  text={t.components.add}
-                  onClick={function () {
-                    const newForm = { ...form };
-                    newForm.products?.push({
-                      productId: "",
-                      productName: "",
-                      variantId: "",
-                      variantName: "",
-                      price: "0.00",
-                      quantity: 1,
+                    const ProductFind = products?.find(function (product) {
+                      return product.id === (row?.productId as string);
                     });
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-            </Vertical>
-          </Wrapper>
 
-          <Wrapper>
-            <Vertical internal={1}>
-              {form.products?.map(function (_, index) {
-                const productFind = products.find(function (product) {
-                  return product.id === form.products?.[index].productId;
-                });
+                    newForm.products[index].productId = row.productId as string;
+                    newForm.products[index].productName =
+                      ProductFind?.name || "";
+                    newForm.products[index].variantId =
+                      ProductFind?.variants?.[0]?.id || "";
+                    newForm.products[index].variantName =
+                      ProductFind?.variants?.[0]?.name || "";
+                    newForm.products[index].price =
+                      ProductFind?.variants?.[0]?.price || "";
 
-                const variantFind = productFind?.variants.find(
-                  function (variant) {
-                    return variant.id === form.products?.[index].variantId;
-                  },
-                );
+                    return newForm;
+                  });
+                  return;
+                },
+              },
+              variantId: {
+                type: "select",
+                options: function (index) {
+                  const ProductFind = products?.find(function (product) {
+                    return product.id === form?.products?.[index].productId;
+                  });
+                  return (
+                    ProductFind?.variants?.map(function (variant) {
+                      return {
+                        id: variant.id,
+                        value: variant.id,
+                        text: variant.name,
+                      };
+                    }) || []
+                  );
+                },
+                onChange: function (row, index) {
+                  setForm(function (prevState) {
+                    const newForm = { ...prevState };
 
-                const quantity = form.products?.[index].quantity || 1;
+                    if (!newForm?.products || !newForm.products?.[index])
+                      return newForm;
 
-                const subtotal = variantFind
-                  ? parseFloat(variantFind.price) * quantity
-                  : 0;
-
-                return (
-                  <Vertical key={`product-${index}`} internal={1}>
-                    <Horizontal
-                      internal={1}
-                      styles={{ alignItems: "flex-end" }}
-                    >
-                      <InputSelect
-                        required
-                        name="productId"
-                        disabled={loading}
-                        label={t.product.product}
-                        empty={t.stacks.no_option}
-                        id={`sale_product_${index}_product_id`}
-                        value={form.products?.[index].productId || ""}
-                        options={products.map(function (product) {
-                          return {
-                            id: product.id,
-                            value: product.id,
-                            text: product.name,
-                          };
-                        })}
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm.products?.[index]) return;
-                          const productId = event.currentTarget?.value || "";
-                          const finded = products.find(function (product) {
-                            return product.id === productId;
-                          });
-                          if (finded) {
-                            newForm.products[index].productId = finded.id;
-                            newForm.products[index].productName = finded.name;
-                            newForm.products[index].variantId =
-                              finded.variants[0].id;
-                            newForm.products[index].price =
-                              finded.variants[0].price;
-                            setForm(newForm);
-                          }
-                          return;
-                        }}
-                      />
-                      <InputSelect
-                        required
-                        name="variantId"
-                        disabled={loading}
-                        empty={t.stacks.no_option}
-                        label={t.product.variant_name}
-                        id={`sale_product_${index}_variant_id`}
-                        value={form.products?.[index].variantId || ""}
-                        options={(productFind?.variants || []).map(
-                          function (variant) {
-                            return {
-                              id: variant.id,
-                              value: variant.id,
-                              text: variant.name,
-                            };
-                          },
-                        )}
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm.products?.[index]) return;
-                          const variantId = event.currentTarget?.value || "";
-                          const finded = productFind?.variants?.find(
-                            function (variant) {
-                              return variant.id === variantId;
-                            },
-                          );
-                          if (!finded) return;
-                          newForm.products[index].variantId = finded.id;
-                          newForm.products[index].variantName = finded.name;
-                          newForm.products[index].price = finded.price;
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                      <Input
-                        required
-                        min={1}
-                        max={9999}
-                        type="number"
-                        name="price"
-                        disabled={loading}
-                        label={t.sale.quantity}
-                        id={`sale_product_${index}_quantity`}
-                        placeholder={t.sale.quantity_placeholder}
-                        value={String(form.products?.[index].quantity || "")}
-                        onChange={function (event) {
-                          const newForm = { ...form };
-                          if (!newForm?.products?.[index]) return;
-                          const quantity = Number(
-                            event.currentTarget?.value || "",
-                          );
-                          newForm.products[index].quantity = quantity;
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                      <Input
-                        readOnly
-                        type="number"
-                        name="total"
-                        placeholder=""
-                        disabled={loading}
-                        label={t.sale.subtotal}
-                        value={subtotal.toFixed(2)}
-                        id={`sale_product_${index}_subtotal`}
-                        onChange={function () {
-                          return;
-                        }}
-                      />
-                      <Button
-                        type="button"
-                        category="Danger"
-                        text={t.components.remove}
-                        onClick={function () {
-                          const newForm = { ...form };
-                          newForm.products?.splice(index, 1);
-                          setForm(newForm);
-                          return;
-                        }}
-                      />
-                    </Horizontal>
-                  </Vertical>
-                );
-              })}
-
-              <Horizontal
-                internal={1}
-                styles={{
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <div>
-                  <span>{t.product.products}: </span>
-                  <span>
-                    {Currency(
-                      form.products?.reduce((acc, product) => {
-                        const price = Number(product.price) || 0;
-                        const quantity = product.quantity || 0;
-                        return acc + price * quantity;
-                      }, 0) || 0,
-                    )}
-                  </span>
-                </div>
-                <Button
-                  type="button"
-                  category="Success"
-                  text={t.components.add}
-                  onClick={function () {
-                    const newForm = { ...form };
-                    newForm.products?.push({
-                      productId: "",
-                      productName: "",
-                      variantId: "",
-                      variantName: "",
-                      price: "0.00",
-                      quantity: 1,
+                    const ProductFind = products?.find(function (product) {
+                      return product.id === (row?.productId as string);
                     });
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-            </Vertical>
-          </Wrapper>
+
+                    const VariantFind = ProductFind?.variants?.find(
+                      function (variant) {
+                        return variant.id === (row?.variantId as string);
+                      },
+                    );
+
+                    newForm.products[index].variantId = VariantFind?.id || "";
+                    newForm.products[index].variantName =
+                      VariantFind?.name || "";
+                    newForm.products[index].price = VariantFind?.price || "";
+                    return newForm;
+                  });
+                  return;
+                },
+              },
+              quantity: {
+                min: 1,
+                max: 9999,
+                placeholder: t.sale.quantity_placeholder,
+                type: "number",
+                onChange: function (row, index) {
+                  setForm(function (prevState) {
+                    const newForm = { ...prevState };
+                    if (!newForm?.products || !newForm.products?.[index])
+                      return newForm;
+                    newForm.products[index] = row as TypeSaleProduct;
+                    return newForm;
+                  });
+                  return;
+                },
+              },
+              price: {
+                type: "money",
+                placeholder: "0.00",
+                onChange: function (row, index) {
+                  setForm(function (prevState) {
+                    const newForm = { ...prevState };
+                    if (!newForm?.products || newForm.products?.[index])
+                      return newForm;
+                    newForm.products[index] = row as TypeSaleProduct;
+                    return newForm;
+                  });
+                  return;
+                },
+              },
+            }}
+          />
 
           <Callout
             Icon={Asterisk}

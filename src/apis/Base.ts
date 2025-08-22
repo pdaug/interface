@@ -5,7 +5,7 @@ import { ApiResponse } from "../types/Api";
 
 export const ApiBase = axios.create({
   baseURL: import.meta.env.DEV
-    ? "http://localhost:3000/"
+    ? "https://api.forzasistemas.com/"
     : "https://api.forzasistemas.com/",
   timeout: 30000,
 });

@@ -1,0 +1,81 @@
+.sheet {
+  background: var(--foregroundColor);
+  background-color: var(--foregroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sheetRow {
+  display: flex;
+}
+
+.sheetRow:not(:last-child) {
+  border-bottom: 1px solid var(--borderColor);
+}
+
+.sheetCell {
+  display: flex;
+  flex: 1;
+}
+
+.sheetCell:not(:last-child) {
+  border: none;
+  border-right: 1px solid var(--borderColor);
+}
+
+.sheetCell input,
+.sheetCell select {
+  flex: 1;
+  background: transparent;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 0.6rem 1rem;
+}
+
+.sheet button {
+  align-items: center;
+  border: none;
+  display: flex;
+  cursor: pointer;
+  font-size: var(--textSmall);
+  gap: 0.4rem;
+  justify-content: center;
+  min-height: 38px;
+  outline: none;
+  overflow: hidden;
+  text-align: center;
+  transition: 200ms;
+  width: 96px;
+}
+
+.sheet button:hover {
+  opacity: 0.8;
+  transition: 200ms;
+}
+
+.sheet button.add {
+  background: var(--successColor);
+  background-color: var(--successColor);
+  color: var(--foregroundColor);
+}
+
+.sheet button.remove {
+  background: var(--dangerColor);
+  background-color: var(--dangerColor);
+  color: var(--foregroundColor);
+}
+
+.sheetFooter {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sheetFooterContainer {
+  padding: 0 1rem;
+}
