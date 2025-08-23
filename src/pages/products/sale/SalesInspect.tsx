@@ -11,8 +11,11 @@ import apis from "../../../apis";
 import { GenerateNumbers } from "../../../utils/GenerateId";
 
 // assets
-import { SaleStages } from "../../../assets/Sale";
-import { MaskDocument1, MaskPhone } from "../../../assets/Mask";
+import {
+  SaleDetailsMode,
+  SaleDetailsType,
+  SaleStages,
+} from "../../../assets/Sale";
 
 // types
 import {
@@ -39,7 +42,6 @@ import useTranslate from "../../../hooks/useTranslate";
 import {
   Input,
   InputText,
-  InputMask,
   InputSelect,
 } from "../../../components/inputs/Input";
 import Sheets from "../../../components/sheets/Sheets";
@@ -76,9 +78,9 @@ const SalesInspect = function () {
       {
         productId: "",
         productName: "",
-        quantity: 1,
         variantId: "",
         variantName: "",
+        quantity: 1,
         price: "0.00",
       },
     ],
@@ -188,6 +190,21 @@ const SalesInspect = function () {
         return;
       }
       setProducts(response.data.result.items);
+      if (response.data.result.items?.[0])
+        setForm(function (prevState) {
+          const newForm = { ...prevState };
+          newForm.products = [
+            {
+              productId: response.data.result.items[0].id,
+              productName: response.data.result.items[0].name,
+              variantId: response.data.result.items[0].variants[0].id,
+              variantName: response.data.result.items[0].variants[0].name,
+              quantity: 1,
+              price: response.data.result.items[0].variants[0].price,
+            },
+          ];
+          return newForm;
+        });
       return;
     } catch (err) {
       play("alert");
@@ -345,9 +362,6 @@ const SalesInspect = function () {
                     return;
                   }}
                 />
-              </Horizontal>
-
-              <Horizontal internal={1}>
                 <InputSelect
                   required
                   name="customerId"
@@ -376,32 +390,6 @@ const SalesInspect = function () {
                       newForm.customerMobile = customerFinded.mobile;
                       setForm(newForm);
                     }
-                    return;
-                  }}
-                />
-                <InputMask
-                  readOnly
-                  mask={MaskPhone}
-                  disabled={loading}
-                  name="customerMobile"
-                  id="sale_customer_mobile"
-                  label={t.customer.mobile}
-                  value={form?.customerMobile || ""}
-                  placeholder={t.customer.mobile_placeholder}
-                  onChange={function () {
-                    return;
-                  }}
-                />
-                <InputMask
-                  readOnly
-                  disabled={loading}
-                  mask={MaskDocument1}
-                  name="customerDocument"
-                  id="sale_customer_document"
-                  label={t.customer.document_1}
-                  value={form?.customerDocument || ""}
-                  placeholder={t.customer.document_placeholder}
-                  onChange={function () {
                     return;
                   }}
                 />
@@ -484,7 +472,7 @@ const SalesInspect = function () {
           <Sheets
             rows={form?.products || []}
             footer={
-              <div>
+              <div style={{ fontSize: "var(--textSmall)" }}>
                 <span>{t.product.products}: </span>
                 <span>
                   {Currency(
@@ -503,9 +491,9 @@ const SalesInspect = function () {
                 newForm.products?.push({
                   productId: products[0].id,
                   productName: products[0].name,
-                  quantity: 1,
                   variantId: products[0].variants[0].id,
                   variantName: products[0].variants[0].name,
+                  quantity: 1,
                   price: products[0].variants[0].price,
                 });
                 return newForm;
@@ -521,114 +509,237 @@ const SalesInspect = function () {
               return;
             }}
             formatter={{
-              productId: {
-                type: "select",
-                options: function () {
-                  return products?.map(function (product) {
+              productId: function (index) {
+                return {
+                  type: "select",
+                  options: products?.map(function (product) {
                     return {
                       id: product.id,
                       value: product.id,
                       text: product.name,
                     };
-                  });
-                },
-                onChange: function (row, index) {
-                  setForm(function (prevState) {
-                    const newForm = { ...prevState };
+                  }),
+                  onChange: function (row) {
+                    setForm(function (prevState) {
+                      const newForm = { ...prevState };
 
-                    if (!newForm?.products || !newForm.products?.[index])
+                      if (!newForm?.products || !newForm.products?.[index])
+                        return newForm;
+
+                      const ProductFind = products?.find(function (product) {
+                        return product.id === (row?.productId as string);
+                      });
+
+                      newForm.products[index].productId =
+                        row.productId as string;
+                      newForm.products[index].productName =
+                        ProductFind?.name || "";
+                      newForm.products[index].variantId =
+                        ProductFind?.variants?.[0]?.id || "";
+                      newForm.products[index].variantName =
+                        ProductFind?.variants?.[0]?.name || "";
+                      newForm.products[index].price =
+                        ProductFind?.variants?.[0]?.price || "";
+
                       return newForm;
-
-                    const ProductFind = products?.find(function (product) {
-                      return product.id === (row?.productId as string);
                     });
-
-                    newForm.products[index].productId = row.productId as string;
-                    newForm.products[index].productName =
-                      ProductFind?.name || "";
-                    newForm.products[index].variantId =
-                      ProductFind?.variants?.[0]?.id || "";
-                    newForm.products[index].variantName =
-                      ProductFind?.variants?.[0]?.name || "";
-                    newForm.products[index].price =
-                      ProductFind?.variants?.[0]?.price || "";
-
-                    return newForm;
-                  });
-                  return;
-                },
+                    return;
+                  },
+                };
               },
-              variantId: {
-                type: "select",
-                options: function (index) {
-                  const ProductFind = products?.find(function (product) {
-                    return product.id === form?.products?.[index].productId;
-                  });
-                  return (
-                    ProductFind?.variants?.map(function (variant) {
-                      return {
-                        id: variant.id,
-                        value: variant.id,
-                        text: variant.name,
-                      };
-                    }) || []
-                  );
-                },
-                onChange: function (row, index) {
-                  setForm(function (prevState) {
-                    const newForm = { ...prevState };
+              variantId: function (index) {
+                const ProductFind = products?.find(function (product) {
+                  return product.id === form?.products?.[index].productId;
+                });
+                return {
+                  type: "select",
+                  options: ProductFind?.variants?.map(function (variant) {
+                    return {
+                      id: variant.id,
+                      value: variant.id,
+                      text: variant.name,
+                    };
+                  }),
+                  onChange: function (row) {
+                    setForm(function (prevState) {
+                      const newForm = { ...prevState };
 
-                    if (!newForm?.products || !newForm.products?.[index])
+                      if (!newForm?.products || !newForm.products?.[index])
+                        return newForm;
+
+                      const VariantFind = ProductFind?.variants?.find(
+                        function (variant) {
+                          return variant.id === (row?.variantId as string);
+                        },
+                      );
+
+                      newForm.products[index].variantId = VariantFind?.id || "";
+                      newForm.products[index].variantName =
+                        VariantFind?.name || "";
+                      newForm.products[index].price = VariantFind?.price || "";
                       return newForm;
-
-                    const ProductFind = products?.find(function (product) {
-                      return product.id === (row?.productId as string);
                     });
-
-                    const VariantFind = ProductFind?.variants?.find(
-                      function (variant) {
-                        return variant.id === (row?.variantId as string);
-                      },
-                    );
-
-                    newForm.products[index].variantId = VariantFind?.id || "";
-                    newForm.products[index].variantName =
-                      VariantFind?.name || "";
-                    newForm.products[index].price = VariantFind?.price || "";
-                    return newForm;
-                  });
-                  return;
-                },
+                    return;
+                  },
+                };
               },
-              quantity: {
-                min: 1,
-                max: 9999,
-                placeholder: t.sale.quantity_placeholder,
-                type: "number",
-                onChange: function (row, index) {
-                  setForm(function (prevState) {
-                    const newForm = { ...prevState };
-                    if (!newForm?.products || !newForm.products?.[index])
+              quantity: function (index) {
+                return {
+                  min: 1,
+                  max: 9999,
+                  placeholder: t.sale.quantity_placeholder,
+                  type: "number",
+                  onChange: function (row) {
+                    setForm(function (prevState) {
+                      const newForm = { ...prevState };
+                      if (!newForm?.products || !newForm.products?.[index])
+                        return newForm;
+                      newForm.products[index] = row as TypeSaleProduct;
                       return newForm;
-                    newForm.products[index] = row as TypeSaleProduct;
-                    return newForm;
-                  });
-                  return;
-                },
+                    });
+                    return;
+                  },
+                };
               },
-              price: {
-                type: "money",
-                placeholder: "0.00",
-                onChange: function (row, index) {
-                  setForm(function (prevState) {
-                    const newForm = { ...prevState };
-                    if (!newForm?.products || newForm.products?.[index])
+              price: function (index) {
+                return {
+                  type: "money",
+                  placeholder: "0.00",
+                  onChange: function (row) {
+                    setForm(function (prevState) {
+                      const newForm = { ...prevState };
+                      if (!newForm?.products || newForm.products?.[index])
+                        return newForm;
+                      newForm.products[index] = row as TypeSaleProduct;
                       return newForm;
-                    newForm.products[index] = row as TypeSaleProduct;
-                    return newForm;
-                  });
-                  return;
-                },
+                    });
+                    return;
+                  },
+                };
+              },
+            }}
+          />
+
+          <Sheets
+            rows={form?.details || []}
+            add={function () {
+              setForm(function (prevState) {
+                const newForm = { ...prevState };
+                newForm.details?.push({
+                  type: "fee",
+                  mode: "amount",
+                  amount: "0.00",
+                  percent: 0,
+                  description: "",
+                });
+                return newForm;
+              });
+              return;
+            }}
+            remove={function (index) {
+              setForm(function (prevState) {
+                const newForm = { ...prevState };
+                newForm.details?.splice(index, 1);
+                return newForm;
+              });
+              return;
+            }}
+            formatter={{
+              type: function (index) {
+                return {
+                  type: "select",
+                  options: SaleDetailsType?.map(function (type) {
+                    return {
+                      id: type,
+                      value: type,
+                      text:
+                        t.sale?.[type as keyof typeof t.sale] ||
+                        t.components.unknown,
+                    };
+                  }),
+                  onChange: function (data) {
+                    setForm(function (prevState) {
+                      const newForm = { ...prevState };
+                      if (!newForm.details?.[index]) return newForm;
+                      newForm.details[index] = data as TypeSaleDetails;
+                      return newForm;
+                    });
+                    return;
+                  },
+                };
+              },
+              mode: function (index) {
+                return {
+                  type: "select",
+                  options: SaleDetailsMode?.map(function (mode) {
+                    return {
+                      id: mode,
+                      value: mode,
+                      text:
+                        t.sale?.[mode as keyof typeof t.sale] ||
+                        t.components.unknown,
+                    };
+                  }),
+                  onChange: function (data) {
+                    setForm(function (prevState) {
+                      const newForm = { ...prevState };
+                      if (!newForm.details?.[index]) return newForm;
+                      newForm.details[index] = data as TypeSaleDetails;
+                      return newForm;
+                    });
+                    return;
+                  },
+                };
+              },
+              amount: function (index) {
+                const isModeAmount = form?.details?.[index]?.mode === "amount";
+                return {
+                  type: "money",
+                  placeholder: "0.00",
+                  hidden: !isModeAmount,
+                  onChange: function (data) {
+                    setForm(function (prevState) {
+                      const newForm = { ...prevState };
+                      if (!newForm.details?.[index]) return newForm;
+                      newForm.details[index] = data as TypeSaleDetails;
+                      return newForm;
+                    });
+                    return;
+                  },
+                };
+              },
+              percent: function (index) {
+                const isModePercent =
+                  form?.details?.[index]?.mode === "percent";
+                return {
+                  type: "number",
+                  placeholder: "10%",
+                  hidden: !isModePercent,
+                  onChange: function (data) {
+                    setForm(function (prevState) {
+                      const newForm = { ...prevState };
+                      if (!newForm.details?.[index]) return newForm;
+                      newForm.details[index] = data as TypeSaleDetails;
+                      return newForm;
+                    });
+                    return;
+                  },
+                };
+              },
+              description: function (index) {
+                return {
+                  type: "text",
+                  placeholder: "empty",
+                  onChange: function (data) {
+                    setForm(function (prevState) {
+                      const newForm = { ...prevState };
+                      if (!newForm.details?.[index]) return newForm;
+                      newForm.details[index] = data as TypeSaleDetails;
+                      return newForm;
+                    });
+                    return;
+                  },
+                };
               },
             }}
           />

@@ -6,6 +6,7 @@ import "./Sheets.css";
 // types
 import { InputSelectOptions } from "../inputs/Input";
 import useTranslate from "../../hooks/useTranslate";
+import { Plus, Trash } from "@phosphor-icons/react";
 
 export type SheetsBase = {
   [key: string]: number | string;
@@ -14,13 +15,14 @@ export type SheetsBase = {
 export type SheetsFormatterType = "number" | "text" | "money" | "select";
 
 export type SheetsFormatter = {
-  [key: string]: {
+  [key: string]: (index: number) => {
     type: SheetsFormatterType;
     min?: number;
     max?: number;
+    hidden?: boolean;
     placeholder?: string;
-    options?: (index: number) => InputSelectOptions[];
-    onChange: (row: SheetsBase, index: number) => void;
+    options?: InputSelectOptions[];
+    onChange: (row: SheetsBase) => void;
   };
 };
 
@@ -49,46 +51,48 @@ const Sheets = function ({
           <div className="sheetRow" key={`sheet-row-${rowIndex}`}>
             {Object.entries(row)?.map(function ([key, value], cellIndex) {
               if (!formatter?.[key]) return;
+              const format = formatter?.[key](rowIndex);
+              if (format.hidden) return;
               return (
                 <div
                   className="sheetCell"
                   key={`sheet-row-${rowIndex}-cell-${cellIndex}`}
                 >
-                  {formatter[key].type === "number" && (
+                  {format.type === "number" && (
                     <input
                       type="number"
                       value={value}
-                      min={formatter[key]?.min}
-                      max={formatter[key]?.max}
-                      placeholder={formatter[key]?.placeholder}
+                      min={format?.min}
+                      max={format?.max}
+                      placeholder={format?.placeholder}
                       id={`${key}-${rowIndex}-${cellIndex}`}
                       name={`${key}-${rowIndex}-${cellIndex}`}
                       onChange={function (event) {
                         const newRow = rows[rowIndex];
                         newRow[key] = event?.currentTarget?.value || "";
-                        formatter[key].onChange(row, rowIndex);
+                        format.onChange(row);
                         return;
                       }}
                     />
                   )}
-                  {formatter[key].type === "text" && (
+                  {format.type === "text" && (
                     <input
                       type="text"
                       value={value}
-                      minLength={formatter[key]?.min}
-                      maxLength={formatter[key]?.max}
-                      placeholder={formatter[key]?.placeholder}
+                      minLength={format?.min}
+                      maxLength={format?.max}
+                      placeholder={format?.placeholder}
                       id={`${key}-${rowIndex}-${cellIndex}`}
                       name={`${key}-${rowIndex}-${cellIndex}`}
                       onChange={function (event) {
                         const newRow = rows[rowIndex];
                         newRow[key] = event?.currentTarget?.value || "";
-                        formatter[key].onChange(row, rowIndex);
+                        format.onChange(row);
                         return;
                       }}
                     />
                   )}
-                  {formatter[key].type === "select" && (
+                  {format.type === "select" && (
                     <select
                       value={value}
                       id={`${key}-${rowIndex}-${cellIndex}`}
@@ -96,29 +100,27 @@ const Sheets = function ({
                       onChange={function (event) {
                         const newRow = rows[rowIndex];
                         newRow[key] = event?.currentTarget?.value || "";
-                        formatter[key].onChange(row, rowIndex);
+                        format.onChange(row);
                         return;
                       }}
                     >
-                      {formatter[key]?.options ? (
-                        formatter[key]
-                          .options(rowIndex)
-                          ?.map(function (option) {
-                            return (
-                              <option key={option.id} value={option.value}>
-                                {option.text}
-                              </option>
-                            );
-                          })
+                      {format?.options || format?.options?.length ? (
+                        format.options?.map(function (option) {
+                          return (
+                            <option key={option.id} value={option.value}>
+                              {option.text}
+                            </option>
+                          );
+                        })
                       ) : (
                         <option value="">{t.stacks.no_items}</option>
                       )}
                     </select>
                   )}
-                  {formatter[key].type === "money" && (
+                  {format.type === "money" && (
                     <input
                       value={value}
-                      placeholder={formatter[key]?.placeholder}
+                      placeholder={format?.placeholder}
                       id={`${key}-${rowIndex}-${cellIndex}`}
                       name={`${key}-${rowIndex}-${cellIndex}`}
                       onChange={function (event) {
@@ -167,7 +169,7 @@ const Sheets = function ({
                           const newValue = `${str.slice(0, dotIndex)}.${str.slice(dotIndex, str.length - 1)}`;
                           const newRow = rows[rowIndex];
                           newRow[key] = newValue.padStart(4, "0");
-                          formatter[key].onChange(row, rowIndex);
+                          format.onChange(row);
                           return;
                         }
                         if (value.length > 9) return;
@@ -180,7 +182,7 @@ const Sheets = function ({
                           const newValue = valueAdded.toFixed(2);
                           const newRow = rows[rowIndex];
                           newRow[key] = newValue;
-                          formatter[key].onChange(row, rowIndex);
+                          format.onChange(row);
                           return;
                         }
                         return;
@@ -195,7 +197,7 @@ const Sheets = function ({
               className="remove"
               onClick={() => remove(rowIndex)}
             >
-              {t.components.remove}
+              <Trash weight="bold" width={24} />
             </button>
           </div>
         );
@@ -203,41 +205,11 @@ const Sheets = function ({
       <div className="sheetFooter">
         <div className="sheetFooterContainer">{footer}</div>
         <button type="button" className="add" onClick={add}>
-          {t.components.add}
+          <Plus weight="bold" width={24} />
         </button>
       </div>
     </div>
   );
 };
-
-// <Sheets
-//   rows={form.addresses}
-//   onAdd={() => {}}
-//   onRemove={(index) => {}}
-//   formatter={{
-//     street: { type: "text", onChange: (row, index) => {} },
-//     number: { type: "number", onChange: (row, index) => {} },
-//     city: {
-//       type: "text",
-//       onChange: (row, index) => {},
-//     },
-//     state: {
-//       type: "select",
-//       options: [
-//         {
-//           id: "ca",
-//           value: "ca",
-//           text: "California",
-//         },
-//         {
-//           id: "ny",
-//           value: "ny",
-//           text: "New York",
-//         },
-//       ],
-//       onChange: (row, index) => {},
-//     },
-//   }}
-// />;
 
 export default Sheets;

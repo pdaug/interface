@@ -13,7 +13,16 @@ export const SaleStages = [
   "disputed",
 ];
 
-export const SaleDetailsType = ["tax", "discount", "fee", "shipping"];
+export const SaleDetailsType = [
+  "tax",
+  "discount",
+  "promo",
+  "fee",
+  "shipping",
+  "promo",
+  "coupon",
+  "voucher",
+];
 
 export const SaleDetailsMode = ["percent", "amount"];
 
