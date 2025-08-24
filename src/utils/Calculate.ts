@@ -7,7 +7,7 @@ const Calculate = {
     }, 0);
   },
 
-  details: function (arr: Record<string, unknown>[], value: number): number {
+  details: function (arr: Record<string, unknown>[], total: number): number {
     const amount = arr?.reduce(function (acc, details) {
       if (details?.mode !== "amount") return acc;
       const amount = Number(details?.amount) || 0;
@@ -18,11 +18,25 @@ const Calculate = {
       if (details?.mode !== "percent") return acc;
       const percentParsed = Number(details?.percent) || 0;
       const percent100 = percentParsed / 100;
-      const partial = value * percent100;
+      const partial = total * percent100;
       return acc + partial;
     }, 0);
 
     return amount + percent;
+  },
+
+  getAmountByPercent: function (percent: number, total: number): number {
+    if (!percent || !total) return 0;
+    const percent100 = percent / 100;
+    const amount = percent100 * total;
+    return amount;
+  },
+
+  getPercentByAmount: function (amount: number, total: number): number {
+    if (!amount || !total) return 0;
+    const percent = amount / total;
+    const percent100 = percent * 100;
+    return percent100;
   },
 };
 

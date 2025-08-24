@@ -98,7 +98,32 @@ const SalesInspect = function () {
       })
     : null;
 
-  const totalProducts = Calculate.products(form?.products || []);
+  const subtotalProducts = Calculate.products(form?.products || []);
+
+  const subtotalAdditions = Calculate.details(
+    form?.details?.filter(function (detail) {
+      return (
+        detail?.type === "tax" ||
+        detail?.type === "fee" ||
+        detail?.type === "shipping"
+      );
+    }) || [],
+    subtotalProducts,
+  );
+
+  const subtotalDeductions = Calculate.details(
+    form?.details?.filter(function (detail) {
+      return (
+        detail?.type === "discount" ||
+        detail?.type === "promo" ||
+        detail?.type === "coupon" ||
+        detail?.type === "voucher"
+      );
+    }) || [],
+    subtotalProducts,
+  );
+
+  const total = subtotalProducts + subtotalAdditions - subtotalDeductions;
 
   // fetch sale
   useAsync(async function () {
@@ -475,7 +500,7 @@ const SalesInspect = function () {
             footer={
               <div style={{ fontSize: "var(--textSmall)" }}>
                 <span>{t.product.products}: </span>
-                <span>{Currency(totalProducts)}</span>
+                <span>{Currency(subtotalProducts)}</span>
               </div>
             }
             add={function () {
@@ -623,43 +648,16 @@ const SalesInspect = function () {
             empty={t.sale.no_details}
             rows={form?.details || []}
             footer={
-              <div style={{ fontSize: "var(--textSmall)" }}>
+              <Horizontal internal={1}>
                 <div>
                   <span>{t.sale.addition}: </span>
-                  <span>
-                    {Currency(
-                      Calculate.details(
-                        (form?.details || [])?.filter(function (detail) {
-                          return (
-                            detail?.type === "tax" ||
-                            detail?.type === "fee" ||
-                            detail?.type === "shipping"
-                          );
-                        }),
-                        totalProducts,
-                      ),
-                    )}
-                  </span>
+                  <span>{Currency(subtotalAdditions)}</span>
                 </div>
                 <div>
                   <span>{t.sale.deduction}: </span>
-                  <span>
-                    {Currency(
-                      Calculate.details(
-                        (form?.details || [])?.filter(function (detail) {
-                          return (
-                            detail?.type === "discount" ||
-                            detail?.type === "promo" ||
-                            detail?.type === "coupon" ||
-                            detail?.type === "voucher"
-                          );
-                        }),
-                        totalProducts,
-                      ),
-                    )}
-                  </span>
+                  <span>{Currency(subtotalDeductions)}</span>
                 </div>
-              </div>
+              </Horizontal>
             }
             add={function () {
               setForm(function (prevState) {
@@ -759,6 +757,13 @@ const SalesInspect = function () {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
                       if (!newForm.details?.[index]) return newForm;
+                      const percent = Calculate.getPercentByAmount(
+                        Number(data.amount),
+                        subtotalProducts,
+                      );
+                      newForm.details[index].percent = parseFloat(
+                        percent.toFixed(2),
+                      );
                       newForm.details[index] = data as TypeSaleDetails;
                       return newForm;
                     });
@@ -778,6 +783,12 @@ const SalesInspect = function () {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
                       if (!newForm.details?.[index]) return newForm;
+                      const amount = Calculate.getAmountByPercent(
+                        Number(data.percent),
+                        subtotalProducts,
+                      );
+                      newForm.details[index].amount = amount.toFixed(2);
+                      data.percent = Number(data.percent);
                       newForm.details[index] = data as TypeSaleDetails;
                       return newForm;
                     });
@@ -796,23 +807,33 @@ const SalesInspect = function () {
           />
 
           <Wrapper>
-            <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
-              <Button
-                type="button"
-                category="Neutral"
-                disabled={loading}
-                text={t.components.cancel}
-                onClick={function () {
-                  navigate("/f/sales");
-                  return;
-                }}
-              />
-              <Button
-                type="submit"
-                disabled={loading}
-                category={id ? "Info" : "Success"}
-                text={id ? t.components.edit : t.components.save}
-              />
+            <Horizontal
+              internal={1}
+              className="itemsCenter"
+              styles={{ justifyContent: "space-between" }}
+            >
+              <Horizontal className="flex-1" styles={{ gap: "0.4rem" }}>
+                <span>{t.components.total}: </span>
+                <span>{Currency(total)}</span>
+              </Horizontal>
+              <Horizontal internal={1}>
+                <Button
+                  type="button"
+                  category="Neutral"
+                  disabled={loading}
+                  text={t.components.cancel}
+                  onClick={function () {
+                    navigate("/f/sales");
+                    return;
+                  }}
+                />
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  category={id ? "Info" : "Success"}
+                  text={id ? t.components.edit : t.components.save}
+                />
+              </Horizontal>
             </Horizontal>
           </Wrapper>
 

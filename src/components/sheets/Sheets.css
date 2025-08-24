@@ -110,5 +110,6 @@
 }
 
 .sheetFooterContainer {
+  font-size: var(--textSmall);
   padding: 0.6rem 1rem;
 }
