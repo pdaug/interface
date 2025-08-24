@@ -63,6 +63,14 @@
   padding: 0.6rem 1rem;
 }
 
+.sheetCell input:disabled,
+.sheetCell select:disabled {
+  background: var(--backgroundColor);
+  background-color: var(--backgroundColor);
+  color: var(--textLight);
+  cursor: not-allowed;
+}
+
 .sheet button {
   align-items: center;
   border: none;

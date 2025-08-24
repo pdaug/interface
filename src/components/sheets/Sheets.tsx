@@ -32,6 +32,7 @@ export type SheetProps = {
   add: () => void;
   remove: (index: number) => void;
   rows: SheetsBase[];
+  empty?: string;
   formatter: SheetsFormatter;
   styles?: React.CSSProperties;
   footer?: React.ReactNode;
@@ -41,6 +42,7 @@ const Sheets = function ({
   add,
   remove,
   rows,
+  empty,
   formatter,
   styles,
   footer,
@@ -225,7 +227,7 @@ const Sheets = function ({
           })
         ) : (
           <div className="sheetEmpty">
-            <i>{t.stacks.no_items}</i>
+            <i>{empty || t.stacks.no_items}</i>
           </div>
         )}
       </div>

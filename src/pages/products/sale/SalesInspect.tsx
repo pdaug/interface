@@ -470,6 +470,7 @@ const SalesInspect = function () {
           </Wrapper>
 
           <Sheets
+            empty={t.sale.no_products}
             rows={form?.products || []}
             footer={
               <div style={{ fontSize: "var(--textSmall)" }}>
@@ -619,6 +620,7 @@ const SalesInspect = function () {
           />
 
           <Sheets
+            empty={t.sale.no_details}
             rows={form?.details || []}
             footer={
               <div style={{ fontSize: "var(--textSmall)" }}>
@@ -663,11 +665,11 @@ const SalesInspect = function () {
               setForm(function (prevState) {
                 const newForm = { ...prevState };
                 newForm.details?.push({
+                  title: "",
                   type: "fee",
                   mode: "amount",
                   amount: "0.00",
                   percent: 0,
-                  description: "",
                 });
                 return newForm;
               });
@@ -682,6 +684,22 @@ const SalesInspect = function () {
               return;
             }}
             formatter={{
+              title: function (index) {
+                return {
+                  type: "text",
+                  title: t.sale.details_title,
+                  placeholder: t.sale.details_title_placeholder,
+                  onChange: function (data) {
+                    setForm(function (prevState) {
+                      const newForm = { ...prevState };
+                      if (!newForm.details?.[index]) return newForm;
+                      newForm.details[index] = data as TypeSaleDetails;
+                      return newForm;
+                    });
+                    return;
+                  },
+                };
+              },
               type: function (index) {
                 return {
                   type: "select",
@@ -735,8 +753,8 @@ const SalesInspect = function () {
                 return {
                   type: "money",
                   placeholder: "0.00",
-                  disabled: isModeAmount,
-                  title: t.sale.details_amount_or_percent,
+                  disabled: !isModeAmount,
+                  title: t.sale.details_amount,
                   onChange: function (data) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
@@ -754,24 +772,8 @@ const SalesInspect = function () {
                 return {
                   type: "number",
                   placeholder: "10%",
-                  disabled: isModePercent,
-                  title: t.sale.details_amount_or_percent,
-                  onChange: function (data) {
-                    setForm(function (prevState) {
-                      const newForm = { ...prevState };
-                      if (!newForm.details?.[index]) return newForm;
-                      newForm.details[index] = data as TypeSaleDetails;
-                      return newForm;
-                    });
-                    return;
-                  },
-                };
-              },
-              description: function (index) {
-                return {
-                  type: "text",
-                  title: t.components.description,
-                  placeholder: t.sale.description_placeholder,
+                  disabled: !isModePercent,
+                  title: t.sale.details_percent,
                   onChange: function (data) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };

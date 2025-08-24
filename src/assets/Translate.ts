@@ -414,9 +414,15 @@ const TranslatePt = {
     product_name: "Nome do produto",
     variant_name: "Nome da variação",
 
-    details_type: "Tipo do detalhes",
-    details_mode: "Modo do detalhes",
-    details_amount_or_percent: "Valor ou porcentagem",
+    details_type: "Tipo",
+    details_mode: "Modo",
+    details_amount: "Quantia",
+    details_percent: "Porcentagem",
+    details_title: "Motivo do detalhe",
+    details_title_placeholder: "Ex.: Taxa de compra",
+
+    no_details: "Nenhum detalhe adicionado ainda",
+    no_products: "Nenhum produto adicionado ainda",
 
     description_placeholder: "Preencha aqui uma descrição sobre a venda...",
     price: "Valor",
@@ -1200,9 +1206,15 @@ const TranslateEn = {
     product_name: "Product name",
     variant_name: "Variant name",
 
-    details_type: "Details type",
-    details_mode: "Details mode",
-    details_amount_or_percent: "Amount or percent",
+    details_type: "Type",
+    details_mode: "Mode",
+    details_amount: "Amount",
+    details_percent: "Percent",
+    details_title: "Title details",
+    details_title_placeholder: "e.g Buy tax",
+
+    no_details: "No details added yet",
+    no_products: "No products add yet",
 
     description_placeholder: "Fill here description about the sale...",
     price: "Price",
