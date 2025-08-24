@@ -4,16 +4,16 @@
   border: 1px solid var(--borderColor);
   border-radius: var(--borderRadius);
   box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 }
 
-.sheetRow {
+.sheetRow,
+.sheetHeader {
   display: flex;
 }
 
-.sheetRow:not(:last-child) {
+.sheetRow:not(:last-child),
+.sheetHeader:not(:last-child) {
   border-bottom: 1px solid var(--borderColor);
 }
 
@@ -27,12 +27,38 @@
   border-right: 1px solid var(--borderColor);
 }
 
+.sheetHeader .sheetCell {
+  font-size: var(--textSmall);
+  border: none !important;
+  padding: 0.4rem 0.8rem;
+}
+
+.sheetAction {
+  width: 48px;
+}
+
+.sheetBody {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--borderColor);
+}
+
+.sheetEmpty {
+  align-items: center;
+  display: flex;
+  font-size: var(--textSmall);
+  height: 38px;
+  justify-content: center;
+  opacity: 0.6;
+  text-align: center;
+}
+
 .sheetCell input,
 .sheetCell select {
-  flex: 1;
   background: transparent;
   background-color: transparent;
   border: none;
+  flex: 1;
   outline: none;
   padding: 0.6rem 1rem;
 }

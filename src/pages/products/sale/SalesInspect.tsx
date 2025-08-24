@@ -504,6 +504,7 @@ const SalesInspect = function () {
               productId: function (index) {
                 return {
                   type: "select",
+                  title: t.sale.product_name,
                   options: products?.map(function (product) {
                     return {
                       id: product.id,
@@ -541,10 +542,12 @@ const SalesInspect = function () {
               },
               variantId: function (index) {
                 const ProductFind = products?.find(function (product) {
-                  return product.id === form?.products?.[index].productId;
+                  return product.id === form?.products?.[index]?.productId;
                 });
                 return {
                   type: "select",
+                  title: t.sale.variant_name,
+                  disabled: ProductFind?.category === "single",
                   options: ProductFind?.variants?.map(function (variant) {
                     return {
                       id: variant.id,
@@ -579,13 +582,15 @@ const SalesInspect = function () {
                 return {
                   min: 1,
                   max: 9999,
-                  placeholder: t.sale.quantity_placeholder,
                   type: "number",
+                  title: t.sale.quantity,
+                  placeholder: t.sale.quantity_placeholder,
                   onChange: function (row) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
                       if (!newForm?.products || !newForm.products?.[index])
                         return newForm;
+                      row.quantity = Number(row.quantity);
                       newForm.products[index] = row as TypeSaleProduct;
                       return newForm;
                     });
@@ -596,6 +601,7 @@ const SalesInspect = function () {
               price: function (index) {
                 return {
                   type: "money",
+                  title: t.sale.price,
                   placeholder: "0.00",
                   onChange: function (row) {
                     setForm(function (prevState) {
@@ -679,6 +685,7 @@ const SalesInspect = function () {
               type: function (index) {
                 return {
                   type: "select",
+                  title: t.sale.details_type,
                   options: SaleDetailsType?.map(function (type) {
                     return {
                       id: type,
@@ -702,6 +709,7 @@ const SalesInspect = function () {
               mode: function (index) {
                 return {
                   type: "select",
+                  title: t.sale.details_mode,
                   options: SaleDetailsMode?.map(function (mode) {
                     return {
                       id: mode,
@@ -727,7 +735,8 @@ const SalesInspect = function () {
                 return {
                   type: "money",
                   placeholder: "0.00",
-                  hidden: !isModeAmount,
+                  disabled: isModeAmount,
+                  title: t.sale.details_amount_or_percent,
                   onChange: function (data) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
@@ -745,7 +754,8 @@ const SalesInspect = function () {
                 return {
                   type: "number",
                   placeholder: "10%",
-                  hidden: !isModePercent,
+                  disabled: isModePercent,
+                  title: t.sale.details_amount_or_percent,
                   onChange: function (data) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
@@ -760,7 +770,8 @@ const SalesInspect = function () {
               description: function (index) {
                 return {
                   type: "text",
-                  placeholder: "empty",
+                  title: t.components.description,
+                  placeholder: t.sale.description_placeholder,
                   onChange: function (data) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };

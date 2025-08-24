@@ -411,6 +411,13 @@ const TranslatePt = {
     stage: "Estágio",
     id: "Identificação",
     customer: "Cliente",
+    product_name: "Nome do produto",
+    variant_name: "Nome da variação",
+
+    details_type: "Tipo do detalhes",
+    details_mode: "Modo do detalhes",
+    details_amount_or_percent: "Valor ou porcentagem",
+
     description_placeholder: "Preencha aqui uma descrição sobre a venda...",
     price: "Valor",
     details: "Detalhes",
@@ -1190,6 +1197,13 @@ const TranslateEn = {
     stage: "Stage",
     id: "Identification",
     customer: "Customer",
+    product_name: "Product name",
+    variant_name: "Variant name",
+
+    details_type: "Details type",
+    details_mode: "Details mode",
+    details_amount_or_percent: "Amount or percent",
+
     description_placeholder: "Fill here description about the sale...",
     price: "Price",
     details: "Details",
