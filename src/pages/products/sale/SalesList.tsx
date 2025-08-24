@@ -351,23 +351,23 @@ const SalesList = function () {
               },
             },
             customerName: {
-              label: t.customer.name,
+              label: t.sale.customer,
             },
             products: {
-              label: t.product.products,
+              label: t.sale.product_name,
             },
             details: {
               label: t.sale.details,
             },
             price: {
-              label: t.sale.price,
+              label: t.components.total,
               handler: function (data) {
                 if (!Array.isArray(data.variants)) return "";
                 return <div>{Currency(data?.variants?.[0].price || 0)}</div>;
               },
             },
             user: {
-              label: t.components.user,
+              label: t.sale.user,
               handler: function (data) {
                 const userFinded = users?.find(function (user) {
                   return user.id === data.userId;
