@@ -71,11 +71,10 @@
 }
 
 .sheetFooter {
-  align-items: center;
   display: flex;
   justify-content: space-between;
 }
 
 .sheetFooterContainer {
-  padding: 0 1rem;
+  padding: 0.6rem 1rem;
 }

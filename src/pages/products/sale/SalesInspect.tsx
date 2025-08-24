@@ -7,15 +7,16 @@ import { useNavigate, useParams } from "react-router-dom";
 // apis
 import apis from "../../../apis";
 
-// utils
-import { GenerateNumbers } from "../../../utils/GenerateId";
-
 // assets
 import {
+  SaleStages,
   SaleDetailsMode,
   SaleDetailsType,
-  SaleStages,
 } from "../../../assets/Sale";
+
+// utils
+import Calculate from "../../../utils/Calculate";
+import { GenerateNumbers } from "../../../utils/GenerateId";
 
 // types
 import {
@@ -67,7 +68,7 @@ const SalesInspect = function () {
   const [customers, setCustomers] = useState<TypeCustomer[]>([]);
 
   const [form, setForm] = useState<Partial<TypeSale>>({
-    saleId: `S${GenerateNumbers(5)}`,
+    saleId: GenerateNumbers(6),
     stage: "open" as TypeSaleStage,
     description: "",
     customerId: "",
@@ -82,7 +83,7 @@ const SalesInspect = function () {
         variantName: "",
         quantity: 1,
         price: "0.00",
-      },
+      } as TypeSaleProduct,
     ],
     details: new Array<TypeSaleDetails>(),
     shippingMethod: "standard" as TypeSaleShippingMethod,
@@ -96,6 +97,8 @@ const SalesInspect = function () {
         return form.userId === userLocal.id;
       })
     : null;
+
+  const totalProducts = Calculate.products(form?.products || []);
 
   // fetch sale
   useAsync(async function () {
@@ -353,12 +356,9 @@ const SalesInspect = function () {
                   id="sale_sale_id"
                   label={t.sale.id}
                   disabled={loading}
+                  placeholder="123456"
                   value={form?.saleId || ""}
-                  placeholder="S00001"
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.saleId = event.currentTarget?.value || "";
-                    setForm(newForm);
+                  onChange={function () {
                     return;
                   }}
                 />
@@ -367,7 +367,7 @@ const SalesInspect = function () {
                   name="customerId"
                   disabled={loading}
                   id="sale_customer_id"
-                  label={t.customer.name}
+                  label={t.sale.customer}
                   empty={t.stacks.no_option}
                   value={String(form.customerId)}
                   options={customers.map(function (customer) {
@@ -400,8 +400,8 @@ const SalesInspect = function () {
                   max={256}
                   height={4}
                   name="description"
-                  id="sale_description"
                   disabled={loading}
+                  id="sale_description"
                   value={form?.description || ""}
                   label={t.components.description}
                   placeholder={t.sale.description_placeholder}
@@ -474,15 +474,7 @@ const SalesInspect = function () {
             footer={
               <div style={{ fontSize: "var(--textSmall)" }}>
                 <span>{t.product.products}: </span>
-                <span>
-                  {Currency(
-                    form.products?.reduce((acc, product) => {
-                      const price = Number(product.price) || 0;
-                      const quantity = product.quantity || 0;
-                      return acc + price * quantity;
-                    }, 0) || 0,
-                  )}
-                </span>
+                <span>{Currency(totalProducts)}</span>
               </div>
             }
             add={function () {
@@ -622,6 +614,45 @@ const SalesInspect = function () {
 
           <Sheets
             rows={form?.details || []}
+            footer={
+              <div style={{ fontSize: "var(--textSmall)" }}>
+                <div>
+                  <span>{t.sale.addition}: </span>
+                  <span>
+                    {Currency(
+                      Calculate.details(
+                        (form?.details || [])?.filter(function (detail) {
+                          return (
+                            detail?.type === "tax" ||
+                            detail?.type === "fee" ||
+                            detail?.type === "shipping"
+                          );
+                        }),
+                        totalProducts,
+                      ),
+                    )}
+                  </span>
+                </div>
+                <div>
+                  <span>{t.sale.deduction}: </span>
+                  <span>
+                    {Currency(
+                      Calculate.details(
+                        (form?.details || [])?.filter(function (detail) {
+                          return (
+                            detail?.type === "discount" ||
+                            detail?.type === "promo" ||
+                            detail?.type === "coupon" ||
+                            detail?.type === "voucher"
+                          );
+                        }),
+                        totalProducts,
+                      ),
+                    )}
+                  </span>
+                </div>
+              </div>
+            }
             add={function () {
               setForm(function (prevState) {
                 const newForm = { ...prevState };

@@ -19,7 +19,6 @@ export const SaleDetailsType = [
   "promo",
   "fee",
   "shipping",
-  "promo",
   "coupon",
   "voucher",
 ];

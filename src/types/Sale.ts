@@ -21,7 +21,15 @@ export type TypeSaleProduct = {
   price: string;
 };
 
-export type TypeSaleDetailsType = "tax" | "discount" | "fee" | "shipping";
+// UPDATE
+export type TypeSaleDetailsType =
+  | "tax"
+  | "discount"
+  | "promo"
+  | "coupon"
+  | "voucher"
+  | "fee"
+  | "shipping";
 
 export type TypeSaleDetailsMode = "percent" | "amount";
 
