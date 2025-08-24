@@ -1,22 +1,26 @@
 import { toast } from "sonner";
+import { format } from "date-fns";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
-import { Asterisk } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Asterisk, MapTrifold } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
+
+// utils
+import Calculate from "../../../utils/Calculate";
+import { GenerateNumbers } from "../../../utils/GenerateId";
 
 // assets
 import {
   SaleStages,
   SaleDetailsMode,
   SaleDetailsType,
+  SaleShippingMethod,
 } from "../../../assets/Sale";
-
-// utils
-import Calculate from "../../../utils/Calculate";
-import { GenerateNumbers } from "../../../utils/GenerateId";
+import { MaskPostalCode } from "../../../assets/Mask";
+import { SettingsAddressState } from "../../../assets/Settings";
 
 // types
 import {
@@ -27,6 +31,7 @@ import {
   TypeSaleProduct,
 } from "../../../types/Sale";
 import { TypeProduct } from "../../../types/Product";
+import { TypeAccount } from "../../../types/Account";
 import { TypeCustomer } from "../../../types/Customers";
 import { ApiResponsePaginate } from "../../../types/Api";
 
@@ -44,6 +49,8 @@ import {
   Input,
   InputText,
   InputSelect,
+  InputMask,
+  InputMoney,
 } from "../../../components/inputs/Input";
 import Sheets from "../../../components/sheets/Sheets";
 import Button from "../../../components/buttons/Button";
@@ -65,16 +72,20 @@ const SalesInspect = function () {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<TypeProduct[]>([]);
+  const [accounts, setAccounts] = useState<TypeAccount[]>([]);
   const [customers, setCustomers] = useState<TypeCustomer[]>([]);
+  const [position, setPosition] = useState<[number, number] | null>(null);
 
   const [form, setForm] = useState<Partial<TypeSale>>({
     saleId: GenerateNumbers(6),
     stage: "open" as TypeSaleStage,
     description: "",
+
     customerId: "",
     customerName: "",
     customerMobile: "",
     customerDocument: "",
+
     products: [
       {
         productId: "",
@@ -85,11 +96,23 @@ const SalesInspect = function () {
         price: "0.00",
       } as TypeSaleProduct,
     ],
+
     details: new Array<TypeSaleDetails>(),
-    shippingMethod: "standard" as TypeSaleShippingMethod,
-    shippingAddress: "",
+
+    shippingMethod: undefined,
     shippingCost: "0.00",
+
+    addressStreet: "",
+    addressNumber: "",
+    addressComplement: "",
+    addressPostalCode: "",
+    addressNeighborhood: "",
+    addressCity: "",
+    addressState: "SP",
+
     userId: user.id,
+
+    createdAt: format(new Date(), "yyyy-MM-dd"),
   });
 
   const userFinded = form.userId
@@ -124,6 +147,40 @@ const SalesInspect = function () {
   );
 
   const total = subtotalProducts + subtotalAdditions - subtotalDeductions;
+
+  // get position
+  useAsync(
+    async function () {
+      if (!form.addressStreet || !form.addressNumber || !form.addressCity)
+        return;
+      try {
+        const response = await apis.AddressPosition({
+          street: form.addressStreet,
+          number: form.addressNumber,
+          city: form.addressCity,
+        });
+        if (
+          !response.data ||
+          !response.data?.[0]?.lat ||
+          !response.data?.[0]?.lon
+        ) {
+          console.warn(
+            "[src/pages/settings/users/UsersInspect.tsx]",
+            response.data,
+          );
+          return;
+        }
+        setPosition([
+          parseFloat(String(response.data[0].lat)),
+          parseFloat(String(response.data[0].lon)),
+        ]);
+      } catch (err) {
+        console.error("[src/pages/settings/users/UsersInspect.tsx]", err);
+      }
+      return;
+    },
+    [form.addressStreet, form.addressNumber, form.addressCity],
+  );
 
   // fetch sale
   useAsync(async function () {
@@ -182,6 +239,15 @@ const SalesInspect = function () {
         });
         return;
       }
+      if (response.data.result.items?.[0])
+        setForm(function (prevState) {
+          const newForm = { ...prevState };
+          newForm.customerId = response.data.result.items[0].id;
+          newForm.customerName = response.data.result.items[0].name;
+          newForm.customerMobile = response.data.result.items[0].mobile;
+          newForm.customerDocument = response.data.result.items[0]?.document1;
+          return newForm;
+        });
       setCustomers(response.data.result.items);
       return;
     } catch (err) {
@@ -233,6 +299,47 @@ const SalesInspect = function () {
           ];
           return newForm;
         });
+      return;
+    } catch (err) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.no_find_item,
+      });
+      console.error("[src/pages/products/sale/SalesInspect.tsx]", err);
+      return;
+    }
+  }, []);
+
+  // fetch accounts
+  useAsync(async function () {
+    try {
+      const response = await apis.Account.list<
+        ApiResponsePaginate<TypeAccount>
+      >(
+        token,
+        instance.name,
+        {
+          pageSize: 999,
+          pageCurrent: 1,
+          orderField: "name",
+          orderSort: "asc",
+        },
+        workspaceId,
+      );
+      if (!response.data?.result || response.status !== 200) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        return;
+      }
+      if (response.data.result.items?.[0])
+        setForm(function (prevState) {
+          const newForm = { ...prevState };
+          newForm.accountId = response.data.result.items[0].id;
+          return newForm;
+        });
+      setAccounts(response.data.result.items);
       return;
     } catch (err) {
       play("alert");
@@ -387,6 +494,9 @@ const SalesInspect = function () {
                     return;
                   }}
                 />
+              </Horizontal>
+
+              <Horizontal internal={1}>
                 <InputSelect
                   required
                   name="customerId"
@@ -415,6 +525,52 @@ const SalesInspect = function () {
                       newForm.customerMobile = customerFinded.mobile;
                       setForm(newForm);
                     }
+                    return;
+                  }}
+                />
+
+                <InputSelect
+                  required
+                  name="userId"
+                  disabled={loading}
+                  id="sale_user_id"
+                  label={t.sale.user}
+                  empty={t.stacks.no_option}
+                  value={String(form.userId)}
+                  options={users.map(function (customer) {
+                    return {
+                      id: customer.id,
+                      value: customer.id,
+                      text: customer.name,
+                    };
+                  })}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.userId = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+
+                <InputSelect
+                  required
+                  name="accountId"
+                  disabled={loading}
+                  id="sale_account_id"
+                  label={t.sale.account}
+                  empty={t.stacks.no_option}
+                  value={String(form.accountId)}
+                  options={accounts.map(function (account) {
+                    return {
+                      id: account.id,
+                      value: account.id,
+                      text: account.name,
+                    };
+                  })}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.accountId = event.currentTarget?.value || "";
+                    setForm(newForm);
                     return;
                   }}
                 />
@@ -452,17 +608,7 @@ const SalesInspect = function () {
                       name={userFinded?.name || t.components.unknown}
                     />
                   </div>
-                  <Input
-                    readOnly
-                    placeholder=""
-                    name="createdAt"
-                    id="sale_created_at"
-                    label={t.components.created_at}
-                    value={instanceDateTime(form.createdAt)}
-                    onChange={function () {
-                      return;
-                    }}
-                  />
+
                   <Input
                     readOnly
                     placeholder=""
@@ -798,6 +944,360 @@ const SalesInspect = function () {
               },
             }}
           />
+
+          <Wrapper
+            collapsible
+            title={t.sale.title_stage}
+            contentStyles={{ padding: 0 }}
+            description={t.sale.subtitle_stage}
+          >
+            <Vertical internal={1} external={1}>
+              <Horizontal internal={1}>
+                <Input
+                  type="date"
+                  name="createdAt"
+                  disabled={loading}
+                  id="sale_created_at"
+                  placeholder="yyyy-MM-dd"
+                  label={t.components.created_at}
+                  value={form?.createdAt || ""}
+                  onChange={function () {
+                    return;
+                  }}
+                />
+                <Input
+                  type="date"
+                  name="datePayment"
+                  disabled={loading}
+                  id="sale_date_payment"
+                  placeholder="yyyy-MM-dd"
+                  label={t.sale.date_payment}
+                  value={form?.datePayment || ""}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.datePayment = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+
+                <Input
+                  type="date"
+                  name="dateShipped"
+                  disabled={loading}
+                  id="sale_date_shipped"
+                  placeholder="yyyy-MM-dd"
+                  label={t.sale.date_shipped}
+                  value={form?.dateShipped || ""}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.dateShipped = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+
+                <Input
+                  type="date"
+                  name="dateCompleted"
+                  disabled={loading}
+                  id="sale_date_completed"
+                  placeholder="yyyy-MM-dd"
+                  label={t.sale.date_completed}
+                  value={form?.dateCompleted || ""}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.dateCompleted = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+
+              <Horizontal internal={1}>
+                <Input
+                  type="date"
+                  name="dateFailed"
+                  disabled={loading}
+                  id="sale_date_failed"
+                  placeholder="yyyy-MM-dd"
+                  label={t.sale.date_failed}
+                  value={form?.dateFailed || ""}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.dateFailed = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+
+                <Input
+                  type="date"
+                  name="dateRefunded"
+                  disabled={loading}
+                  id="sale_date_refunded"
+                  placeholder="yyyy-MM-dd"
+                  label={t.sale.date_refunded}
+                  value={form?.dateRefunded || ""}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.dateRefunded = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+
+                <Input
+                  type="date"
+                  name="dateCanceled"
+                  disabled={loading}
+                  id="sale_date_canceled"
+                  placeholder="yyyy-MM-dd"
+                  label={t.sale.date_canceled}
+                  value={form?.dateCanceled || ""}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.dateCanceled = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+            </Vertical>
+          </Wrapper>
+
+          <Wrapper
+            collapsible
+            contentStyles={{ padding: 0 }}
+            title={t.sale.title_address}
+            description={t.sale.subtitle_address}
+          >
+            <Horizontal internal={1} external={1}>
+              <Vertical internal={1} className="flex1">
+                <Horizontal internal={1}>
+                  <InputSelect
+                    disabled={loading}
+                    name="shippingMethod"
+                    id="sale_shipping_method"
+                    empty={t.stacks.no_option}
+                    label={t.sale.shipping_method}
+                    value={form?.shippingMethod || ""}
+                    options={SaleShippingMethod.map(function (shipping) {
+                      return {
+                        id: shipping,
+                        value: shipping,
+                        text:
+                          t.sale?.[shipping as keyof typeof t.sale] ||
+                          t.components.unknown,
+                      };
+                    })}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.shippingMethod = (event.currentTarget?.value ||
+                        "") as TypeSaleShippingMethod;
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <InputMoney
+                    disabled={loading}
+                    placeholder="0.00"
+                    name="shippingCost"
+                    id="sale_shipping_cost"
+                    label={t.sale.shipping_cost}
+                    value={form?.shippingCost || "0.00"}
+                    onChange={function (value) {
+                      const newForm = { ...form };
+                      newForm.shippingCost = value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                </Horizontal>
+
+                <Horizontal internal={1}>
+                  <InputMask
+                    mask={MaskPostalCode}
+                    name="addressPostalCode"
+                    id="user_address_postal_code"
+                    disabled={loading}
+                    value={form?.addressPostalCode || ""}
+                    label={t.components.address_postal_code}
+                    placeholder={t.components.address_postal_code_placeholder}
+                    onChange={async function (event) {
+                      const newForm = { ...form };
+                      const postalCodeRaw = event.currentTarget?.value || "";
+                      const postalCode = postalCodeRaw.replace(/\D/g, "");
+                      newForm.addressPostalCode = postalCode;
+                      if (postalCode.length === 8) {
+                        setLoading(true);
+                        const toastId = toast.loading(t.components.loading);
+                        try {
+                          const response = await apis.PostalCode(postalCode);
+                          newForm.addressStreet =
+                            response.data?.street || newForm.addressStreet;
+                          newForm.addressCity =
+                            response.data?.city || newForm.addressCity;
+                          newForm.addressNeighborhood =
+                            response.data?.neighborhood ||
+                            newForm.addressNeighborhood;
+                          newForm.addressState =
+                            response.data?.state || newForm.addressState;
+                          toast.dismiss(toastId);
+                          play("ok");
+                          toast.success(t.toast.success, {
+                            description: t.toast.success_find,
+                          });
+                        } catch (err) {
+                          console.error(
+                            "[src/pages/settings/users/UsersInspect.tsx]",
+                            err,
+                          );
+                          toast.dismiss(toastId);
+                          play("alert");
+                          toast.warning(t.toast.warning_error, {
+                            description: t.toast.warning_find,
+                          });
+                        } finally {
+                          setLoading(false);
+                        }
+                      }
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+
+                  <Input
+                    min={4}
+                    max={64}
+                    name="addressStreet"
+                    id="user_address_street"
+                    disabled={loading}
+                    value={form?.addressStreet || ""}
+                    label={t.components.address_street}
+                    placeholder={t.components.address_street_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressStreet = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                </Horizontal>
+
+                <Horizontal internal={1}>
+                  <Input
+                    min={1}
+                    max={8}
+                    name="addressNumber"
+                    id="user_address_number"
+                    disabled={loading}
+                    value={form?.addressNumber || ""}
+                    label={t.components.address_number}
+                    placeholder={t.components.address_number_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressNumber = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+
+                  <Input
+                    max={32}
+                    name="addressComplement"
+                    id="user_address_complement"
+                    disabled={loading}
+                    value={form?.addressComplement || ""}
+                    label={t.components.address_complement}
+                    placeholder={t.components.address_complement_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressComplement =
+                        event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+
+                  <Input
+                    max={64}
+                    name="addressNeighborhood"
+                    id="user_address_neighborhood"
+                    disabled={loading}
+                    value={form?.addressNeighborhood || ""}
+                    label={t.components.address_neighborhood}
+                    placeholder={t.components.address_neighborhood_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressNeighborhood =
+                        event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                </Horizontal>
+
+                <Horizontal internal={1}>
+                  <Input
+                    min={2}
+                    max={64}
+                    name="addressCity"
+                    id="user_address_city"
+                    value={form?.addressCity || ""}
+                    disabled={loading}
+                    label={t.components.address_city}
+                    placeholder={t.components.address_city_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressCity = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+
+                  <InputSelect
+                    name="addressState"
+                    empty={t.stacks.no_option}
+                    id="user_address_state"
+                    value={form?.addressState || ""}
+                    disabled={loading}
+                    label={t.components.address_state}
+                    options={SettingsAddressState.map(function (state) {
+                      return {
+                        id: state.code,
+                        value: state.code,
+                        text: state.name,
+                      };
+                    })}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.addressState = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                </Horizontal>
+
+                <Callout
+                  Icon={MapTrifold}
+                  IconSize={16}
+                  category="Info"
+                  text={t.callout.postal_code_search}
+                  styles={{ fontSize: "var(--textSmall)" }}
+                />
+              </Vertical>
+
+              {position && (
+                <iframe
+                  loading="lazy"
+                  width="25%"
+                  height={320}
+                  src={`https://maps.google.com/maps?q=${position.join(",")}&z=15&output=embed&maptype=satellite`}
+                ></iframe>
+              )}
+            </Horizontal>
+          </Wrapper>
 
           <Callout
             Icon={Asterisk}

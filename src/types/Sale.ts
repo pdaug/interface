@@ -55,16 +55,37 @@ export type TypeSale = {
   saleId: string;
   stage: TypeSaleStage;
   description: string;
+
+  datePayment?: string;
+  dateShipped?: string;
+  dateCompleted?: string;
+  dateFailed?: string;
+  dateCanceled?: string;
+  dateRefunded?: string;
+
   customerId: string;
   customerName: string;
   customerMobile: string;
   customerDocument?: string | null;
+
   products: TypeSaleProduct[];
+
   details: TypeSaleDetails[];
-  shippingMethod: TypeSaleShippingMethod;
-  shippingAddress: string;
-  shippingCost: string;
+
+  shippingMethod?: TypeSaleShippingMethod;
+  shippingCost?: string;
+
+  addressStreet?: string;
+  addressNumber?: string;
+  addressComplement?: string;
+  addressPostalCode?: string;
+  addressNeighborhood?: string;
+  addressCity?: string;
+  addressState?: string;
+
   userId: string;
+  accountId: string;
+
   createdAt: string;
   updatedAt: string | null;
   deletedAt: string | null;
