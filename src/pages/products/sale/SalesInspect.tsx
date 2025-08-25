@@ -330,14 +330,17 @@ const SalesInspect = function () {
         });
         return;
       }
-      if (response.data.result.items?.[0])
+      const accountList = response.data.result.items;
+      if (accountList?.[0])
         setForm(function (prevState) {
           const newForm = { ...prevState };
-          if (!newForm.accountId)
-            newForm.accountId = response.data.result.items[0].id;
+          if (!newForm.accountId) newForm.accountId = accountList[0].id;
           return newForm;
         });
-      setAccounts(response.data.result.items);
+      const accountsFilter = accountList.filter(function (account) {
+        return account.status;
+      });
+      setAccounts(accountsFilter);
       return;
     } catch (err) {
       play("alert");
@@ -352,6 +355,15 @@ const SalesInspect = function () {
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
+    // no products
+    if (!form.products || form.products?.length === 0) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.sale.no_products,
+      });
+      setLoading(false);
+      return;
+    }
     try {
       // is editing
       if (id) {
