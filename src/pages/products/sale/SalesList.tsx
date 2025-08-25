@@ -352,12 +352,49 @@ const SalesList = function () {
             },
             customerName: {
               label: t.sale.customer,
+              handler: function (data) {
+                return (
+                  <div
+                    className="cursor"
+                    onClick={function () {
+                      navigate(`/f/sales/inspect/${data.id}`);
+                      return;
+                    }}
+                  >
+                    {data?.customerName as string}
+                  </div>
+                );
+              },
             },
             products: {
               label: t.sale.product_name,
+              handler: function (data) {
+                return (
+                  <div>
+                    {Array.isArray(data?.products) &&
+                      data?.products
+                        ?.map(function (product) {
+                          return product.productName;
+                        })
+                        ?.join(", ")}
+                  </div>
+                );
+              },
             },
             details: {
               label: t.sale.details,
+              handler: function (data) {
+                return (
+                  <div>
+                    {Array.isArray(data?.details) &&
+                      data?.details
+                        ?.map(function (detail) {
+                          return detail.title;
+                        })
+                        ?.join(", ")}
+                  </div>
+                );
+              },
             },
             price: {
               label: t.components.total,

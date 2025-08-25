@@ -86,16 +86,7 @@ const SalesInspect = function () {
     customerMobile: "",
     customerDocument: "",
 
-    products: [
-      {
-        productId: "",
-        productName: "",
-        variantId: "",
-        variantName: "",
-        quantity: 1,
-        price: "0.00",
-      } as TypeSaleProduct,
-    ],
+    products: new Array<TypeSaleProduct>(),
 
     details: new Array<TypeSaleDetails>(),
 
@@ -114,6 +105,8 @@ const SalesInspect = function () {
 
     createdAt: format(new Date(), "yyyy-MM-dd"),
   });
+
+  console.log(form);
 
   const userFinded = form.userId
     ? users.find(function (userLocal) {
@@ -242,10 +235,12 @@ const SalesInspect = function () {
       if (response.data.result.items?.[0])
         setForm(function (prevState) {
           const newForm = { ...prevState };
-          newForm.customerId = response.data.result.items[0].id;
-          newForm.customerName = response.data.result.items[0].name;
-          newForm.customerMobile = response.data.result.items[0].mobile;
-          newForm.customerDocument = response.data.result.items[0]?.document1;
+          if (!newForm?.customerId) {
+            newForm.customerId = response.data.result.items[0].id;
+            newForm.customerName = response.data.result.items[0].name;
+            newForm.customerMobile = response.data.result.items[0].mobile;
+            newForm.customerDocument = response.data.result.items[0]?.document1;
+          }
           return newForm;
         });
       setCustomers(response.data.result.items);
@@ -283,22 +278,24 @@ const SalesInspect = function () {
         });
         return;
       }
-      setProducts(response.data.result.items);
       if (response.data.result.items?.[0])
         setForm(function (prevState) {
           const newForm = { ...prevState };
-          newForm.products = [
-            {
-              productId: response.data.result.items[0].id,
-              productName: response.data.result.items[0].name,
-              variantId: response.data.result.items[0].variants[0].id,
-              variantName: response.data.result.items[0].variants[0].name,
-              quantity: 1,
-              price: response.data.result.items[0].variants[0].price,
-            },
-          ];
+          if (newForm?.products?.length === 0) {
+            newForm.products = [
+              {
+                productId: response.data.result.items[0].id,
+                productName: response.data.result.items[0].name,
+                variantId: response.data.result.items[0].variants[0].id,
+                variantName: response.data.result.items[0].variants[0].name,
+                quantity: 1,
+                price: response.data.result.items[0].variants[0].price,
+              },
+            ];
+          }
           return newForm;
         });
+      setProducts(response.data.result.items);
       return;
     } catch (err) {
       play("alert");

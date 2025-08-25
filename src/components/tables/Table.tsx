@@ -26,7 +26,7 @@ export type TableColumn = {
 
 export type TableData = {
   id: string;
-  [key: string]: string | number | boolean | object;
+  [key: string]: string | number | boolean | object | unknown[];
 };
 
 export type TableProps = {

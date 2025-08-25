@@ -34,11 +34,11 @@ export type TypeSaleDetailsType =
 export type TypeSaleDetailsMode = "percent" | "amount";
 
 export type TypeSaleDetails = {
+  title: string;
   type: TypeSaleDetailsType;
   mode: TypeSaleDetailsMode;
   percent: number;
   amount: string;
-  title: string;
 };
 
 export type TypeSaleShippingMethod =
