@@ -333,7 +333,8 @@ const SalesInspect = function () {
       if (response.data.result.items?.[0])
         setForm(function (prevState) {
           const newForm = { ...prevState };
-          newForm.accountId = response.data.result.items[0].id;
+          if (!newForm.accountId)
+            newForm.accountId = response.data.result.items[0].id;
           return newForm;
         });
       setAccounts(response.data.result.items);
@@ -556,7 +557,7 @@ const SalesInspect = function () {
                   id="sale_account_id"
                   label={t.sale.account}
                   empty={t.stacks.no_option}
-                  value={String(form.accountId)}
+                  value={form.accountId || ""}
                   options={accounts.map(function (account) {
                     return {
                       id: account.id,
