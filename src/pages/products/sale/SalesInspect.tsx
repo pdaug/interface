@@ -912,7 +912,7 @@ const SalesInspect = function () {
                         subtotalProducts,
                       );
                       newForm.details[index].percent = parseFloat(
-                        percent.toFixed(2),
+                        percent.toFixed(6),
                       );
                       newForm.details[index] = data as TypeSaleDetails;
                       return newForm;
