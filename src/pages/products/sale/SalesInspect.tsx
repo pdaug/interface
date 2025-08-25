@@ -439,7 +439,9 @@ const SalesInspect = function () {
               },
               {
                 id: "sale",
-                label: form?.saleId || t.components.empty_name,
+                label: loading
+                  ? t.components.empty_name
+                  : form?.saleId || t.components.empty_name,
                 url: `/f/sales/inspect${id ? `/${id}` : ""}`,
               },
             ]}
@@ -795,11 +797,15 @@ const SalesInspect = function () {
               <Horizontal internal={1}>
                 <div>
                   <span>{t.sale.addition}: </span>
-                  <span>{Currency(subtotalAdditions)}</span>
+                  <span style={{ color: "var(--dangerColor)" }}>
+                    {Currency(subtotalAdditions)}
+                  </span>
                 </div>
                 <div>
                   <span>{t.sale.deduction}: </span>
-                  <span>{Currency(subtotalDeductions)}</span>
+                  <span style={{ color: "var(--successColor)" }}>
+                    {Currency(subtotalDeductions)}
+                  </span>
                 </div>
               </Horizontal>
             }
@@ -958,7 +964,11 @@ const SalesInspect = function () {
                   id="sale_created_at"
                   placeholder="yyyy-MM-dd"
                   label={t.components.created_at}
-                  value={form?.createdAt || ""}
+                  value={
+                    form?.createdAt
+                      ? format(new Date(form?.createdAt), "yyyy-MM-dd")
+                      : ""
+                  }
                   onChange={function () {
                     return;
                   }}

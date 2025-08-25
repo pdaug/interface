@@ -220,7 +220,7 @@ const Sheets = function ({
                   className="remove"
                   onClick={() => remove(rowIndex)}
                 >
-                  <Trash weight="bold" width={24} />
+                  <Trash />
                 </button>
               </div>
             );
@@ -234,7 +234,7 @@ const Sheets = function ({
       <div className="sheetFooter">
         <div className="sheetFooterContainer">{footer}</div>
         <button type="button" className="add" onClick={add}>
-          <Plus weight="bold" width={24} />
+          <Plus />
         </button>
       </div>
     </div>

@@ -16,7 +16,7 @@ import { endOfDay, startOfYear } from "date-fns";
 import apis from "../../../apis";
 
 // assets
-import { SaleStages } from "../../../assets/Sale";
+import { SaleStages, SaleStagesCategory } from "../../../assets/Sale";
 
 // utils
 import Download from "../../../utils/Download";
@@ -50,6 +50,7 @@ import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import Calculate from "../../../utils/Calculate";
 
 const pageSize = 10;
 
@@ -246,11 +247,11 @@ const SalesList = function () {
           text={t.sale.new}
           onClick={() => navigate("/f/sales/inspect")}
         />
-        <div style={{ maxWidth: 128 }}>
+        <div style={{ maxWidth: 160 }}>
           <InputSelect
             label=""
             value={stage}
-            empty={t.stacks.no_option}
+            empty={t.sale.no_stage}
             options={SaleStages.map(function (stage) {
               return {
                 id: stage,
@@ -340,12 +341,30 @@ const SalesList = function () {
           columns={{
             stage: {
               label: t.sale.stage,
-              maxWidth: "96px",
+              maxWidth: 96,
               handler: function (data) {
                 return (
                   <Badge
-                    value={String(data.status)}
-                    category={data.status ? "Success" : "Danger"}
+                    value={
+                      t.sale?.[data.stage as keyof typeof t.sale] ||
+                      t.components.unknown
+                    }
+                    category={
+                      SaleStagesCategory?.[data.stage as TypeSaleStage] ||
+                      "Neutral"
+                    }
+                  />
+                );
+              },
+            },
+            saleId: {
+              label: t.sale.id,
+              maxWidth: 96,
+              handler: function (data) {
+                return (
+                  <Badge
+                    category="Neutral"
+                    value={(data?.saleId as string) || ""}
                   />
                 );
               },
@@ -384,23 +403,101 @@ const SalesList = function () {
             details: {
               label: t.sale.details,
               handler: function (data) {
+                const subtotalProducts = Calculate.products(
+                  (data?.products as Record<string, unknown>[]) || [],
+                );
+
+                const subtotalAdditions = Calculate.details(
+                  (data?.details as Record<string, unknown>[])?.filter(
+                    function (detail) {
+                      return (
+                        detail?.type === "tax" ||
+                        detail?.type === "fee" ||
+                        detail?.type === "shipping"
+                      );
+                    },
+                  ) || [],
+                  subtotalProducts,
+                );
+
+                const subtotalDeductions = Calculate.details(
+                  (data?.details as Record<string, unknown>[])?.filter(
+                    function (detail) {
+                      return (
+                        detail?.type === "discount" ||
+                        detail?.type === "promo" ||
+                        detail?.type === "coupon" ||
+                        detail?.type === "voucher"
+                      );
+                    },
+                  ) || [],
+                  subtotalProducts,
+                );
+
                 return (
                   <div>
-                    {Array.isArray(data?.details) &&
-                      data?.details
-                        ?.map(function (detail) {
-                          return detail.title;
-                        })
-                        ?.join(", ")}
+                    {!subtotalAdditions && !subtotalDeductions && (
+                      <i style={{ opacity: 0.6 }}>{t.sale.empty_details}</i>
+                    )}
+                    {Boolean(subtotalAdditions) && (
+                      <div>
+                        <span>{t.sale.addition}: </span>
+                        <span style={{ color: "var(--dangerColor)" }}>
+                          {Currency(subtotalAdditions)}
+                        </span>
+                      </div>
+                    )}
+                    {Boolean(subtotalDeductions) && (
+                      <div>
+                        <span>{t.sale.deduction}: </span>
+                        <span style={{ color: "var(--successColor)" }}>
+                          {Currency(subtotalDeductions)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 );
               },
             },
-            price: {
+            total: {
               label: t.components.total,
+              maxWidth: 128,
               handler: function (data) {
-                if (!Array.isArray(data.variants)) return "";
-                return <div>{Currency(data?.variants?.[0].price || 0)}</div>;
+                const subtotalProducts = Calculate.products(
+                  (data?.products as Record<string, unknown>[]) || [],
+                );
+
+                const subtotalAdditions = Calculate.details(
+                  (data?.details as Record<string, unknown>[])?.filter(
+                    function (detail) {
+                      return (
+                        detail?.type === "tax" ||
+                        detail?.type === "fee" ||
+                        detail?.type === "shipping"
+                      );
+                    },
+                  ) || [],
+                  subtotalProducts,
+                );
+
+                const subtotalDeductions = Calculate.details(
+                  (data?.details as Record<string, unknown>[])?.filter(
+                    function (detail) {
+                      return (
+                        detail?.type === "discount" ||
+                        detail?.type === "promo" ||
+                        detail?.type === "coupon" ||
+                        detail?.type === "voucher"
+                      );
+                    },
+                  ) || [],
+                  subtotalProducts,
+                );
+
+                const total =
+                  subtotalProducts + subtotalAdditions - subtotalDeductions;
+
+                return <div>{Currency(total || 0)}</div>;
               },
             },
             user: {
