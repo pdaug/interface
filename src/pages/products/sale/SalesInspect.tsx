@@ -337,10 +337,8 @@ const SalesInspect = function () {
           if (!newForm.accountId) newForm.accountId = accountList[0].id;
           return newForm;
         });
-      const accountsFilter = accountList.filter(function (account) {
-        return account.status;
-      });
-      setAccounts(accountsFilter);
+
+      setAccounts(accountList);
       return;
     } catch (err) {
       play("alert");
@@ -522,6 +520,7 @@ const SalesInspect = function () {
                       id: customer.id,
                       value: customer.id,
                       text: customer.name,
+                      disabled: !customer.status,
                     };
                   })}
                   onChange={function (event) {
@@ -549,11 +548,12 @@ const SalesInspect = function () {
                   label={t.sale.user}
                   empty={t.stacks.no_option}
                   value={String(form.userId)}
-                  options={users.map(function (customer) {
+                  options={users.map(function (user) {
                     return {
-                      id: customer.id,
-                      value: customer.id,
-                      text: customer.name,
+                      id: user.id,
+                      value: user.id,
+                      text: user.name,
+                      disabled: !user.status,
                     };
                   })}
                   onChange={function (event) {
@@ -577,6 +577,7 @@ const SalesInspect = function () {
                       id: account.id,
                       value: account.id,
                       text: account.name,
+                      disabled: !account.status,
                     };
                   })}
                   onChange={function (event) {
