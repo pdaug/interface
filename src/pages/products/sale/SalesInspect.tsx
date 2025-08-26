@@ -337,7 +337,6 @@ const SalesInspect = function () {
           if (!newForm.accountId) newForm.accountId = accountList[0].id;
           return newForm;
         });
-
       setAccounts(accountList);
       return;
     } catch (err) {
@@ -358,6 +357,18 @@ const SalesInspect = function () {
       play("alert");
       toast.warning(t.toast.warning_error, {
         description: t.sale.no_products,
+      });
+      setLoading(false);
+      return;
+    }
+    // check values details
+    const hasSomeInvalidValue = form.details?.some(function (detail) {
+      return detail.amount === "0.00" || detail.percent === 0;
+    });
+    if (hasSomeInvalidValue) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.sale.some_invalid_detail,
       });
       setLoading(false);
       return;
