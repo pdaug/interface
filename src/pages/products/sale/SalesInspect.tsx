@@ -90,8 +90,13 @@ const SalesInspect = function () {
 
     shippingMethod: undefined,
     shippingCost: "0.00",
+    shippingFromAddress: "",
+    shippingFromPostal: "",
+    shippingToAddress: "",
+    shippingToPostal: "",
 
     userId: user.id,
+    accountId: "",
 
     createdAt: format(new Date(), "yyyy-MM-dd"),
   });
@@ -1184,7 +1189,7 @@ const SalesInspect = function () {
                       const toastId = toast.loading(t.components.loading);
                       try {
                         const response = await apis.PostalCode(postalCode);
-                        newForm.shippingFromAddress = `${response.data?.street}, ${response.data?.neighborhood}, ${response.data?.city} - ${response.data?.state}`;
+                        newForm.shippingToAddress = `${response.data?.street}, ${response.data?.neighborhood}, ${response.data?.city} - ${response.data?.state}`;
                         toast.dismiss(toastId);
                         play("ok");
                         toast.success(t.toast.success, {
