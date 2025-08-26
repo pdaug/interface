@@ -74,14 +74,10 @@ export type TypeSale = {
 
   shippingMethod?: TypeSaleShippingMethod;
   shippingCost?: string;
-
-  addressStreet?: string;
-  addressNumber?: string;
-  addressComplement?: string;
-  addressPostalCode?: string;
-  addressNeighborhood?: string;
-  addressCity?: string;
-  addressState?: string;
+  shippingFromPostal?: string;
+  shippingFromAddress?: string;
+  shippingToPostal?: string;
+  shippingToAddress?: string;
 
   userId: string;
   accountId: string;

@@ -20,7 +20,6 @@ import {
   SaleShippingMethod,
 } from "../../../assets/Sale";
 import { MaskPostalCode } from "../../../assets/Mask";
-import { SettingsAddressState } from "../../../assets/Settings";
 
 // types
 import {
@@ -74,7 +73,6 @@ const SalesInspect = function () {
   const [products, setProducts] = useState<TypeProduct[]>([]);
   const [accounts, setAccounts] = useState<TypeAccount[]>([]);
   const [customers, setCustomers] = useState<TypeCustomer[]>([]);
-  const [position, setPosition] = useState<[number, number] | null>(null);
 
   const [form, setForm] = useState<Partial<TypeSale>>({
     saleId: GenerateNumbers(6),
@@ -92,14 +90,6 @@ const SalesInspect = function () {
 
     shippingMethod: undefined,
     shippingCost: "0.00",
-
-    addressStreet: "",
-    addressNumber: "",
-    addressComplement: "",
-    addressPostalCode: "",
-    addressNeighborhood: "",
-    addressCity: "",
-    addressState: "SP",
 
     userId: user.id,
 
@@ -140,40 +130,6 @@ const SalesInspect = function () {
   );
 
   const total = subtotalProducts + subtotalAdditions - subtotalDeductions;
-
-  // get position
-  useAsync(
-    async function () {
-      if (!form.addressStreet || !form.addressNumber || !form.addressCity)
-        return;
-      try {
-        const response = await apis.AddressPosition({
-          street: form.addressStreet,
-          number: form.addressNumber,
-          city: form.addressCity,
-        });
-        if (
-          !response.data ||
-          !response.data?.[0]?.lat ||
-          !response.data?.[0]?.lon
-        ) {
-          console.warn(
-            "[src/pages/settings/users/UsersInspect.tsx]",
-            response.data,
-          );
-          return;
-        }
-        setPosition([
-          parseFloat(String(response.data[0].lat)),
-          parseFloat(String(response.data[0].lon)),
-        ]);
-      } catch (err) {
-        console.error("[src/pages/settings/users/UsersInspect.tsx]", err);
-      }
-      return;
-    },
-    [form.addressStreet, form.addressNumber, form.addressCity],
-  );
 
   // fetch sale
   useAsync(async function () {
@@ -1104,231 +1060,182 @@ const SalesInspect = function () {
             title={t.sale.title_address}
             description={t.sale.subtitle_address}
           >
-            <Horizontal internal={1} external={1}>
-              <Vertical internal={1} className="flex1">
-                <Horizontal internal={1}>
-                  <InputSelect
-                    disabled={loading}
-                    name="shippingMethod"
-                    id="sale_shipping_method"
-                    empty={t.stacks.no_option}
-                    label={t.sale.shipping_method}
-                    value={form?.shippingMethod || ""}
-                    options={SaleShippingMethod.map(function (shipping) {
-                      return {
-                        id: shipping,
-                        value: shipping,
-                        text:
-                          t.sale?.[shipping as keyof typeof t.sale] ||
-                          t.components.unknown,
-                      };
-                    })}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.shippingMethod = (event.currentTarget?.value ||
-                        "") as TypeSaleShippingMethod;
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                  <InputMoney
-                    disabled={loading}
-                    placeholder="0.00"
-                    name="shippingCost"
-                    id="sale_shipping_cost"
-                    label={t.sale.shipping_cost}
-                    value={form?.shippingCost || "0.00"}
-                    onChange={function (value) {
-                      const newForm = { ...form };
-                      newForm.shippingCost = value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                </Horizontal>
-
-                <Horizontal internal={1}>
-                  <InputMask
-                    mask={MaskPostalCode}
-                    name="addressPostalCode"
-                    id="user_address_postal_code"
-                    disabled={loading}
-                    value={form?.addressPostalCode || ""}
-                    label={t.components.address_postal_code}
-                    placeholder={t.components.address_postal_code_placeholder}
-                    onChange={async function (event) {
-                      const newForm = { ...form };
-                      const postalCodeRaw = event.currentTarget?.value || "";
-                      const postalCode = postalCodeRaw.replace(/\D/g, "");
-                      newForm.addressPostalCode = postalCode;
-                      if (postalCode.length === 8) {
-                        setLoading(true);
-                        const toastId = toast.loading(t.components.loading);
-                        try {
-                          const response = await apis.PostalCode(postalCode);
-                          newForm.addressStreet =
-                            response.data?.street || newForm.addressStreet;
-                          newForm.addressCity =
-                            response.data?.city || newForm.addressCity;
-                          newForm.addressNeighborhood =
-                            response.data?.neighborhood ||
-                            newForm.addressNeighborhood;
-                          newForm.addressState =
-                            response.data?.state || newForm.addressState;
-                          toast.dismiss(toastId);
-                          play("ok");
-                          toast.success(t.toast.success, {
-                            description: t.toast.success_find,
-                          });
-                        } catch (err) {
-                          console.error(
-                            "[src/pages/settings/users/UsersInspect.tsx]",
-                            err,
-                          );
-                          toast.dismiss(toastId);
-                          play("alert");
-                          toast.warning(t.toast.warning_error, {
-                            description: t.toast.warning_find,
-                          });
-                        } finally {
-                          setLoading(false);
-                        }
-                      }
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-
-                  <Input
-                    min={4}
-                    max={64}
-                    name="addressStreet"
-                    id="user_address_street"
-                    disabled={loading}
-                    value={form?.addressStreet || ""}
-                    label={t.components.address_street}
-                    placeholder={t.components.address_street_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.addressStreet = event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                </Horizontal>
-
-                <Horizontal internal={1}>
-                  <Input
-                    min={1}
-                    max={8}
-                    name="addressNumber"
-                    id="user_address_number"
-                    disabled={loading}
-                    value={form?.addressNumber || ""}
-                    label={t.components.address_number}
-                    placeholder={t.components.address_number_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.addressNumber = event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-
-                  <Input
-                    max={32}
-                    name="addressComplement"
-                    id="user_address_complement"
-                    disabled={loading}
-                    value={form?.addressComplement || ""}
-                    label={t.components.address_complement}
-                    placeholder={t.components.address_complement_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.addressComplement =
-                        event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-
-                  <Input
-                    max={64}
-                    name="addressNeighborhood"
-                    id="user_address_neighborhood"
-                    disabled={loading}
-                    value={form?.addressNeighborhood || ""}
-                    label={t.components.address_neighborhood}
-                    placeholder={t.components.address_neighborhood_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.addressNeighborhood =
-                        event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                </Horizontal>
-
-                <Horizontal internal={1}>
-                  <Input
-                    min={2}
-                    max={64}
-                    name="addressCity"
-                    id="user_address_city"
-                    value={form?.addressCity || ""}
-                    disabled={loading}
-                    label={t.components.address_city}
-                    placeholder={t.components.address_city_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.addressCity = event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-
-                  <InputSelect
-                    name="addressState"
-                    empty={t.stacks.no_option}
-                    id="user_address_state"
-                    value={form?.addressState || ""}
-                    disabled={loading}
-                    label={t.components.address_state}
-                    options={SettingsAddressState.map(function (state) {
-                      return {
-                        id: state.code,
-                        value: state.code,
-                        text: state.name,
-                      };
-                    })}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.addressState = event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                </Horizontal>
-
-                <Callout
-                  Icon={MapTrifold}
-                  IconSize={16}
-                  category="Info"
-                  text={t.callout.postal_code_search}
-                  styles={{ fontSize: "var(--textSmall)" }}
+            <Vertical internal={1} external={1} className="flex1">
+              <Horizontal internal={1}>
+                <InputSelect
+                  disabled={loading}
+                  name="shippingMethod"
+                  id="sale_shipping_method"
+                  empty={t.stacks.no_option}
+                  label={t.sale.shipping_method}
+                  value={form?.shippingMethod || ""}
+                  options={SaleShippingMethod.map(function (shipping) {
+                    return {
+                      id: shipping,
+                      value: shipping,
+                      text:
+                        t.sale?.[shipping as keyof typeof t.sale] ||
+                        t.components.unknown,
+                    };
+                  })}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.shippingMethod = (event.currentTarget?.value ||
+                      "") as TypeSaleShippingMethod;
+                    setForm(newForm);
+                    return;
+                  }}
                 />
-              </Vertical>
+                <InputMoney
+                  disabled={loading}
+                  placeholder="0.00"
+                  name="shippingCost"
+                  id="sale_shipping_cost"
+                  label={t.sale.shipping_cost}
+                  value={form?.shippingCost || "0.00"}
+                  onChange={function (value) {
+                    const newForm = { ...form };
+                    newForm.shippingCost = value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
 
-              {position && (
-                <iframe
-                  loading="lazy"
-                  width="25%"
-                  height={320}
-                  src={`https://maps.google.com/maps?q=${position.join(",")}&z=15&output=embed&maptype=satellite`}
-                ></iframe>
-              )}
-            </Horizontal>
+              <Horizontal internal={1}>
+                <InputMask
+                  disabled={loading}
+                  mask={MaskPostalCode}
+                  name="shippingFromPostal"
+                  id="user_shipping_from_postal"
+                  value={form?.shippingFromPostal || ""}
+                  label={t.components.address_postal_code}
+                  placeholder={t.components.address_postal_code_placeholder}
+                  onChange={async function (event) {
+                    const newForm = { ...form };
+                    const postalCodeRaw = event.currentTarget?.value || "";
+                    const postalCode = postalCodeRaw.replace(/\D/g, "");
+                    newForm.shippingFromPostal = postalCode;
+                    if (postalCode.length === 8) {
+                      setLoading(true);
+                      const toastId = toast.loading(t.components.loading);
+                      try {
+                        const response = await apis.PostalCode(postalCode);
+                        newForm.shippingFromAddress = `${response.data?.street}, ${response.data?.neighborhood}, ${response.data?.city} - ${response.data?.state}`;
+                        toast.dismiss(toastId);
+                        play("ok");
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_find,
+                        });
+                      } catch (err) {
+                        console.error(
+                          "[src/pages/products/sale/SalesInspect.tsx]",
+                          err,
+                        );
+                        toast.dismiss(toastId);
+                        play("alert");
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.warning_find,
+                        });
+                      } finally {
+                        setLoading(false);
+                      }
+                    }
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+
+                <Input
+                  min={4}
+                  max={64}
+                  disabled={loading}
+                  name="shippingFromAddress"
+                  id="shipping_from_address"
+                  label={t.components.address_street}
+                  value={form?.shippingFromAddress || ""}
+                  placeholder={t.components.address_street_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.shippingFromAddress =
+                      event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+
+              <Horizontal internal={1}>
+                <InputMask
+                  disabled={loading}
+                  mask={MaskPostalCode}
+                  name="shippingToPostal"
+                  id="user_shipping_to_postal"
+                  value={form?.shippingToPostal || ""}
+                  label={t.components.address_postal_code}
+                  placeholder={t.components.address_postal_code_placeholder}
+                  onChange={async function (event) {
+                    const newForm = { ...form };
+                    const postalCodeRaw = event.currentTarget?.value || "";
+                    const postalCode = postalCodeRaw.replace(/\D/g, "");
+                    newForm.shippingToPostal = postalCode;
+                    if (postalCode.length === 8) {
+                      setLoading(true);
+                      const toastId = toast.loading(t.components.loading);
+                      try {
+                        const response = await apis.PostalCode(postalCode);
+                        newForm.shippingFromAddress = `${response.data?.street}, ${response.data?.neighborhood}, ${response.data?.city} - ${response.data?.state}`;
+                        toast.dismiss(toastId);
+                        play("ok");
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_find,
+                        });
+                      } catch (err) {
+                        console.error(
+                          "[src/pages/products/sale/SalesInspect.tsx]",
+                          err,
+                        );
+                        toast.dismiss(toastId);
+                        play("alert");
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.warning_find,
+                        });
+                      } finally {
+                        setLoading(false);
+                      }
+                    }
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+
+                <Input
+                  min={4}
+                  max={64}
+                  disabled={loading}
+                  name="shippingToAddress"
+                  id="shipping_to_address"
+                  label={t.components.address_street}
+                  value={form?.shippingToAddress || ""}
+                  placeholder={t.components.address_street_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.shippingToAddress =
+                      event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+
+              <Callout
+                Icon={MapTrifold}
+                IconSize={16}
+                category="Info"
+                text={t.callout.postal_code_search}
+                styles={{ fontSize: "var(--textSmall)" }}
+              />
+            </Vertical>
           </Wrapper>
 
           <Callout
