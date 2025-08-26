@@ -72,3 +72,26 @@ export type ApiAddressResult = {
   lat: string | number;
   lon: string | number;
 }[];
+
+export type ApiShipping = {
+  id: number;
+  name: string;
+  company: {
+    id: number;
+    name: string;
+    picture?: string;
+  };
+
+  // error
+  error?: string;
+
+  // success
+  price?: string;
+  custom_price?: string;
+  currency?: string;
+  delivery_time?: number;
+  delivery_range?: {
+    min: number;
+    max: number;
+  };
+}[];
