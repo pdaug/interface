@@ -29,6 +29,7 @@ export type SheetsFormatter = {
 };
 
 export type SheetProps = {
+  title?: string;
   add: () => void;
   remove: (index: number) => void;
   rows: SheetsBase[];
@@ -39,6 +40,7 @@ export type SheetProps = {
 };
 
 const Sheets = function ({
+  title = "",
   add,
   remove,
   rows,
@@ -50,6 +52,7 @@ const Sheets = function ({
   const t = useTranslate();
   return (
     <div className="sheet" style={styles}>
+      <div className="sheetTitle">{title}</div>
       <div className="sheetHeader">
         {Object.values(formatter)?.map(function (value, index) {
           const format = value(0);

@@ -661,6 +661,7 @@ const SalesInspect = function () {
           </Wrapper>
 
           <Sheets
+            title={t.product.products}
             empty={t.sale.no_products}
             rows={form?.products || []}
             footer={
@@ -811,6 +812,7 @@ const SalesInspect = function () {
           />
 
           <Sheets
+            title={t.sale.details}
             empty={t.sale.no_details}
             rows={form?.details || []}
             footer={
