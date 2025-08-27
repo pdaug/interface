@@ -13,22 +13,17 @@ export type ShippingOptions = {
 const Shipping = function (
   from: string,
   to: string,
-  {
-    width = 10,
-    height = 10,
-    length = 10,
-    insurance_value = 0,
-  }: ShippingOptions,
+  options?: ShippingOptions,
 ) {
   const url = `https://www.melhorenvio.com.br/api/v2/calculator`;
   return axios.get<ApiShipping>(url, {
     params: {
       from,
       to,
-      width,
-      height,
-      length,
-      insurance_value,
+      width: options?.width || 10,
+      height: options?.height || 10,
+      length: options?.length || 10,
+      insurance_value: options?.insurance_value || 0,
     },
   });
 };

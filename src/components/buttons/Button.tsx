@@ -30,6 +30,7 @@ export type ButtonProps = {
   IconSize?: number;
   IconPosition?: ButtonIconPosition;
   style?: React.CSSProperties;
+  stylesContainer?: React.CSSProperties;
   type?: ButtonType;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   onlyIcon?: boolean;
@@ -48,6 +49,7 @@ const Button = function ({
   IconPosition = "left",
   text,
   style,
+  stylesContainer,
   onClick,
   disabled,
   onlyIcon,
@@ -67,7 +69,7 @@ const Button = function ({
       {Icon && IconPosition === "left" && (
         <Icon weight={IconWeight} size={IconSize} />
       )}
-      {text && <span>{text}</span>}
+      {text && <span style={stylesContainer}>{text}</span>}
       {Icon && IconPosition === "right" && (
         <Icon weight={IconWeight} size={IconSize} />
       )}

@@ -74,6 +74,7 @@ export type TypeSale = {
 
   shippingMethod?: TypeSaleShippingMethod;
   shippingCost?: string;
+  shippingDescription?: string;
   shippingFromPostal?: string;
   shippingFromAddress?: string;
   shippingToPostal?: string;
