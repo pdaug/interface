@@ -16,7 +16,7 @@ import { endOfDay, startOfYear } from "date-fns";
 import apis from "../../../apis";
 
 // assets
-import { SaleStages, SaleStagesCategory } from "../../../assets/Sale";
+import { SaleStagesGroupped, SaleStagesCategory } from "../../../assets/Sale";
 
 // utils
 import Download from "../../../utils/Download";
@@ -252,11 +252,12 @@ const SalesList = function () {
             label=""
             value={stage}
             empty={t.sale.no_stage}
-            options={SaleStages.map(function (stage) {
+            options={SaleStagesGroupped.map(function (stage) {
               return {
-                id: stage,
-                value: stage,
-                text: t.sale?.[stage as keyof typeof t.sale] || stage,
+                id: stage.value,
+                value: stage.value,
+                text: t.sale[stage.value as keyof typeof t.sale],
+                group: t.sale[stage.group as keyof typeof t.sale],
               };
             })}
             onChange={function (event) {
@@ -437,37 +438,37 @@ const SalesList = function () {
                 const subtotalShipping = Number(data?.shippingCost) || 0;
 
                 return (
-                  <div>
+                  <Vertical
+                    internal={0.4}
+                    styles={{ alignItems: "flex-start" }}
+                  >
                     {!subtotalAdditions &&
                       !subtotalDeductions &&
                       !subtotalShipping && (
                         <i style={{ opacity: 0.6 }}>{t.sale.empty_details}</i>
                       )}
                     {Boolean(subtotalShipping) && (
-                      <div>
-                        <span>{t.sale.shipping}: </span>
-                        <span style={{ color: "var(--dangerColor)" }}>
-                          +{Currency(subtotalShipping)}
-                        </span>
-                      </div>
+                      <Badge
+                        category="Danger"
+                        styles={{ justifyContent: "flex-start" }}
+                        value={`${t.sale.shipping}: +${Currency(subtotalShipping)}`}
+                      />
                     )}
                     {Boolean(subtotalAdditions) && (
-                      <div>
-                        <span>{t.sale.addition}: </span>
-                        <span style={{ color: "var(--dangerColor)" }}>
-                          +{Currency(subtotalAdditions)}
-                        </span>
-                      </div>
+                      <Badge
+                        category="Danger"
+                        styles={{ justifyContent: "flex-start" }}
+                        value={`${t.sale.addition}: +${Currency(subtotalAdditions)}`}
+                      />
                     )}
                     {Boolean(subtotalDeductions) && (
-                      <div>
-                        <span>{t.sale.deduction}: </span>
-                        <span style={{ color: "var(--successColor)" }}>
-                          -{Currency(subtotalDeductions)}
-                        </span>
-                      </div>
+                      <Badge
+                        category="Success"
+                        styles={{ justifyContent: "flex-start" }}
+                        value={`${t.sale.deduction}: +${Currency(subtotalDeductions)}`}
+                      />
                     )}
-                  </div>
+                  </Vertical>
                 );
               },
             },
