@@ -25,15 +25,13 @@ export type TypeSaleProduct = {
   price: string;
 };
 
-// UPDATE
 export type TypeSaleDetailsType =
   | "tax"
   | "discount"
   | "promo"
   | "coupon"
   | "voucher"
-  | "fee"
-  | "shipping";
+  | "fee";
 
 export type TypeSaleDetailsMode = "percent" | "amount";
 
@@ -85,6 +83,7 @@ export type TypeSale = {
   shippingToAddress?: string;
 
   userId: string;
+  sellerId: string;
   accountId: string;
 
   createdAt: string;

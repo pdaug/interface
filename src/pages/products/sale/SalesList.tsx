@@ -434,16 +434,28 @@ const SalesList = function () {
                   subtotalProducts,
                 );
 
+                const subtotalShipping = Number(data?.shippingCost) || 0;
+
                 return (
                   <div>
-                    {!subtotalAdditions && !subtotalDeductions && (
-                      <i style={{ opacity: 0.6 }}>{t.sale.empty_details}</i>
+                    {!subtotalAdditions &&
+                      !subtotalDeductions &&
+                      !subtotalShipping && (
+                        <i style={{ opacity: 0.6 }}>{t.sale.empty_details}</i>
+                      )}
+                    {Boolean(subtotalShipping) && (
+                      <div>
+                        <span>{t.sale.shipping}: </span>
+                        <span style={{ color: "var(--dangerColor)" }}>
+                          +{Currency(subtotalShipping)}
+                        </span>
+                      </div>
                     )}
                     {Boolean(subtotalAdditions) && (
                       <div>
                         <span>{t.sale.addition}: </span>
                         <span style={{ color: "var(--dangerColor)" }}>
-                          {Currency(subtotalAdditions)}
+                          +{Currency(subtotalAdditions)}
                         </span>
                       </div>
                     )}
@@ -451,7 +463,7 @@ const SalesList = function () {
                       <div>
                         <span>{t.sale.deduction}: </span>
                         <span style={{ color: "var(--successColor)" }}>
-                          {Currency(subtotalDeductions)}
+                          -{Currency(subtotalDeductions)}
                         </span>
                       </div>
                     )}
@@ -494,30 +506,39 @@ const SalesList = function () {
                   subtotalProducts,
                 );
 
+                const subtotalShipping = Number(data?.shippingCost) || 0;
+
                 const total =
-                  subtotalProducts + subtotalAdditions - subtotalDeductions;
+                  subtotalProducts +
+                  subtotalAdditions -
+                  subtotalDeductions +
+                  subtotalShipping;
 
                 return <div>{Currency(total || 0)}</div>;
               },
             },
             user: {
-              label: t.sale.user,
+              label: t.sale.seller,
               handler: function (data) {
                 const userFinded = users?.find(function (user) {
                   return user.id === data.userId;
                 });
+                const sellerFinded =
+                  users?.find(function (user) {
+                    return user.id === data.sellerId;
+                  }) || userFinded;
                 return (
                   <Tooltip
-                    content={t.components[userFinded?.role || "collaborator"]}
+                    content={t.components[sellerFinded?.role || "collaborator"]}
                   >
                     <Profile
                       photoCircle
                       photoSize={3}
                       padding={false}
                       styles={{ lineHeight: 1 }}
-                      photo={userFinded?.photo || ""}
-                      description={userFinded?.email || ""}
-                      name={userFinded?.name || t.components.unknown}
+                      photo={sellerFinded?.photo || ""}
+                      description={sellerFinded?.email || ""}
+                      name={sellerFinded?.name || t.components.unknown}
                     />
                   </Tooltip>
                 );

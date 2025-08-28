@@ -97,6 +97,7 @@ const SalesInspect = function () {
     shippingToPostal: "",
 
     userId: user.id,
+    sellerId: user.id,
     accountId: "",
 
     createdAt: format(new Date(), "yyyy-MM-dd"),
@@ -112,11 +113,7 @@ const SalesInspect = function () {
 
   const subtotalAdditions = Calculate.details(
     form?.details?.filter(function (detail) {
-      return (
-        detail?.type === "tax" ||
-        detail?.type === "fee" ||
-        detail?.type === "shipping"
-      );
+      return detail?.type === "tax" || detail?.type === "fee";
     }) || [],
     subtotalProducts,
   );
@@ -133,7 +130,13 @@ const SalesInspect = function () {
     subtotalProducts,
   );
 
-  const total = subtotalProducts + subtotalAdditions - subtotalDeductions;
+  const subtotalShipping = Number(form?.shippingCost) || 0;
+
+  const total =
+    subtotalProducts +
+    subtotalAdditions -
+    subtotalDeductions +
+    subtotalShipping;
 
   // fetch sale
   useAsync(async function () {
@@ -549,12 +552,12 @@ const SalesInspect = function () {
 
                 <InputSelect
                   required
-                  name="userId"
+                  name="sellerId"
                   disabled={loading}
-                  id="sale_user_id"
-                  label={t.sale.user}
+                  id="sale_seller_id"
+                  label={t.sale.seller}
                   empty={t.stacks.no_option}
-                  value={String(form.userId)}
+                  value={String(form.sellerId)}
                   options={users.map(function (user) {
                     return {
                       id: user.id,
@@ -565,7 +568,7 @@ const SalesInspect = function () {
                   })}
                   onChange={function (event) {
                     const newForm = { ...form };
-                    newForm.userId = event.currentTarget?.value || "";
+                    newForm.sellerId = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}
@@ -820,13 +823,13 @@ const SalesInspect = function () {
                 <div>
                   <span>{t.sale.addition}: </span>
                   <span style={{ color: "var(--dangerColor)" }}>
-                    {Currency(subtotalAdditions)}
+                    +{Currency(subtotalAdditions)}
                   </span>
                 </div>
                 <div>
                   <span>{t.sale.deduction}: </span>
                   <span style={{ color: "var(--successColor)" }}>
-                    {Currency(subtotalDeductions)}
+                    -{Currency(subtotalDeductions)}
                   </span>
                 </div>
               </Horizontal>
