@@ -21,6 +21,26 @@ export const SaleStages = [
   "disputed",
 ];
 
+export const SaleStagesGroupped = [
+  { value: "draft", group: "funnel" },
+  { value: "open", group: "funnel" },
+  { value: "proposal", group: "funnel" },
+  { value: "negotiation", group: "funnel" },
+  { value: "pending", group: "funnel" },
+  { value: "won", group: "funnel" },
+  { value: "lost", group: "funnel" },
+
+  { value: "processing", group: "closing" },
+  { value: "paid", group: "closing" },
+  { value: "shipped", group: "closing" },
+  { value: "completed", group: "closing" },
+  { value: "canceled", group: "closing" },
+  { value: "failed", group: "closing" },
+  { value: "refunded", group: "closing" },
+  { value: "returned", group: "closing" },
+  { value: "disputed", group: "closing" },
+];
+
 export const SaleStagesCategory: Record<TypeSaleStage, BadgeCategories> = {
   draft: "Neutral",
   open: "Warning",

@@ -339,6 +339,18 @@ const SalesList = function () {
           loading={loading}
           data={sales as TableData[]}
           columns={{
+            saleId: {
+              label: t.sale.id,
+              maxWidth: 96,
+              handler: function (data) {
+                return (
+                  <Badge
+                    category="Neutral"
+                    value={(data?.saleId as string) || ""}
+                  />
+                );
+              },
+            },
             stage: {
               label: t.sale.stage,
               maxWidth: 96,
@@ -353,18 +365,6 @@ const SalesList = function () {
                       SaleStagesCategory?.[data.stage as TypeSaleStage] ||
                       "Neutral"
                     }
-                  />
-                );
-              },
-            },
-            saleId: {
-              label: t.sale.id,
-              maxWidth: 96,
-              handler: function (data) {
-                return (
-                  <Badge
-                    category="Neutral"
-                    value={(data?.saleId as string) || ""}
                   />
                 );
               },

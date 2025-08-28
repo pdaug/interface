@@ -429,6 +429,8 @@ const TranslatePt = {
     title_address: "Logística da venda",
     subtitle_address: "Preencha com as informações de endereço dessa venda",
     // stages
+    funnel: "Estágios do funil",
+    closing: "Estágios de fechamento",
     draft: "Rascunho",
     open: "Aberto",
     pending: "Pendente",
@@ -1258,6 +1260,8 @@ const TranslateEn = {
     title_address: "Logistics of sale",
     subtitle_address: "Fill with address information of this sale",
     // stages
+    funnel: "Funnel stages",
+    closing: "Closing stages",
     draft: "Draft",
     open: "Open",
     pending: "Pending",

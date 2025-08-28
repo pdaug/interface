@@ -14,9 +14,9 @@ import { GenerateNumbers } from "../../../utils/GenerateId";
 
 // assets
 import {
-  SaleStages,
   SaleDetailsMode,
   SaleDetailsType,
+  SaleStagesGroupped,
   SaleShippingMethod,
 } from "../../../assets/Sale";
 import { MaskPostalCode } from "../../../assets/Mask";
@@ -58,6 +58,7 @@ import Profile from "../../../components/profiles/Profile";
 import Callout from "../../../components/callouts/Callout";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import Badge from "../../../components/badges/Badge";
 
 const SalesInspect = function () {
   const t = useTranslate();
@@ -77,7 +78,7 @@ const SalesInspect = function () {
 
   const [form, setForm] = useState<Partial<TypeSale>>({
     saleId: GenerateNumbers(6),
-    stage: "open" as TypeSaleStage,
+    stage: "draft" as TypeSaleStage,
     description: "",
 
     customerId: "",
@@ -485,11 +486,12 @@ const SalesInspect = function () {
                   label={t.sale.stage}
                   value={form.stage || ""}
                   empty={t.stacks.no_option}
-                  options={SaleStages.map(function (stage) {
+                  options={SaleStagesGroupped.map(function (stage) {
                     return {
-                      id: stage,
-                      value: stage,
-                      text: t.sale[stage as keyof typeof t.sale],
+                      id: stage.value,
+                      value: stage.value,
+                      text: t.sale[stage.value as keyof typeof t.sale],
+                      group: t.sale[stage.group as keyof typeof t.sale],
                     };
                   })}
                   onChange={function (event) {
@@ -668,10 +670,10 @@ const SalesInspect = function () {
             empty={t.sale.no_products}
             rows={form?.products || []}
             footer={
-              <div style={{ fontSize: "var(--textSmall)" }}>
-                <span>{t.product.products}: </span>
-                <span>{Currency(subtotalProducts)}</span>
-              </div>
+              <Badge
+                category="Info"
+                value={`${t.product.products}: ${Currency(subtotalProducts)}`}
+              />
             }
             add={function () {
               setForm(function (prevState) {
@@ -820,18 +822,14 @@ const SalesInspect = function () {
             rows={form?.details || []}
             footer={
               <Horizontal internal={1}>
-                <div>
-                  <span>{t.sale.addition}: </span>
-                  <span style={{ color: "var(--dangerColor)" }}>
-                    +{Currency(subtotalAdditions)}
-                  </span>
-                </div>
-                <div>
-                  <span>{t.sale.deduction}: </span>
-                  <span style={{ color: "var(--successColor)" }}>
-                    -{Currency(subtotalDeductions)}
-                  </span>
-                </div>
+                <Badge
+                  category="Danger"
+                  value={`${t.sale.addition}: +${Currency(subtotalAdditions)}`}
+                />
+                <Badge
+                  category="Success"
+                  value={`${t.sale.deduction}: -${Currency(subtotalDeductions)}`}
+                />
               </Horizontal>
             }
             add={function () {
@@ -1378,8 +1376,11 @@ const SalesInspect = function () {
               styles={{ justifyContent: "space-between" }}
             >
               <Horizontal className="flex-1" styles={{ gap: "0.4rem" }}>
-                <span>{t.components.total}: </span>
-                <span>{Currency(total)}</span>
+                <Badge
+                  category="Neutral"
+                  styles={{ fontSize: "var(--textRegular)" }}
+                  value={`${t.components.total}: ${Currency(total)}`}
+                />
               </Horizontal>
               <Horizontal internal={1}>
                 <Button

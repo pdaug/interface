@@ -22,6 +22,7 @@ export type BadgeProps = {
   name?: string;
   value: string;
   category: BadgeCategories;
+  styles?: React.CSSProperties;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
   options?: {
     id: string;
@@ -36,6 +37,7 @@ const Badge = function ({
   value,
   options,
   category,
+  styles,
   onChange,
 }: BadgeProps) {
   return options && options.length > 0 ? (
@@ -44,7 +46,7 @@ const Badge = function ({
       name={name}
       value={value}
       onChange={onChange}
-      style={{ cursor: "pointer" }}
+      style={{ ...styles, cursor: "pointer" }}
       className={`badge badge${category}`}
     >
       {options.map(function ({ id, value, label }) {
@@ -56,7 +58,7 @@ const Badge = function ({
       })}
     </select>
   ) : (
-    <div id={id} className={`badge badge${category}`}>
+    <div id={id} className={`badge badge${category}`} style={styles}>
       <span>{value || "badge_empty_text"}</span>
     </div>
   );
