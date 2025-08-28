@@ -24,8 +24,6 @@ import { Input } from "../components/inputs/Input";
 import Wrapper from "../components/wrapper/Wrapper";
 import { Center, Horizontal, Vertical } from "../components/aligns/Align";
 
-// TODO: get favicon and title
-// TODO: background color by instance primary and secondary
 const Login = function () {
   const {
     token,
@@ -36,6 +34,7 @@ const Login = function () {
     saveUser,
     saveInstance,
     saveWorkspaces,
+    selectWorkspace,
     saveVersion,
   } = useSystem();
   const play = useSounds();
@@ -134,6 +133,13 @@ const Login = function () {
         });
         return;
       }
+
+      // select workspace
+      if (
+        responseWorkspace.data.result.items?.[0] &&
+        responseWorkspace.data.result.items[0].status
+      )
+        selectWorkspace(responseWorkspace.data.result.items[0].id);
 
       // fetch users
       const responseUser = await apis.User.list<ApiResponsePaginate<TypeUser>>(
