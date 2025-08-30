@@ -474,12 +474,8 @@ const TranslatePt = {
     percent: "Porcentagem",
     amount: "Quantia",
     // dates
-    date_payment: "Data do pagamento",
-    date_shipped: "Data do envio",
-    date_completed: "Data da finalização",
-    date_failed: "Data da falha",
-    date_refunded: "Data do reembolso",
-    date_canceled: "Data do cancelamento",
+    date_won: "Data de ganho",
+    date_lost: "Data de perdido",
     // shipping
     shipping: "Envio",
     shipping_method: "Método de envio",
@@ -1249,6 +1245,7 @@ const TranslateEn = {
     user: "Responsable",
     seller: "Seller",
     account: "Bank account",
+    description_placeholder: "Fill here description about the sale...",
     addition: "Addition",
     deduction: "Deduction",
     subtotal: "Subtotal",
@@ -1305,13 +1302,8 @@ const TranslateEn = {
     percent: "Percent",
     amount: "Amount",
     // dates
-    date_payment: "Payment date",
-    date_shipped: "Shipped date",
-    date_completed: "Completed data",
-    date_failed: "Failed date",
-    date_refunded: "Refunded date",
-    date_canceled: "Canceled date",
-    description_placeholder: "Fill here description about the sale...",
+    date_won: "Won stage date",
+    date_lost: "Lost stage date",
     // shipping
     shipping: "Shipping",
     shipping_method: "Shipping method",

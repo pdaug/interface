@@ -998,15 +998,15 @@ const SalesInspect = function () {
                 />
                 <Input
                   type="date"
-                  name="datePayment"
+                  name="dateWon"
                   disabled={loading}
-                  id="sale_date_payment"
+                  id="sale_date_won"
                   placeholder="yyyy-MM-dd"
-                  label={t.sale.date_payment}
-                  value={form?.datePayment || ""}
+                  label={t.sale.date_won}
+                  value={form?.dateWon || ""}
                   onChange={function (event) {
                     const newForm = { ...form };
-                    newForm.datePayment = event.currentTarget?.value || "";
+                    newForm.dateWon = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}
@@ -1014,81 +1014,15 @@ const SalesInspect = function () {
 
                 <Input
                   type="date"
-                  name="dateShipped"
+                  name="dateLost"
                   disabled={loading}
-                  id="sale_date_shipped"
+                  id="sale_date_lost"
                   placeholder="yyyy-MM-dd"
-                  label={t.sale.date_shipped}
-                  value={form?.dateShipped || ""}
+                  label={t.sale.date_lost}
+                  value={form?.dateLost || ""}
                   onChange={function (event) {
                     const newForm = { ...form };
-                    newForm.dateShipped = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-
-                <Input
-                  type="date"
-                  name="dateCompleted"
-                  disabled={loading}
-                  id="sale_date_completed"
-                  placeholder="yyyy-MM-dd"
-                  label={t.sale.date_completed}
-                  value={form?.dateCompleted || ""}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.dateCompleted = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-
-              <Horizontal internal={1}>
-                <Input
-                  type="date"
-                  name="dateFailed"
-                  disabled={loading}
-                  id="sale_date_failed"
-                  placeholder="yyyy-MM-dd"
-                  label={t.sale.date_failed}
-                  value={form?.dateFailed || ""}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.dateFailed = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-
-                <Input
-                  type="date"
-                  name="dateRefunded"
-                  disabled={loading}
-                  id="sale_date_refunded"
-                  placeholder="yyyy-MM-dd"
-                  label={t.sale.date_refunded}
-                  value={form?.dateRefunded || ""}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.dateRefunded = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-
-                <Input
-                  type="date"
-                  name="dateCanceled"
-                  disabled={loading}
-                  id="sale_date_canceled"
-                  placeholder="yyyy-MM-dd"
-                  label={t.sale.date_canceled}
-                  value={form?.dateCanceled || ""}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.dateCanceled = event.currentTarget?.value || "";
+                    newForm.dateLost = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}

@@ -58,12 +58,8 @@ export type TypeSale = {
   stage: TypeSaleStage;
   description: string;
 
-  datePayment?: string;
-  dateShipped?: string;
-  dateCompleted?: string;
-  dateFailed?: string;
-  dateCanceled?: string;
-  dateRefunded?: string;
+  dateWon?: string;
+  dateLost?: string;
 
   customerId: string;
   customerName: string;
