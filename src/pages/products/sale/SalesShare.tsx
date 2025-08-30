@@ -143,8 +143,7 @@ const SalesShare = function () {
       toast.warning(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/products/sale/SalesInspect.tsx]", err);
-      navigate("/f/sales");
+      console.error("src/pages/products/sale/SalesShare.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -192,7 +191,7 @@ const SalesShare = function () {
       toast.warning(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/products/sale/SalesInspect.tsx]", err);
+      console.error("src/pages/products/sale/SalesShare.tsx]", err);
       return;
     }
   }, []);

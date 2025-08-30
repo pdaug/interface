@@ -173,6 +173,7 @@ const DocumentsShare = function () {
                 </div>
               </Vertical>
             </Horizontal>
+
             <RichTextContext
               content={documentFile?.content as Descendant[]}
               setContent={function () {

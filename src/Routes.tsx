@@ -18,8 +18,9 @@ import administrative from "./pages/administrative";
 
 // pages public
 import Login from "./pages/Login";
-import SaleShare from "./pages/products/sale/SalesShare";
+import SalesShare from "./pages/products/sale/SalesShare";
 import DocumentsShare from "./pages/tool/documents/DocumentsShare";
+import SalesDocumentShare from "./pages/products/sale/SalesDocumentShare";
 
 // pages other
 import NotFound from "./pages/NotFound";
@@ -37,7 +38,11 @@ const Router = createBrowserRouter([
   },
   {
     path: "/share/sale/:id",
-    Component: SaleShare,
+    Component: SalesShare,
+  },
+  {
+    path: "/share/sale/:id/document/:type",
+    Component: SalesDocumentShare,
   },
   {
     path: "f",
