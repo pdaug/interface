@@ -981,6 +981,7 @@ const SalesInspect = function () {
             <Vertical internal={1} external={1}>
               <Horizontal internal={1}>
                 <Input
+                  readOnly
                   type="date"
                   name="createdAt"
                   disabled={loading}
@@ -1003,7 +1004,7 @@ const SalesInspect = function () {
                   id="sale_date_won"
                   placeholder="yyyy-MM-dd"
                   label={t.sale.date_won}
-                  value={form?.dateWon || ""}
+                  value={form?.dateWon ? form.dateWon.slice(0, 10) : ""}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.dateWon = event.currentTarget?.value || "";
@@ -1019,7 +1020,7 @@ const SalesInspect = function () {
                   id="sale_date_lost"
                   placeholder="yyyy-MM-dd"
                   label={t.sale.date_lost}
-                  value={form?.dateLost || ""}
+                  value={form?.dateLost ? form.dateLost.slice(0, 10) : ""}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.dateLost = event.currentTarget?.value || "";
