@@ -21,11 +21,12 @@ import { SaleStagesGroupped, SaleStagesCategory } from "../../../assets/Sale";
 // utils
 import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
+import Calculate from "../../../utils/Calculate";
 
 // types
-import { TypeSale, TypeSaleProduct, TypeSaleStage } from "../../../types/Sale";
 import { ApiResponsePaginate } from "../../../types/Api";
 import { TypeInputInterval } from "../../../types/Components";
+import { TypeSale, TypeSaleProduct, TypeSaleStage } from "../../../types/Sale";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
@@ -50,7 +51,6 @@ import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Calculate from "../../../utils/Calculate";
 
 const pageSize = 10;
 
@@ -454,19 +454,17 @@ const SalesList = function () {
             products: {
               label: t.sale.product_name,
               handler: function (data) {
-                const productNames = (data?.products as TypeSaleProduct[])?.map(
-                  function (product) {
-                    return product.productName;
-                  },
-                );
-
-                const productNamesFrequency = productNames.reduce(
+                const productNamesFrequency = (
+                  data?.products as TypeSaleProduct[]
+                ).reduce(
                   function (acc, item) {
-                    acc[item] = (acc[item] || 0) + 1;
+                    acc[item.productName] =
+                      (acc[item.productName] || 0) + item.quantity;
                     return acc;
                   },
                   {} as Record<string, number>,
                 );
+
                 return (
                   <div>
                     {Object.entries(productNamesFrequency)?.map(function (
