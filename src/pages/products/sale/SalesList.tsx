@@ -23,7 +23,7 @@ import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
 
 // types
-import { TypeSale, TypeSaleStage } from "../../../types/Sale";
+import { TypeSale, TypeSaleProduct, TypeSaleStage } from "../../../types/Sale";
 import { ApiResponsePaginate } from "../../../types/Api";
 import { TypeInputInterval } from "../../../types/Components";
 
@@ -67,9 +67,10 @@ const SalesList = function () {
   const [total, setTotal] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
   const [sales, setSales] = useState<TypeSale[]>([]);
+  const [seller, setSeller] = useState<string>("all");
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
-  const [stage, setStage] = useState<TypeSaleStage | "">("");
+  const [stage, setStage] = useState<TypeSaleStage | "all">("all");
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: startOfYear(new Date()),
     end: endOfDay(new Date()),
@@ -86,10 +87,36 @@ const SalesList = function () {
         {
           pageSize,
           pageCurrent: searchDebounced ? 1 : page,
-          searchField: "name",
-          search: searchDebounced,
           dateStart: interval.start ? interval.start.toISOString() : undefined,
           dateEnd: interval.end ? interval.end.toISOString() : undefined,
+          showDeleted: "true",
+          filter: JSON.stringify({
+            stage: stage !== "all" ? stage : undefined,
+            $expr:
+              seller !== "all"
+                ? {
+                    $eq: [{ $toString: "$sellerId" }, seller],
+                  }
+                : undefined,
+            $and: [
+              { $or: [{ deletedAt: { $exists: false } }, { deletedAt: null }] },
+              {
+                $or: searchDebounced
+                  ? [
+                      {
+                        saleId: searchDebounced,
+                      },
+                      {
+                        customerName: {
+                          $regex: searchDebounced,
+                          $options: "i",
+                        },
+                      },
+                    ]
+                  : undefined,
+              },
+            ],
+          }),
         },
         workspaceId,
       );
@@ -117,7 +144,14 @@ const SalesList = function () {
   };
 
   // fetch sales
-  useAsync(FetchSales, [interval, workspaceId, page, searchDebounced]);
+  useAsync(FetchSales, [
+    interval,
+    workspaceId,
+    stage,
+    page,
+    seller,
+    searchDebounced,
+  ]);
 
   const getOptions = [
     {
@@ -251,15 +285,23 @@ const SalesList = function () {
           <InputSelect
             label=""
             value={stage}
-            empty={t.sale.no_stage}
-            options={SaleStagesGroupped.map(function (stage) {
-              return {
-                id: stage.value,
-                value: stage.value,
-                text: t.sale[stage.value as keyof typeof t.sale],
-                group: t.sale[stage.group as keyof typeof t.sale],
-              };
-            })}
+            empty={t.sale.all_stage}
+            options={[...SaleStagesGroupped, { value: "all", group: "" }].map(
+              function (stage) {
+                if (stage.value === "all")
+                  return {
+                    id: stage.value,
+                    value: stage.value,
+                    text: t.sale.all_stage,
+                  };
+                return {
+                  id: stage.value,
+                  value: stage.value,
+                  text: t.sale[stage.value as keyof typeof t.sale],
+                  group: t.sale[stage.group as keyof typeof t.sale],
+                };
+              },
+            )}
             onChange={function (event) {
               const newStage =
                 (event.currentTarget?.value as TypeSaleStage) || "";
@@ -268,7 +310,30 @@ const SalesList = function () {
             }}
           />
         </div>
-        <div style={{ minWidth: 200, maxWidth: 256 }}>
+        <div style={{ maxWidth: 256 }}>
+          <InputSelect
+            label=""
+            value={seller}
+            empty={t.sale.all_seller}
+            options={[
+              { id: "all", name: t.sale.all_seller, status: true },
+              ...users,
+            ].map(function (user) {
+              return {
+                id: user.id,
+                value: user.id,
+                text: user.name,
+                disabled: !user.status,
+              };
+            })}
+            onChange={function (event) {
+              const newSeller = event.currentTarget?.value || "";
+              setSeller(newSeller);
+              return;
+            }}
+          />
+        </div>
+        <div style={{ width: 200 }}>
           <InputInterval
             label=""
             value={[interval.start, interval.end]}
@@ -389,14 +454,31 @@ const SalesList = function () {
             products: {
               label: t.sale.product_name,
               handler: function (data) {
+                const productNames = (data?.products as TypeSaleProduct[])?.map(
+                  function (product) {
+                    return product.productName;
+                  },
+                );
+
+                const productNamesFrequency = productNames.reduce(
+                  function (acc, item) {
+                    acc[item] = (acc[item] || 0) + 1;
+                    return acc;
+                  },
+                  {} as Record<string, number>,
+                );
                 return (
                   <div>
-                    {Array.isArray(data?.products) &&
-                      data?.products
-                        ?.map(function (product) {
-                          return product.productName;
-                        })
-                        ?.join(", ")}
+                    {Object.entries(productNamesFrequency)?.map(function (
+                      [productName, value],
+                      index,
+                    ) {
+                      return (
+                        <div key={`product-name-${index}`}>
+                          {String(value)}x {productName}
+                        </div>
+                      );
+                    })}
                   </div>
                 );
               },

@@ -30,6 +30,7 @@ export const ApiBaseCrud = function (path: string) {
       Authorization: string,
       instance: string,
       params?: {
+        filter?: string;
         orderField?: string;
         orderSort?: string;
         pageSize?: number;
