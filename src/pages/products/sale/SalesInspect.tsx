@@ -1000,10 +1000,10 @@ const SalesInspect = function () {
                 <Input
                   type="date"
                   name="dateWon"
-                  disabled={loading}
                   id="sale_date_won"
                   placeholder="yyyy-MM-dd"
                   label={t.sale.date_won}
+                  disabled={loading || form.stage !== "won"}
                   value={form?.dateWon ? form.dateWon.slice(0, 10) : ""}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -1016,10 +1016,10 @@ const SalesInspect = function () {
                 <Input
                   type="date"
                   name="dateLost"
-                  disabled={loading}
                   id="sale_date_lost"
                   placeholder="yyyy-MM-dd"
                   label={t.sale.date_lost}
+                  disabled={loading || form.stage !== "lost"}
                   value={form?.dateLost ? form.dateLost.slice(0, 10) : ""}
                   onChange={function (event) {
                     const newForm = { ...form };
