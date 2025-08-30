@@ -78,6 +78,9 @@ export type TypeSale = {
   shippingToPostal?: string;
   shippingToAddress?: string;
 
+  documentProposal?: string;
+  documentContract?: string;
+
   userId: string;
   sellerId: string;
   accountId: string;

@@ -428,6 +428,9 @@ const TranslatePt = {
     subtitle_stage: "Preencha as dadas dos estagios desta venda",
     title_address: "Logística da venda",
     subtitle_address: "Preencha com as informações de endereço dessa venda",
+    title_document: "Documento da venda",
+    subtitle_document:
+      "Selecione o documento de proposta e contrato dessa venda",
     // stages
     funnel: "Estágios do funil",
     closing: "Estágios de fechamento",
@@ -493,6 +496,9 @@ const TranslatePt = {
     freight: "Frete",
     dropshipping: "Dropshipping",
     delivery: "Entrega local",
+    // documents
+    document_proposal: "Documento de proposta",
+    document_contract: "Documento de contrato",
   },
   schedule: {
     schedule: "Agenda",
@@ -1256,6 +1262,9 @@ const TranslateEn = {
     subtitle_stage: "Fill the dates of stages this sale",
     title_address: "Logistics of sale",
     subtitle_address: "Fill with address information of this sale",
+    title_document: "Document of sale",
+    subtitle_document:
+      "Select the document to proporsal and contract of this sale",
     // stages
     funnel: "Funnel stages",
     closing: "Closing stages",
@@ -1321,6 +1330,9 @@ const TranslateEn = {
     freight: "Freight",
     dropshipping: "Dropshipping",
     delivery: "Delivery",
+    // documents
+    document_proposal: "Proposal document",
+    document_contract: "Contract document",
   },
   schedule: {
     schedule: "Schedule",

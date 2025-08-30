@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Asterisk, MapTrifold } from "@phosphor-icons/react";
+import { Asterisk, ShareFat, MapTrifold } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -26,12 +26,13 @@ import {
   TypeSale,
   TypeSaleStage,
   TypeSaleDetails,
-  TypeSaleShippingMethod,
   TypeSaleProduct,
+  TypeSaleShippingMethod,
 } from "../../../types/Sale";
 import { TypeProduct } from "../../../types/Product";
 import { TypeAccount } from "../../../types/Account";
 import { TypeCustomer } from "../../../types/Customers";
+import { TypeDocument } from "../../../types/Documents";
 import { ApiResponsePaginate, ApiShipping } from "../../../types/Api";
 
 // hooks
@@ -47,10 +48,11 @@ import useTranslate from "../../../hooks/useTranslate";
 import {
   Input,
   InputText,
-  InputSelect,
   InputMask,
   InputMoney,
+  InputSelect,
 } from "../../../components/inputs/Input";
+import Badge from "../../../components/badges/Badge";
 import Sheets from "../../../components/sheets/Sheets";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
@@ -58,7 +60,6 @@ import Profile from "../../../components/profiles/Profile";
 import Callout from "../../../components/callouts/Callout";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Badge from "../../../components/badges/Badge";
 
 const SalesInspect = function () {
   const t = useTranslate();
@@ -75,6 +76,7 @@ const SalesInspect = function () {
   const [accounts, setAccounts] = useState<TypeAccount[]>([]);
   const [customers, setCustomers] = useState<TypeCustomer[]>([]);
   const [shippings, setShippings] = useState<ApiShipping>([]);
+  const [documents, setDocuments] = useState<TypeDocument[]>([]);
 
   const [form, setForm] = useState<Partial<TypeSale>>({
     saleId: GenerateNumbers(6),
@@ -348,6 +350,41 @@ const SalesInspect = function () {
     },
     [form?.shippingToPostal, form?.shippingFromPostal],
   );
+
+  // fetch documents
+  useAsync(async function () {
+    try {
+      const response = await apis.DocumentApi.list<
+        ApiResponsePaginate<TypeDocument>
+      >(
+        token,
+        instance.name,
+        {
+          pageSize: 999,
+          pageCurrent: 1,
+          orderField: "name",
+          orderSort: "asc",
+        },
+        workspaceId,
+      );
+      if (!response.data?.result || response.status !== 200) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        return;
+      }
+      setDocuments(response.data.result.items);
+      return;
+    } catch (err) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.no_find_item,
+      });
+      console.error("[src/pages/products/sale/SalesInspect.tsx]", err);
+      return;
+    }
+  }, []);
 
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -1295,6 +1332,97 @@ const SalesInspect = function () {
                   </Vertical>
                 )}
             </Horizontal>
+          </Wrapper>
+
+          <Wrapper
+            collapsible
+            contentStyles={{ padding: 0 }}
+            title={t.sale.title_document}
+            description={t.sale.subtitle_document}
+          >
+            <Vertical internal={1} external={1} className="flex1">
+              <Horizontal internal={1}>
+                <Horizontal
+                  internal={1}
+                  className=" flex1"
+                  styles={{ alignItems: "flex-end" }}
+                >
+                  <InputSelect
+                    disabled={loading}
+                    name="documentProposal"
+                    id="sale_document_proposal"
+                    empty={t.stacks.no_option}
+                    label={t.sale.document_proposal}
+                    value={form?.documentProposal || ""}
+                    options={documents.map(function (documentItem) {
+                      return {
+                        id: documentItem.id,
+                        value: documentItem.id,
+                        text: documentItem.name,
+                        disabled: documentItem.id === form?.documentContract,
+                      };
+                    })}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.documentProposal =
+                        event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    category="Info"
+                    Icon={ShareFat}
+                    text={t.components.share}
+                    disabled={!form?.documentProposal}
+                    onClick={function () {
+                      return;
+                    }}
+                  />
+                </Horizontal>
+
+                <Horizontal
+                  internal={1}
+                  className=" flex1"
+                  styles={{ alignItems: "flex-end" }}
+                >
+                  <InputSelect
+                    disabled={loading}
+                    name="documentContract"
+                    id="sale_document_contract"
+                    empty={t.stacks.no_option}
+                    label={t.sale.document_contract}
+                    value={form?.documentContract || ""}
+                    options={documents.map(function (documentItem) {
+                      return {
+                        id: documentItem.id,
+                        value: documentItem.id,
+                        text: documentItem.name,
+                        disabled: documentItem.id === form?.documentProposal,
+                      };
+                    })}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.documentContract =
+                        event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    category="Info"
+                    Icon={ShareFat}
+                    text={t.components.share}
+                    disabled={!form?.documentContract}
+                    onClick={function () {
+                      return;
+                    }}
+                  />
+                </Horizontal>
+              </Horizontal>
+            </Vertical>
           </Wrapper>
 
           <Callout

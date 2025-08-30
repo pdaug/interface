@@ -7,18 +7,23 @@ import Container from "./layouts/Container";
 import { ToastElement } from "./components/toasts/Toast";
 import { DialogElement, DialogProvider } from "./components/dialogs/Dialog";
 
-// pages
+// pages private
 import tool from "./pages/tool";
-import Login from "./pages/Login";
 import settings from "./pages/settings";
-import NotFound from "./pages/NotFound";
-import ErrorPage from "./pages/ErrorPage";
+import services from "./pages/services";
+import products from "./pages/products";
 import Dashboard from "./pages/Dashboard";
 import financial from "./pages/financial";
 import administrative from "./pages/administrative";
+
+// pages public
+import Login from "./pages/Login";
+import SaleShare from "./pages/products/sale/SalesShare";
 import DocumentsShare from "./pages/tool/documents/DocumentsShare";
-import services from "./pages/services";
-import products from "./pages/products";
+
+// pages other
+import NotFound from "./pages/NotFound";
+import ErrorPage from "./pages/ErrorPage";
 
 const Router = createBrowserRouter([
   {
@@ -29,6 +34,10 @@ const Router = createBrowserRouter([
   {
     path: "/share/document/:id",
     Component: DocumentsShare,
+  },
+  {
+    path: "/share/sale/:id",
+    Component: SaleShare,
   },
   {
     path: "f",
