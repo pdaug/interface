@@ -1372,9 +1372,9 @@ const SalesInspect = function () {
                   />
                   <Button
                     type="button"
-                    category="Info"
                     Icon={ShareFat}
-                    text={t.components.share}
+                    category="Neutral"
+                    text={t.sale.open_proposal}
                     disabled={!form?.documentProposal}
                     onClick={function () {
                       return;
@@ -1412,9 +1412,9 @@ const SalesInspect = function () {
                   />
                   <Button
                     type="button"
-                    category="Info"
                     Icon={ShareFat}
-                    text={t.components.share}
+                    category="Neutral"
+                    text={t.sale.open_contract}
                     disabled={!form?.documentContract}
                     onClick={function () {
                       return;
@@ -1440,8 +1440,8 @@ const SalesInspect = function () {
             >
               <Horizontal className="flex-1" styles={{ gap: "0.4rem" }}>
                 <Badge
-                  category="Neutral"
-                  styles={{ fontSize: "var(--textRegular)" }}
+                  category="Info"
+                  styles={{ fontSize: "var(--textHighlight)" }}
                   value={`${t.components.total}: ${Currency(total)}`}
                 />
               </Horizontal>

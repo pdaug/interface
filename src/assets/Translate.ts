@@ -500,6 +500,8 @@ const TranslatePt = {
     // documents
     document_proposal: "Documento de proposta",
     document_contract: "Documento de contrato",
+    open_proposal: "Abrir proposta",
+    open_contract: "Abrir contrato",
   },
   schedule: {
     schedule: "Agenda",
@@ -1335,6 +1337,8 @@ const TranslateEn = {
     // documents
     document_proposal: "Proposal document",
     document_contract: "Contract document",
+    open_proposal: "Open proposal",
+    open_contract: "Open contract",
   },
   schedule: {
     schedule: "Schedule",

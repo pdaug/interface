@@ -1,12 +1,12 @@
 import React from "react";
+import { Plus, Trash } from "@phosphor-icons/react";
 
 // styles
 import "./Sheets.css";
 
 // types
-import { InputSelectOptions } from "../inputs/Input";
 import useTranslate from "../../hooks/useTranslate";
-import { Plus, Trash } from "@phosphor-icons/react";
+import { InputSelectOptions } from "../inputs/Input";
 
 export type SheetsBase = {
   [key: string]: number | string;
@@ -21,6 +21,7 @@ export type SheetsFormatter = {
     min?: number;
     max?: number;
     hidden?: boolean;
+    readOnly?: boolean;
     disabled?: boolean;
     placeholder?: string;
     options?: InputSelectOptions[];
@@ -30,8 +31,8 @@ export type SheetsFormatter = {
 
 export type SheetProps = {
   title?: string;
-  add: () => void;
-  remove: (index: number) => void;
+  add?: () => void;
+  remove?: (index: number) => void;
   rows: SheetsBase[];
   empty?: string;
   formatter: SheetsFormatter;
@@ -87,6 +88,7 @@ const Sheets = function ({
                           min={format?.min}
                           max={format?.max}
                           disabled={format.disabled}
+                          readOnly={format?.readOnly}
                           placeholder={format?.placeholder}
                           id={`${key}-${rowIndex}-${cellIndex}`}
                           name={`${key}-${rowIndex}-${cellIndex}`}
@@ -105,6 +107,7 @@ const Sheets = function ({
                           minLength={format?.min}
                           maxLength={format?.max}
                           disabled={format.disabled}
+                          readOnly={format?.readOnly}
                           placeholder={format?.placeholder}
                           id={`${key}-${rowIndex}-${cellIndex}`}
                           name={`${key}-${rowIndex}-${cellIndex}`}
@@ -119,9 +122,9 @@ const Sheets = function ({
                       {format.type === "select" && (
                         <select
                           value={row[key]}
-                          disabled={format.disabled}
                           id={`${key}-${rowIndex}-${cellIndex}`}
                           name={`${key}-${rowIndex}-${cellIndex}`}
+                          disabled={format.disabled || format?.readOnly}
                           onChange={function (event) {
                             const newRow = rows[rowIndex];
                             newRow[key] = event?.currentTarget?.value || "";
@@ -146,6 +149,7 @@ const Sheets = function ({
                         <input
                           value={row[key]}
                           disabled={format.disabled}
+                          readOnly={format?.readOnly}
                           placeholder={format?.placeholder}
                           id={`${key}-${rowIndex}-${cellIndex}`}
                           name={`${key}-${rowIndex}-${cellIndex}`}
@@ -218,13 +222,15 @@ const Sheets = function ({
                     </div>
                   );
                 })}
-                <button
-                  type="button"
-                  className="remove"
-                  onClick={() => remove(rowIndex)}
-                >
-                  <Trash />
-                </button>
+                {remove && (
+                  <button
+                    type="button"
+                    className="remove"
+                    onClick={() => remove(rowIndex)}
+                  >
+                    <Trash />
+                  </button>
+                )}
               </div>
             );
           })
@@ -236,9 +242,11 @@ const Sheets = function ({
       </div>
       <div className="sheetFooter">
         <div className="sheetFooterContainer">{footer}</div>
-        <button type="button" className="add" onClick={add}>
-          <Plus />
-        </button>
+        {add && (
+          <button type="button" className="add" onClick={add}>
+            <Plus />
+          </button>
+        )}
       </div>
     </div>
   );
