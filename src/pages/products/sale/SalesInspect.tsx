@@ -1377,6 +1377,19 @@ const SalesInspect = function () {
                     text={t.sale.open_proposal}
                     disabled={!form?.documentProposal}
                     onClick={function () {
+                      if (!id) {
+                        console.error(
+                          "[src/pages/products/sale/SalesInspect.tsx]",
+                          "no id",
+                        );
+                        play("alert");
+                        toast.warning(t.toast.warning_error, {
+                          description: t.stacks.no_items,
+                        });
+                        return;
+                      }
+                      const url = `${window.location.origin}/share/sale/${id}/document/proposal`;
+                      window.open(url, "_blank");
                       return;
                     }}
                   />
@@ -1415,8 +1428,21 @@ const SalesInspect = function () {
                     Icon={ShareFat}
                     category="Neutral"
                     text={t.sale.open_contract}
-                    disabled={!form?.documentContract}
+                    disabled={!form?.documentContract || !id}
                     onClick={function () {
+                      if (!id) {
+                        console.error(
+                          "[src/pages/products/sale/SalesInspect.tsx]",
+                          "no id",
+                        );
+                        play("alert");
+                        toast.warning(t.toast.warning_error, {
+                          description: t.stacks.no_items,
+                        });
+                        return;
+                      }
+                      const url = `${window.location.origin}/share/sale/${id}/document/contract`;
+                      window.open(url, "_blank");
                       return;
                     }}
                   />
