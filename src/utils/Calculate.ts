@@ -1,8 +1,8 @@
 const Calculate = {
-  products: function (arr: Record<string, unknown>[]): number {
-    return arr?.reduce(function (acc, product) {
-      const price = Number(product?.price) || 0;
-      const quantity = Number(product?.quantity || 0);
+  productsOrServices: function (arr: Record<string, unknown>[]): number {
+    return arr?.reduce(function (acc, item) {
+      const price = Number(item?.price) || 0;
+      const quantity = Number(item?.quantity || 0);
       return acc + price * quantity;
     }, 0);
   },

@@ -617,7 +617,7 @@ const SalesList = function () {
             details: {
               label: t.sale.details,
               handler: function (data) {
-                const subtotalProducts = Calculate.products(
+                const subtotalProducts = Calculate.productsOrServices(
                   (data?.products as Record<string, unknown>[]) || [],
                 );
 
@@ -689,7 +689,7 @@ const SalesList = function () {
               label: t.components.total,
               maxWidth: 128,
               handler: function (data) {
-                const subtotalProducts = Calculate.products(
+                const subtotalProducts = Calculate.productsOrServices(
                   (data?.products as Record<string, unknown>[]) || [],
                 );
 

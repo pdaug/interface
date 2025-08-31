@@ -621,7 +621,7 @@ const OrdersList = function () {
             details: {
               label: t.order.details,
               handler: function (data) {
-                const subtotalProducts = Calculate.products(
+                const subtotalProducts = Calculate.productsOrServices(
                   (data?.products as Record<string, unknown>[]) || [],
                 );
 
@@ -682,7 +682,7 @@ const OrdersList = function () {
               label: t.components.total,
               maxWidth: 128,
               handler: function (data) {
-                const subtotalProducts = Calculate.products(
+                const subtotalProducts = Calculate.productsOrServices(
                   (data?.products as Record<string, unknown>[]) || [],
                 );
 
@@ -719,7 +719,7 @@ const OrdersList = function () {
                 return <div>{Currency(total || 0)}</div>;
               },
             },
-            user: {
+            userId: {
               label: t.order.user,
               handler: function (data) {
                 const userFinded = users?.find(function (user) {

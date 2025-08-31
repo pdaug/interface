@@ -27,7 +27,6 @@ export const OrderDetailsType = [
   "discount",
   "promo",
   "fee",
-  "shipping",
   "coupon",
   "voucher",
 ];

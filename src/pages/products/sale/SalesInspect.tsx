@@ -119,7 +119,7 @@ const SalesInspect = function () {
       })
     : null;
 
-  const subtotalProducts = Calculate.products(form?.products || []);
+  const subtotalProducts = Calculate.productsOrServices(form?.products || []);
 
   const subtotalAdditions = Calculate.details(
     form?.details?.filter(function (detail) {

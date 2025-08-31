@@ -13,6 +13,7 @@ export type TypeOrderStage =
 export type TypeOrderService = {
   serviceId: string;
   serviceName: string;
+  method: string;
   quantity: number;
   price: string;
 };
@@ -53,13 +54,12 @@ export type TypeOrder = {
 
   details: TypeOrderDetails[];
 
-  documentProposal?: string;
+  documentQuotation?: string;
   documentContract?: string;
 
   addresses: (TypeAddress & { description?: string })[];
 
   userId: string;
-  sellerId: string;
   accountId: string;
 
   createdAt: string;
