@@ -43,6 +43,7 @@ export type TypeOrder = {
   description: string;
 
   dateStart?: string;
+  dateEstimated?: string;
   dateEnd?: string;
 
   customerId: string;
@@ -57,9 +58,11 @@ export type TypeOrder = {
   documentQuotation?: string;
   documentContract?: string;
 
-  addresses: (TypeAddress & { description?: string })[];
+  addresses: (TypeAddress & { description?: string })[]; // TODO
 
+  vehicleId?: string; // TODO
   userId: string;
+  providerId: string;
   accountId: string;
 
   createdAt: string;

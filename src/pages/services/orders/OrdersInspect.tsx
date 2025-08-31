@@ -88,6 +88,7 @@ const OrdersInspect = function () {
 
     details: new Array<TypeOrderDetails>(),
 
+    providerId: "",
     userId: user.id,
     accountId: "",
 
@@ -550,6 +551,24 @@ const OrdersInspect = function () {
 
                 <Input
                   type="date"
+                  disabled={loading}
+                  name="dateEstimated"
+                  id="order_date_estimated"
+                  placeholder="yyyy-MM-dd"
+                  label={t.order.date_estimated}
+                  value={
+                    form?.dateEstimated ? form.dateEstimated.slice(0, 10) : ""
+                  }
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.dateEstimated = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+
+                <Input
+                  type="date"
                   name="dateEnd"
                   id="order_date_end"
                   placeholder="yyyy-MM-dd"
@@ -604,10 +623,10 @@ const OrdersInspect = function () {
 
                 <InputSelect
                   required
-                  name="sellerId"
+                  name="providerId"
                   disabled={loading}
-                  id="order_seller_id"
-                  label={t.order.user}
+                  id="order_provider_id"
+                  label={t.order.provider}
                   empty={t.stacks.no_option}
                   value={String(form.userId)}
                   options={users.map(function (user) {
@@ -620,7 +639,7 @@ const OrdersInspect = function () {
                   })}
                   onChange={function (event) {
                     const newForm = { ...form };
-                    newForm.userId = event.currentTarget?.value || "";
+                    newForm.providerId = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}

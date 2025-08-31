@@ -76,7 +76,7 @@ const OrdersList = function () {
   const [orders, setOrders] = useState<TypeOrder[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
-  const [userFilter, setUserFilter] = useState<string>("all");
+  const [provider, setProvider] = useState<string>("all");
   const [stage, setStage] = useState<TypeOrderStage | "all">("all");
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: startOfYear(new Date()),
@@ -100,9 +100,9 @@ const OrdersList = function () {
           filter: JSON.stringify({
             stage: stage !== "all" ? stage : undefined,
             $expr:
-              userFilter !== "all"
+              provider !== "all"
                 ? {
-                    $eq: [{ $toString: "$userId" }, userFilter],
+                    $eq: [{ $toString: "$providerId" }, provider],
                   }
                 : undefined,
             $and: [
@@ -159,7 +159,7 @@ const OrdersList = function () {
     workspaceId,
     stage,
     page,
-    userFilter,
+    provider,
     searchDebounced,
   ]);
 
@@ -450,10 +450,10 @@ const OrdersList = function () {
         <div style={{ maxWidth: 256 }}>
           <InputSelect
             label=""
-            value={userFilter}
-            empty={t.order.all_users}
+            value={provider}
+            empty={t.order.all_providers}
             options={[
-              { id: "all", name: t.order.all_users, status: true },
+              { id: "all", name: t.order.all_providers, status: true },
               ...users,
             ].map(function (userLocal) {
               return {
@@ -464,8 +464,8 @@ const OrdersList = function () {
               };
             })}
             onChange={function (event) {
-              const newUserFilter = event.currentTarget?.value || "";
-              setUserFilter(newUserFilter);
+              const newProvider = event.currentTarget?.value || "";
+              setProvider(newProvider);
               return;
             }}
           />
@@ -719,8 +719,8 @@ const OrdersList = function () {
                 return <div>{Currency(total || 0)}</div>;
               },
             },
-            userId: {
-              label: t.order.user,
+            providerId: {
+              label: t.order.provider,
               handler: function (data) {
                 const userFinded = users?.find(function (user) {
                   return user.id === data.userId;

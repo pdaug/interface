@@ -344,6 +344,7 @@ const TranslatePt = {
     // filters
     all_stages: "Todos estágios",
     all_users: "Todos responsáveis",
+    all_providers: "Todos prestadores",
     // list
     id: "Identificação",
     stage: "Estágio",
@@ -354,11 +355,13 @@ const TranslatePt = {
     account: "Conta bancária",
     addition: "Acréscimo",
     deduction: "Dedução",
+    provider: "Prestador",
     user: "Responsável",
     addresses: "Endereços",
     // inspect
     date_start: "Data de início",
-    date_end: "Data de termino",
+    date_estimated: "Date prevista para término",
+    date_end: "Data de término",
     no_services: "Sem serviços",
     no_details: "Sem detalhes",
     some_invalid_detail: "Algum detalhe está inválido",
@@ -1237,6 +1240,7 @@ const TranslateEn = {
     // filters
     all_stages: "All stages",
     all_users: "All users",
+    all_providers: "All providers",
     // list
     id: "Identification",
     stage: "Stage",
@@ -1248,9 +1252,11 @@ const TranslateEn = {
     addition: "Addition",
     deduction: "Deduction",
     user: "Responsable",
+    provider: "Provider",
     addresses: "Addresses",
     // inspect
     date_start: "Start date",
+    date_estimated: "Estimated date",
     date_end: "End date",
     no_services: "No services",
     no_details: "No details",
