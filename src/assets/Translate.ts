@@ -44,6 +44,7 @@ const TranslatePt = {
       "Com o código postal do destinatário e do remetente, será mostrado as empresas disponíveis para realizar o envio desta venda",
   },
   components: {
+    to_invoice: "Faturar",
     total: "Total",
     ai_short: "AI",
     ai_long: "Inteligência Artificial",
@@ -884,6 +885,7 @@ const TranslateEn = {
       "With the recipient's and sender's postal code, the companies available to ship this sale will be shown.",
   },
   components: {
+    to_invoice: "To invoice",
     total: "Total",
     ai_short: "AI",
     ai_long: "Artificial Intelligence",

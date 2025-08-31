@@ -1,8 +1,11 @@
 import {
   Plus,
   Trash,
+  Receipt,
+  FileText,
   CopySimple,
   PencilSimple,
+  ShareNetwork,
   QuestionMark,
   DownloadSimple,
 } from "@phosphor-icons/react";
@@ -173,6 +176,139 @@ const SalesList = function () {
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_copy,
         });
+        return;
+      },
+    },
+    {
+      id: "invoice",
+      label: t.components.to_invoice,
+      Icon: Receipt,
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          navigate(`/f/sales/inspect/${data.id}`);
+          return;
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.sale.no_products,
+        });
+        console.error(
+          "[src/pages/products/sale/SalesList.tsx]",
+          "no_document_proposal",
+        );
+        return;
+      },
+    },
+    {
+      id: "share",
+      label: t.components.share,
+      Icon: ShareNetwork,
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          const urlShare = `https://${location.host}/share/sale/${data.id}`;
+          OpenDialog({
+            category: "Success",
+            title: t.dialog.title_share,
+            description: (
+              <Vertical internal={1}>
+                <div>{t.dialog.description_share}</div>
+                <a
+                  href={urlShare}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {urlShare}
+                </a>
+              </Vertical>
+            ),
+            confirmText: t.components.copy,
+            onConfirm: async function () {
+              const result = await Clipboard.copy(urlShare);
+              if (result) {
+                play("ok");
+                toast.success(t.toast.success, {
+                  description: t.toast.success_copy,
+                });
+                CloseDialog();
+                return;
+              }
+              play("alert");
+              toast.warning(t.toast.warning_error, {
+                description: t.toast.warning_copy,
+              });
+              CloseDialog();
+              return;
+            },
+          });
+          return;
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.sale.no_products,
+        });
+        console.error(
+          "[src/pages/products/sale/SalesList.tsx]",
+          "no_document_proposal",
+        );
+        return;
+      },
+    },
+    {
+      id: "documentProposal",
+      label: t.sale.document_proposal,
+      Icon: FileText,
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (
+          data &&
+          typeof data === "object" &&
+          "id" in data &&
+          "documentProposal" in data &&
+          data.documentProposal
+        ) {
+          const url = `${window.location.origin}/share/sale/${data.id}/document/proposal`;
+          window.open(url, "_blank");
+          return;
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_document,
+        });
+        console.error(
+          "[src/pages/products/sale/SalesList.tsx]",
+          "no_document_proposal",
+        );
+        return;
+      },
+    },
+    {
+      id: "documentContract",
+      label: t.sale.document_contract,
+      Icon: FileText,
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (
+          data &&
+          typeof data === "object" &&
+          "id" in data &&
+          "documentContract" in data &&
+          data.documentContract
+        ) {
+          const url = `${window.location.origin}/share/sale/${data.id}/document/contract`;
+          window.open(url, "_blank");
+          return;
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_document,
+        });
+        console.error(
+          "[src/pages/products/sale/SalesList.tsx]",
+          "no_document_contract",
+        );
         return;
       },
     },
