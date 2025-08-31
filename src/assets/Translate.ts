@@ -78,6 +78,8 @@ const TranslatePt = {
     all: "Todos",
     photo: "Foto",
     image: "Imagem",
+    to: "Para",
+    by: "Por",
     // editor
     bold: "Negrito",
     italic: "Itálico",
@@ -916,6 +918,8 @@ const TranslateEn = {
     all: "All",
     photo: "Photo",
     image: "Image",
+    to: "To",
+    by: "By",
     // editor
     bold: "Bold",
     italic: "Italic",

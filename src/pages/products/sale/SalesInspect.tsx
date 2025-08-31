@@ -1,7 +1,7 @@
 import { toast } from "sonner";
-import { format } from "date-fns";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
+import { format, startOfDay } from "date-fns";
 import { useNavigate, useParams } from "react-router-dom";
 import { Asterisk, ShareFat, MapTrifold } from "@phosphor-icons/react";
 
@@ -31,6 +31,7 @@ import {
 } from "../../../types/Sale";
 import { TypeProduct } from "../../../types/Product";
 import { TypeAccount } from "../../../types/Account";
+import { TypeSchedule } from "../../../types/Schedules";
 import { TypeCustomer } from "../../../types/Customers";
 import { TypeDocument } from "../../../types/Documents";
 import { ApiResponsePaginate, ApiShipping } from "../../../types/Api";
@@ -109,6 +110,12 @@ const SalesInspect = function () {
   const userFinded = form.userId
     ? users.find(function (userLocal) {
         return form.userId === userLocal.id;
+      })
+    : null;
+
+  const SellerFind = form.sellerId
+    ? users?.find(function (userLocal) {
+        return form.sellerId === userLocal.id;
       })
     : null;
 
@@ -435,13 +442,36 @@ const SalesInspect = function () {
         return;
       }
       // is creating
-      const response = await apis.Sale.create(
+      const responseSale = await apis.Sale.create(
         token,
         instance.name,
         form,
         workspaceId,
       );
-      if (!response.data?.result || response.status !== 201) {
+      if (!responseSale.data?.result || responseSale.status !== 201) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_create,
+        });
+        return;
+      }
+      // create schedule
+      const bodySchedule: TypeSchedule = {
+        title: `${t.sale.sale} ${t.components.to} ${form.customerName} ${t.components.by} ${SellerFind?.name || ""}`,
+        category: "task",
+        priority: "none",
+        description: `${t.sale.id} ${form.saleId}`,
+        start: startOfDay(new Date()),
+        end: new Date(),
+        userId: user.id,
+      };
+      const responseSchedule = await apis.Schedule.create<TypeSchedule>(
+        token,
+        instance.name,
+        bodySchedule,
+        workspaceId,
+      );
+      if (!responseSchedule.data?.result || responseSchedule.status !== 201) {
         play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_create,
