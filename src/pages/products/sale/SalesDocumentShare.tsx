@@ -13,6 +13,11 @@ import Avatar from "../../../components/avatars/Avatar";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
+// utils
+import Renderer from "../../../utils/Renderer";
+import PhoneNumber from "../../../utils/PhoneNumber";
+import { GenerateNumbers } from "../../../utils/GenerateId";
+
 // types
 import {
   TypeSale,
@@ -24,24 +29,16 @@ import { TypeCustomer } from "../../../types/Customers";
 import { TypeDocument } from "../../../types/Documents";
 import { ApiResponsePaginate } from "../../../types/Api";
 
-// utils
-import Renderer from "../../../utils/Renderer";
-import Calculate from "../../../utils/Calculate";
-import PhoneNumber from "../../../utils/PhoneNumber";
-import { GenerateNumbers } from "../../../utils/GenerateId";
-
 // hooks
 import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
 import useSounds from "../../../hooks/useSounds";
-import useCurrency from "../../../hooks/useCurrency";
 import useTranslate from "../../../hooks/useTranslate";
 
 const SalesDocumentShare = function () {
   const t = useTranslate();
   const play = useSounds();
   const { id, type } = useParams();
-  const Currency = useCurrency();
   const navigate = useNavigate();
   const { user, token, instance, workspaceId } = useSystem();
 
@@ -86,35 +83,6 @@ const SalesDocumentShare = function () {
   const customer = customers.find(function (customer) {
     return customer.id === form.customerId;
   });
-
-  const subtotalProducts = Calculate.products(form?.products || []);
-
-  const subtotalAdditions = Calculate.details(
-    form?.details?.filter(function (detail) {
-      return detail?.type === "tax" || detail?.type === "fee";
-    }) || [],
-    subtotalProducts,
-  );
-
-  const subtotalDeductions = Calculate.details(
-    form?.details?.filter(function (detail) {
-      return (
-        detail?.type === "discount" ||
-        detail?.type === "promo" ||
-        detail?.type === "coupon" ||
-        detail?.type === "voucher"
-      );
-    }) || [],
-    subtotalProducts,
-  );
-
-  const subtotalShipping = Number(form?.shippingCost) || 0;
-
-  const total =
-    subtotalProducts +
-    subtotalAdditions -
-    subtotalDeductions +
-    subtotalShipping;
 
   // fetch sale and documents
   useAsync(async function () {
@@ -278,7 +246,24 @@ const SalesDocumentShare = function () {
 
       <Wrapper>
         <Vertical internal={0.6}>
-          <Renderer content={documentData.content as Descendant[]} />
+          <Renderer
+            content={documentData.content as Descendant[]}
+            params={{
+              customerName: customer?.name || "",
+              customerMobile: customer?.mobile || "",
+              customerPhone1: customer?.phone1 || "",
+              customerPhone2: customer?.phone2 || "",
+              customerEmail: customer?.email || "",
+              customerDocument1: customer?.document1 || "",
+              customerDocument2: customer?.document2 || "",
+              companyName: instance?.companyName || "",
+              companyPhone: instance?.companyPhone || "",
+              companyMobile: instance?.companyMobile || "",
+              companyWebsite: instance?.companyWebsite || "",
+              companyEmail: instance?.companyEmail || "",
+              companyDocument: instance?.companyDocument || "",
+            }}
+          />
         </Vertical>
       </Wrapper>
     </Vertical>

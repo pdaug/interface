@@ -6,10 +6,36 @@ import { fontBasicList } from "../components/richtext/RichText";
 
 export type RendererProps = {
   content: Descendant[];
+  params: Record<string, string>;
 };
 
-const Renderer = function ({ content }: RendererProps) {
+// customerName
+// customerMobile
+// customerPhone1
+// customerPhone2
+// customerEmail
+// customerDocument1
+// customerDocument2
+// companyName
+// companyPhone
+// companyMobile
+// companyWebsite
+// companyEmail
+// companyDocument1
+// companyDocument2
+
+const Renderer = function ({ content, params }: RendererProps) {
   let fontFamily = "sans-serif";
+
+  const RendererText = function (text: string) {
+    const expression = /{{(.*?)}}/g;
+    const textReplaced = text.replace(expression, function (_, key) {
+      const keyTrimmed = key.trim();
+      const value = params[keyTrimmed] ?? "";
+      return value;
+    });
+    return textReplaced;
+  };
 
   const RendererNode = function (node: Descendant, index: number) {
     // font
@@ -20,7 +46,8 @@ const Renderer = function ({ content }: RendererProps) {
 
     // node
     if ("text" in node && node.text) {
-      const text = node.text;
+      const text = RendererText(node.text);
+
       if ("bold" in node && node.bold)
         return (
           <b key={`node-${index}`} style={{ fontFamily }}>
