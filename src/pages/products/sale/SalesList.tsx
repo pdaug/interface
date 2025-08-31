@@ -194,7 +194,7 @@ const SalesList = function () {
         });
         console.error(
           "[src/pages/products/sale/SalesList.tsx]",
-          "no_document_proposal",
+          "no_to_invoice",
         );
         return;
       },
@@ -251,10 +251,7 @@ const SalesList = function () {
         toast.warning(t.toast.warning_error, {
           description: t.sale.no_products,
         });
-        console.error(
-          "[src/pages/products/sale/SalesList.tsx]",
-          "no_document_proposal",
-        );
+        console.error("[src/pages/products/sale/SalesList.tsx]", "no_share");
         return;
       },
     },
@@ -454,12 +451,12 @@ const SalesList = function () {
             options={[
               { id: "all", name: t.sale.all_seller, status: true },
               ...users,
-            ].map(function (user) {
+            ].map(function (userLocal) {
               return {
-                id: user.id,
-                value: user.id,
-                text: user.name,
-                disabled: !user.status,
+                id: userLocal.id,
+                value: userLocal.id,
+                text: userLocal.name,
+                disabled: !userLocal.status,
               };
             })}
             onChange={function (event) {
