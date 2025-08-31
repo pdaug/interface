@@ -205,14 +205,19 @@ const SalesInspect = function () {
         });
         return;
       }
-      if (response.data.result.items?.[0])
+      const customerFindedValid = response.data.result.items?.find(
+        function (customer) {
+          return customer.status;
+        },
+      );
+      if (customerFindedValid)
         setForm(function (prevState) {
           const newForm = { ...prevState };
           if (!newForm?.customerId) {
-            newForm.customerId = response.data.result.items[0].id;
-            newForm.customerName = response.data.result.items[0].name;
-            newForm.customerMobile = response.data.result.items[0].mobile;
-            newForm.customerDocument = response.data.result.items[0]?.document1;
+            newForm.customerId = customerFindedValid.id;
+            newForm.customerName = customerFindedValid.name;
+            newForm.customerMobile = customerFindedValid.mobile;
+            newForm.customerDocument = customerFindedValid?.document1;
           }
           return newForm;
         });
@@ -303,14 +308,18 @@ const SalesInspect = function () {
         });
         return;
       }
-      const accountList = response.data.result.items;
-      if (accountList?.[0])
+      const accountFindedValid = response.data.result.items?.find(
+        function (account) {
+          return account.status;
+        },
+      );
+      if (accountFindedValid)
         setForm(function (prevState) {
           const newForm = { ...prevState };
-          if (!newForm.accountId) newForm.accountId = accountList[0].id;
+          if (!newForm.accountId) newForm.accountId = accountFindedValid.id;
           return newForm;
         });
-      setAccounts(accountList);
+      setAccounts(response.data.result.items);
       return;
     } catch (err) {
       play("alert");
