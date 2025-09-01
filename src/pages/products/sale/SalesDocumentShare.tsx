@@ -44,7 +44,13 @@ const SalesDocumentShare = function () {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [customers, setCustomers] = useState<TypeCustomer[]>([]);
-  const [documents, setDocuments] = useState<TypeDocument[]>([]);
+  const [documentFile, setDocumentFile] = useState<{
+    contract: TypeDocument | null;
+    proposal: TypeDocument | null;
+  }>({
+    contract: null,
+    proposal: null,
+  });
 
   const [form, setForm] = useState<Partial<TypeSale>>({
     saleId: GenerateNumbers(6),
@@ -74,11 +80,9 @@ const SalesDocumentShare = function () {
     createdAt: format(new Date(), "yyyy-MM-dd"),
   });
 
-  const documentData = documents.find(function (documentLocal) {
-    if (type === "contract") return documentLocal.id === form?.documentContract;
-    if (type === "proposal") return documentLocal.id === form?.documentProposal;
-    return false;
-  });
+  const documentData = type
+    ? documentFile?.[type as keyof typeof documentFile] || null
+    : null;
 
   const customer = customers.find(function (customer) {
     return customer.id === form.customerId;
@@ -89,7 +93,7 @@ const SalesDocumentShare = function () {
     if (!id) return;
     setLoading(true);
     try {
-      const responseSale = await apis.Sale.get(
+      const responseSale = await apis.Sale.get<TypeSale>(
         token,
         instance.name,
         id,
@@ -105,27 +109,44 @@ const SalesDocumentShare = function () {
       }
       setForm(responseSale.data.result);
 
-      const responseDocument = await apis.DocumentApi.list<
-        ApiResponsePaginate<TypeDocument>
-      >(
+      const responseDocumentContract = await apis.DocumentApi.get<TypeDocument>(
         token,
         instance.name,
-        {
-          pageSize: 999,
-          pageCurrent: 1,
-          orderField: "name",
-          orderSort: "asc",
-        },
+        responseSale.data.result.documentContract || "",
         workspaceId,
       );
-      if (!responseDocument.data?.result || responseDocument.status !== 200) {
+      if (
+        !responseDocumentContract.data?.result ||
+        responseDocumentContract.status !== 200
+      ) {
         play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
         return;
       }
-      setDocuments(responseDocument.data.result.items);
+
+      const responseDocumentProposal = await apis.DocumentApi.get<TypeDocument>(
+        token,
+        instance.name,
+        responseSale.data.result.documentProposal || "",
+        workspaceId,
+      );
+      if (
+        !responseDocumentProposal.data?.result ||
+        responseDocumentProposal.status !== 200
+      ) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        return;
+      }
+
+      setDocumentFile({
+        contract: responseDocumentContract.data.result ?? null,
+        proposal: responseDocumentProposal.data.result ?? null,
+      });
 
       return;
     } catch (err) {
