@@ -1,8 +1,14 @@
 // hooks
 import useSystem from "./useSystem";
 
-const useCurrency = function () {
+// types
+import { TypeInstance } from "../types/Instance";
+
+const useCurrency = function (instanceExternal?: TypeInstance) {
   const { instance } = useSystem();
+
+  const language = instance?.language || instanceExternal?.language || "en";
+  const currency = instance?.currency || instanceExternal?.currency || "USD";
 
   const Currency = function (value: string | number): string {
     let number =
@@ -10,9 +16,9 @@ const useCurrency = function () {
         ? parseFloat(value.replace(",", ".").replace(/[^\d.-]/g, ""))
         : value;
     if (isNaN(number)) number = 0;
-    return number.toLocaleString(instance.language, {
+    return number.toLocaleString(language, {
       style: "currency",
-      currency: instance.currency,
+      currency,
     });
   };
 

@@ -1,7 +1,7 @@
 import { toast } from "sonner";
-import { useState } from "react";
-import { format } from "date-fns";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { ImageBroken } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -17,21 +17,14 @@ import { MaskPostalCode } from "../../../assets/Mask";
 // utils
 import Calculate from "../../../utils/Calculate";
 import PhoneNumber from "../../../utils/PhoneNumber";
-import { GenerateNumbers } from "../../../utils/GenerateId";
 
 // types
-import {
-  TypeSale,
-  TypeSaleStage,
-  TypeSaleDetails,
-  TypeSaleProduct,
-} from "../../../types/Sale";
+import { TypeSale } from "../../../types/Sale";
+import { TypeInstance } from "../../../types/Instance";
 import { TypeCustomer } from "../../../types/Customers";
-import { ApiResponsePaginate } from "../../../types/Api";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
-import useSystem from "../../../hooks/useSystem";
 import useSounds from "../../../hooks/useSounds";
 import useCurrency from "../../../hooks/useCurrency";
 import useTranslate from "../../../hooks/useTranslate";
@@ -45,6 +38,7 @@ import {
 } from "../../../components/inputs/Input";
 import Badge from "../../../components/badges/Badge";
 import Sheets from "../../../components/sheets/Sheets";
+import Avatar from "../../../components/avatars/Avatar";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Profile from "../../../components/profiles/Profile";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
@@ -53,52 +47,25 @@ const SalesShare = function () {
   const t = useTranslate();
   const play = useSounds();
   const { id } = useParams();
-  const Currency = useCurrency();
-  const navigate = useNavigate();
-  const { user, token, instance, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [customers, setCustomers] = useState<TypeCustomer[]>([]);
+  const [sale, setSale] = useState<TypeSale | null>(null);
+  const [customer, setCustomer] = useState<TypeCustomer | null>(null);
+  const [instance, setInstance] = useState<TypeInstance | null>(null);
 
-  const [form, setForm] = useState<Partial<TypeSale>>({
-    saleId: GenerateNumbers(6),
-    stage: "draft" as TypeSaleStage,
-    description: "",
+  const Currency = useCurrency(instance ?? undefined);
 
-    customerId: "",
-    customerName: "",
-    customerMobile: "",
-    customerDocument: "",
-
-    products: new Array<TypeSaleProduct>(),
-
-    details: new Array<TypeSaleDetails>(),
-
-    shippingMethod: undefined,
-    shippingCost: "0.00",
-    shippingFromAddress: "",
-    shippingFromPostal: "",
-    shippingToAddress: "",
-    shippingToPostal: "",
-
-    userId: user.id,
-    sellerId: user.id,
-    accountId: "",
-
-    createdAt: format(new Date(), "yyyy-MM-dd"),
-  });
-
-  const subtotalProducts = Calculate.productsOrServices(form?.products || []);
+  const subtotalProducts = Calculate.productsOrServices(sale?.products || []);
 
   const subtotalAdditions = Calculate.details(
-    form?.details?.filter(function (detail) {
+    sale?.details?.filter(function (detail) {
       return detail?.type === "tax" || detail?.type === "fee";
     }) || [],
     subtotalProducts,
   );
 
   const subtotalDeductions = Calculate.details(
-    form?.details?.filter(function (detail) {
+    sale?.details?.filter(function (detail) {
       return (
         detail?.type === "discount" ||
         detail?.type === "promo" ||
@@ -109,7 +76,7 @@ const SalesShare = function () {
     subtotalProducts,
   );
 
-  const subtotalShipping = Number(form?.shippingCost) || 0;
+  const subtotalShipping = Number(sale?.shippingCost) || 0;
 
   const total =
     subtotalProducts +
@@ -117,27 +84,91 @@ const SalesShare = function () {
     subtotalDeductions +
     subtotalShipping;
 
-  // fetch sale
+  // change style by instance
+  useEffect(
+    function () {
+      if (!instance) return;
+      const favicon: HTMLLinkElement | null =
+        document.querySelector("link[rel*='icon']");
+      if (!favicon) return;
+      favicon.type = "image/x-icon";
+      favicon.rel = "shortcut icon";
+      favicon.href = instance.favicon as string;
+      document.title = instance.companyName as string;
+      return;
+    },
+    [instance],
+  );
+
+  // fetch instance, sale and customer
   useAsync(async function () {
-    if (!id) return;
+    if (!id) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.no_items,
+      });
+      return;
+    }
     setLoading(true);
     try {
-      const response = await apis.Sale.get(
-        token,
+      // instance
+      let instance: TypeInstance | null = null;
+      const host = window.location.hostname;
+      const parts = host.split(".");
+      const subdomain = parts?.[0];
+      if (subdomain && parts.length >= 3) {
+        const responseInstance =
+          await apis.Instance.search<TypeInstance>(subdomain);
+        if (responseInstance.data?.result) {
+          instance = responseInstance.data.result;
+          setInstance(responseInstance.data.result);
+        }
+      } else {
+        const responseInstance =
+          await apis.Instance.search<TypeInstance>("test");
+        if (responseInstance.data?.result) {
+          instance = responseInstance.data.result;
+          setInstance(responseInstance.data.result);
+        }
+      }
+
+      if (!instance) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_instance,
+        });
+        return;
+      }
+
+      // sale
+      const responseSale = await apis.Sale.get<TypeSale>(
+        "5d83e097-d2d2-4b0e-8686-fb91154876d8",
         instance.name,
         id,
-        workspaceId,
       );
-      if (!response.data?.result || response.status !== 200) {
+      if (!responseSale.data?.result || responseSale.status !== 200) {
         play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        navigate("/f/sales");
         return;
       }
-      setForm(response.data.result);
-      return;
+      setSale(responseSale.data.result);
+
+      // customer
+      const responseCustomer = await apis.Customer.get<TypeCustomer>(
+        "5d83e097-d2d2-4b0e-8686-fb91154876d8",
+        instance.name,
+        responseSale.data.result.customerId,
+      );
+      if (!responseCustomer.data?.result || responseCustomer.status !== 200) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        return;
+      }
+      setCustomer(responseCustomer.data.result);
     } catch (err) {
       play("alert");
       toast.warning(t.toast.warning_error, {
@@ -149,56 +180,6 @@ const SalesShare = function () {
       setLoading(false);
     }
   }, []);
-
-  // fetch customers
-  useAsync(async function () {
-    try {
-      const response = await apis.Customer.list<
-        ApiResponsePaginate<TypeCustomer>
-      >(
-        token,
-        instance.name,
-        {
-          pageSize: 999,
-          pageCurrent: 1,
-          orderField: "name",
-          orderSort: "asc",
-        },
-        workspaceId,
-      );
-      if (!response.data?.result || response.status !== 200) {
-        play("alert");
-        toast.warning(t.toast.warning_error, {
-          description: t.stacks.no_find_item,
-        });
-        return;
-      }
-      if (response.data.result.items?.[0])
-        setForm(function (prevState) {
-          const newForm = { ...prevState };
-          if (!newForm?.customerId) {
-            newForm.customerId = response.data.result.items[0].id;
-            newForm.customerName = response.data.result.items[0].name;
-            newForm.customerMobile = response.data.result.items[0].mobile;
-            newForm.customerDocument = response.data.result.items[0]?.document1;
-          }
-          return newForm;
-        });
-      setCustomers(response.data.result.items);
-      return;
-    } catch (err) {
-      play("alert");
-      toast.warning(t.toast.warning_error, {
-        description: t.stacks.no_find_item,
-      });
-      console.error("src/pages/products/sale/SalesShare.tsx]", err);
-      return;
-    }
-  }, []);
-
-  const customer = customers.find(function (customer) {
-    return customer.id === form.customerId;
-  });
 
   return loading ? (
     <Vertical internal={1} external={1}>
@@ -217,6 +198,47 @@ const SalesShare = function () {
     </Vertical>
   ) : (
     <Vertical internal={1} external={1}>
+      <Horizontal internal={1} className="itemsCenter">
+        <Avatar
+          label=""
+          size={[12, 24]}
+          Icon={ImageBroken}
+          photo={instance?.logoLarge ?? undefined}
+        />
+        <Vertical internal={0.2}>
+          <div
+            style={{
+              color: instance?.colorPrimary,
+              fontSize: "var(--textSubtitle)",
+            }}
+          >
+            {instance?.companyName}
+          </div>
+          <div style={{ fontSize: "var(--textSmall)" }}>
+            <a
+              href={`tel:${instance?.companyMobile}`}
+              style={{ color: instance?.colorSecondary }}
+            >
+              {PhoneNumber.Internacional(instance?.companyMobile || "")}
+            </a>
+            <br />
+            <a
+              href={`tel:${instance?.companyPhone}`}
+              style={{ color: instance?.colorSecondary }}
+            >
+              {PhoneNumber.Internacional(instance?.companyPhone || "")}
+            </a>
+            <br />
+            <a
+              href={`mailto:${instance?.companyPhone}`}
+              style={{ color: instance?.colorSecondary }}
+            >
+              {instance?.companyEmail}
+            </a>
+          </div>
+        </Vertical>
+      </Horizontal>
+
       <Wrapper>
         <Horizontal
           internal={1}
@@ -231,7 +253,7 @@ const SalesShare = function () {
             description={
               <Vertical>
                 <div>{PhoneNumber.Internacional(customer?.mobile || "")}</div>
-                <div>{form.saleId}</div>
+                <div>{sale?.saleId}</div>
               </Vertical>
             }
           />
@@ -247,7 +269,7 @@ const SalesShare = function () {
       <Sheets
         title={t.product.products}
         empty={t.sale.no_products}
-        rows={form?.products || []}
+        rows={sale?.products || []}
         footer={
           <Badge
             category="Info"
@@ -302,11 +324,11 @@ const SalesShare = function () {
         }}
       />
 
-      {form?.details && form.details?.length > 0 && (
+      {sale?.details && sale.details?.length > 0 && (
         <Sheets
           title={t.sale.details}
           empty={t.sale.no_details}
-          rows={form?.details || []}
+          rows={sale?.details || []}
           footer={
             <Horizontal internal={1}>
               <Badge
@@ -395,7 +417,7 @@ const SalesShare = function () {
         />
       )}
 
-      {form?.shippingMethod && (
+      {sale?.shippingMethod && (
         <Wrapper title={t.sale.title_address}>
           <Vertical internal={1} className="flex1">
             <Horizontal internal={1}>
@@ -405,7 +427,7 @@ const SalesShare = function () {
                 id="sale_shipping_method"
                 empty={t.stacks.no_option}
                 label={t.sale.shipping_method}
-                value={form?.shippingMethod || ""}
+                value={sale?.shippingMethod || ""}
                 options={SaleShippingMethod.map(function (shipping) {
                   return {
                     id: shipping,
@@ -425,7 +447,7 @@ const SalesShare = function () {
                 name="shippingCost"
                 id="sale_shipping_cost"
                 label={t.sale.shipping_cost}
-                value={form?.shippingCost || "0.00"}
+                value={sale?.shippingCost || "0.00"}
                 onChange={function () {
                   return;
                 }}
@@ -435,7 +457,7 @@ const SalesShare = function () {
                 name="shippingDescription"
                 id="sale_shipping_description"
                 label={t.sale.shipping_description}
-                value={form?.shippingDescription || ""}
+                value={sale?.shippingDescription || ""}
                 placeholder={t.sale.shipping_description_placeholder}
                 onChange={function () {
                   return;
@@ -450,7 +472,7 @@ const SalesShare = function () {
                 name="shippingFromPostal"
                 id="user_shipping_from_postal"
                 label={t.sale.shipping_from_postal}
-                value={form?.shippingFromPostal || ""}
+                value={sale?.shippingFromPostal || ""}
                 placeholder={t.components.address_postal_code_placeholder}
                 onChange={async function () {
                   return;
@@ -462,7 +484,7 @@ const SalesShare = function () {
                 name="shippingFromAddress"
                 id="shipping_from_address"
                 label={t.sale.shipping_from_address}
-                value={form?.shippingFromAddress || ""}
+                value={sale?.shippingFromAddress || ""}
                 placeholder={t.components.address_street_placeholder}
                 onChange={function () {
                   return;
@@ -477,7 +499,7 @@ const SalesShare = function () {
                 name="shippingToPostal"
                 id="user_shipping_to_postal"
                 label={t.sale.shipping_to_postal}
-                value={form?.shippingToPostal || ""}
+                value={sale?.shippingToPostal || ""}
                 placeholder={t.components.address_postal_code_placeholder}
                 onChange={async function () {
                   return;
@@ -489,7 +511,7 @@ const SalesShare = function () {
                 name="shippingToAddress"
                 id="shipping_to_address"
                 label={t.sale.shipping_to_address}
-                value={form?.shippingToAddress || ""}
+                value={sale?.shippingToAddress || ""}
                 placeholder={t.components.address_street_placeholder}
                 onChange={function () {
                   return;
