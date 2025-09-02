@@ -44,7 +44,6 @@ import Profile from "../../../components/profiles/Profile";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const SalesShare = function () {
-  const t = useTranslate();
   const play = useSounds();
   const { id } = useParams();
 
@@ -53,6 +52,7 @@ const SalesShare = function () {
   const [customer, setCustomer] = useState<TypeCustomer | null>(null);
   const [instance, setInstance] = useState<TypeInstance | null>(null);
 
+  const t = useTranslate(instance ?? undefined);
   const Currency = useCurrency(instance ?? undefined);
 
   const subtotalProducts = Calculate.productsOrServices(sale?.products || []);
@@ -109,6 +109,7 @@ const SalesShare = function () {
       });
       return;
     }
+
     setLoading(true);
     try {
       // instance

@@ -1,8 +1,8 @@
 import { toast } from "sonner";
 import { Descendant } from "slate";
+import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { ImageBroken } from "@phosphor-icons/react";
-import { useNavigate, useParams } from "react-router-dom";
 
 // apis
 import apis from "../../../apis";
@@ -32,7 +32,6 @@ const DocumentsShare = function () {
   const t = useTranslate();
   const play = useSounds();
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [documentFile, setDocumentFile] = useState<TypeDocument | null>(null);
@@ -91,7 +90,6 @@ const DocumentsShare = function () {
           toast.warning(t.toast.warning_error, {
             description: t.stacks.no_find_item,
           });
-          navigate("/f/documents");
           setLoading(false);
           return;
         }

@@ -1,9 +1,8 @@
 import { toast } from "sonner";
 import { useState } from "react";
-import { format } from "date-fns";
 import { Descendant } from "slate";
+import { useParams } from "react-router-dom";
 import { ImageBroken } from "@phosphor-icons/react";
-import { useNavigate, useParams } from "react-router-dom";
 
 // apis
 import apis from "../../../apis";
@@ -16,34 +15,25 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 // utils
 import Renderer from "../../../utils/Renderer";
 import PhoneNumber from "../../../utils/PhoneNumber";
-import { GenerateNumbers } from "../../../utils/GenerateId";
 
 // types
-import {
-  TypeSale,
-  TypeSaleStage,
-  TypeSaleDetails,
-  TypeSaleProduct,
-} from "../../../types/Sale";
+import { TypeSale } from "../../../types/Sale";
 import { TypeCustomer } from "../../../types/Customers";
 import { TypeDocument } from "../../../types/Documents";
-import { ApiResponsePaginate } from "../../../types/Api";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
-import useSystem from "../../../hooks/useSystem";
 import useSounds from "../../../hooks/useSounds";
 import useTranslate from "../../../hooks/useTranslate";
+import { TypeInstance } from "../../../types/Instance";
 
 const SalesDocumentShare = function () {
-  const t = useTranslate();
   const play = useSounds();
   const { id, type } = useParams();
-  const navigate = useNavigate();
-  const { user, token, instance, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [customers, setCustomers] = useState<TypeCustomer[]>([]);
+  const [instance, setInstance] = useState<TypeInstance | null>();
+  const [customer, setCustomer] = useState<TypeCustomer | null>();
   const [documentFile, setDocumentFile] = useState<{
     contract: TypeDocument | null;
     proposal: TypeDocument | null;
@@ -52,101 +42,123 @@ const SalesDocumentShare = function () {
     proposal: null,
   });
 
-  const [form, setForm] = useState<Partial<TypeSale>>({
-    saleId: GenerateNumbers(6),
-    stage: "draft" as TypeSaleStage,
-    description: "",
-
-    customerId: "",
-    customerName: "",
-    customerMobile: "",
-    customerDocument: "",
-
-    products: new Array<TypeSaleProduct>(),
-
-    details: new Array<TypeSaleDetails>(),
-
-    shippingMethod: undefined,
-    shippingCost: "0.00",
-    shippingFromAddress: "",
-    shippingFromPostal: "",
-    shippingToAddress: "",
-    shippingToPostal: "",
-
-    userId: user.id,
-    sellerId: user.id,
-    accountId: "",
-
-    createdAt: format(new Date(), "yyyy-MM-dd"),
-  });
+  const t = useTranslate(instance ?? undefined);
 
   const documentData = type
     ? documentFile?.[type as keyof typeof documentFile] || null
     : null;
 
-  const customer = customers.find(function (customer) {
-    return customer.id === form.customerId;
-  });
-
-  // fetch sale and documents
+  // fetch sale, customer, documents
   useAsync(async function () {
-    if (!id) return;
+    if (!id) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.no_items,
+      });
+      return;
+    }
+
     setLoading(true);
     try {
+      // instance
+      let instance: TypeInstance | null = null;
+      const host = window.location.hostname;
+      const parts = host.split(".");
+      const subdomain = parts?.[0];
+      if (subdomain && parts.length >= 3) {
+        const responseInstance =
+          await apis.Instance.search<TypeInstance>(subdomain);
+        if (responseInstance.data?.result) {
+          instance = responseInstance.data.result;
+          setInstance(responseInstance.data.result);
+        }
+      } else {
+        const responseInstance =
+          await apis.Instance.search<TypeInstance>("test");
+        if (responseInstance.data?.result) {
+          instance = responseInstance.data.result;
+          setInstance(responseInstance.data.result);
+        }
+      }
+
+      if (!instance) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_instance,
+        });
+        return;
+      }
+
+      // sale
       const responseSale = await apis.Sale.get<TypeSale>(
-        token,
+        "5d83e097-d2d2-4b0e-8686-fb91154876d8",
         instance.name,
         id,
-        workspaceId,
       );
       if (!responseSale.data?.result || responseSale.status !== 200) {
         play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        navigate("/f/sales");
         return;
       }
-      setForm(responseSale.data.result);
 
-      const responseDocumentContract = await apis.DocumentApi.get<TypeDocument>(
-        token,
+      // customer
+      const responseCustomer = await apis.Customer.get<TypeCustomer>(
+        "5d83e097-d2d2-4b0e-8686-fb91154876d8",
         instance.name,
-        responseSale.data.result.documentContract || "",
-        workspaceId,
+        responseSale.data.result.customerId,
       );
-      if (
-        !responseDocumentContract.data?.result ||
-        responseDocumentContract.status !== 200
-      ) {
+      if (!responseCustomer.data?.result || responseCustomer.status !== 200) {
         play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
         return;
       }
+      setCustomer(responseCustomer.data.result);
 
-      const responseDocumentProposal = await apis.DocumentApi.get<TypeDocument>(
-        token,
-        instance.name,
-        responseSale.data.result.documentProposal || "",
-        workspaceId,
-      );
-      if (
-        !responseDocumentProposal.data?.result ||
-        responseDocumentProposal.status !== 200
-      ) {
-        play("alert");
-        toast.warning(t.toast.warning_error, {
-          description: t.stacks.no_find_item,
-        });
-        return;
+      let contract: TypeDocument | null = null;
+      if (responseSale.data.result?.documentContract) {
+        const responseDocumentContract =
+          await apis.DocumentApi.getPublic<TypeDocument>(
+            instance.name,
+            responseSale.data.result.documentContract,
+          );
+        if (
+          !responseDocumentContract.data?.result ||
+          responseDocumentContract.status !== 200
+        ) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          return;
+        }
+        contract = responseDocumentContract.data.result;
       }
 
-      setDocumentFile({
-        contract: responseDocumentContract.data.result ?? null,
-        proposal: responseDocumentProposal.data.result ?? null,
-      });
+      let proposal: TypeDocument | null = null;
+      if (responseSale.data.result.documentProposal) {
+        const responseDocumentProposal =
+          await apis.DocumentApi.getPublic<TypeDocument>(
+            instance.name,
+            responseSale.data.result.documentProposal || "",
+          );
+        if (
+          !responseDocumentProposal.data?.result ||
+          responseDocumentProposal.status !== 200
+        ) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          return;
+        }
+        proposal = responseDocumentProposal.data.result;
+      }
+
+      setDocumentFile({ contract, proposal });
 
       return;
     } catch (err) {
@@ -158,52 +170,6 @@ const SalesDocumentShare = function () {
       return;
     } finally {
       setLoading(false);
-    }
-  }, []);
-
-  // fetch customers
-  useAsync(async function () {
-    try {
-      const response = await apis.Customer.list<
-        ApiResponsePaginate<TypeCustomer>
-      >(
-        token,
-        instance.name,
-        {
-          pageSize: 999,
-          pageCurrent: 1,
-          orderField: "name",
-          orderSort: "asc",
-        },
-        workspaceId,
-      );
-      if (!response.data?.result || response.status !== 200) {
-        play("alert");
-        toast.warning(t.toast.warning_error, {
-          description: t.stacks.no_find_item,
-        });
-        return;
-      }
-      if (response.data.result.items?.[0])
-        setForm(function (prevState) {
-          const newForm = { ...prevState };
-          if (!newForm?.customerId) {
-            newForm.customerId = response.data.result.items[0].id;
-            newForm.customerName = response.data.result.items[0].name;
-            newForm.customerMobile = response.data.result.items[0].mobile;
-            newForm.customerDocument = response.data.result.items[0]?.document1;
-          }
-          return newForm;
-        });
-      setCustomers(response.data.result.items);
-      return;
-    } catch (err) {
-      play("alert");
-      toast.warning(t.toast.warning_error, {
-        description: t.stacks.no_find_item,
-      });
-      console.error("[src/pages/products/sale/SalesDocumentShare.tsx]", err);
-      return;
     }
   }, []);
 
@@ -267,24 +233,37 @@ const SalesDocumentShare = function () {
 
       <Wrapper>
         <Vertical internal={0.6}>
-          <Renderer
-            content={documentData.content as Descendant[]}
-            params={{
-              customerName: customer?.name || "",
-              customerMobile: customer?.mobile || "",
-              customerPhone1: customer?.phone1 || "",
-              customerPhone2: customer?.phone2 || "",
-              customerEmail: customer?.email || "",
-              customerDocument1: customer?.document1 || "",
-              customerDocument2: customer?.document2 || "",
-              companyName: instance?.companyName || "",
-              companyPhone: instance?.companyPhone || "",
-              companyMobile: instance?.companyMobile || "",
-              companyWebsite: instance?.companyWebsite || "",
-              companyEmail: instance?.companyEmail || "",
-              companyDocument: instance?.companyDocument || "",
-            }}
-          />
+          {documentData?.content ? (
+            <Renderer
+              content={documentData?.content as Descendant[]}
+              params={{
+                customerName: customer?.name || "",
+                customerMobile: customer?.mobile || "",
+                customerPhone1: customer?.phone1 || "",
+                customerPhone2: customer?.phone2 || "",
+                customerEmail: customer?.email || "",
+                customerDocument1: customer?.document1 || "",
+                customerDocument2: customer?.document2 || "",
+                companyName: instance?.companyName || "",
+                companyPhone: instance?.companyPhone || "",
+                companyMobile: instance?.companyMobile || "",
+                companyWebsite: instance?.companyWebsite || "",
+                companyEmail: instance?.companyEmail || "",
+                companyDocument: instance?.companyDocument || "",
+              }}
+            />
+          ) : (
+            <Horizontal className="justifyCenter">
+              <i
+                style={{
+                  color: "var(--textLight)",
+                  fontSize: "var(--textSmall)",
+                }}
+              >
+                {t.document.not_public}
+              </i>
+            </Horizontal>
+          )}
         </Vertical>
       </Wrapper>
     </Vertical>
