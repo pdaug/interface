@@ -621,8 +621,8 @@ const OrdersList = function () {
             details: {
               label: t.order.details,
               handler: function (data) {
-                const subtotalProducts = Calculate.productsOrServices(
-                  (data?.products as Record<string, unknown>[]) || [],
+                const subtotalServices = Calculate.productsOrServices(
+                  (data?.services as Record<string, unknown>[]) || [],
                 );
 
                 const subtotalAdditions = Calculate.details(
@@ -635,7 +635,7 @@ const OrdersList = function () {
                       );
                     },
                   ) || [],
-                  subtotalProducts,
+                  subtotalServices,
                 );
 
                 const subtotalDeductions = Calculate.details(
@@ -649,7 +649,7 @@ const OrdersList = function () {
                       );
                     },
                   ) || [],
-                  subtotalProducts,
+                  subtotalServices,
                 );
 
                 return (
@@ -682,8 +682,8 @@ const OrdersList = function () {
               label: t.components.total,
               maxWidth: 128,
               handler: function (data) {
-                const subtotalProducts = Calculate.productsOrServices(
-                  (data?.products as Record<string, unknown>[]) || [],
+                const subtotalServices = Calculate.productsOrServices(
+                  (data?.services as Record<string, unknown>[]) || [],
                 );
 
                 const subtotalAdditions = Calculate.details(
@@ -696,7 +696,7 @@ const OrdersList = function () {
                       );
                     },
                   ) || [],
-                  subtotalProducts,
+                  subtotalServices,
                 );
 
                 const subtotalDeductions = Calculate.details(
@@ -710,11 +710,11 @@ const OrdersList = function () {
                       );
                     },
                   ) || [],
-                  subtotalProducts,
+                  subtotalServices,
                 );
 
                 const total =
-                  subtotalProducts + subtotalAdditions - subtotalDeductions;
+                  subtotalServices + subtotalAdditions - subtotalDeductions;
 
                 return <div>{Currency(total || 0)}</div>;
               },
