@@ -60,7 +60,7 @@ export type TypeOrder = {
 
   addresses: (TypeAddress & { description?: string })[];
 
-  vehicleId?: string; // TODO
+  vehicleId?: string;
   driverId?: string;
 
   userId: string;

@@ -98,7 +98,7 @@ const OrdersInspect = function () {
 
     addresses: [],
 
-    providerId: "",
+    providerId: user.id,
     userId: user.id,
     accountId: "",
 
@@ -713,7 +713,7 @@ const OrdersInspect = function () {
                   id="order_provider_id"
                   label={t.order.provider}
                   empty={t.stacks.no_option}
-                  value={String(form.userId)}
+                  value={String(form.providerId)}
                   options={users.map(function (user) {
                     return {
                       id: user.id,
