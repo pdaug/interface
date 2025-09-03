@@ -329,10 +329,16 @@ const TranslatePt = {
     title_edit: "Edite a ordem",
     title_create: "Crie uma nova ordem",
     subtitle: "Preencha os dados abaixo para poder editar ou criar a ordem",
-    title_document: "Documentos de ordem",
+    title_document: "Documentos",
     subtitle_document:
       "Selecione os documentos para serem anexados com a ordem",
     services: "Serviços",
+    title_addresses: "Endereços",
+    subtitle_addresses:
+      "Coloque aqui todos os endereços relacionados com a ordem",
+    title_transport: "Deslocamento",
+    subtitle_transport:
+      "Preencha os dados relacionados ao deslocamento da ordem de serviço",
     // stages
     draft: "Rascunho",
     open: "Aberto",
@@ -370,6 +376,8 @@ const TranslatePt = {
     quantity_placeholder: "Ex. 2 quantidade",
     price: "Valor",
     method: "Método",
+    vehicle: "Veículo",
+    driver: "Motorista",
     // details
     details_title: "Detalhes",
     details_title_placeholder: "Ex. Impostos, Taxas",
@@ -1229,6 +1237,10 @@ const TranslateEn = {
     title_document: "Document of order",
     subtitle_document: "Select the documents to attach with the order",
     services: "Services",
+    title_addresses: "Addresses of order",
+    subtitle_addresses: "Put here all addresses relantion with this order",
+    title_transport: "Order transport",
+    subtitle_transport: "Fill with data relation of order service transport",
     // stages
     draft: "Draft",
     open: "Open",
@@ -1266,6 +1278,8 @@ const TranslateEn = {
     quantity_placeholder: "e.g. 2 quantity",
     price: "Price",
     method: "Method",
+    vehicle: "Vehicle",
+    driver: "Driver",
     // details
     details_title: "Details name",
     details_title_placeholder: "e.g. Fees, Taxs",

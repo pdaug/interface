@@ -58,9 +58,11 @@ export type TypeOrder = {
   documentQuotation?: string;
   documentContract?: string;
 
-  addresses: (TypeAddress & { description?: string })[]; // TODO
+  addresses: (TypeAddress & { description?: string })[];
 
   vehicleId?: string; // TODO
+  driverId?: string;
+
   userId: string;
   providerId: string;
   accountId: string;

@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { format, startOfDay } from "date-fns";
 import { useNavigate, useParams } from "react-router-dom";
-import { Asterisk, ShareFat } from "@phosphor-icons/react";
+import { Asterisk, MapTrifold, ShareFat } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -18,7 +18,9 @@ import {
   OrderDetailsMode,
   OrderDetailsType,
 } from "../../../assets/Order";
+import { MaskPostalCode } from "../../../assets/Mask";
 import { ServiceMethods } from "../../../assets/Services";
+import { SettingsAddressState } from "../../../assets/Settings";
 
 // types
 import {
@@ -48,6 +50,7 @@ import {
   Input,
   InputText,
   InputSelect,
+  InputMask,
 } from "../../../components/inputs/Input";
 import Badge from "../../../components/badges/Badge";
 import Sheets from "../../../components/sheets/Sheets";
@@ -55,8 +58,10 @@ import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Profile from "../../../components/profiles/Profile";
 import Callout from "../../../components/callouts/Callout";
+import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import { TypeVehicle } from "../../../types/Vehicle";
 
 const OrdersInspect = function () {
   const t = useTranslate();
@@ -66,13 +71,16 @@ const OrdersInspect = function () {
   const Currency = useCurrency();
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
+  const { OpenDialog, CloseDialog } = useDialog();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [services, setServices] = useState<TypeService[]>([]);
   const [accounts, setAccounts] = useState<TypeAccount[]>([]);
+  const [vehicles, setVehicles] = useState<TypeVehicle[]>([]);
   const [customers, setCustomers] = useState<TypeCustomer[]>([]);
   const [documents, setDocuments] = useState<TypeDocument[]>([]);
+  const [position, setPosition] = useState<[number, number] | null>(null);
 
   const [form, setForm] = useState<Partial<TypeOrder>>({
     orderId: GenerateNumbers(6),
@@ -87,6 +95,8 @@ const OrdersInspect = function () {
     services: new Array<TypeOrderService>(),
 
     details: new Array<TypeOrderDetails>(),
+
+    addresses: [],
 
     providerId: "",
     userId: user.id,
@@ -198,6 +208,41 @@ const OrdersInspect = function () {
           return newForm;
         });
       setCustomers(response.data.result.items);
+      return;
+    } catch (err) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.no_find_item,
+      });
+      console.error("[src/pages/services/order/OrdersInspect.tsx]", err);
+      return;
+    }
+  }, []);
+
+  // fetch vehicles
+  useAsync(async function () {
+    try {
+      const response = await apis.Vehicle.list<
+        ApiResponsePaginate<TypeVehicle>
+      >(
+        token,
+        instance.name,
+        {
+          pageSize: 999,
+          pageCurrent: 1,
+          orderField: "name",
+          orderSort: "asc",
+        },
+        workspaceId,
+      );
+      if (!response.data?.result || response.status !== 200) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        return;
+      }
+      setVehicles(response.data.result.items);
       return;
     } catch (err) {
       play("alert");
@@ -340,6 +385,45 @@ const OrdersInspect = function () {
       return;
     }
   }, []);
+
+  // get position
+  useAsync(
+    async function () {
+      const addressFirst = form.addresses?.[0];
+      if (!addressFirst) return;
+      if (!addressFirst.street || !addressFirst.number || !addressFirst.city)
+        return;
+      try {
+        const response = await apis.AddressPosition(addressFirst);
+        if (
+          !response.data ||
+          !response.data?.[0]?.lat ||
+          !response.data?.[0]?.lon
+        ) {
+          console.warn(
+            "[src/pages/administrative/customers/CustomersInspect.tsx]",
+            response.data,
+          );
+          return;
+        }
+        setPosition([
+          parseFloat(String(response.data[0].lat)),
+          parseFloat(String(response.data[0].lon)),
+        ]);
+      } catch (err) {
+        console.error(
+          "[src/pages/administrative/customers/CustomersInspect.tsx]",
+          err,
+        );
+      }
+      return;
+    },
+    [
+      form.addresses?.[0]?.street,
+      form.addresses?.[0]?.number,
+      form.addresses?.[0]?.city,
+    ],
+  );
 
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -534,6 +618,7 @@ const OrdersInspect = function () {
 
               <Horizontal internal={1}>
                 <Input
+                  required
                   type="date"
                   name="dateStart"
                   disabled={loading}
@@ -1034,6 +1119,347 @@ const OrdersInspect = function () {
               },
             }}
           />
+
+          <Wrapper
+            title={t.order.title_addresses}
+            description={t.order.subtitle_addresses}
+          >
+            <Horizontal internal={1}>
+              <Vertical internal={1} className="flex1">
+                {form.addresses?.map(function (_, index) {
+                  return (
+                    <Vertical internal={1} key={`address-${index}`}>
+                      <Horizontal
+                        internal={1}
+                        styles={{ alignItems: "flex-end" }}
+                      >
+                        <InputMask
+                          mask={MaskPostalCode}
+                          disabled={loading}
+                          name={`addresses[${index}].postalCode`}
+                          label={t.components.address_postal_code}
+                          id={`order_addresses_${index}_postal_code`}
+                          value={form?.addresses?.[index].postalCode || ""}
+                          placeholder={
+                            t.components.address_postal_code_placeholder
+                          }
+                          onChange={async function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            const postalCodeRaw =
+                              event.currentTarget?.value || "";
+                            const postalCode = postalCodeRaw.replace(/\D/g, "");
+                            newForm.addresses[index].postalCode = postalCode;
+                            if (postalCode.length === 8) {
+                              setLoading(true);
+                              const toastId = toast.loading(
+                                t.components.loading,
+                              );
+                              try {
+                                const response =
+                                  await apis.PostalCode(postalCode);
+                                newForm.addresses[index].street =
+                                  response.data?.street ||
+                                  newForm.addresses[index].street;
+                                newForm.addresses[index].city =
+                                  response.data?.city ||
+                                  newForm.addresses[index].city;
+                                newForm.addresses[index].neighborhood =
+                                  response.data?.neighborhood ||
+                                  newForm.addresses[index].neighborhood;
+                                newForm.addresses[index].state =
+                                  response.data?.state ||
+                                  newForm.addresses[index].state;
+                                toast.dismiss(toastId);
+                                play("ok");
+                                toast.success(t.toast.success, {
+                                  description: t.toast.success_find,
+                                });
+                              } catch (err) {
+                                console.error(
+                                  "[src/pages/services/orders/OrdersInspect.tsx]",
+                                  err,
+                                );
+                                toast.dismiss(toastId);
+                                play("alert");
+                                toast.warning(t.toast.warning_error, {
+                                  description: t.toast.warning_find,
+                                });
+                              } finally {
+                                setLoading(false);
+                              }
+                            }
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+
+                        <Input
+                          min={4}
+                          max={64}
+                          disabled={loading}
+                          name={`addresses[${index}].street`}
+                          id={`order_addresses_${index}_street`}
+                          value={form?.addresses?.[index].street || ""}
+                          label={t.components.address_street}
+                          placeholder={t.components.address_street_placeholder}
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].street =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+
+                        <Button
+                          type="button"
+                          category="Danger"
+                          disabled={loading}
+                          text={t.components.remove}
+                          onClick={function () {
+                            OpenDialog({
+                              category: "Danger",
+                              title: t.dialog.title_delete,
+                              description: t.dialog.description_delete,
+                              confirmText: t.components.remove,
+                              onConfirm: function () {
+                                const newForm = { ...form };
+                                newForm.addresses?.splice(index, 1);
+                                setForm(newForm);
+                                play("ok");
+                                toast.success(t.toast.success, {
+                                  description: t.toast.success_delete,
+                                });
+                                CloseDialog();
+                                return;
+                              },
+                            });
+                          }}
+                        />
+                      </Horizontal>
+
+                      <Horizontal internal={1}>
+                        <Input
+                          min={1}
+                          max={8}
+                          disabled={loading}
+                          label={t.components.address_number}
+                          name={`addresses[${index}].number`}
+                          id={`order_addresses_${index}_number`}
+                          value={form?.addresses?.[index].number || ""}
+                          placeholder={t.components.address_number_placeholder}
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].number =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+
+                        <Input
+                          max={32}
+                          disabled={loading}
+                          label={t.components.address_complement}
+                          name={`addresses[${index}].complement`}
+                          id={`order_addresses_${index}_complement`}
+                          value={form?.addresses?.[index].complement || ""}
+                          placeholder={
+                            t.components.address_complement_placeholder
+                          }
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].complement =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+
+                        <Input
+                          max={64}
+                          disabled={loading}
+                          label={t.components.address_neighborhood}
+                          name={`addresses[${index}].neighborhood`}
+                          id={`order_addresses_${index}_neighborhood`}
+                          value={form?.addresses?.[index].neighborhood || ""}
+                          placeholder={
+                            t.components.address_neighborhood_placeholder
+                          }
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].neighborhood =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+                      </Horizontal>
+
+                      <Horizontal internal={1}>
+                        <Input
+                          min={2}
+                          max={64}
+                          disabled={loading}
+                          name={`addresses[${index}].city`}
+                          label={t.components.address_city}
+                          id={`order_addresses_${index}_city`}
+                          value={form?.addresses?.[index].city || ""}
+                          placeholder={t.components.address_city_placeholder}
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].city =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+
+                        <InputSelect
+                          empty={t.stacks.no_option}
+                          disabled={loading}
+                          name={`addresses[${index}].state`}
+                          label={t.components.address_state}
+                          id={`order_addresses_${index}_state`}
+                          value={form?.addresses?.[index].state || ""}
+                          options={SettingsAddressState.map(function (state) {
+                            return {
+                              id: state.code,
+                              value: state.code,
+                              text: state.name,
+                            };
+                          })}
+                          onChange={function (event) {
+                            const newForm = { ...form };
+                            if (!newForm.addresses?.[index]) return;
+                            newForm.addresses[index].state =
+                              event.currentTarget?.value || "";
+                            setForm(newForm);
+                            return;
+                          }}
+                        />
+                      </Horizontal>
+
+                      {index + 1 !== form.addresses?.length && (
+                        <hr className="wFull" />
+                      )}
+                    </Vertical>
+                  );
+                })}
+
+                <Horizontal
+                  internal={1}
+                  styles={{
+                    justifyContent:
+                      form.addresses?.length === 0 ? "center" : "flex-end",
+                  }}
+                >
+                  <Button
+                    type="button"
+                    category="Success"
+                    disabled={loading}
+                    text={t.components.add}
+                    onClick={function () {
+                      const newForm = { ...form };
+                      newForm.addresses?.push({
+                        street: "",
+                        number: "",
+                        complement: "",
+                        neighborhood: "",
+                        postalCode: "",
+                        city: "",
+                        state: "",
+                      });
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                </Horizontal>
+
+                <div>
+                  <Callout
+                    IconSize={16}
+                    category="Info"
+                    Icon={MapTrifold}
+                    text={t.callout.postal_code_search}
+                    styles={{ flex: 1, fontSize: "var(--textSmall)" }}
+                  />
+                </div>
+              </Vertical>
+
+              {position && (
+                <iframe
+                  loading="lazy"
+                  width="25%"
+                  height={320}
+                  src={`https://maps.google.com/maps?q=${position.join(",")}&z=15&output=embed&maptype=satellite`}
+                ></iframe>
+              )}
+            </Horizontal>
+          </Wrapper>
+
+          <Wrapper
+            collapsible
+            contentStyles={{ padding: 0 }}
+            title={t.order.title_transport}
+            description={t.order.subtitle_transport}
+          >
+            <Vertical internal={1} external={1} className="flex1">
+              <Horizontal internal={1}>
+                <InputSelect
+                  name="vehicleId"
+                  disabled={loading}
+                  id="order_vehicle_id"
+                  label={t.order.vehicle}
+                  empty={t.stacks.no_option}
+                  value={form?.vehicleId || ""}
+                  options={vehicles.map(function (vehicle) {
+                    return {
+                      id: vehicle.id,
+                      value: vehicle.id,
+                      text: vehicle.name,
+                      disabled: !vehicle?.status,
+                    };
+                  })}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.vehicleId = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+
+                <InputSelect
+                  name="driverId"
+                  disabled={loading}
+                  id="order_driver_id"
+                  label={t.order.driver}
+                  empty={t.stacks.no_option}
+                  value={form?.driverId || ""}
+                  options={users.map(function (user) {
+                    return {
+                      id: user.id,
+                      value: user.id,
+                      text: user.name,
+                      disabled: !user?.status,
+                    };
+                  })}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.driverId = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+            </Vertical>
+          </Wrapper>
 
           <Wrapper
             collapsible
