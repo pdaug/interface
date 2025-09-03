@@ -18,9 +18,7 @@ import administrative from "./pages/administrative";
 
 // pages public
 import Login from "./pages/Login";
-import SalesShare from "./pages/products/sale/SalesShare";
-import DocumentsShare from "./pages/tool/documents/DocumentsShare";
-import SalesDocumentShare from "./pages/products/sale/SalesDocumentShare";
+import Shares from "./pages/Shares";
 
 // pages other
 import NotFound from "./pages/NotFound";
@@ -32,18 +30,7 @@ const Router = createBrowserRouter([
     Component: Login,
     errorElement: <ErrorPage />,
   },
-  {
-    path: "/share/document/:id",
-    Component: DocumentsShare,
-  },
-  {
-    path: "/share/sale/:id",
-    Component: SalesShare,
-  },
-  {
-    path: "/share/sale/:id/document/:type",
-    Component: SalesDocumentShare,
-  },
+  Shares,
   {
     path: "f",
     element: <Container />,
