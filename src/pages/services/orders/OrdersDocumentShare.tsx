@@ -22,12 +22,12 @@ import Wrapper from "../../../components/wrapper/Wrapper";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 // types
-import { TypeSale } from "../../../types/Sale";
-import { TypeCustomer } from "../../../types/Customers";
-import { TypeDocument } from "../../../types/Documents";
+import { TypeOrder } from "../../../types/Order";
 import { TypeInstance } from "../../../types/Instance";
+import { TypeDocument } from "../../../types/Documents";
+import { TypeCustomer } from "../../../types/Customers";
 
-const SalesDocumentShare = function () {
+const OrdersDocumentShare = function () {
   const play = useSounds();
   const { id, type } = useParams();
 
@@ -36,10 +36,10 @@ const SalesDocumentShare = function () {
   const [customer, setCustomer] = useState<TypeCustomer | null>();
   const [documentFile, setDocumentFile] = useState<{
     contract: TypeDocument | null;
-    proposal: TypeDocument | null;
+    quotation: TypeDocument | null;
   }>({
     contract: null,
-    proposal: null,
+    quotation: null,
   });
 
   const t = useTranslate(instance ?? undefined);
@@ -64,7 +64,7 @@ const SalesDocumentShare = function () {
     [instance],
   );
 
-  // fetch sale, customer, documents
+  // fetch order, customer, documents
   useAsync(async function () {
     if (!id) {
       play("alert");
@@ -105,13 +105,13 @@ const SalesDocumentShare = function () {
         return;
       }
 
-      // sale
-      const responseSale = await apis.Sale.get<TypeSale>(
+      // order
+      const responseOrder = await apis.Order.get<TypeOrder>(
         "5d83e097-d2d2-4b0e-8686-fb91154876d8",
         instance.name,
         id,
       );
-      if (!responseSale.data?.result || responseSale.status !== 200) {
+      if (!responseOrder.data?.result || responseOrder.status !== 200) {
         play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_find_item,
@@ -123,7 +123,7 @@ const SalesDocumentShare = function () {
       const responseCustomer = await apis.Customer.get<TypeCustomer>(
         "5d83e097-d2d2-4b0e-8686-fb91154876d8",
         instance.name,
-        responseSale.data.result.customerId,
+        responseOrder.data.result.customerId,
       );
       if (!responseCustomer.data?.result || responseCustomer.status !== 200) {
         play("alert");
@@ -135,11 +135,11 @@ const SalesDocumentShare = function () {
       setCustomer(responseCustomer.data.result);
 
       let contract: TypeDocument | null = null;
-      if (responseSale.data.result?.documentContract) {
+      if (responseOrder.data.result?.documentContract) {
         const responseDocumentContract =
           await apis.DocumentApi.getPublic<TypeDocument>(
             instance.name,
-            responseSale.data.result.documentContract,
+            responseOrder.data.result.documentContract,
           );
         if (
           !responseDocumentContract.data?.result ||
@@ -154,16 +154,16 @@ const SalesDocumentShare = function () {
         contract = responseDocumentContract.data.result;
       }
 
-      let proposal: TypeDocument | null = null;
-      if (responseSale.data.result.documentProposal) {
-        const responseDocumentProposal =
+      let quotation: TypeDocument | null = null;
+      if (responseOrder.data.result.documentQuotation) {
+        const responseDocumentQuotation =
           await apis.DocumentApi.getPublic<TypeDocument>(
             instance.name,
-            responseSale.data.result.documentProposal || "",
+            responseOrder.data.result.documentQuotation || "",
           );
         if (
-          !responseDocumentProposal.data?.result ||
-          responseDocumentProposal.status !== 200
+          !responseDocumentQuotation.data?.result ||
+          responseDocumentQuotation.status !== 200
         ) {
           play("alert");
           toast.warning(t.toast.warning_error, {
@@ -171,17 +171,17 @@ const SalesDocumentShare = function () {
           });
           return;
         }
-        proposal = responseDocumentProposal.data.result;
+        quotation = responseDocumentQuotation.data.result;
       }
 
-      setDocumentFile({ contract, proposal });
+      setDocumentFile({ contract, quotation });
       return;
     } catch (err) {
       play("alert");
       toast.warning(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/products/sale/SalesDocumentShare.tsx]", err);
+      console.error("[src/pages/services/order/OrdersDocumentShare.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -300,4 +300,4 @@ const SalesDocumentShare = function () {
   );
 };
 
-export default SalesDocumentShare;
+export default OrdersDocumentShare;
