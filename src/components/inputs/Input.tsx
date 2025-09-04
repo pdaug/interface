@@ -37,6 +37,7 @@ export type InputProps = {
   readOnly?: boolean;
   helper?: string;
   list?: string;
+  stylesInput?: React.CSSProperties;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
@@ -52,6 +53,7 @@ const Input = function ({
   placeholder,
   min,
   max,
+  stylesInput,
   disabled,
   required,
   readOnly,
@@ -73,6 +75,7 @@ const Input = function ({
           type={type}
           step={step}
           value={value}
+          style={stylesInput}
           disabled={disabled}
           required={required}
           onChange={onChange}

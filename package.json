@@ -1,7 +1,7 @@
 {
   "name": "interface",
   "private": true,
-  "version": "0.103",
+  "version": "0.104",
   "type": "module",
   "homepage": "https://pdaug.github.io/interface/",
   "scripts": {
@@ -17,6 +17,7 @@
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
     "@tippyjs/react": "^4.2.6",
+    "@xyflow/react": "^12.8.4",
     "axios": "^1.10.0",
     "date-fns": "^4.1.0",
     "html2canvas": "^1.4.1",
