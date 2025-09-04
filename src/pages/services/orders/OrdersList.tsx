@@ -723,7 +723,7 @@ const OrdersList = function () {
               label: t.order.provider,
               handler: function (data) {
                 const userFinded = users?.find(function (user) {
-                  return user.id === data.userId;
+                  return user.id === data.providerId;
                 });
                 return (
                   <Tooltip
