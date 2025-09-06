@@ -5,6 +5,7 @@ import {
   PencilSimple,
   QuestionMark,
   DownloadSimple,
+  ShoppingBagOpen,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -168,6 +169,22 @@ const CustomersList = function () {
             });
             return;
           }
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_copy,
+        });
+        return;
+      },
+    },
+    {
+      id: "sales",
+      Icon: ShoppingBagOpen,
+      label: t.sale.sales,
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          navigate(`/f/customers/sales/${data.id}`);
+          return;
         }
         play("alert");
         toast.warning(t.toast.warning_error, {

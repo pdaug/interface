@@ -18,6 +18,9 @@
 .statsIcon {
   align-items: center;
   aspect-ratio: 1;
+  background: var(--backgroundColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
   color: var(--textLight);
   display: flex;
   justify-content: center;

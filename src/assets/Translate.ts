@@ -208,6 +208,12 @@ const TranslatePt = {
       "Preencha as entradas com os dados do representante",
     title_addresses: "Endereço",
     subtitle_addresses: "Preencha as entradas com os dados de endereço",
+    // stats
+    stats_sale_title_quantity: "Quantidade de vendas",
+    stats_sale_description_quantity:
+      "Total da quantidade de vendas neste cliente",
+    stats_sale_title_total: "Valor das vendas",
+    stats_sale_description_total: "Total em valor de vendas neste cliente",
     // messages
     no_delete_address: "Não é possível deletar todos os endereços",
   },
@@ -1147,6 +1153,11 @@ const TranslateEn = {
     subtitle_representative: "Fill the inputs with representative data",
     title_addresses: "Addresses",
     subtitle_addresses: "Fill the inputs with the address data",
+    // stats
+    stats_sale_title_quantity: "Sales quantity",
+    stats_sale_description_quantity: "Total of quantity customer sales",
+    stats_sale_title_total: "Sales value",
+    stats_sale_description_total: "Total of value customer sales",
     // messages
     no_delete_address: "Do not delete all addresses",
   },

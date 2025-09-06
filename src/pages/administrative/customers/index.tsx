@@ -1,8 +1,8 @@
 // pages
 import CustomersList from "./CustomersList.tsx";
 import CustomersInspect from "./CustomersInspect.tsx";
+import CustomersSales from "./CustomersSales.tsx";
 
-// TODO: display sales
 // TODO: display orders
 export default [
   {
@@ -16,5 +16,9 @@ export default [
   {
     path: "inspect/:id",
     Component: CustomersInspect,
+  },
+  {
+    path: "sales/:id",
+    Component: CustomersSales,
   },
 ];

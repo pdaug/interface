@@ -119,34 +119,8 @@ const SalesInspect = function () {
       })
     : null;
 
-  const subtotalProducts = Calculate.productsOrServices(form?.products || []);
-
-  const subtotalAdditions = Calculate.details(
-    form?.details?.filter(function (detail) {
-      return detail?.type === "tax" || detail?.type === "fee";
-    }) || [],
-    subtotalProducts,
-  );
-
-  const subtotalDeductions = Calculate.details(
-    form?.details?.filter(function (detail) {
-      return (
-        detail?.type === "discount" ||
-        detail?.type === "promo" ||
-        detail?.type === "coupon" ||
-        detail?.type === "voucher"
-      );
-    }) || [],
-    subtotalProducts,
-  );
-
-  const subtotalShipping = Number(form?.shippingCost) || 0;
-
-  const total =
-    subtotalProducts +
-    subtotalAdditions -
-    subtotalDeductions +
-    subtotalShipping;
+  const { subtotalProducts, subtotalDeductions, subtotalAdditions, total } =
+    Calculate.totalSale(form as TypeSale);
 
   // fetch sale
   useAsync(async function () {

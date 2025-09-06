@@ -284,9 +284,6 @@ const CustomersInspect = function () {
     }
   };
 
-  // TODO: Inscrição munícipal
-  // TODO: Inscrição estadual
-  // TODO: Contribuinte
   return (
     <React.Fragment>
       <Horizontal>

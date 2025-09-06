@@ -3,6 +3,7 @@ import {
   Info,
   House,
   Truck,
+  Users,
   Table,
   Check,
   Wrench,
@@ -12,7 +13,6 @@ import {
   CreditCard,
   SuitcaseSimple,
   ShoppingBagOpen,
-  Users,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
