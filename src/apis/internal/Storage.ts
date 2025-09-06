@@ -4,7 +4,7 @@ import { ApiBase } from "../Base";
 // types
 import { ApiResponse } from "../../types/Api";
 
-const Upload = {
+const Storage = {
   file: function <T>(
     instance: string,
     Authorization: string,
@@ -19,7 +19,11 @@ const Upload = {
       "Content-Type": "multipart/form-data",
     };
     const config = { headers };
-    return ApiBase.post<ApiResponse<T>>("/upload/file", formData, config);
+    return ApiBase.post<ApiResponse<T>>(
+      "/storage/upload/file",
+      formData,
+      config,
+    );
   },
 
   image: function <T>(
@@ -47,8 +51,12 @@ const Upload = {
       "Content-Type": "multipart/form-data",
     };
     const config = { headers };
-    return ApiBase.post<ApiResponse<T>>("/upload/image", formData, config);
+    return ApiBase.post<ApiResponse<T>>(
+      "/upload/upload/image",
+      formData,
+      config,
+    );
   },
 };
 
-export default Upload;
+export default Storage;

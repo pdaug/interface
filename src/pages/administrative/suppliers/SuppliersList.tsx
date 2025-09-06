@@ -279,8 +279,8 @@ const SuppliersList = function () {
                 );
               },
             },
-            companyName: {
-              label: t.supplier.company_name,
+            name: {
+              label: t.supplier.name,
               handler: function (data) {
                 return (
                   <div
@@ -290,19 +290,15 @@ const SuppliersList = function () {
                       return;
                     }}
                   >
-                    {data?.companyName as string}
+                    <Profile
+                      photoCircle
+                      photoSize={4}
+                      padding={false}
+                      name={data.name as string}
+                      photo={(data.photo as string) ?? undefined}
+                      description={(data?.representativeName as string) || ""}
+                    />
                   </div>
-                );
-              },
-            },
-            description: {
-              label: t.supplier.description,
-              handler: function (data) {
-                if (data.description) return data.description as string;
-                return (
-                  <i style={{ color: "var(--textLight)" }}>
-                    {t.stacks.no_description}
-                  </i>
                 );
               },
             },
@@ -319,6 +315,24 @@ const SuppliersList = function () {
                       (data?.companyMobile as string) || "",
                     )}
                   </a>
+                );
+              },
+            },
+            phone: {
+              label: t.customer.phone_1,
+              handler: function (data) {
+                return data?.phone_1 ? (
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`tel:${data.mobile as string}`}
+                  >
+                    {PhoneNumber.Internacional((data?.phone_1 as string) || "")}
+                  </a>
+                ) : (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.stacks.no_phone}
+                  </i>
                 );
               },
             },
@@ -340,23 +354,23 @@ const SuppliersList = function () {
                 );
               },
             },
-            address: {
-              label: t.supplier.address,
-              handler: function (data) {
-                if ("addresses" in data && Array.isArray(data.addresses))
-                  return `${data?.addresses?.[0]?.street}, ${data?.addresses?.[0]?.number}, ${data?.addresses?.[0]?.city} - ${data?.addresses?.[0]?.state}`;
-                return (
-                  <i
-                    style={{
-                      color: "var(--textLight)",
-                      fontSize: "var(--textSmall)",
-                    }}
-                  >
-                    {t.stacks.no_address}
-                  </i>
-                );
-              },
-            },
+            // address: {
+            //   label: t.supplier.address,
+            //   handler: function (data) {
+            //     if ("addresses" in data && Array.isArray(data.addresses))
+            //       return `${data?.addresses?.[0]?.street}, ${data?.addresses?.[0]?.number}, ${data?.addresses?.[0]?.city} - ${data?.addresses?.[0]?.state}`;
+            //     return (
+            //       <i
+            //         style={{
+            //           color: "var(--textLight)",
+            //           fontSize: "var(--textSmall)",
+            //         }}
+            //       >
+            //         {t.stacks.no_address}
+            //       </i>
+            //     );
+            //   },
+            // },
             user: {
               label: t.components.user,
               handler: function (data) {

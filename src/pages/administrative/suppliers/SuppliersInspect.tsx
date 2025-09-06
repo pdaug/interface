@@ -57,26 +57,21 @@ const SuppliersInspect = function () {
   const [form, setForm] = useState<Partial<TypeSupplier>>({
     id: "",
     status: true,
+
     name: "",
-    description: "",
     document1: "",
+    mobile: "",
+    phone1: "",
+    email: "",
+    description: "",
+
+    representativeName: "",
+    representativeRole: "",
+    phone2: "",
     document2: "",
-    companyName: "",
-    companyDocument: "",
-    companyMobile: "",
-    companyPhone: "",
-    companyEmail: "",
-    addresses: [
-      {
-        street: "",
-        number: "",
-        complement: "",
-        neighborhood: "",
-        postalCode: "",
-        city: "",
-        state: "SP",
-      },
-    ],
+
+    addresses: [],
+
     userId: user.id,
     workspaceId,
   });
@@ -275,11 +270,11 @@ const SuppliersInspect = function () {
                 <InputSelect
                   required
                   name="status"
+                  disabled={loading}
                   id="supplier_status"
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
-                  disabled={loading}
                   options={[
                     {
                       id: "true",
@@ -305,9 +300,9 @@ const SuppliersInspect = function () {
                   required
                   name="name"
                   id="supplier_name"
+                  disabled={loading}
                   value={form?.name || ""}
                   label={t.supplier.name}
-                  disabled={loading}
                   placeholder={t.supplier.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -316,16 +311,14 @@ const SuppliersInspect = function () {
                     return;
                   }}
                 />
-              </Horizontal>
-              <Horizontal internal={1}>
                 <InputMask
                   name="document1"
+                  disabled={loading}
                   mask={MaskDocument1}
                   id="supplier_document_1"
                   label={t.supplier.document_1}
                   value={form?.document1 || ""}
-                  disabled={loading}
-                  placeholder={t.supplier.document_placeholder}
+                  placeholder={t.supplier.document_1_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.document1 = event.currentTarget?.value || "";
@@ -333,212 +326,28 @@ const SuppliersInspect = function () {
                     return;
                   }}
                 />
-                <InputMask
-                  name="document2"
-                  mask={MaskDocument2}
-                  id="supplier_document_2"
-                  label={t.supplier.document_2}
-                  value={form?.document2 || ""}
-                  disabled={loading}
-                  placeholder={t.supplier.document_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.document2 = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-              <Horizontal internal={1}>
-                <InputText
-                  max={256}
-                  height={4}
-                  name="description"
-                  id="supplier_description"
-                  value={form?.description || ""}
-                  label={t.components.description}
-                  disabled={loading}
-                  placeholder={t.supplier.description_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.description = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-              {Boolean(id) && (
-                <Horizontal internal={1}>
-                  <div
-                    className="flex flex1"
-                    style={{ alignItems: "flex-end" }}
-                  >
-                    <Profile
-                      padding={false}
-                      photo={userFinded?.photo || ""}
-                      description={userFinded?.email || ""}
-                      name={userFinded?.name || t.components.unknown}
-                    />
-                  </div>
-                  <Input
-                    readOnly
-                    placeholder=""
-                    name="createdAt"
-                    id="service_created_at"
-                    label={t.components.created_at}
-                    value={instanceDateTime(form.createdAt)}
-                    onChange={function () {
-                      return;
-                    }}
-                  />
-                  <Input
-                    readOnly
-                    placeholder=""
-                    name="updatedAt"
-                    id="service_updated_at"
-                    label={t.components.updated_at}
-                    value={
-                      form?.updatedAt ? instanceDateTime(form.updatedAt) : "-"
-                    }
-                    onChange={function () {
-                      return;
-                    }}
-                  />
-                  <Input
-                    readOnly
-                    placeholder=""
-                    name="deletedAt"
-                    id="service_deleted_at"
-                    label={t.components.deletedAt}
-                    value={
-                      form?.deletedAt ? instanceDateTime(form.deletedAt) : "-"
-                    }
-                    onChange={function () {
-                      return;
-                    }}
-                  />
-                </Horizontal>
-              )}
-            </Vertical>
-          </Wrapper>
-
-          <Wrapper
-            title={t.supplier.title_company}
-            description={t.supplier.subtitle_company}
-          >
-            <Vertical internal={1}>
-              <Horizontal internal={1}>
-                <Input
-                  min={4}
-                  max={32}
-                  required
-                  name="companyName"
-                  id="supplier_company_name"
-                  label={t.supplier.company_name}
-                  value={form?.companyName || ""}
-                  disabled={loading}
-                  placeholder={t.supplier.company_name_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.companyName = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <InputMask
-                  mask={MaskDocument1}
-                  name="companyDocument"
-                  label={t.supplier.document_1}
-                  id="supplier_company_document"
-                  disabled={loading}
-                  value={form?.companyDocument || ""}
-                  placeholder={t.supplier.document_placeholder}
-                  onChange={async function (event) {
-                    const newForm = { ...form };
-                    const companyDocumentRaw = event.currentTarget?.value || "";
-                    const companyDocument = companyDocumentRaw.replace(
-                      /\D/g,
-                      "",
-                    );
-                    if (companyDocument.length === 14) {
-                      setLoading(true);
-                      const toastId = toast.loading(t.components.loading);
-                      try {
-                        const response =
-                          await apis.CompanyData(companyDocument);
-                        newForm.companyMobile = response.data?.ddd_telefone_1
-                          ? `+55${response.data?.ddd_telefone_1}`
-                          : newForm.companyMobile;
-                        newForm.companyPhone = response.data?.ddd_telefone_2
-                          ? `+55${response.data?.ddd_telefone_2}`
-                          : newForm.companyPhone;
-                        newForm.companyName =
-                          response.data?.nome_fantasia ||
-                          response.data?.razao_social ||
-                          newForm.companyName;
-                        newForm.companyMobile =
-                          response.data?.email || newForm.companyMobile;
-                        if (!newForm.addresses?.[0]) return;
-                        newForm.addresses[0].street =
-                          response.data?.logradouro || "";
-                        newForm.addresses[0].number =
-                          response.data?.numero || "";
-                        newForm.addresses[0].complement =
-                          response.data?.complemento || "";
-                        newForm.addresses[0].neighborhood =
-                          response.data?.bairro || "";
-                        newForm.addresses[0].postalCode =
-                          response.data?.cep || "";
-                        newForm.addresses[0].city =
-                          response.data?.municipio || "";
-                        newForm.addresses[0].state =
-                          response.data?.uf?.toUpperCase() || "";
-                        toast.dismiss(toastId);
-                        play("ok");
-                        toast.success(t.toast.success, {
-                          description: t.toast.success_find,
-                        });
-                      } catch (err) {
-                        console.error(
-                          "[src/pages/administrative/suppliers/SuppliersInspect.tsx]",
-                          err,
-                        );
-                        toast.dismiss(toastId);
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.toast.warning_find,
-                        });
-                      } finally {
-                        setLoading(false);
-                      }
-                    }
-                    newForm.companyDocument = companyDocument;
-                    setForm(newForm);
-                    return;
-                  }}
-                />
               </Horizontal>
 
               <Horizontal internal={1}>
                 <InputMask
                   required
+                  name="mobile"
                   mask={MaskPhone}
-                  name="companyMobile"
-                  label={t.supplier.mobile}
-                  id="supplier_company_mobile"
-                  value={form?.companyMobile || ""}
                   disabled={loading}
+                  id="supplier_mobile"
+                  label={t.supplier.mobile}
+                  value={form?.mobile || ""}
                   placeholder={t.supplier.mobile_placeholder}
                   onChange={async function (event) {
                     const newForm = { ...form };
-                    const companyMobileRaw = event.currentTarget?.value || "";
-                    const companyMobile = companyMobileRaw.replace(/\D/g, "");
-                    if (companyMobile.length === 13) {
+                    const mobileRaw = event.currentTarget?.value || "";
+                    const mobile = mobileRaw.replace(/\D/g, "");
+                    if (mobile.length === 13) {
                       setLoading(true);
                       const toastId = toast.loading(t.components.loading);
                       try {
                         const responseWhatsApp = await apis.WhatsApp.contact({
-                          number: companyMobile,
+                          number: mobile,
                         });
                         newForm.name =
                           !newForm.name?.length &&
@@ -567,22 +376,22 @@ const SuppliersInspect = function () {
                         setLoading(false);
                       }
                     }
-                    newForm.companyMobile = companyMobile;
+                    newForm.mobile = mobile;
                     setForm(newForm);
                     return;
                   }}
                 />
                 <InputMask
+                  name="phone1"
                   mask={MaskPhone}
-                  name="companyPhone"
-                  label={t.supplier.phone_1}
-                  id="supplier_company_phone"
-                  value={form?.companyPhone || ""}
                   disabled={loading}
-                  placeholder={t.supplier.mobile_placeholder}
-                  onChange={function (event) {
+                  id="supplier_phone_1"
+                  label={t.supplier.phone_1}
+                  value={form?.phone1 || ""}
+                  placeholder={t.supplier.phone_placeholder}
+                  onChange={async function (event) {
                     const newForm = { ...form };
-                    newForm.companyPhone = event.currentTarget?.value || "";
+                    newForm.phone1 = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}
@@ -591,20 +400,92 @@ const SuppliersInspect = function () {
                   min={4}
                   max={32}
                   type="email"
-                  name="companyEmail"
-                  label={t.supplier.email}
-                  id="supplier_company_email"
-                  value={form?.companyEmail || ""}
+                  name="email"
                   disabled={loading}
+                  id="supplier_email"
+                  label={t.supplier.email}
+                  value={form?.email || ""}
                   placeholder={t.supplier.email_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
-                    newForm.companyEmail = event.currentTarget?.value || "";
+                    newForm.email = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}
                 />
               </Horizontal>
+
+              <Horizontal internal={1}>
+                <InputText
+                  max={256}
+                  height={4}
+                  name="description"
+                  disabled={loading}
+                  id="supplier_description"
+                  value={form?.description || ""}
+                  label={t.components.description}
+                  placeholder={t.supplier.description_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.description = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+
+              {Boolean(id) && (
+                <Horizontal internal={1}>
+                  <div
+                    className="flex flex1"
+                    style={{ alignItems: "flex-end" }}
+                  >
+                    <Profile
+                      padding={false}
+                      photo={userFinded?.photo || ""}
+                      description={userFinded?.email || ""}
+                      name={userFinded?.name || t.components.unknown}
+                    />
+                  </div>
+                  <Input
+                    readOnly
+                    placeholder=""
+                    name="createdAt"
+                    id="supplier_created_at"
+                    label={t.components.created_at}
+                    value={instanceDateTime(form.createdAt)}
+                    onChange={function () {
+                      return;
+                    }}
+                  />
+                  <Input
+                    readOnly
+                    placeholder=""
+                    name="updatedAt"
+                    id="supplier_updated_at"
+                    label={t.components.updated_at}
+                    value={
+                      form?.updatedAt ? instanceDateTime(form.updatedAt) : "-"
+                    }
+                    onChange={function () {
+                      return;
+                    }}
+                  />
+                  <Input
+                    readOnly
+                    placeholder=""
+                    name="deletedAt"
+                    id="supplier_deleted_at"
+                    label={t.components.deletedAt}
+                    value={
+                      form?.deletedAt ? instanceDateTime(form.deletedAt) : "-"
+                    }
+                    onChange={function () {
+                      return;
+                    }}
+                  />
+                </Horizontal>
+              )}
 
               <Callout
                 Icon={UserList}
@@ -618,6 +499,81 @@ const SuppliersInspect = function () {
                 }
                 styles={{ fontSize: "var(--textSmall)" }}
               />
+            </Vertical>
+          </Wrapper>
+
+          <Wrapper
+            title={t.supplier.title_representative}
+            description={t.supplier.subtitle_representative}
+          >
+            <Vertical internal={1}>
+              <Horizontal internal={1}>
+                <Input
+                  max={32}
+                  disabled={loading}
+                  name="representativeName"
+                  id="supplier_representative_name"
+                  label={t.supplier.representative_name}
+                  value={form?.representativeName || ""}
+                  placeholder={t.supplier.representative_name_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.representativeName =
+                      event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <Input
+                  max={32}
+                  disabled={loading}
+                  name="representativeRole"
+                  id="supplier_representative_role"
+                  label={t.supplier.representative_role}
+                  value={form?.representativeRole || ""}
+                  placeholder={t.supplier.representative_role_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.representativeRole =
+                      event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+
+              <Horizontal internal={1}>
+                <InputMask
+                  name="document2"
+                  disabled={loading}
+                  mask={MaskDocument2}
+                  id="supplier_document_2"
+                  label={t.supplier.document_2}
+                  value={form?.document2 || ""}
+                  placeholder={t.supplier.document_2_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.document2 = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <InputMask
+                  name="phone2"
+                  mask={MaskPhone}
+                  disabled={loading}
+                  id="supplier_phone_2"
+                  label={t.supplier.phone_2}
+                  value={form?.phone2 || ""}
+                  placeholder={t.supplier.phone_placeholder}
+                  onChange={async function (event) {
+                    const newForm = { ...form };
+                    newForm.phone2 = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
             </Vertical>
           </Wrapper>
 
@@ -861,10 +817,7 @@ const SuppliersInspect = function () {
                   );
                 })}
 
-                <Horizontal
-                  internal={1}
-                  styles={{ justifyContent: "flex-end" }}
-                >
+                <Horizontal internal={1} styles={{ justifyContent: "center" }}>
                   <Button
                     type="button"
                     category="Success"
@@ -885,17 +838,17 @@ const SuppliersInspect = function () {
                       return;
                     }}
                   />
-                </Horizontal>
 
-                <div>
-                  <Callout
-                    Icon={MapTrifold}
-                    IconSize={16}
-                    category="Info"
-                    text={t.callout.postal_code_search}
-                    styles={{ flex: 1, fontSize: "var(--textSmall)" }}
-                  />
-                </div>
+                  {form.addresses && form.addresses?.length > 0 && (
+                    <Callout
+                      Icon={MapTrifold}
+                      IconSize={16}
+                      category="Info"
+                      text={t.callout.postal_code_search}
+                      styles={{ flex: 1, fontSize: "var(--textSmall)" }}
+                    />
+                  )}
+                </Horizontal>
               </Vertical>
 
               {position && (

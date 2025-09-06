@@ -732,36 +732,44 @@ const TranslatePt = {
     invalid_postal_code: "Código postal inválido",
   },
   supplier: {
+    // list
     supplier: "Fornecedor",
     suppliers: "Fornecedores",
     new: "Novo forncedor",
+    // inputs
     name: "Nome do fornecedor",
-    name_placeholder: "Ex. Fulano de Tal",
-    company_name: "Razão Social",
-    company_name_placeholder: "Ex. Fulano LTDA.",
-    description: "Descrição",
-    description_placeholder:
-      "Escreva aqui uma descrição sobre este fornecedor...",
-    document_1: "Documento (CPF/CNPJ)",
-    document_2: "Document (CNAE/RG)",
-    document_placeholder: "123.456.789-10",
+    document_1: "Documento (CNPJ)",
     mobile: "Número de celular",
-    mobile_placeholder: "+55 (11) 98888-7777",
-    email: "Email",
-    email_placeholder: "Ex. fulano@email.com",
-    address: "Endereço",
     phone_1: "Número de telefone 1",
+    email: "Email",
+    description: "Descrição",
+    representative_name: "Nome do representante",
+    representative_role: "Função do representante",
     phone_2: "Número de telefone 2",
+    document_2: "Document (CPF, RG...)",
+    address: "Endereço",
+    // placeholders
+    name_placeholder: "Ex. Fulano de LTDA",
+    document_1_placeholder: "Ex. 11.222.333/0001-44",
+    mobile_placeholder: "Ex. +55 (11) 98888-7777",
+    phone_placeholder: "Ex. +55 (11) 4040-3030",
+    email_placeholder: "Ex. fulano@email.com",
+    description_placeholder:
+      "Escreva aqui uma breve descrição sobre o fornecedor",
+    representative_name_placeholder: "Ex. Fulano de Tal",
+    representative_role_placeholder: "Ex. Diretor",
+    document_2_placeholder: "Ex. 111.222.333-44",
+    // titles and subtitles
     title_edit: "Edite o fornecedor",
     title_create: "Crie um novo fornecedor",
-    subtitle:
-      "Preencha os dados abaixo para poder editar ou criar o fornecedor",
-    title_addresses: "Endereço do fornecedor",
-    subtitle_addresses: "Preencha os dados dos endereços do fornecedor",
+    subtitle: "Preencha as entradas para editar ou criar o fornecedor",
+    title_representative: "Representantes",
+    subtitle_representative:
+      "Preencha as entradas com os dados do representante",
+    title_addresses: "Endereços",
+    subtitle_addresses: "Preencha as entradas com os dados de endereço",
+    // messages
     no_delete_address: "Não é possível excluir todos os endereços",
-    title_company: "Dados empresariais fornecedor",
-    subtitle_company:
-      "Preencha todo os dados empresariais referente a este fornecedor",
   },
   toast: {
     // title
@@ -1096,7 +1104,7 @@ const TranslateEn = {
     representative_role: "Representative Role",
     address: "Address",
     // placeholders
-    name_placeholder: "e.g. John Doe",
+    name_placeholder: "e.g. John Doe Inc",
     description_placeholder: "Type here a brief description about the customer",
     mobile_placeholder: "e.g +1 (234) 555-6666",
     phone_placeholder: "e.g +1 (234) 555-6666",
@@ -1600,34 +1608,42 @@ const TranslateEn = {
     mining_and_extraction: "Mining and Extraction",
   },
   supplier: {
+    // list
     supplier: "Supplier",
     suppliers: "Suppliers",
     new: "New supplier",
+    // inputs
     name: "Supplier name",
-    name_placeholder: "e.g. John Doe",
-    company_name: "Company name",
-    company_name_placeholder: "e.g. John S.A.",
-    description: "Description",
-    description_placeholder: "Type here a description about this supplier...",
     document_1: "Document 1",
-    document_2: "Document 2",
-    document_placeholder: "123.456.789-10",
     mobile: "Mobile",
-    mobile_placeholder: "+1 (123) 4567-890",
-    email: "Email",
-    email_placeholder: "e.g. johndoe@email.com",
-    address: "Address",
     phone_1: "Phone 1",
+    email: "Email",
+    description: "Description",
+    representative_name: "Representative name",
+    representative_role: "Representative role",
     phone_2: "Phone 2",
+    document_2: "Document 2",
+    address: "Address",
+    // placeholders
+    name_placeholder: "e.g. John Doe Inc",
+    document_1_placeholder: "123.456.789-10",
+    mobile_placeholder: "+1 (123) 4567-890",
+    phone_placeholder: "+1 (123) 4567-890",
+    email_placeholder: "e.g. johndoe@email.com",
+    description_placeholder: "Type here a brief description about the supplier",
+    representative_name_placeholder: "e.g. John Doe",
+    representative_role_placeholder: "e.g. Chief Executive",
+    document_2_placeholder: "e.g. 111.222.33-44",
+    // titles and subtitles
     title_edit: "Edit the supplier ",
     title_create: "Create a new supplier",
-    subtitle: "Fill the fields below to edit or create the supplier",
-    title_addresses: "Supplier address",
-    subtitle_addresses: "Fill the supplier address data below",
+    subtitle: "Fill the inputs to edit or create the supplier",
+    title_addresses: "Addresses",
+    subtitle_addresses: "Fill the inputs with address data",
+    title_representative: "Representative",
+    subtitle_representative: "Fill the inputs with representative data",
+    // messages
     no_delete_address: "Do not delete all addresses",
-    title_company: "Supplier Company Information",
-    subtitle_company:
-      "Fill in all the company details related to this supplier",
   },
   stacks: {
     // no

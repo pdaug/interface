@@ -137,7 +137,7 @@ const SettingsPanel = function () {
       let logoLargeUrl = null;
       // upload logo temp
       if (logoTemp) {
-        const responseUploadImage = await apis.Upload.image<string>(
+        const responseUploadImage = await apis.Storage.image<string>(
           instance.name,
           token,
           {
@@ -153,7 +153,7 @@ const SettingsPanel = function () {
       }
       // upload favicon temp
       if (faviconTemp) {
-        const responseUploadImage = await apis.Upload.image<string>(
+        const responseUploadImage = await apis.Storage.image<string>(
           instance.name,
           token,
           {
@@ -169,7 +169,7 @@ const SettingsPanel = function () {
       }
       // upload logo large temp
       if (logoLargeTemp) {
-        const responseUploadImage = await apis.Upload.image<string>(
+        const responseUploadImage = await apis.Storage.image<string>(
           instance.name,
           token,
           {

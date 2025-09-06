@@ -2,21 +2,21 @@ import { TypeAddress } from "./Components";
 
 export type TypeSupplier = {
   id: string;
-
   status: boolean;
+
+  // company
   name: string;
-
   document1?: string;
-  document2?: string;
-
+  mobile: string;
+  phone1?: string;
+  email?: string;
   description: string;
 
-  companyName: string;
-  companyDocument?: string;
-
-  companyMobile: string;
-  companyPhone?: string;
-  companyEmail?: string;
+  // personal
+  representativeName?: string;
+  representativeRole?: string;
+  phone2?: string;
+  document2?: string;
 
   addresses: TypeAddress[];
 

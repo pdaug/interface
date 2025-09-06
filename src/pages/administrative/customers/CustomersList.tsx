@@ -331,6 +331,7 @@ const CustomersList = function () {
                       padding={false}
                       name={data.name as string}
                       photo={(data.photo as string) ?? undefined}
+                      description={(data?.representativeName as string) || ""}
                     />
                   </div>
                 );

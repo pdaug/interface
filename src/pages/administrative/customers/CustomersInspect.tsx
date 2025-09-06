@@ -170,7 +170,7 @@ const CustomersInspect = function () {
       if (id) {
         // upload photo temp
         if (photoTemp) {
-          const responseUploadImage = await apis.Upload.image<string>(
+          const responseUploadImage = await apis.Storage.image<string>(
             instance.name,
             token,
             {
@@ -221,7 +221,7 @@ const CustomersInspect = function () {
       }
       // upload photo temp
       if (photoTemp) {
-        const responseUploadImage = await apis.Upload.image<string>(
+        const responseUploadImage = await apis.Storage.image<string>(
           instance.name,
           token,
           {

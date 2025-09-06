@@ -146,7 +146,7 @@ const ProductsInspect = function () {
         for (const [index, file] of productTemp.entries()) {
           if (!file) continue;
           if (!form.variants?.[index]) continue;
-          const responseUploadImage = await apis.Upload.image<string>(
+          const responseUploadImage = await apis.Storage.image<string>(
             instance.name,
             token,
             {
@@ -205,7 +205,7 @@ const ProductsInspect = function () {
       for (const [index, file] of productTemp.entries()) {
         if (!file) continue;
         if (!form.variants?.[index]) continue;
-        const responseUploadImage = await apis.Upload.image<string>(
+        const responseUploadImage = await apis.Storage.image<string>(
           instance.name,
           token,
           {

@@ -10,7 +10,7 @@ import Sale from "./internal/Sale";
 import Audit from "./internal/Audit";
 import Order from "./internal/Order";
 import Login from "./internal/Login";
-import Upload from "./internal/Upload";
+import Storage from "./internal/Storage";
 import Session from "./internal/Session";
 import Service from "./internal/Service";
 import Product from "./internal/Product";
@@ -45,8 +45,8 @@ export default {
   Service,
   Session,
   Settings,
+  Storage,
   Supplier,
-  Upload,
   User,
   Vehicle,
   WhatsApp,
