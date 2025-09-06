@@ -96,7 +96,7 @@ const CustomersList = function () {
                         },
                       },
                       {
-                        phone: {
+                        phone1: {
                           $regex: searchDebounced,
                           $options: "i",
                         },

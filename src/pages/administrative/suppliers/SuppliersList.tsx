@@ -78,10 +78,46 @@ const SuppliersList = function () {
         {
           pageSize,
           pageCurrent: searchDebounced ? 1 : page,
-          searchField: "name",
-          search: searchDebounced,
+          // searchField: "name",
+          // search: searchDebounced,
           dateStart: interval.start ? interval.start.toISOString() : undefined,
           dateEnd: interval.end ? interval.end.toISOString() : undefined,
+          showDeleted: "true",
+          filter: JSON.stringify({
+            $and: [
+              { $or: [{ deletedAt: { $exists: false } }, { deletedAt: null }] },
+              {
+                $or: searchDebounced
+                  ? [
+                      {
+                        mobile: {
+                          $regex: searchDebounced,
+                          $options: "i",
+                        },
+                      },
+                      {
+                        phone1: {
+                          $regex: searchDebounced,
+                          $options: "i",
+                        },
+                      },
+                      {
+                        email: {
+                          $regex: searchDebounced,
+                          $options: "i",
+                        },
+                      },
+                      {
+                        name: {
+                          $regex: searchDebounced,
+                          $options: "i",
+                        },
+                      },
+                    ]
+                  : undefined,
+              },
+            ],
+          }),
         },
         workspaceId,
       );
