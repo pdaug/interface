@@ -3,17 +3,22 @@ import { TypeAddress } from "./Components";
 export type TypeCustomer = {
   id: string;
   status: boolean;
-
   photo?: string | null;
+
+  // company
   name: string;
+  document1?: string;
+  mobile: string;
+  phone1?: string;
+  email?: string;
   description: string;
 
-  phone1?: string;
+  // personal
+  representativeName?: string;
+  representativeRole?: string;
   phone2?: string;
-  mobile: string;
-  email?: string;
-  document1?: string;
   document2?: string;
+
   addresses: TypeAddress[];
 
   workspaceId: string;

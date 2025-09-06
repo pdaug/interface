@@ -1,13 +1,8 @@
-import {
-  UserList,
-  Asterisk,
-  HandCoins,
-  MapTrifold,
-} from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { UserList, Asterisk, MapTrifold } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -40,7 +35,6 @@ import {
   InputMask,
   InputSelect,
 } from "../../../components/inputs/Input";
-import Stats from "../../../components/stats/Stats";
 import Avatar from "../../../components/avatars/Avatar";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
@@ -67,25 +61,21 @@ const CustomersInspect = function () {
   const [form, setForm] = useState<Partial<TypeCustomer>>({
     id: "",
     status: true,
+
     name: "",
     description: "",
     document1: "",
-    document2: "",
     phone1: "",
-    phone2: "",
     mobile: "",
     email: "",
-    addresses: [
-      {
-        street: "",
-        number: "",
-        complement: "",
-        neighborhood: "",
-        postalCode: "",
-        city: "",
-        state: "SP",
-      },
-    ],
+
+    representativeName: "",
+    representativeRole: "",
+    phone2: "",
+    document2: "",
+
+    addresses: [],
+
     userId: user.id,
     workspaceId,
   });
@@ -316,60 +306,41 @@ const CustomersInspect = function () {
 
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
-          <Horizontal internal={1}>
-            <Wrapper styles={{ minWidth: "40%" }}>
-              <Horizontal internal={1} className="itemsCenter">
-                <Avatar
-                  label=""
-                  size={14}
-                  Icon={UserList}
-                  photo={
-                    photoTemp
-                      ? URL.createObjectURL(photoTemp)
-                      : form?.photo || ""
-                  }
-                />
+          <Wrapper styles={{ minWidth: "40%" }}>
+            <Horizontal internal={1} className="itemsCenter">
+              <Avatar
+                label=""
+                size={14}
+                Icon={UserList}
+                photo={
+                  photoTemp ? URL.createObjectURL(photoTemp) : form?.photo || ""
+                }
+              />
 
-                <InputFile
-                  name="photo"
-                  value={photoTemp}
-                  id="customer_photo"
-                  helper="PNG, JPG e JPEG"
-                  label={t.components.photo}
-                  disabled={loading}
-                  accept="image/png, image/jpg, image/jpeg"
-                  onChange={function (event) {
-                    const file = event.currentTarget.files?.[0] || null;
-                    if (!file) return;
-                    if (file.size > 5 * 1024 * 1024) {
-                      play("alert");
-                      toast.error(t.toast.warning_error, {
-                        description: t.stacks.limit_image_5mb,
-                      });
-                      return;
-                    }
-                    setPhotoTemp(file);
+              <InputFile
+                name="photo"
+                value={photoTemp}
+                disabled={loading}
+                id="customer_photo"
+                helper="PNG, JPG e JPEG"
+                label={t.components.photo}
+                accept="image/png, image/jpg, image/jpeg"
+                onChange={function (event) {
+                  const file = event.currentTarget.files?.[0] || null;
+                  if (!file) return;
+                  if (file.size > 5 * 1024 * 1024) {
+                    play("alert");
+                    toast.error(t.toast.warning_error, {
+                      description: t.stacks.limit_image_5mb,
+                    });
                     return;
-                  }}
-                />
-              </Horizontal>
-            </Wrapper>
-
-            <Stats
-              Icon={HandCoins}
-              metric={0}
-              metricStatus="Up"
-              metricLocale={instance.language}
-              metricOptions={{ style: "percent" }}
-              title={t.customer.stats_inflows_title}
-              value={0}
-              valueLocale={instance.language}
-              valueOptions={{ style: "currency", currency: instance.currency }}
-              footer={t.customer.stats_inflows_description}
-              styles={{ alignItems: "center", display: "flex" }}
-              stylesContainer={{ flex: 1 }}
-            />
-          </Horizontal>
+                  }
+                  setPhotoTemp(file);
+                  return;
+                }}
+              />
+            </Horizontal>
+          </Wrapper>
 
           <Wrapper
             title={id ? t.customer.title_edit : t.customer.title_create}
@@ -421,6 +392,73 @@ const CustomersInspect = function () {
                     return;
                   }}
                 />
+                <InputMask
+                  name="document1"
+                  mask={MaskDocument1}
+                  id="customer_document_1"
+                  label={t.customer.document_1}
+                  value={form?.document1 || ""}
+                  disabled={loading}
+                  placeholder={t.customer.document_placeholder}
+                  onChange={async function (event) {
+                    const newForm = { ...form };
+                    const document1Raw = event.currentTarget?.value || "";
+                    const document1 = document1Raw.replace(/\D/g, "");
+                    newForm.document1 = document1;
+                    if (document1.length === 14) {
+                      const toastId = toast.loading(t.components.loading);
+                      try {
+                        const response = await apis.CompanyData(document1);
+                        newForm.phone1 = response.data?.ddd_telefone_1
+                          ? `+55${response.data?.ddd_telefone_1}`
+                          : newForm.phone1;
+                        newForm.phone2 = response.data?.ddd_telefone_2
+                          ? `+55${response.data?.ddd_telefone_2}`
+                          : newForm.phone2;
+                        newForm.name =
+                          response.data?.nome_fantasia ||
+                          response.data?.razao_social ||
+                          newForm.name;
+                        newForm.email = response.data?.email || newForm.email;
+                        if (!newForm.addresses?.[0]) return;
+                        newForm.addresses[0].street =
+                          response.data?.logradouro || "";
+                        newForm.addresses[0].number =
+                          response.data?.numero || "";
+                        newForm.addresses[0].complement =
+                          response.data?.complemento || "";
+                        newForm.addresses[0].neighborhood =
+                          response.data?.bairro || "";
+                        newForm.addresses[0].postalCode =
+                          response.data?.cep || "";
+                        newForm.addresses[0].city =
+                          response.data?.municipio || "";
+                        newForm.addresses[0].state =
+                          response.data?.uf?.toUpperCase() || "";
+                        toast.dismiss(toastId);
+                        play("ok");
+                        toast.success(t.toast.success, {
+                          description: t.toast.success_find,
+                        });
+                      } catch (err) {
+                        console.error(
+                          "[src/pages/administrative/customers/CustomerInspect.tsx]",
+                          err,
+                        );
+                        toast.dismiss(toastId);
+                        play("alert");
+                        toast.warning(t.toast.warning_error, {
+                          description: t.toast.warning_find,
+                        });
+                      }
+                    }
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+
+              <Horizontal internal={1}>
                 <InputMask
                   required
                   name="mobile"
@@ -492,91 +530,6 @@ const CustomersInspect = function () {
                     return;
                   }}
                 />
-              </Horizontal>
-
-              <Horizontal internal={1}>
-                <InputMask
-                  name="document1"
-                  mask={MaskDocument1}
-                  id="customer_document_1"
-                  label={t.customer.document_1}
-                  value={form?.document1 || ""}
-                  disabled={loading}
-                  placeholder={t.customer.document_placeholder}
-                  onChange={async function (event) {
-                    const newForm = { ...form };
-                    const document1Raw = event.currentTarget?.value || "";
-                    const document1 = document1Raw.replace(/\D/g, "");
-                    newForm.document1 = document1;
-                    if (document1.length === 14) {
-                      const toastId = toast.loading(t.components.loading);
-                      try {
-                        const response = await apis.CompanyData(document1);
-                        newForm.phone1 = response.data?.ddd_telefone_1
-                          ? `+55${response.data?.ddd_telefone_1}`
-                          : newForm.phone1;
-                        newForm.phone2 = response.data?.ddd_telefone_2
-                          ? `+55${response.data?.ddd_telefone_2}`
-                          : newForm.phone2;
-                        newForm.name =
-                          response.data?.nome_fantasia ||
-                          response.data?.razao_social ||
-                          newForm.name;
-                        newForm.email = response.data?.email || newForm.email;
-                        if (!newForm.addresses?.[0]) return;
-                        newForm.addresses[0].street =
-                          response.data?.logradouro || "";
-                        newForm.addresses[0].number =
-                          response.data?.numero || "";
-                        newForm.addresses[0].complement =
-                          response.data?.complemento || "";
-                        newForm.addresses[0].neighborhood =
-                          response.data?.bairro || "";
-                        newForm.addresses[0].postalCode =
-                          response.data?.cep || "";
-                        newForm.addresses[0].city =
-                          response.data?.municipio || "";
-                        newForm.addresses[0].state =
-                          response.data?.uf?.toUpperCase() || "";
-                        toast.dismiss(toastId);
-                        play("ok");
-                        toast.success(t.toast.success, {
-                          description: t.toast.success_find,
-                        });
-                      } catch (err) {
-                        console.error(
-                          "[src/pages/administrative/customers/CustomerInspect.tsx]",
-                          err,
-                        );
-                        toast.dismiss(toastId);
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.toast.warning_find,
-                        });
-                      }
-                    }
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <InputMask
-                  name="document2"
-                  mask={MaskDocument2}
-                  id="customer_document_2"
-                  label={t.customer.document_2}
-                  value={form?.document2 || ""}
-                  disabled={loading}
-                  placeholder={t.customer.document_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.document2 = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-
-              <Horizontal internal={1}>
                 <InputMask
                   name="phone1"
                   mask={MaskPhone}
@@ -588,21 +541,6 @@ const CustomersInspect = function () {
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.phone1 = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <InputMask
-                  name="phone2"
-                  mask={MaskPhone}
-                  id="customer_phone_2"
-                  label={t.customer.phone_2}
-                  value={form?.phone2 || ""}
-                  disabled={loading}
-                  placeholder={t.customer.mobile_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.phone2 = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}
@@ -714,7 +652,82 @@ const CustomersInspect = function () {
           </Wrapper>
 
           <Wrapper
-            title={id ? t.customer.title_addresses : t.customer.title_addresses}
+            title={t.customer.title_representative}
+            description={t.customer.subtitle_representative}
+          >
+            <Vertical internal={1}>
+              <Horizontal internal={1}>
+                <Input
+                  max={32}
+                  disabled={loading}
+                  name="representativeName"
+                  id="customer_representative_name"
+                  value={form?.representativeName || ""}
+                  label={t.customer.representative_name}
+                  placeholder={t.customer.representative_name_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.representativeName =
+                      event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <Input
+                  max={32}
+                  disabled={loading}
+                  name="representativeRole"
+                  id="customer_representative_role"
+                  value={form?.representativeRole || ""}
+                  label={t.customer.representative_role}
+                  placeholder={t.customer.representative_role_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.representativeRole =
+                      event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+
+              <Horizontal internal={1}>
+                <InputMask
+                  name="document2"
+                  mask={MaskDocument2}
+                  id="customer_document_2"
+                  label={t.customer.document_2}
+                  value={form?.document2 || ""}
+                  disabled={loading}
+                  placeholder={t.customer.document_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.document2 = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <InputMask
+                  name="phone2"
+                  mask={MaskPhone}
+                  id="customer_phone_2"
+                  label={t.customer.phone_2}
+                  value={form?.phone2 || ""}
+                  disabled={loading}
+                  placeholder={t.customer.mobile_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.phone2 = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+            </Vertical>
+          </Wrapper>
+
+          <Wrapper
+            title={t.customer.title_addresses}
             description={t.customer.subtitle_addresses}
           >
             <Horizontal internal={1}>
@@ -812,13 +825,6 @@ const CustomersInspect = function () {
                           disabled={loading}
                           text={t.components.remove}
                           onClick={function () {
-                            if (index === 0) {
-                              play("alert");
-                              toast.warning(t.toast.warning_error, {
-                                description: t.customer.no_delete_address,
-                              });
-                              return;
-                            }
                             OpenDialog({
                               category: "Danger",
                               title: t.dialog.title_delete,
@@ -950,10 +956,7 @@ const CustomersInspect = function () {
                   );
                 })}
 
-                <Horizontal
-                  internal={1}
-                  styles={{ justifyContent: "flex-end" }}
-                >
+                <Horizontal internal={1} styles={{ justifyContent: "center" }}>
                   <Button
                     type="button"
                     category="Success"
@@ -974,17 +977,17 @@ const CustomersInspect = function () {
                       return;
                     }}
                   />
-                </Horizontal>
 
-                <div>
-                  <Callout
-                    Icon={MapTrifold}
-                    IconSize={16}
-                    category="Info"
-                    text={t.callout.postal_code_search}
-                    styles={{ flex: 1, fontSize: "var(--textSmall)" }}
-                  />
-                </div>
+                  {form.addresses && form.addresses.length > 0 && (
+                    <Callout
+                      Icon={MapTrifold}
+                      IconSize={16}
+                      category="Info"
+                      text={t.callout.postal_code_search}
+                      styles={{ flex: 1, fontSize: "var(--textSmall)" }}
+                    />
+                  )}
+                </Horizontal>
               </Vertical>
 
               {position && (
