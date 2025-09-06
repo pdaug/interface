@@ -145,6 +145,7 @@ const Login = function () {
       const responseUser = await apis.User.list<ApiResponsePaginate<TypeUser>>(
         responseLogin.data.result.token,
         form.instance,
+        { pageSize: 99 },
       );
       if (!responseUser?.data?.result?.items?.length) {
         play("alert");
