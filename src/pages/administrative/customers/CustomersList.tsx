@@ -153,6 +153,106 @@ const CustomersList = function () {
   // fetch customers
   useAsync(FetchCustomers, [interval, page, workspaceId, searchDebounced]);
 
+  const getOptions = [
+    {
+      id: "copy",
+      Icon: CopySimple,
+      label: t.components.copy_id,
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          const result = await Clipboard.copy(data.id as string);
+          if (result) {
+            play("ok");
+            toast.success(t.toast.success, {
+              description: t.toast.success_copy,
+            });
+            return;
+          }
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_copy,
+        });
+        return;
+      },
+    },
+    {
+      id: "download",
+      Icon: DownloadSimple,
+      label: t.components.download,
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          Download.JSON(data, `customer-${data.id}.json`);
+          play("ok");
+          toast.success(t.toast.success, {
+            description: t.toast.success_download,
+          });
+        }
+        return;
+      },
+    },
+    {
+      id: "edit",
+      Icon: PencilSimple,
+      label: t.components.edit,
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data)
+          navigate(`/f/customers/inspect/${data.id}`);
+        return;
+      },
+    },
+    {
+      id: "delete",
+      Icon: Trash,
+      label: t.components.delete,
+      IconColor: "var(--dangerColor",
+      styles: { color: "var(--dangerColor)" },
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (!data || typeof data !== "object" || !("id" in data)) return;
+        OpenDialog({
+          category: "Danger",
+          title: t.dialog.title_delete,
+          description: t.dialog.description_delete,
+          confirmText: t.components.delete,
+          onConfirm: async function () {
+            try {
+              const response = await apis.Customer.delete(
+                token,
+                instance.name,
+                data.id as string,
+                workspaceId,
+              );
+              if (!response.data?.result) {
+                play("alert");
+                toast.warning(t.toast.warning_error, {
+                  description: t.toast.error_delete,
+                });
+                return;
+              }
+              play("ok");
+              toast.success(t.toast.success, {
+                description: t.toast.success_delete,
+              });
+              CloseDialog();
+              await FetchCustomers();
+              return;
+            } catch (err) {
+              play("alert");
+              toast.error(t.toast.warning_error, {
+                description: t.toast.error_delete,
+              });
+              console.error(
+                "[src/pages/administrative/customers/CustomersList.tsx]",
+                err,
+              );
+              return;
+            }
+          },
+        });
+      },
+    },
+  ];
+
   return (
     <React.Fragment>
       <Horizontal>
@@ -436,106 +536,7 @@ const CustomersList = function () {
           }}
           selected={selected}
           setSelected={setSelected}
-          options={[
-            {
-              id: "copy",
-              Icon: CopySimple,
-              label: t.components.copy_id,
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  const result = await Clipboard.copy(data.id as string);
-                  if (result) {
-                    play("ok");
-                    toast.success(t.toast.success, {
-                      description: t.toast.success_copy,
-                    });
-                    return;
-                  }
-                }
-                play("alert");
-                toast.warning(t.toast.warning_error, {
-                  description: t.toast.warning_copy,
-                });
-                return;
-              },
-            },
-            {
-              id: "download",
-              Icon: DownloadSimple,
-              label: t.components.download,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  Download.JSON(data, `customer-${data.id}.json`);
-                  play("ok");
-                  toast.success(t.toast.success, {
-                    description: t.toast.success_download,
-                  });
-                }
-                return;
-              },
-            },
-            {
-              id: "edit",
-              Icon: PencilSimple,
-              label: t.components.edit,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data)
-                  navigate(`/f/customers/inspect/${data.id}`);
-                return;
-              },
-            },
-            {
-              id: "delete",
-              Icon: Trash,
-              label: t.components.delete,
-              IconColor: "var(--dangerColor",
-              styles: { color: "var(--dangerColor)" },
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (!data || typeof data !== "object" || !("id" in data))
-                  return;
-                OpenDialog({
-                  category: "Danger",
-                  title: t.dialog.title_delete,
-                  description: t.dialog.description_delete,
-                  confirmText: t.components.delete,
-                  onConfirm: async function () {
-                    try {
-                      const response = await apis.Customer.delete(
-                        token,
-                        instance.name,
-                        data.id as string,
-                        workspaceId,
-                      );
-                      if (!response.data?.result) {
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.toast.error_delete,
-                        });
-                        return;
-                      }
-                      play("ok");
-                      toast.success(t.toast.success, {
-                        description: t.toast.success_delete,
-                      });
-                      CloseDialog();
-                      await FetchCustomers();
-                      return;
-                    } catch (err) {
-                      play("alert");
-                      toast.error(t.toast.warning_error, {
-                        description: t.toast.error_delete,
-                      });
-                      console.error(
-                        "[src/pages/administrative/customers/CustomersList.tsx]",
-                        err,
-                      );
-                      return;
-                    }
-                  },
-                });
-              },
-            },
-          ]}
+          options={getOptions}
         />
         <Pagination
           display

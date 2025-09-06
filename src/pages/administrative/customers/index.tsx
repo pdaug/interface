@@ -2,6 +2,8 @@
 import CustomersList from "./CustomersList.tsx";
 import CustomersInspect from "./CustomersInspect.tsx";
 
+// TODO: display sales
+// TODO: display orders
 export default [
   {
     index: true,

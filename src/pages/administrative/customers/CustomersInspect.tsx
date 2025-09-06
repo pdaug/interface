@@ -17,6 +17,10 @@ import {
   MaskDocument2,
   MaskPostalCode,
 } from "../../../assets/Mask";
+import {
+  CustomerTaxPayers,
+  CustomerTaxRegimes,
+} from "../../../assets/Customer";
 import { SettingsAddressState } from "../../../assets/Settings";
 
 // hooks
@@ -73,6 +77,11 @@ const CustomersInspect = function () {
     representativeRole: "",
     phone2: "",
     document2: "",
+
+    registrationMunicipal: "",
+    registrationState: "",
+    taxpayer: "non_taxpayer",
+    taxregime: "non_taxregime",
 
     addresses: [],
 
@@ -275,6 +284,9 @@ const CustomersInspect = function () {
     }
   };
 
+  // TODO: Inscrição munícipal
+  // TODO: Inscrição estadual
+  // TODO: Contribuinte
   return (
     <React.Fragment>
       <Horizontal>
@@ -545,7 +557,6 @@ const CustomersInspect = function () {
                   }}
                 />
                 <Input
-                  min={4}
                   max={32}
                   type="email"
                   name="email"
@@ -557,6 +568,89 @@ const CustomersInspect = function () {
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.email = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+
+              <Horizontal internal={1}>
+                <Input
+                  max={32}
+                  type="text"
+                  disabled={loading}
+                  name="registrationMunicipal"
+                  id="customer_registration_municipal"
+                  label={t.customer.registration_municipal}
+                  value={form?.registrationMunicipal || ""}
+                  placeholder={t.customer.registration_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.registrationMunicipal =
+                      event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <Input
+                  max={32}
+                  type="text"
+                  disabled={loading}
+                  name="registrationState"
+                  id="customer_registration_state"
+                  value={form?.registrationState || ""}
+                  label={t.customer.registration_state}
+                  placeholder={t.customer.registration_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.registrationState =
+                      event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <InputSelect
+                  name="taxpayer"
+                  disabled={loading}
+                  id="customer_taxpayer"
+                  empty={t.stacks.no_option}
+                  label={t.customer.taxpayer}
+                  value={form?.taxpayer || ""}
+                  options={CustomerTaxPayers.map(function (taxpayer) {
+                    return {
+                      id: taxpayer,
+                      value: taxpayer,
+                      text:
+                        t.customer?.[taxpayer as keyof typeof t.customer] ||
+                        t.components.unknown,
+                    };
+                  })}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.taxpayer = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <InputSelect
+                  name="taxregime"
+                  disabled={loading}
+                  id="customer_taxregime"
+                  empty={t.stacks.no_option}
+                  label={t.customer.tax_regime}
+                  value={form?.taxregime || ""}
+                  options={CustomerTaxRegimes.map(function (taxregime) {
+                    return {
+                      id: taxregime,
+                      value: taxregime,
+                      text:
+                        t.customer?.[taxregime as keyof typeof t.customer] ||
+                        t.components.unknown,
+                    };
+                  })}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.taxregime = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}

@@ -19,6 +19,12 @@ export type TypeCustomer = {
   phone2?: string;
   document2?: string;
 
+  // others
+  registrationMunicipal?: string;
+  registrationState?: string;
+  taxpayer?: string;
+  taxregime?: string;
+
   addresses: TypeAddress[];
 
   workspaceId: string;
