@@ -52,7 +52,7 @@ const Storage = {
     };
     const config = { headers };
     return ApiBase.post<ApiResponse<T>>(
-      "/upload/upload/image",
+      "/storage/upload/image",
       formData,
       config,
     );

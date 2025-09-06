@@ -676,13 +676,13 @@ const SuppliersInspect = function () {
                           disabled={loading}
                           text={t.components.remove}
                           onClick={function () {
-                            if (index === 0) {
-                              play("alert");
-                              toast.warning(t.toast.warning_error, {
-                                description: t.supplier.no_delete_address,
-                              });
-                              return;
-                            }
+                            // if (index === 0) {
+                            //   play("alert");
+                            //   toast.warning(t.toast.warning_error, {
+                            //     description: t.supplier.no_delete_address,
+                            //   });
+                            //   return;
+                            // }
                             OpenDialog({
                               category: "Danger",
                               title: t.dialog.title_delete,

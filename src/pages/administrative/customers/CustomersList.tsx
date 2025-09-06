@@ -326,7 +326,6 @@ const CustomersList = function () {
                     }}
                   >
                     <Profile
-                      photoCircle
                       photoSize={4}
                       padding={false}
                       name={data.name as string}
@@ -354,13 +353,13 @@ const CustomersList = function () {
             phone: {
               label: t.customer.phone_1,
               handler: function (data) {
-                return data?.phone_1 ? (
+                return data?.phone1 ? (
                   <a
                     target="_blank"
                     rel="noreferrer"
                     href={`tel:${data.mobile as string}`}
                   >
-                    {PhoneNumber.Internacional((data?.phone_1 as string) || "")}
+                    {PhoneNumber.Internacional((data?.phone1 as string) || "")}
                   </a>
                 ) : (
                   <i style={{ color: "var(--textLight)" }}>
