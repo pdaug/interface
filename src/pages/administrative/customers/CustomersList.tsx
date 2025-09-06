@@ -300,28 +300,6 @@ const CustomersList = function () {
                 );
               },
             },
-            description: {
-              label: t.customer.description,
-              handler: function (data) {
-                if (data.description) return data.description as string;
-                return (
-                  <i style={{ color: "var(--textLight)" }}>
-                    {t.stacks.no_description}
-                  </i>
-                );
-              },
-            },
-            document1: {
-              label: t.customer.document,
-              handler: function (data) {
-                if (data.document1) return data.document1 as string;
-                return (
-                  <i style={{ color: "var(--textLight)" }}>
-                    {t.stacks.no_document}
-                  </i>
-                );
-              },
-            },
             mobile: {
               label: t.customer.mobile,
               handler: function (data) {
@@ -333,6 +311,24 @@ const CustomersList = function () {
                   >
                     {PhoneNumber.Internacional((data?.mobile as string) || "")}
                   </a>
+                );
+              },
+            },
+            phone: {
+              label: t.customer.phone_1,
+              handler: function (data) {
+                return data?.phone_1 ? (
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`tel:${data.mobile as string}`}
+                  >
+                    {PhoneNumber.Internacional((data?.phone_1 as string) || "")}
+                  </a>
+                ) : (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.stacks.no_phone}
+                  </i>
                 );
               },
             },
@@ -354,23 +350,23 @@ const CustomersList = function () {
                 );
               },
             },
-            address: {
-              label: t.customer.address,
-              handler: function (data) {
-                if ("addresses" in data && Array.isArray(data.addresses))
-                  return `${data?.addresses?.[0]?.street}, ${data?.addresses?.[0]?.number}, ${data?.addresses?.[0]?.city} - ${data?.addresses?.[0]?.state}`;
-                return (
-                  <i
-                    style={{
-                      color: "var(--textLight)",
-                      fontSize: "var(--textSmall)",
-                    }}
-                  >
-                    {t.stacks.no_address}
-                  </i>
-                );
-              },
-            },
+            // address: {
+            //   label: t.customer.address,
+            //   handler: function (data) {
+            //     if ("addresses" in data && Array.isArray(data.addresses))
+            //       return `${data?.addresses?.[0]?.street}, ${data?.addresses?.[0]?.number}, ${data?.addresses?.[0]?.city} - ${data?.addresses?.[0]?.state}`;
+            //     return (
+            //       <i
+            //         style={{
+            //           color: "var(--textLight)",
+            //           fontSize: "var(--textSmall)",
+            //         }}
+            //       >
+            //         {t.stacks.no_address}
+            //       </i>
+            //     );
+            //   },
+            // },
             user: {
               label: t.components.user,
               handler: function (data) {

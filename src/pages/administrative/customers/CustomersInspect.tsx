@@ -316,15 +316,14 @@ const CustomersInspect = function () {
                   photoTemp ? URL.createObjectURL(photoTemp) : form?.photo || ""
                 }
               />
-
               <InputFile
                 name="photo"
                 value={photoTemp}
                 disabled={loading}
                 id="customer_photo"
-                helper="PNG, JPG e JPEG"
+                helper="PNG, JPG e WEBP"
                 label={t.components.photo}
-                accept="image/png, image/jpg, image/jpeg"
+                accept="image/png, image/jpg, image/jpeg, image/webp, image/gif"
                 onChange={function (event) {
                   const file = event.currentTarget.files?.[0] || null;
                   if (!file) return;
@@ -351,11 +350,11 @@ const CustomersInspect = function () {
                 <InputSelect
                   required
                   name="status"
+                  disabled={loading}
                   id="customer_status"
                   empty={t.stacks.no_option}
                   value={String(form.status)}
                   label={t.components.status}
-                  disabled={loading}
                   options={[
                     {
                       id: "true",
@@ -381,9 +380,9 @@ const CustomersInspect = function () {
                   required
                   name="name"
                   id="customer_name"
+                  disabled={loading}
                   value={form?.name || ""}
                   label={t.customer.name}
-                  disabled={loading}
                   placeholder={t.customer.name_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -394,12 +393,12 @@ const CustomersInspect = function () {
                 />
                 <InputMask
                   name="document1"
+                  disabled={loading}
                   mask={MaskDocument1}
                   id="customer_document_1"
                   label={t.customer.document_1}
                   value={form?.document1 || ""}
-                  disabled={loading}
-                  placeholder={t.customer.document_placeholder}
+                  placeholder={t.customer.document_1_placeholder}
                   onChange={async function (event) {
                     const newForm = { ...form };
                     const document1Raw = event.currentTarget?.value || "";
@@ -463,10 +462,10 @@ const CustomersInspect = function () {
                   required
                   name="mobile"
                   mask={MaskPhone}
+                  disabled={loading}
                   id="customer_mobile"
                   label={t.customer.mobile}
                   value={form?.mobile || ""}
-                  disabled={loading}
                   placeholder={t.customer.mobile_placeholder}
                   onChange={async function (event) {
                     const newForm = { ...form };
@@ -533,11 +532,11 @@ const CustomersInspect = function () {
                 <InputMask
                   name="phone1"
                   mask={MaskPhone}
+                  disabled={loading}
                   id="customer_phone_1"
                   label={t.customer.phone_1}
                   value={form?.phone1 || ""}
-                  disabled={loading}
-                  placeholder={t.customer.mobile_placeholder}
+                  placeholder={t.customer.phone_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.phone1 = event.currentTarget?.value || "";
@@ -550,10 +549,10 @@ const CustomersInspect = function () {
                   max={32}
                   type="email"
                   name="email"
+                  disabled={loading}
                   id="customer_email"
                   value={form?.email || ""}
                   label={t.customer.email}
-                  disabled={loading}
                   placeholder={t.customer.email_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -569,10 +568,10 @@ const CustomersInspect = function () {
                   max={256}
                   height={4}
                   name="description"
+                  disabled={loading}
                   id="customer_description"
                   value={form?.description || ""}
                   label={t.components.description}
-                  disabled={loading}
                   placeholder={t.customer.description_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
@@ -694,12 +693,12 @@ const CustomersInspect = function () {
               <Horizontal internal={1}>
                 <InputMask
                   name="document2"
+                  disabled={loading}
                   mask={MaskDocument2}
                   id="customer_document_2"
                   label={t.customer.document_2}
                   value={form?.document2 || ""}
-                  disabled={loading}
-                  placeholder={t.customer.document_placeholder}
+                  placeholder={t.customer.document_2_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.document2 = event.currentTarget?.value || "";
@@ -710,11 +709,11 @@ const CustomersInspect = function () {
                 <InputMask
                   name="phone2"
                   mask={MaskPhone}
+                  disabled={loading}
                   id="customer_phone_2"
                   label={t.customer.phone_2}
                   value={form?.phone2 || ""}
-                  disabled={loading}
-                  placeholder={t.customer.mobile_placeholder}
+                  placeholder={t.customer.phone_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.phone2 = event.currentTarget?.value || "";
@@ -741,8 +740,8 @@ const CustomersInspect = function () {
                       >
                         <InputMask
                           required
-                          mask={MaskPostalCode}
                           disabled={loading}
+                          mask={MaskPostalCode}
                           name={`addresses[${index}].postalCode`}
                           label={t.components.address_postal_code}
                           id={`customer_addresses_${index}_postal_code`}
@@ -926,8 +925,8 @@ const CustomersInspect = function () {
                         />
                         <InputSelect
                           required
-                          empty={t.stacks.no_option}
                           disabled={loading}
+                          empty={t.stacks.no_option}
                           name={`addresses[${index}].state`}
                           label={t.components.address_state}
                           id={`customer_addresses_${index}_state`}
