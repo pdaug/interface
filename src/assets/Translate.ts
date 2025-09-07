@@ -1,7 +1,7 @@
 const TranslatePt = {
   about: {
     title: "Sobre",
-    description: "Forza Sistemas. Todos os direitos reservados.",
+    description: "Forza Sistemas LTDA. Todos os direitos reservados.",
     version_backend: "Backend",
     version_frontend: "Frontend",
     uptime: "Tempo em atividade",
@@ -947,7 +947,7 @@ const TranslatePt = {
 const TranslateEn = {
   about: {
     title: "About",
-    description: "Forza Sistemas. All rights reserved.",
+    description: "Forza Sistemas LTDA. All rights reserved.",
     version_backend: "Backend",
     version_frontend: "Frontend",
     uptime: "Uptime",

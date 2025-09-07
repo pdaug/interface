@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 // package
-import { version as versionFrontend } from "../../package.json";
+// import { version as versionFrontend } from "../../package.json";
 
 // hooks
 import useSystem from "../hooks/useSystem";
@@ -26,7 +26,7 @@ import useSounds from "../hooks/useSounds";
 import useTranslate from "../hooks/useTranslate";
 
 // components
-import { Vertical } from "../components/aligns/Align";
+import { Horizontal, Vertical } from "../components/aligns/Align";
 import { useDialog } from "../components/dialogs/Dialog";
 import { DropdownValue } from "../components/dropdowns/Dropdown";
 import Sidebar, { SidebarOptions } from "../components/sidebar/Sidebar";
@@ -37,7 +37,7 @@ const Menu = function () {
     instance,
     workspaces,
     workspaceId,
-    version: versionBackend,
+    // version: versionBackend,
     clear,
     selectWorkspace,
   } = useSystem();
@@ -262,9 +262,9 @@ const Menu = function () {
               description: (
                 <Vertical internal={1}>
                   <div style={{ fontSize: "var(--textSmall)" }}>
-                    {t.about.description}
+                    {new Date().getFullYear()} {t.about.description}
                   </div>
-                  <Vertical internal={0.4}>
+                  <Horizontal internal={1}>
                     {[
                       {
                         id: "api",
@@ -276,7 +276,7 @@ const Menu = function () {
                         id: "website",
                         label: t.about.website,
                         url: "https://forzasistemas.com/",
-                        disabled: true,
+                        disabled: false,
                       },
                       {
                         id: "docs",
@@ -296,7 +296,7 @@ const Menu = function () {
                           href={item.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex1 itemsCenter"
+                          className="itemsCenter"
                           style={{
                             fontSize: "var(--textSmall)",
                             gap: "0.2rem",
@@ -306,14 +306,14 @@ const Menu = function () {
                         </a>
                       );
                     })}
-                  </Vertical>
-                  <Vertical internal={0.2}>
+                  </Horizontal>
+                  {/* <Vertical internal={0.2}>
                     <code style={{ fontSize: "var(--textSmall)" }}>
                       {t.about.version_backend}: {versionBackend}
                       <br />
                       {t.about.version_frontend}: {versionFrontend}
                     </code>
-                  </Vertical>
+                  </Vertical> */}
                 </Vertical>
               ),
             });
