@@ -214,6 +214,11 @@ const TranslatePt = {
       "Total da quantidade de vendas neste cliente",
     stats_sale_title_total: "Valor das vendas",
     stats_sale_description_total: "Total em valor de vendas neste cliente",
+    stats_order_title_quantity: "Quantidade de ordens",
+    stats_order_description_quantity:
+      "Total da quantidade de ordens neste cliente",
+    stats_order_title_total: "Valor das ordens",
+    stats_order_description_total: "Total em valor de ordens neste cliente",
     // messages
     no_delete_address: "Não é possível deletar todos os endereços",
   },
@@ -1158,6 +1163,10 @@ const TranslateEn = {
     stats_sale_description_quantity: "Total of quantity customer sales",
     stats_sale_title_total: "Sales value",
     stats_sale_description_total: "Total of value customer sales",
+    stats_order_title_quantity: "Orders quantity",
+    stats_order_description_quantity: "Total of quantity customer order",
+    stats_order_title_total: "Orders value",
+    stats_order_description_total: "Total of value customer orders",
     // messages
     no_delete_address: "Do not delete all addresses",
   },

@@ -211,16 +211,16 @@ const CustomersOrders = function () {
 
       <Horizontal internal={1}>
         <Stats
-          title={t.customer.stats_sale_title_quantity}
+          title={t.customer.stats_order_title_quantity}
           value={orders?.length || 0}
           Icon={Receipt}
           valueUnit={t.components.total}
-          footer={t.customer.stats_sale_description_quantity}
+          footer={t.customer.stats_order_description_quantity}
           styles={{ display: "flex" }}
           stylesContainer={{ flex: 1 }}
         />
         <Stats
-          title={t.customer.stats_sale_title_total}
+          title={t.customer.stats_order_title_total}
           value={orders?.reduce(function (acc, item) {
             const { total } = Calculate.totalOrder(item);
             return acc + total;
@@ -228,7 +228,7 @@ const CustomersOrders = function () {
           Icon={MoneyWavy}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
-          footer={t.customer.stats_sale_description_total}
+          footer={t.customer.stats_order_description_total}
           styles={{ display: "flex" }}
           stylesContainer={{ flex: 1 }}
         />
