@@ -179,3 +179,9 @@ code {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+@keyframes dashmove {
+  to {
+    stroke-dashoffset: -10;
+  }
+}

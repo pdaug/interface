@@ -3,9 +3,13 @@ import {
   addEdge,
   applyEdgeChanges,
   applyNodeChanges,
+  BaseEdge,
   Connection,
+  Edge,
   EdgeChange,
+  getSmoothStepPath,
   Handle,
+  Node,
   NodeChange,
   Position,
   ReactFlow,
@@ -26,7 +30,7 @@ import useTranslate from "../../../hooks/useTranslate";
 const AutomationsPanel = function () {
   const t = useTranslate();
 
-  const [nodes, setNodes] = useState([
+  const [nodes, setNodes] = useState<Node[]>([
     {
       id: "start",
       type: "eventNode",
@@ -52,21 +56,24 @@ const AutomationsPanel = function () {
       data: {},
     },
   ]);
-  const [edges, setEdges] = useState([
+  const [edges, setEdges] = useState<Edge[]>([
     {
       id: "start-message1",
       source: "start",
       target: "message1",
+      type: "dashed",
     },
     {
       id: "start-transformer1",
       source: "start",
       target: "transformer1",
+      type: "dashed",
     },
     {
       id: "transformer1-generator1",
       source: "transformer1",
       target: "generator1",
+      type: "dashed",
     },
   ]);
 
@@ -343,7 +350,7 @@ const AutomationsPanel = function () {
                 }}
               >
                 <Badge
-                  category="Danger"
+                  category="Success"
                   value="Transformador: IA"
                   styles={{ width: "min-content" }}
                 />
@@ -386,18 +393,13 @@ const AutomationsPanel = function () {
                 type="source"
                 position={"right" as Position}
                 style={{
-                  background: "var(--dangerLight)",
-                  border: "1px solid var(--dangerColor)",
-                  borderRadius: "0",
-                  width: "auto",
-                  height: "auto",
-                  padding: "0.2rem",
-                  fontSize: "var(--textSmall)",
+                  background: "var(--successLight)",
+                  border: "1px solid var(--successColor)",
+                  height: 10,
+                  width: 10,
                   top: 32,
                 }}
-              >
-                Ok
-              </Handle>
+              ></Handle>
               <Handle
                 type="source"
                 position={"right" as Position}
@@ -405,21 +407,17 @@ const AutomationsPanel = function () {
                   background: "var(--dangerLight)",
                   border: "1px solid var(--dangerColor)",
                   borderRadius: "0",
-                  width: "auto",
-                  height: "auto",
-                  padding: "0.2rem",
-                  fontSize: "var(--textSmall)",
+                  height: 10,
+                  width: 10,
                   top: 64,
                 }}
-              >
-                Err
-              </Handle>
+              ></Handle>
               <Handle
                 type="target"
                 position={"left" as Position}
                 style={{
-                  background: "var(--dangerLight)",
-                  border: "1px solid var(--dangerColor)",
+                  background: "var(--successLight)",
+                  border: "1px solid var(--successColor)",
                   height: 10,
                   width: 10,
                 }}
@@ -521,6 +519,44 @@ const AutomationsPanel = function () {
                 }}
               />
             </div>
+          );
+        },
+      }}
+      // edge custom
+      edgeTypes={{
+        dashed: function ({
+          id,
+          sourceX,
+          sourceY,
+          targetX,
+          targetY,
+          sourcePosition,
+          targetPosition,
+          markerEnd,
+        }) {
+          const [edgePath] = getSmoothStepPath({
+            sourceX,
+            sourceY,
+            targetX,
+            targetY,
+            sourcePosition,
+            targetPosition,
+            borderRadius: 0,
+          });
+
+          return (
+            <BaseEdge
+              id={id}
+              path={edgePath}
+              markerEnd={markerEnd}
+              type="step"
+              style={{
+                stroke: "var(--infoColor)",
+                strokeWidth: 2,
+                strokeDasharray: "5,5",
+                animation: "dashmove 0.6s linear infinite", // 👈 animação
+              }}
+            />
           );
         },
       }}
