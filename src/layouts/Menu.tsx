@@ -146,12 +146,12 @@ const Menu = function () {
       ],
     },
     {
-      id: "products",
+      id: "product",
       name: t.menu.products,
       Icon: ShoppingBagOpen,
       items: [
         {
-          id: "list",
+          id: "products",
           label: t.menu.products,
           onClick: () => navigate("/f/products"),
         },
@@ -163,12 +163,12 @@ const Menu = function () {
       ],
     },
     {
-      id: "services",
+      id: "service",
       name: t.menu.services,
       Icon: Truck,
       items: [
         {
-          id: "list",
+          id: "services",
           label: t.menu.services,
           onClick: () => navigate("/f/services"),
         },

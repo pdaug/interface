@@ -55,34 +55,8 @@ const SalesShare = function () {
   const t = useTranslate(instance ?? undefined);
   const Currency = useCurrency(instance ?? undefined);
 
-  const subtotalProducts = Calculate.productsOrServices(sale?.products || []);
-
-  const subtotalAdditions = Calculate.details(
-    sale?.details?.filter(function (detail) {
-      return detail?.type === "tax" || detail?.type === "fee";
-    }) || [],
-    subtotalProducts,
-  );
-
-  const subtotalDeductions = Calculate.details(
-    sale?.details?.filter(function (detail) {
-      return (
-        detail?.type === "discount" ||
-        detail?.type === "promo" ||
-        detail?.type === "coupon" ||
-        detail?.type === "voucher"
-      );
-    }) || [],
-    subtotalProducts,
-  );
-
-  const subtotalShipping = Number(sale?.shippingCost) || 0;
-
-  const total =
-    subtotalProducts +
-    subtotalAdditions -
-    subtotalDeductions +
-    subtotalShipping;
+  const { subtotalProducts, subtotalDeductions, subtotalAdditions, total } =
+    Calculate.totalSale(sale as TypeSale);
 
   // change style by instance
   useEffect(

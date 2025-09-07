@@ -45,28 +45,8 @@ const OrdersShare = function () {
   const t = useTranslate(instance ?? undefined);
   const Currency = useCurrency(instance ?? undefined);
 
-  const subtotalServices = Calculate.productsOrServices(order?.services || []);
-
-  const subtotalAdditions = Calculate.details(
-    order?.details?.filter(function (detail) {
-      return detail?.type === "tax" || detail?.type === "fee";
-    }) || [],
-    subtotalServices,
-  );
-
-  const subtotalDeductions = Calculate.details(
-    order?.details?.filter(function (detail) {
-      return (
-        detail?.type === "discount" ||
-        detail?.type === "promo" ||
-        detail?.type === "coupon" ||
-        detail?.type === "voucher"
-      );
-    }) || [],
-    subtotalServices,
-  );
-
-  const total = subtotalServices + subtotalAdditions - subtotalDeductions;
+  const { subtotalServices, subtotalAdditions, subtotalDeductions, total } =
+    Calculate.totalOrder(order as unknown as TypeOrder);
 
   // change style by instance
   useEffect(

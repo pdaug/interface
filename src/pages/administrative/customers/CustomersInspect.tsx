@@ -816,6 +816,7 @@ const CustomersInspect = function () {
             </Vertical>
           </Wrapper>
 
+          {/* BUG: remove address keep map appears */}
           <Wrapper
             title={t.customer.title_addresses}
             description={t.customer.subtitle_addresses}

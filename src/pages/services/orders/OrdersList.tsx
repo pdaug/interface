@@ -621,36 +621,8 @@ const OrdersList = function () {
             details: {
               label: t.order.details,
               handler: function (data) {
-                const subtotalServices = Calculate.productsOrServices(
-                  (data?.services as Record<string, unknown>[]) || [],
-                );
-
-                const subtotalAdditions = Calculate.details(
-                  (data?.details as Record<string, unknown>[])?.filter(
-                    function (detail) {
-                      return (
-                        detail?.type === "tax" ||
-                        detail?.type === "fee" ||
-                        detail?.type === "shipping"
-                      );
-                    },
-                  ) || [],
-                  subtotalServices,
-                );
-
-                const subtotalDeductions = Calculate.details(
-                  (data?.details as Record<string, unknown>[])?.filter(
-                    function (detail) {
-                      return (
-                        detail?.type === "discount" ||
-                        detail?.type === "promo" ||
-                        detail?.type === "coupon" ||
-                        detail?.type === "voucher"
-                      );
-                    },
-                  ) || [],
-                  subtotalServices,
-                );
+                const { subtotalAdditions, subtotalDeductions } =
+                  Calculate.totalOrder(data as TypeOrder);
 
                 return (
                   <Vertical
@@ -682,39 +654,7 @@ const OrdersList = function () {
               label: t.components.total,
               maxWidth: 128,
               handler: function (data) {
-                const subtotalServices = Calculate.productsOrServices(
-                  (data?.services as Record<string, unknown>[]) || [],
-                );
-
-                const subtotalAdditions = Calculate.details(
-                  (data?.details as Record<string, unknown>[])?.filter(
-                    function (detail) {
-                      return (
-                        detail?.type === "tax" ||
-                        detail?.type === "fee" ||
-                        detail?.type === "shipping"
-                      );
-                    },
-                  ) || [],
-                  subtotalServices,
-                );
-
-                const subtotalDeductions = Calculate.details(
-                  (data?.details as Record<string, unknown>[])?.filter(
-                    function (detail) {
-                      return (
-                        detail?.type === "discount" ||
-                        detail?.type === "promo" ||
-                        detail?.type === "coupon" ||
-                        detail?.type === "voucher"
-                      );
-                    },
-                  ) || [],
-                  subtotalServices,
-                );
-
-                const total =
-                  subtotalServices + subtotalAdditions - subtotalDeductions;
+                const { total } = Calculate.totalOrder(data as TypeOrder);
 
                 return <div>{Currency(total || 0)}</div>;
               },

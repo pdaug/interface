@@ -2,26 +2,29 @@ import { toast } from "sonner";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowSquareIn,
   CopySimple,
-  MoneyWavy,
+  ArrowSquareIn,
   Receipt,
+  MoneyWavy,
 } from "@phosphor-icons/react";
 
 //apis
 import apis from "../../../apis";
 
-// assets
-import { SaleStagesCategory } from "../../../assets/Sale";
+import { OrderStagesCategory } from "../../../assets/Order";
 
 // utils
 import Clipboard from "../../../utils/Clipboard";
 import Calculate from "../../../utils/Calculate";
 
 // types
+import {
+  TypeOrder,
+  TypeOrderStage,
+  TypeOrderService,
+} from "../../../types/Order";
 import { TypeCustomer } from "../../../types/Customers";
 import { ApiResponsePaginate } from "../../../types/Api";
-import { TypeSale, TypeSaleProduct, TypeSaleStage } from "../../../types/Sale";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
@@ -32,20 +35,20 @@ import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
+import Stats from "../../../components/stats/Stats";
 import Badge from "../../../components/badges/Badge";
+import Wrapper from "../../../components/wrapper/Wrapper";
 import Profile from "../../../components/profiles/Profile";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Stats from "../../../components/stats/Stats";
 import { ChartData, ChartLine } from "../../../components/charts/Chart";
-import Wrapper from "../../../components/wrapper/Wrapper";
 
 const pageSize = 999;
 
-const CustomersSales = function () {
+const CustomersOrders = function () {
   const t = useTranslate();
   const play = useSounds();
   const { id } = useParams();
@@ -54,17 +57,16 @@ const CustomersSales = function () {
   const { instanceDateTime } = useDateTime();
   const { users, token, instance, workspaces, workspaceId } = useSystem();
 
-  const [sales, setSales] = useState<TypeSale[]>([]);
+  const [orders, setOrders] = useState<TypeOrder[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selected, setSelected] = useState<string[]>([]);
   const [customer, setCustomer] = useState<TypeCustomer | null>(null);
 
-  // fetch sales
+  // fetch orders
   useAsync(
     async function () {
       setLoading(true);
       try {
-        const response = await apis.Sale.list<ApiResponsePaginate<TypeSale>>(
+        const response = await apis.Order.list<ApiResponsePaginate<TypeOrder>>(
           token,
           instance.name,
           {
@@ -80,22 +82,19 @@ const CustomersSales = function () {
             description: t.stacks.no_find_item,
           });
           console.warn(
-            "[src/pages/administrative/customers/CustomersSales.tsx]",
+            "[src/pages/products/order/OrdersList.tsx]",
             response.data,
           );
           return;
         }
-        setSales(response.data.result.items);
+        setOrders(response.data.result.items);
         return;
       } catch (err) {
         play("alert");
         toast.error(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        console.error(
-          "[src/pages/administrative/customers/CustomersSales.tsx]",
-          err,
-        );
+        console.error("[src/pages/products/order/OrdersList.tsx]", err);
         return;
       } finally {
         setLoading(false);
@@ -170,7 +169,7 @@ const CustomersSales = function () {
       Icon: ArrowSquareIn,
       onClick: function (_: React.MouseEvent, data: unknown) {
         if (data && typeof data === "object" && "id" in data)
-          navigate(`/f/sales/inspect/${data.id}`);
+          navigate(`/f/orders/inspect/${data.id}`);
         return;
       },
     },
@@ -201,9 +200,9 @@ const CustomersSales = function () {
                 url: `/f/customers/inspect${id ? `/${id}` : ""}`,
               },
               {
-                id: "sales",
-                label: t.sale.sales,
-                url: "/f/sales",
+                id: "orders",
+                label: t.order.orders,
+                url: "/f/orders",
               },
             ]}
           />
@@ -213,7 +212,7 @@ const CustomersSales = function () {
       <Horizontal internal={1}>
         <Stats
           title={t.customer.stats_sale_title_quantity}
-          value={sales?.length || 0}
+          value={orders?.length || 0}
           Icon={Receipt}
           valueUnit={t.components.total}
           footer={t.customer.stats_sale_description_quantity}
@@ -222,8 +221,8 @@ const CustomersSales = function () {
         />
         <Stats
           title={t.customer.stats_sale_title_total}
-          value={sales?.reduce(function (acc, item) {
-            const { total } = Calculate.totalSale(item);
+          value={orders?.reduce(function (acc, item) {
+            const { total } = Calculate.totalOrder(item);
             return acc + total;
           }, 0)}
           Icon={MoneyWavy}
@@ -267,10 +266,10 @@ const CustomersSales = function () {
               width: 24,
             }}
             data={
-              sales?.map(function (sale) {
-                const { total } = Calculate.totalSale(sale);
+              orders?.map(function (order) {
+                const { total } = Calculate.totalOrder(order);
                 return {
-                  date: sale.createdAt.slice(0, 10),
+                  date: order.createdAt.slice(0, 10),
                   value: total,
                 };
               }) as unknown as ChartData[]
@@ -283,32 +282,32 @@ const CustomersSales = function () {
         <Table
           border
           loading={loading}
-          data={sales as TableData[]}
+          data={orders as TableData[]}
           columns={{
-            saleId: {
-              label: t.sale.id,
+            orderId: {
+              label: t.order.id,
               maxWidth: 96,
               handler: function (data) {
                 return (
                   <Badge
                     category="Neutral"
-                    value={(data?.saleId as string) || ""}
+                    value={(data?.orderId as string) || ""}
                   />
                 );
               },
             },
             stage: {
-              label: t.sale.stage,
+              label: t.order.stage,
               maxWidth: 96,
               handler: function (data) {
                 return (
                   <Badge
                     value={
-                      t.sale?.[data.stage as keyof typeof t.sale] ||
+                      t.order?.[data.stage as keyof typeof t.order] ||
                       t.components.unknown
                     }
                     category={
-                      SaleStagesCategory?.[data.stage as TypeSaleStage] ||
+                      OrderStagesCategory?.[data.stage as TypeOrderStage] ||
                       "Neutral"
                     }
                   />
@@ -316,13 +315,13 @@ const CustomersSales = function () {
               },
             },
             customerName: {
-              label: t.sale.customer,
+              label: t.order.customer,
               handler: function (data) {
                 return (
                   <div
                     className="cursor"
                     onClick={function () {
-                      navigate(`/f/sales/inspect/${data.id}`);
+                      navigate(`/f/orders/inspect/${data.id}`);
                       return;
                     }}
                   >
@@ -331,15 +330,15 @@ const CustomersSales = function () {
                 );
               },
             },
-            products: {
-              label: t.sale.product_name,
+            services: {
+              label: t.order.service_name,
               handler: function (data) {
-                const productNamesFrequency = (
-                  data?.products as TypeSaleProduct[]
+                const serviceNamesFrequency = (
+                  data?.services as TypeOrderService[]
                 ).reduce(
                   function (acc, item) {
-                    acc[item.productName] =
-                      (acc[item.productName] || 0) + item.quantity;
+                    acc[item.serviceName] =
+                      (acc[item.serviceName] || 0) + item.quantity;
                     return acc;
                   },
                   {} as Record<string, number>,
@@ -347,13 +346,13 @@ const CustomersSales = function () {
 
                 return (
                   <div>
-                    {Object.entries(productNamesFrequency)?.map(function (
-                      [productName, value],
+                    {Object.entries(serviceNamesFrequency)?.map(function (
+                      [serviceName, value],
                       index,
                     ) {
                       return (
-                        <div key={`product-name-${index}`}>
-                          {String(value)}x {productName}
+                        <div key={`service-name-${index}`}>
+                          {String(value)}x {serviceName}
                         </div>
                       );
                     })}
@@ -362,10 +361,10 @@ const CustomersSales = function () {
               },
             },
             details: {
-              label: t.sale.details,
+              label: t.order.details,
               handler: function (data) {
-                const subtotalProducts = Calculate.productsOrServices(
-                  (data?.products as Record<string, unknown>[]) || [],
+                const subtotalServices = Calculate.productsOrServices(
+                  (data?.services as Record<string, unknown>[]) || [],
                 );
 
                 const subtotalAdditions = Calculate.details(
@@ -378,7 +377,7 @@ const CustomersSales = function () {
                       );
                     },
                   ) || [],
-                  subtotalProducts,
+                  subtotalServices,
                 );
 
                 const subtotalDeductions = Calculate.details(
@@ -392,40 +391,29 @@ const CustomersSales = function () {
                       );
                     },
                   ) || [],
-                  subtotalProducts,
+                  subtotalServices,
                 );
-
-                const subtotalShipping = Number(data?.shippingCost) || 0;
 
                 return (
                   <Vertical
                     internal={0.4}
                     styles={{ alignItems: "flex-start" }}
                   >
-                    {!subtotalAdditions &&
-                      !subtotalDeductions &&
-                      !subtotalShipping && (
-                        <i style={{ opacity: 0.6 }}>{t.sale.empty_details}</i>
-                      )}
-                    {Boolean(subtotalShipping) && (
-                      <Badge
-                        category="Danger"
-                        styles={{ justifyContent: "flex-start" }}
-                        value={`${t.sale.shipping}: +${Currency(subtotalShipping)}`}
-                      />
+                    {!subtotalAdditions && !subtotalDeductions && (
+                      <i style={{ opacity: 0.6 }}>{t.order.empty_details}</i>
                     )}
                     {Boolean(subtotalAdditions) && (
                       <Badge
                         category="Danger"
                         styles={{ justifyContent: "flex-start" }}
-                        value={`${t.sale.addition}: +${Currency(subtotalAdditions)}`}
+                        value={`${t.order.addition}: +${Currency(subtotalAdditions)}`}
                       />
                     )}
                     {Boolean(subtotalDeductions) && (
                       <Badge
                         category="Success"
                         styles={{ justifyContent: "flex-start" }}
-                        value={`${t.sale.deduction}: +${Currency(subtotalDeductions)}`}
+                        value={`${t.order.deduction}: +${Currency(subtotalDeductions)}`}
                       />
                     )}
                   </Vertical>
@@ -436,8 +424,8 @@ const CustomersSales = function () {
               label: t.components.total,
               maxWidth: 128,
               handler: function (data) {
-                const subtotalProducts = Calculate.productsOrServices(
-                  (data?.products as Record<string, unknown>[]) || [],
+                const subtotalServices = Calculate.productsOrServices(
+                  (data?.services as Record<string, unknown>[]) || [],
                 );
 
                 const subtotalAdditions = Calculate.details(
@@ -450,7 +438,7 @@ const CustomersSales = function () {
                       );
                     },
                   ) || [],
-                  subtotalProducts,
+                  subtotalServices,
                 );
 
                 const subtotalDeductions = Calculate.details(
@@ -464,42 +452,33 @@ const CustomersSales = function () {
                       );
                     },
                   ) || [],
-                  subtotalProducts,
+                  subtotalServices,
                 );
 
-                const subtotalShipping = Number(data?.shippingCost) || 0;
-
                 const total =
-                  subtotalProducts +
-                  subtotalAdditions -
-                  subtotalDeductions +
-                  subtotalShipping;
+                  subtotalServices + subtotalAdditions - subtotalDeductions;
 
                 return <div>{Currency(total || 0)}</div>;
               },
             },
-            user: {
-              label: t.sale.seller,
+            providerId: {
+              label: t.order.provider,
               handler: function (data) {
                 const userFinded = users?.find(function (user) {
-                  return user.id === data.userId;
+                  return user.id === data.providerId;
                 });
-                const sellerFinded =
-                  users?.find(function (user) {
-                    return user.id === data.sellerId;
-                  }) || userFinded;
                 return (
                   <Tooltip
-                    content={t.components[sellerFinded?.role || "collaborator"]}
+                    content={t.components[userFinded?.role || "collaborator"]}
                   >
                     <Profile
                       photoCircle
                       photoSize={3}
                       padding={false}
                       styles={{ lineHeight: 1 }}
-                      photo={sellerFinded?.photo || ""}
-                      description={sellerFinded?.email || ""}
-                      name={sellerFinded?.name || t.components.unknown}
+                      photo={userFinded?.photo || ""}
+                      description={userFinded?.email || ""}
+                      name={userFinded?.name || t.components.unknown}
                     />
                   </Tooltip>
                 );
@@ -513,8 +492,6 @@ const CustomersSales = function () {
               },
             },
           }}
-          selected={selected}
-          setSelected={setSelected}
           options={getOptions}
         />
 
@@ -522,7 +499,7 @@ const CustomersSales = function () {
           display
           pageCurrent={1}
           setPage={() => {}}
-          itemsTotal={sales.length}
+          itemsTotal={orders.length}
           pageSize={pageSize}
         />
       </Vertical>
@@ -530,4 +507,4 @@ const CustomersSales = function () {
   );
 };
 
-export default CustomersSales;
+export default CustomersOrders;

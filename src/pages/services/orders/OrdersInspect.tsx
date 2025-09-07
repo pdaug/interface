@@ -30,6 +30,7 @@ import {
   TypeOrderService,
 } from "../../../types/Order";
 import { TypeAccount } from "../../../types/Account";
+import { TypeVehicle } from "../../../types/Vehicle";
 import { TypeService } from "../../../types/Service";
 import { TypeSchedule } from "../../../types/Schedules";
 import { TypeCustomer } from "../../../types/Customers";
@@ -61,7 +62,6 @@ import Callout from "../../../components/callouts/Callout";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import { TypeVehicle } from "../../../types/Vehicle";
 
 const OrdersInspect = function () {
   const t = useTranslate();
@@ -111,28 +111,8 @@ const OrdersInspect = function () {
       })
     : null;
 
-  const subtotalServices = Calculate.productsOrServices(form?.services || []);
-
-  const subtotalAdditions = Calculate.details(
-    form?.details?.filter(function (detail) {
-      return detail?.type === "tax" || detail?.type === "fee";
-    }) || [],
-    subtotalServices,
-  );
-
-  const subtotalDeductions = Calculate.details(
-    form?.details?.filter(function (detail) {
-      return (
-        detail?.type === "discount" ||
-        detail?.type === "promo" ||
-        detail?.type === "coupon" ||
-        detail?.type === "voucher"
-      );
-    }) || [],
-    subtotalServices,
-  );
-
-  const total = subtotalServices + subtotalAdditions - subtotalDeductions;
+  const { subtotalServices, subtotalAdditions, subtotalDeductions, total } =
+    Calculate.totalOrder(form as unknown as TypeOrder);
 
   // fetch order
   useAsync(async function () {

@@ -1,6 +1,7 @@
 import {
   Plus,
   Trash,
+  Truck,
   CopySimple,
   PencilSimple,
   QuestionMark,
@@ -184,6 +185,22 @@ const CustomersList = function () {
       onClick: async function (_: React.MouseEvent, data: unknown) {
         if (data && typeof data === "object" && "id" in data) {
           navigate(`/f/customers/sales/${data.id}`);
+          return;
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_copy,
+        });
+        return;
+      },
+    },
+    {
+      id: "orders",
+      Icon: Truck,
+      label: t.order.orders,
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          navigate(`/f/customers/orders/${data.id}`);
           return;
         }
         play("alert");

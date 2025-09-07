@@ -14,8 +14,8 @@ export const OrderStages = [
 
 export const OrderStagesCategory: Record<TypeOrderStage, BadgeCategories> = {
   draft: "Neutral",
-  open: "Info",
-  pending: "Info",
+  open: "Warning",
+  pending: "Warning",
   review: "Info",
   progress: "Info",
   completed: "Success",

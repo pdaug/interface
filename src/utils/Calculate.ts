@@ -1,5 +1,6 @@
 // types
 import { TypeSale } from "../types/Sale";
+import { TypeOrder } from "../types/Order";
 
 const Calculate = {
   productsOrServices: function (arr: Record<string, unknown>[]): number {
@@ -53,6 +54,35 @@ const Calculate = {
       subtotalShipping,
       total,
     };
+  },
+
+  totalOrder: function (order: TypeOrder) {
+    const subtotalServices = Calculate.productsOrServices(
+      order?.services || [],
+    );
+
+    const subtotalAdditions = Calculate.details(
+      order?.details?.filter(function (detail) {
+        return detail?.type === "tax" || detail?.type === "fee";
+      }) || [],
+      subtotalServices,
+    );
+
+    const subtotalDeductions = Calculate.details(
+      order?.details?.filter(function (detail) {
+        return (
+          detail?.type === "discount" ||
+          detail?.type === "promo" ||
+          detail?.type === "coupon" ||
+          detail?.type === "voucher"
+        );
+      }) || [],
+      subtotalServices,
+    );
+
+    const total = subtotalServices + subtotalAdditions - subtotalDeductions;
+
+    return { subtotalServices, subtotalAdditions, subtotalDeductions, total };
   },
 
   details: function (arr: Record<string, unknown>[], total: number): number {

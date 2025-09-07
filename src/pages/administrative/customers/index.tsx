@@ -2,8 +2,8 @@
 import CustomersList from "./CustomersList.tsx";
 import CustomersInspect from "./CustomersInspect.tsx";
 import CustomersSales from "./CustomersSales.tsx";
+import CustomersOrders from "./CustomersOrders.tsx";
 
-// TODO: display orders
 export default [
   {
     index: true,
@@ -20,5 +20,9 @@ export default [
   {
     path: "sales/:id",
     Component: CustomersSales,
+  },
+  {
+    path: "orders/:id",
+    Component: CustomersOrders,
   },
 ];
