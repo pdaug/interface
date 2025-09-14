@@ -839,16 +839,89 @@ const UsersInspect = function () {
           <Wrapper>
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
               {id && (
-                <Button
-                  type="button"
-                  category="Neutral"
-                  disabled={loading}
-                  text={t.user.audit}
-                  onClick={function () {
-                    navigate(`/f/users/audit/${id}`);
-                    return;
-                  }}
-                />
+                <React.Fragment>
+                  {user.role !== "collaborator" && (
+                    <Button
+                      type="button"
+                      category="Neutral"
+                      disabled={loading}
+                      text={t.user.audit}
+                      onClick={function () {
+                        navigate(`/f/users/audit/${id}`);
+                        return;
+                      }}
+                    />
+                  )}
+
+                  {(user.id === id || user.role === "master") && (
+                    <Button
+                      type="button"
+                      category="Neutral"
+                      disabled={loading}
+                      text={t.password.request}
+                      onClick={async function () {
+                        try {
+                          const response = await apis.Password.setRequest(
+                            instance.name,
+                            token,
+                            id,
+                          );
+                          if (!response || !response.data) {
+                            play("alert");
+                            console.error(
+                              "[src/pages/settings/users/UsersInspect.tsx]",
+                              response.data,
+                            );
+                            toast.error(t.toast.warning_error, {
+                              description: t.toast.error_edit,
+                            });
+                            return;
+                          }
+                          toast.success(t.toast.warning_error, {
+                            description: t.password.sent_request,
+                          });
+                        } catch (err) {
+                          play("alert");
+                          console.error(
+                            "[src/pages/settings/users/UsersInspect.tsx]",
+                            err,
+                          );
+                          if (
+                            err instanceof AxiosError &&
+                            err.response?.data?.result?.message
+                          ) {
+                            const message = err.response.data.result.message;
+                            if (message === "user_id_incorrect")
+                              toast.error(t.toast.warning_error, {
+                                description: t.stacks.no_items,
+                              });
+                            if (message === "no_exists_user")
+                              toast.error(t.toast.warning_error, {
+                                description: t.stacks.no_items,
+                              });
+                            if (message === "already_change_password")
+                              toast.error(t.toast.warning_error, {
+                                description: t.password.already_changed,
+                              });
+                            if (message === "no_upsert_password_request")
+                              toast.error(t.toast.warning_error, {
+                                description: t.toast.error_edit,
+                              });
+                            if (message === "password_request_no_searched")
+                              toast.error(t.toast.warning_error, {
+                                description: t.toast.error_edit,
+                              });
+                            return;
+                          }
+                          toast.error(t.toast.warning_error, {
+                            description: t.toast.error_create,
+                          });
+                        }
+                        return;
+                      }}
+                    />
+                  )}
+                </React.Fragment>
               )}
               <Button
                 type="button"

@@ -135,11 +135,15 @@ const Login = function () {
       }
 
       // select workspace
-      if (
-        responseWorkspace.data.result.items?.[0] &&
-        responseWorkspace.data.result.items[0].status
-      )
-        selectWorkspace(responseWorkspace.data.result.items[0].id);
+      if (responseWorkspace.data.result.items?.length) {
+        const workspacesList = responseWorkspace.data.result.items;
+        const workspaceValid = workspacesList?.find(function (works) {
+          return works?.status;
+        });
+        if (workspaceValid) {
+          selectWorkspace(workspaceValid.id);
+        }
+      }
 
       // fetch users
       const responseUser = await apis.User.list<ApiResponsePaginate<TypeUser>>(

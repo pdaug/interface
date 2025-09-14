@@ -7,6 +7,7 @@ import { ImageBroken } from "@phosphor-icons/react";
 import apis from "../../../apis";
 
 // assets
+import { Master } from "../../../assets/Master";
 import { ServiceMethods } from "../../../assets/Services";
 import { OrderDetailsMode, OrderDetailsType } from "../../../assets/Order";
 
@@ -107,7 +108,7 @@ const OrdersShare = function () {
 
       // iorder
       const responseOrder = await apis.Order.get<TypeOrder>(
-        "5d83e097-d2d2-4b0e-8686-fb91154876d8",
+        Master.token,
         instance.name,
         id,
       );
@@ -122,7 +123,7 @@ const OrdersShare = function () {
 
       // customer
       const responseCustomer = await apis.Customer.get<TypeCustomer>(
-        "5d83e097-d2d2-4b0e-8686-fb91154876d8",
+        Master.token,
         instance.name,
         responseOrder.data.result.customerId,
       );

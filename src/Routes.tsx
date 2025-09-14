@@ -7,6 +7,11 @@ import Container from "./layouts/Container";
 import { ToastElement } from "./components/toasts/Toast";
 import { DialogElement, DialogProvider } from "./components/dialogs/Dialog";
 
+// pages public
+import Login from "./pages/Login";
+import Shares from "./pages/Shares";
+import Password from "./pages/password";
+
 // pages private
 import tool from "./pages/tool";
 import settings from "./pages/settings";
@@ -15,10 +20,6 @@ import products from "./pages/products";
 import Dashboard from "./pages/Dashboard";
 import financial from "./pages/financial";
 import administrative from "./pages/administrative";
-
-// pages public
-import Login from "./pages/Login";
-import Shares from "./pages/Shares";
 
 // pages other
 import NotFound from "./pages/NotFound";
@@ -31,6 +32,7 @@ const Router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   Shares,
+  Password,
   {
     path: "f",
     element: <Container />,
