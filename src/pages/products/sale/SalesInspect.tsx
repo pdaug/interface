@@ -686,6 +686,24 @@ const SalesInspect = function () {
 
                   <Input
                     readOnly
+                    type="date"
+                    name="createdAt"
+                    disabled={loading}
+                    id="sale_created_at"
+                    placeholder="yyyy-MM-dd"
+                    label={t.components.created_at}
+                    value={
+                      form?.createdAt
+                        ? format(new Date(form?.createdAt), "yyyy-MM-dd")
+                        : ""
+                    }
+                    onChange={function () {
+                      return;
+                    }}
+                  />
+
+                  <Input
+                    readOnly
                     placeholder=""
                     name="updatedAt"
                     id="sale_updated_at"
@@ -697,16 +715,35 @@ const SalesInspect = function () {
                       return;
                     }}
                   />
+
                   <Input
-                    readOnly
-                    placeholder=""
-                    name="deletedAt"
-                    id="sale_deleted_at"
-                    label={t.components.deletedAt}
-                    value={
-                      form?.deletedAt ? instanceDateTime(form.deletedAt) : "-"
-                    }
-                    onChange={function () {
+                    type="date"
+                    name="dateWon"
+                    id="sale_date_won"
+                    placeholder="yyyy-MM-dd"
+                    label={t.sale.date_won}
+                    disabled={loading || form.stage !== "won"}
+                    value={form?.dateWon ? form.dateWon.slice(0, 10) : ""}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.dateWon = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+
+                  <Input
+                    type="date"
+                    name="dateLost"
+                    id="sale_date_lost"
+                    placeholder="yyyy-MM-dd"
+                    label={t.sale.date_lost}
+                    disabled={loading || form.stage !== "lost"}
+                    value={form?.dateLost ? form.dateLost.slice(0, 10) : ""}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.dateLost = event.currentTarget?.value || "";
+                      setForm(newForm);
                       return;
                     }}
                   />
@@ -1024,69 +1061,9 @@ const SalesInspect = function () {
 
           <Wrapper
             collapsible
-            title={t.sale.title_stage}
             contentStyles={{ padding: 0 }}
-            description={t.sale.subtitle_stage}
-          >
-            <Vertical internal={1} external={1}>
-              <Horizontal internal={1}>
-                <Input
-                  readOnly
-                  type="date"
-                  name="createdAt"
-                  disabled={loading}
-                  id="sale_created_at"
-                  placeholder="yyyy-MM-dd"
-                  label={t.components.created_at}
-                  value={
-                    form?.createdAt
-                      ? format(new Date(form?.createdAt), "yyyy-MM-dd")
-                      : ""
-                  }
-                  onChange={function () {
-                    return;
-                  }}
-                />
-                <Input
-                  type="date"
-                  name="dateWon"
-                  id="sale_date_won"
-                  placeholder="yyyy-MM-dd"
-                  label={t.sale.date_won}
-                  disabled={loading || form.stage !== "won"}
-                  value={form?.dateWon ? form.dateWon.slice(0, 10) : ""}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.dateWon = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-
-                <Input
-                  type="date"
-                  name="dateLost"
-                  id="sale_date_lost"
-                  placeholder="yyyy-MM-dd"
-                  label={t.sale.date_lost}
-                  disabled={loading || form.stage !== "lost"}
-                  value={form?.dateLost ? form.dateLost.slice(0, 10) : ""}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.dateLost = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-            </Vertical>
-          </Wrapper>
-
-          <Wrapper
-            collapsible
-            contentStyles={{ padding: 0 }}
-            title={t.sale.title_address}
-            description={t.sale.subtitle_address}
+            title={t.sale.title_logistics}
+            description={t.sale.subtitle_logistics}
           >
             <Horizontal external={1} internal={1}>
               <Vertical internal={1} className="flex1">

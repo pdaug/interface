@@ -1333,13 +1333,7 @@ const OrdersInspect = function () {
                   );
                 })}
 
-                <Horizontal
-                  internal={1}
-                  styles={{
-                    justifyContent:
-                      form.addresses?.length === 0 ? "center" : "flex-end",
-                  }}
-                >
+                <Horizontal internal={1} styles={{ justifyContent: "center" }}>
                   <Button
                     type="button"
                     category="Success"
@@ -1360,17 +1354,17 @@ const OrdersInspect = function () {
                       return;
                     }}
                   />
-                </Horizontal>
 
-                <div>
-                  <Callout
-                    IconSize={16}
-                    category="Info"
-                    Icon={MapTrifold}
-                    text={t.callout.postal_code_search}
-                    styles={{ flex: 1, fontSize: "var(--textSmall)" }}
-                  />
-                </div>
+                  {form.addresses && form.addresses.length > 0 && (
+                    <Callout
+                      IconSize={16}
+                      category="Info"
+                      Icon={MapTrifold}
+                      text={t.callout.postal_code_search}
+                      styles={{ flex: 1, fontSize: "var(--textSmall)" }}
+                    />
+                  )}
+                </Horizontal>
               </Vertical>
 
               {position && (
