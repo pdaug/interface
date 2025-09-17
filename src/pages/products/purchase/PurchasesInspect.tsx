@@ -2,8 +2,8 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { format, startOfDay } from "date-fns";
+import { Asterisk } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Asterisk, ShareFat, MapTrifold } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -14,27 +14,24 @@ import { GenerateNumbers } from "../../../utils/GenerateId";
 
 // assets
 import {
-  SaleDetailsMode,
-  SaleDetailsType,
-  SaleStagesGroupped,
-  SaleShippingMethod,
-} from "../../../assets/Sale";
-import { MaskPostalCode } from "../../../assets/Mask";
+  PurchaseDetailsMode,
+  PurchaseDetailsType,
+  PurchaseStagesOptions,
+} from "../../../assets/Purchase";
 
 // types
 import {
-  TypeSale,
-  TypeSaleStage,
-  TypeSaleDetails,
-  TypeSaleProduct,
-  TypeSaleShippingMethod,
-} from "../../../types/Sale";
+  TypePurchase,
+  TypePurchaseDetails,
+  TypePurchaseItem,
+  TypePurchaseStage,
+} from "../../../types/Purchases";
 import { TypeProduct } from "../../../types/Product";
 import { TypeAccount } from "../../../types/Account";
+import { TypeSupplier } from "../../../types/Supplier";
 import { TypeSchedule } from "../../../types/Schedules";
 import { TypeCustomer } from "../../../types/Customers";
-import { TypeDocument } from "../../../types/Documents";
-import { ApiResponsePaginate, ApiShipping } from "../../../types/Api";
+import { ApiResponsePaginate } from "../../../types/Api";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
@@ -49,7 +46,6 @@ import useTranslate from "../../../hooks/useTranslate";
 import {
   Input,
   InputText,
-  InputMask,
   InputMoney,
   InputSelect,
 } from "../../../components/inputs/Input";
@@ -75,33 +71,27 @@ const PurchasesInspect = function () {
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<TypeProduct[]>([]);
   const [accounts, setAccounts] = useState<TypeAccount[]>([]);
-  const [customers, setCustomers] = useState<TypeCustomer[]>([]);
-  const [shippings, setShippings] = useState<ApiShipping>([]);
-  const [documents, setDocuments] = useState<TypeDocument[]>([]);
+  const [suppliers, setSuppliers] = useState<TypeCustomer[]>([]);
 
-  const [form, setForm] = useState<Partial<TypeSale>>({
-    saleId: GenerateNumbers(6),
-    stage: "draft" as TypeSaleStage,
+  const [form, setForm] = useState<Partial<TypePurchase>>({
+    purchaseId: GenerateNumbers(6),
+    stage: "draft" as TypePurchaseStage,
     description: "",
 
-    customerId: "",
-    customerName: "",
-    customerMobile: "",
-    customerDocument: "",
+    supplierId: "",
+    supplierName: "",
+    supplierMobile: "",
+    supplierDocument: "",
 
-    products: new Array<TypeSaleProduct>(),
+    items: new Array<TypePurchaseItem>(),
 
-    details: new Array<TypeSaleDetails>(),
+    details: new Array<TypePurchaseDetails>(),
 
-    shippingMethod: undefined,
     shippingCost: "0.00",
-    shippingFromAddress: "",
-    shippingFromPostal: "",
-    shippingToAddress: "",
-    shippingToPostal: "",
+    shippingDescription: "",
 
     userId: user.id,
-    sellerId: user.id,
+    purchaserId: user.id,
     accountId: "",
 
     createdAt: format(new Date(), "yyyy-MM-dd"),
@@ -113,21 +103,21 @@ const PurchasesInspect = function () {
       })
     : null;
 
-  const SellerFind = form.sellerId
+  const PurchaseFind = form.purchaseId
     ? users?.find(function (userLocal) {
-        return form.sellerId === userLocal.id;
+        return form.purchaseId === userLocal.id;
       })
     : null;
 
-  const { subtotalProducts, subtotalDeductions, subtotalAdditions, total } =
-    Calculate.totalSale(form as TypeSale);
+  const { subtotalItems, subtotalDeductions, subtotalAdditions, total } =
+    Calculate.totalPurchase(form as TypePurchase);
 
-  // fetch sale
+  // fetch purchase
   useAsync(async function () {
     if (!id) return;
     setLoading(true);
     try {
-      const response = await apis.Sale.get(
+      const response = await apis.Purchase.get(
         token,
         instance.name,
         id,
@@ -138,7 +128,7 @@ const PurchasesInspect = function () {
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        navigate("/f/sales");
+        navigate("/f/purchases");
         return;
       }
       setForm(response.data.result);
@@ -148,19 +138,19 @@ const PurchasesInspect = function () {
       toast.warning(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/products/sale/SalesInspect.tsx]", err);
-      navigate("/f/sales");
+      console.error("[src/pages/products/purchases/PurchasesInspect.tsx]", err);
+      navigate("/f/purchases");
       return;
     } finally {
       setLoading(false);
     }
   }, []);
 
-  // fetch customers
+  // fetch suppliers
   useAsync(async function () {
     try {
-      const response = await apis.Customer.list<
-        ApiResponsePaginate<TypeCustomer>
+      const response = await apis.Supplier.list<
+        ApiResponsePaginate<TypeSupplier>
       >(
         token,
         instance.name,
@@ -179,30 +169,30 @@ const PurchasesInspect = function () {
         });
         return;
       }
-      const customerFindedValid = response.data.result.items?.find(
-        function (customer) {
-          return customer.status;
+      const supplierFindedValid = response.data.result.items?.find(
+        function (supplier) {
+          return supplier.status;
         },
       );
-      if (customerFindedValid)
+      if (supplierFindedValid)
         setForm(function (prevState) {
           const newForm = { ...prevState };
-          if (!newForm?.customerId) {
-            newForm.customerId = customerFindedValid.id;
-            newForm.customerName = customerFindedValid.name;
-            newForm.customerMobile = customerFindedValid.mobile;
-            newForm.customerDocument = customerFindedValid?.document1;
+          if (!newForm?.supplierId) {
+            newForm.supplierId = supplierFindedValid.id;
+            newForm.supplierName = supplierFindedValid.name;
+            newForm.supplierMobile = supplierFindedValid.mobile;
+            newForm.supplierDocument = supplierFindedValid?.document1;
           }
           return newForm;
         });
-      setCustomers(response.data.result.items);
+      setSuppliers(response.data.result.items);
       return;
     } catch (err) {
       play("alert");
       toast.warning(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/products/sale/SalesInspect.tsx]", err);
+      console.error("[src/pages/products/purchases/PurchasesInspect.tsx]", err);
       return;
     }
   }, []);
@@ -233,11 +223,11 @@ const PurchasesInspect = function () {
       if (response.data.result.items?.[0])
         setForm(function (prevState) {
           const newForm = { ...prevState };
-          if (newForm?.products?.length === 0) {
-            newForm.products = [
+          if (newForm?.items?.length === 0) {
+            newForm.items = [
               {
-                productId: response.data.result.items[0].id,
-                productName: response.data.result.items[0].name,
+                itemId: response.data.result.items[0].id,
+                itemName: response.data.result.items[0].name,
                 variantId: response.data.result.items[0].variants[0].id,
                 variantName: response.data.result.items[0].variants[0].name,
                 quantity: 1,
@@ -254,7 +244,7 @@ const PurchasesInspect = function () {
       toast.warning(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/products/sale/SalesInspect.tsx]", err);
+      console.error("[src/pages/products/purchases/PurchasesInspect.tsx]", err);
       return;
     }
   }, []);
@@ -300,78 +290,7 @@ const PurchasesInspect = function () {
       toast.warning(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/products/sale/SalesInspect.tsx]", err);
-      return;
-    }
-  }, []);
-
-  // fetch shipping
-  useAsync(
-    async function () {
-      if (
-        !form?.shippingToPostal ||
-        form.shippingToPostal.length !== 8 ||
-        !form?.shippingFromPostal ||
-        form.shippingFromPostal.length !== 8
-      )
-        return;
-      try {
-        const response = await apis.Shipping(
-          form.shippingFromPostal,
-          form.shippingToPostal,
-        );
-        if (!response.data || response.status !== 200) {
-          play("alert");
-          toast.warning(t.toast.warning_error, {
-            description: t.stacks.no_find_item,
-          });
-          return;
-        }
-        setShippings(response.data);
-        return;
-      } catch (err) {
-        play("alert");
-        toast.warning(t.toast.warning_error, {
-          description: t.stacks.no_find_item,
-        });
-        console.error("[src/pages/products/sale/SalesInspect.tsx]", err);
-        return;
-      }
-    },
-    [form?.shippingToPostal, form?.shippingFromPostal],
-  );
-
-  // fetch documents
-  useAsync(async function () {
-    try {
-      const response = await apis.DocumentApi.list<
-        ApiResponsePaginate<TypeDocument>
-      >(
-        token,
-        instance.name,
-        {
-          pageSize: 999,
-          pageCurrent: 1,
-          orderField: "name",
-          orderSort: "asc",
-        },
-        workspaceId,
-      );
-      if (!response.data?.result || response.status !== 200) {
-        play("alert");
-        toast.warning(t.toast.warning_error, {
-          description: t.stacks.no_find_item,
-        });
-        return;
-      }
-      setDocuments(response.data.result.items);
-      return;
-    } catch (err) {
-      play("alert");
-      toast.warning(t.toast.warning_error, {
-        description: t.stacks.no_find_item,
-      });
-      console.error("[src/pages/products/sale/SalesInspect.tsx]", err);
+      console.error("[src/pages/products/purchases/PurchasesInspect.tsx]", err);
       return;
     }
   }, []);
@@ -379,11 +298,11 @@ const PurchasesInspect = function () {
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
-    // no products
-    if (!form.products || form.products?.length === 0) {
+    // no items
+    if (!form.items || form.items?.length === 0) {
       play("alert");
       toast.warning(t.toast.warning_error, {
-        description: t.sale.no_products,
+        description: t.purchase.no_items,
       });
       setLoading(false);
       return;
@@ -395,7 +314,7 @@ const PurchasesInspect = function () {
     if (hasSomeInvalidValue) {
       play("alert");
       toast.warning(t.toast.warning_error, {
-        description: t.sale.some_invalid_detail,
+        description: t.purchase.some_invalid_detail,
       });
       setLoading(false);
       return;
@@ -403,7 +322,7 @@ const PurchasesInspect = function () {
     try {
       // is editing
       if (id) {
-        const response = await apis.Sale.update(
+        const response = await apis.Purchase.update(
           token,
           instance.name,
           id,
@@ -421,17 +340,17 @@ const PurchasesInspect = function () {
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
         });
-        navigate("/f/sales");
+        navigate("/f/purchases");
         return;
       }
       // is creating
-      const responseSale = await apis.Sale.create(
+      const responsePurchase = await apis.Purchase.create(
         token,
         instance.name,
         form,
         workspaceId,
       );
-      if (!responseSale.data?.result || responseSale.status !== 201) {
+      if (!responsePurchase.data?.result || responsePurchase.status !== 201) {
         play("alert");
         toast.warning(t.toast.warning_error, {
           description: t.toast.warning_create,
@@ -440,10 +359,10 @@ const PurchasesInspect = function () {
       }
       // create schedule
       const bodySchedule: TypeSchedule = {
-        title: `${t.sale.sale} ${t.components.to} ${form.customerName} ${t.components.by} ${SellerFind?.name || ""}`,
+        title: `${t.purchase.purchase} ${t.components.to} ${form.supplierName} ${t.components.by} ${PurchaseFind?.name || ""}`,
         category: "task",
         priority: "none",
-        description: `${t.sale.id} ${form.saleId}`,
+        description: `${t.purchase.id} ${form.purchaseId}`,
         start: startOfDay(new Date()),
         end: new Date(),
         userId: user.id,
@@ -465,11 +384,11 @@ const PurchasesInspect = function () {
       toast.success(t.toast.success, {
         description: t.toast.success_create,
       });
-      navigate("/f/sales");
+      navigate("/f/purchases");
       return;
     } catch (err) {
       play("alert");
-      console.error("[src/pages/products/sale/SalesInspect.tsx]", err);
+      console.error("[src/pages/products/purchases/PurchasesInspect.tsx]", err);
       if (
         err instanceof AxiosError &&
         err.response?.data?.result?.message === "schema_incorrect"
@@ -504,16 +423,16 @@ const PurchasesInspect = function () {
                 url: "/f/",
               },
               {
-                id: "sales",
-                label: t.sale.sales,
-                url: "/f/sales",
+                id: "purchases",
+                label: t.purchase.purchases,
+                url: "/f/purchases",
               },
               {
-                id: "sale",
+                id: "purchase",
                 label: loading
                   ? t.components.empty_name
-                  : form?.saleId || t.components.empty_name,
-                url: `/f/sales/inspect${id ? `/${id}` : ""}`,
+                  : form?.purchaseId || t.components.empty_name,
+                url: `/f/purchases/inspect${id ? `/${id}` : ""}`,
               },
             ]}
           />
@@ -523,31 +442,30 @@ const PurchasesInspect = function () {
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Wrapper
-            title={id ? t.sale.title_edit : t.sale.title_create}
-            description={t.sale.subtitle}
+            title={id ? t.purchase.title_edit : t.purchase.title_create}
+            description={t.purchase.subtitle}
           >
             <Vertical internal={1}>
               <Horizontal internal={1}>
                 <InputSelect
                   required
                   name="stage"
-                  id="sale_stage"
+                  id="purchase_stage"
                   disabled={loading}
-                  label={t.sale.stage}
+                  label={t.purchase.stage}
                   value={form.stage || ""}
                   empty={t.stacks.no_option}
-                  options={SaleStagesGroupped.map(function (stage) {
+                  options={PurchaseStagesOptions.map(function (stage) {
                     return {
-                      id: stage.value,
-                      value: stage.value,
-                      text: t.sale[stage.value as keyof typeof t.sale],
-                      group: t.sale[stage.group as keyof typeof t.sale],
+                      id: stage,
+                      value: stage,
+                      text: t.purchase[stage as keyof typeof t.purchase],
                     };
                   })}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.stage = (event.currentTarget?.value ||
-                      "open") as TypeSaleStage;
+                      "draft") as TypePurchaseStage;
                     setForm(newForm);
                     return;
                   }}
@@ -556,12 +474,12 @@ const PurchasesInspect = function () {
                   min={4}
                   max={12}
                   readOnly
-                  name="saleId"
-                  id="sale_sale_id"
-                  label={t.sale.id}
+                  name="purchaseId"
+                  id="purchase_purchase_id"
+                  label={t.purchase.id}
                   disabled={loading}
                   placeholder="123456"
-                  value={form?.saleId || ""}
+                  value={form?.purchaseId || ""}
                   onChange={function () {
                     return;
                   }}
@@ -571,31 +489,31 @@ const PurchasesInspect = function () {
               <Horizontal internal={1}>
                 <InputSelect
                   required
-                  name="customerId"
+                  name="supplierId"
                   disabled={loading}
-                  id="sale_customer_id"
-                  label={t.sale.customer}
+                  id="purchase_supplier_id"
+                  label={t.purchase.supplier}
                   empty={t.stacks.no_option}
-                  value={String(form.customerId)}
-                  options={customers.map(function (customer) {
+                  value={String(form.supplierId)}
+                  options={suppliers.map(function (supplier) {
                     return {
-                      id: customer.id,
-                      value: customer.id,
-                      text: customer.name,
-                      disabled: !customer.status,
+                      id: supplier.id,
+                      value: supplier.id,
+                      text: supplier.name,
+                      disabled: !supplier.status,
                     };
                   })}
                   onChange={function (event) {
                     const newForm = { ...form };
-                    const customerId = event.currentTarget?.value || "";
-                    const customerFinded = customers.find(function (customer) {
-                      return customer.id === customerId;
+                    const supplierId = event.currentTarget?.value || "";
+                    const supplierFinded = suppliers.find(function (supplier) {
+                      return supplier.id === supplierId;
                     });
-                    if (customerFinded) {
-                      newForm.customerId = customerFinded.id;
-                      newForm.customerName = customerFinded.name;
-                      newForm.customerDocument = customerFinded.document1;
-                      newForm.customerMobile = customerFinded.mobile;
+                    if (supplierFinded) {
+                      newForm.supplierId = supplierFinded.id;
+                      newForm.supplierName = supplierFinded.name;
+                      newForm.supplierDocument = supplierFinded.document1;
+                      newForm.supplierMobile = supplierFinded.mobile;
                       setForm(newForm);
                     }
                     return;
@@ -604,12 +522,12 @@ const PurchasesInspect = function () {
 
                 <InputSelect
                   required
-                  name="sellerId"
+                  name="purchaserId"
                   disabled={loading}
-                  id="sale_seller_id"
-                  label={t.sale.seller}
+                  id="purchase_purchaser_id"
                   empty={t.stacks.no_option}
-                  value={String(form.sellerId)}
+                  label={t.purchase.purchaser}
+                  value={String(form.purchaserId)}
                   options={users.map(function (user) {
                     return {
                       id: user.id,
@@ -620,7 +538,7 @@ const PurchasesInspect = function () {
                   })}
                   onChange={function (event) {
                     const newForm = { ...form };
-                    newForm.sellerId = event.currentTarget?.value || "";
+                    newForm.purchaserId = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}
@@ -630,8 +548,8 @@ const PurchasesInspect = function () {
                   required
                   name="accountId"
                   disabled={loading}
-                  id="sale_account_id"
-                  label={t.sale.account}
+                  id="purchase_account_id"
+                  label={t.account.account}
                   empty={t.stacks.no_option}
                   value={form.accountId || ""}
                   options={accounts.map(function (account) {
@@ -657,10 +575,10 @@ const PurchasesInspect = function () {
                   height={4}
                   name="description"
                   disabled={loading}
-                  id="sale_description"
+                  id="purchase_description"
                   value={form?.description || ""}
                   label={t.components.description}
-                  placeholder={t.sale.description_placeholder}
+                  placeholder={t.purchase.description_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.description = event.currentTarget?.value || "";
@@ -689,7 +607,7 @@ const PurchasesInspect = function () {
                     type="date"
                     name="createdAt"
                     disabled={loading}
-                    id="sale_created_at"
+                    id="purchase_created_at"
                     placeholder="yyyy-MM-dd"
                     label={t.components.created_at}
                     value={
@@ -706,44 +624,12 @@ const PurchasesInspect = function () {
                     readOnly
                     placeholder=""
                     name="updatedAt"
-                    id="sale_updated_at"
+                    id="purchase_updated_at"
                     label={t.components.updated_at}
                     value={
                       form?.updatedAt ? instanceDateTime(form.updatedAt) : "-"
                     }
                     onChange={function () {
-                      return;
-                    }}
-                  />
-
-                  <Input
-                    type="date"
-                    name="dateWon"
-                    id="sale_date_won"
-                    placeholder="yyyy-MM-dd"
-                    label={t.sale.date_won}
-                    disabled={loading || form.stage !== "won"}
-                    value={form?.dateWon ? form.dateWon.slice(0, 10) : ""}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.dateWon = event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-
-                  <Input
-                    type="date"
-                    name="dateLost"
-                    id="sale_date_lost"
-                    placeholder="yyyy-MM-dd"
-                    label={t.sale.date_lost}
-                    disabled={loading || form.stage !== "lost"}
-                    value={form?.dateLost ? form.dateLost.slice(0, 10) : ""}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.dateLost = event.currentTarget?.value || "";
-                      setForm(newForm);
                       return;
                     }}
                   />
@@ -753,21 +639,21 @@ const PurchasesInspect = function () {
           </Wrapper>
 
           <Sheets
-            title={t.product.products}
-            empty={t.sale.no_products}
-            rows={form?.products || []}
+            title={t.purchase.items}
+            empty={t.purchase.no_items}
+            rows={form?.items || []}
             footer={
               <Badge
                 category="Info"
-                value={`${t.product.products}: ${Currency(subtotalProducts)}`}
+                value={`${t.purchase.items}: ${Currency(subtotalItems)}`}
               />
             }
             add={function () {
               setForm(function (prevState) {
                 const newForm = { ...prevState };
-                newForm.products?.push({
-                  productId: products[0].id,
-                  productName: products[0].name,
+                newForm.items?.push({
+                  itemId: products[0].id,
+                  itemName: products[0].name,
                   variantId: products[0].variants[0].id,
                   variantName: products[0].variants[0].name,
                   quantity: 1,
@@ -780,44 +666,65 @@ const PurchasesInspect = function () {
             remove={function (index) {
               setForm(function (prevState) {
                 const newForm = { ...prevState };
-                newForm.products?.splice(index, 1);
+                newForm.items?.splice(index, 1);
                 return newForm;
               });
               return;
             }}
             formatter={{
-              productId: function (index) {
+              itemId: function (index) {
                 return {
                   type: "select",
-                  title: t.sale.product_name,
-                  options: products?.map(function (product) {
-                    return {
-                      id: product.id,
-                      value: product.id,
-                      text: product.name,
-                    };
-                  }),
+                  title: t.purchase.item_id,
+                  options: [{ id: "", name: "" }, ...products]?.map(
+                    function (product) {
+                      return {
+                        id: product.id,
+                        value: product.id,
+                        text: product.name || t.purchase.no_product,
+                      };
+                    },
+                  ),
                   onChange: function (row) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
 
-                      if (!newForm?.products || !newForm.products?.[index])
+                      if (!newForm?.items || !newForm.items?.[index])
                         return newForm;
 
                       const ProductFind = products?.find(function (product) {
-                        return product.id === (row?.productId as string);
+                        return product.id === (row?.itemId as string);
                       });
 
-                      newForm.products[index].productId =
-                        row.productId as string;
-                      newForm.products[index].productName =
-                        ProductFind?.name || "";
-                      newForm.products[index].variantId =
+                      newForm.items[index].itemId = row.itemId as string;
+                      newForm.items[index].itemName = ProductFind?.name || "";
+                      newForm.items[index].variantId =
                         ProductFind?.variants?.[0]?.id || "";
-                      newForm.products[index].variantName =
+                      newForm.items[index].variantName =
                         ProductFind?.variants?.[0]?.name || "";
-                      newForm.products[index].price =
+                      newForm.items[index].price =
                         ProductFind?.variants?.[0]?.price || "";
+
+                      return newForm;
+                    });
+                    return;
+                  },
+                };
+              },
+              itemName: function (index) {
+                return {
+                  type: "text",
+                  disabled: loading,
+                  title: t.purchase.item_name,
+                  onChange: function (row) {
+                    setForm(function (prevState) {
+                      const newForm = { ...prevState };
+
+                      if (!newForm?.items || !newForm.items?.[index])
+                        return newForm;
+
+                      newForm.items[index].itemId = "";
+                      newForm.items[index].itemName = row?.itemName as string;
 
                       return newForm;
                     });
@@ -827,12 +734,13 @@ const PurchasesInspect = function () {
               },
               variantId: function (index) {
                 const ProductFind = products?.find(function (product) {
-                  return product.id === form?.products?.[index]?.productId;
+                  return product.id === form?.items?.[index]?.itemId;
                 });
+
                 return {
                   type: "select",
-                  title: t.sale.variant_name,
-                  disabled: ProductFind?.category === "single",
+                  title: t.purchase.variant_name,
+                  disabled: ProductFind?.category === "single" || !ProductFind,
                   options: ProductFind?.variants?.map(function (variant) {
                     return {
                       id: variant.id,
@@ -844,7 +752,7 @@ const PurchasesInspect = function () {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
 
-                      if (!newForm?.products || !newForm.products?.[index])
+                      if (!newForm?.items || !newForm.items?.[index])
                         return newForm;
 
                       const VariantFind = ProductFind?.variants?.find(
@@ -853,10 +761,10 @@ const PurchasesInspect = function () {
                         },
                       );
 
-                      newForm.products[index].variantId = VariantFind?.id || "";
-                      newForm.products[index].variantName =
+                      newForm.items[index].variantId = VariantFind?.id || "";
+                      newForm.items[index].variantName =
                         VariantFind?.name || "";
-                      newForm.products[index].price = VariantFind?.price || "";
+                      newForm.items[index].price = VariantFind?.price || "";
                       return newForm;
                     });
                     return;
@@ -868,15 +776,15 @@ const PurchasesInspect = function () {
                   min: 1,
                   max: 9999,
                   type: "number",
-                  title: t.sale.quantity,
-                  placeholder: t.sale.quantity_placeholder,
+                  title: t.purchase.quantity,
+                  placeholder: t.purchase.quantity_placeholder,
                   onChange: function (row) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
-                      if (!newForm?.products || !newForm.products?.[index])
+                      if (!newForm?.items || !newForm.items?.[index])
                         return newForm;
                       row.quantity = Number(row.quantity);
-                      newForm.products[index] = row as TypeSaleProduct;
+                      newForm.items[index] = row as TypePurchaseItem;
                       return newForm;
                     });
                     return;
@@ -886,14 +794,14 @@ const PurchasesInspect = function () {
               price: function (index) {
                 return {
                   type: "money",
-                  title: t.sale.price,
+                  title: t.purchase.price,
                   placeholder: "0.00",
                   onChange: function (row) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
-                      if (!newForm?.products || newForm.products?.[index])
+                      if (!newForm?.items || newForm.items?.[index])
                         return newForm;
-                      newForm.products[index] = row as TypeSaleProduct;
+                      newForm.items[index] = row as TypePurchaseItem;
                       return newForm;
                     });
                     return;
@@ -904,18 +812,18 @@ const PurchasesInspect = function () {
           />
 
           <Sheets
-            title={t.sale.details}
-            empty={t.sale.no_details}
+            title={t.purchase.details}
+            empty={t.purchase.no_details}
             rows={form?.details || []}
             footer={
               <Horizontal internal={1}>
                 <Badge
                   category="Danger"
-                  value={`${t.sale.addition}: +${Currency(subtotalAdditions)}`}
+                  value={`${t.purchase.addition}: +${Currency(subtotalAdditions)}`}
                 />
                 <Badge
                   category="Success"
-                  value={`${t.sale.deduction}: -${Currency(subtotalDeductions)}`}
+                  value={`${t.purchase.deduction}: -${Currency(subtotalDeductions)}`}
                 />
               </Horizontal>
             }
@@ -945,13 +853,13 @@ const PurchasesInspect = function () {
               title: function (index) {
                 return {
                   type: "text",
-                  title: t.sale.details_title,
-                  placeholder: t.sale.details_title_placeholder,
+                  title: t.purchase.details_title,
+                  placeholder: t.purchase.details_title_placeholder,
                   onChange: function (data) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
                       if (!newForm.details?.[index]) return newForm;
-                      newForm.details[index] = data as TypeSaleDetails;
+                      newForm.details[index] = data as TypePurchaseDetails;
                       return newForm;
                     });
                     return;
@@ -961,13 +869,13 @@ const PurchasesInspect = function () {
               type: function (index) {
                 return {
                   type: "select",
-                  title: t.sale.details_type,
-                  options: SaleDetailsType?.map(function (type) {
+                  title: t.purchase.details_type,
+                  options: PurchaseDetailsType?.map(function (type) {
                     return {
                       id: type,
                       value: type,
                       text:
-                        t.sale?.[type as keyof typeof t.sale] ||
+                        t.purchase?.[type as keyof typeof t.purchase] ||
                         t.components.unknown,
                     };
                   }),
@@ -975,7 +883,7 @@ const PurchasesInspect = function () {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
                       if (!newForm.details?.[index]) return newForm;
-                      newForm.details[index] = data as TypeSaleDetails;
+                      newForm.details[index] = data as TypePurchaseDetails;
                       return newForm;
                     });
                     return;
@@ -985,13 +893,13 @@ const PurchasesInspect = function () {
               mode: function (index) {
                 return {
                   type: "select",
-                  title: t.sale.details_mode,
-                  options: SaleDetailsMode?.map(function (mode) {
+                  title: t.purchase.details_mode,
+                  options: PurchaseDetailsMode?.map(function (mode) {
                     return {
                       id: mode,
                       value: mode,
                       text:
-                        t.sale?.[mode as keyof typeof t.sale] ||
+                        t.purchase?.[mode as keyof typeof t.purchase] ||
                         t.components.unknown,
                     };
                   }),
@@ -999,7 +907,7 @@ const PurchasesInspect = function () {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
                       if (!newForm.details?.[index]) return newForm;
-                      newForm.details[index] = data as TypeSaleDetails;
+                      newForm.details[index] = data as TypePurchaseDetails;
                       return newForm;
                     });
                     return;
@@ -1012,19 +920,19 @@ const PurchasesInspect = function () {
                   type: "money",
                   placeholder: "0.00",
                   disabled: !isModeAmount,
-                  title: t.sale.details_amount,
+                  title: t.purchase.details_amount,
                   onChange: function (data) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
                       if (!newForm.details?.[index]) return newForm;
                       const percent = Calculate.getPercentByAmount(
                         Number(data.amount),
-                        subtotalProducts,
+                        subtotalItems,
                       );
                       newForm.details[index].percent = parseFloat(
                         percent.toFixed(6),
                       );
-                      newForm.details[index] = data as TypeSaleDetails;
+                      newForm.details[index] = data as TypePurchaseDetails;
                       return newForm;
                     });
                     return;
@@ -1038,18 +946,18 @@ const PurchasesInspect = function () {
                   type: "number",
                   placeholder: "10%",
                   disabled: !isModePercent,
-                  title: t.sale.details_percent,
+                  title: t.purchase.details_percent,
                   onChange: function (data) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
                       if (!newForm.details?.[index]) return newForm;
                       const amount = Calculate.getAmountByPercent(
                         Number(data.percent),
-                        subtotalProducts,
+                        subtotalItems,
                       );
                       newForm.details[index].amount = amount.toFixed(2);
                       data.percent = Number(data.percent);
-                      newForm.details[index] = data as TypeSaleDetails;
+                      newForm.details[index] = data as TypePurchaseDetails;
                       return newForm;
                     });
                     return;
@@ -1060,385 +968,40 @@ const PurchasesInspect = function () {
           />
 
           <Wrapper
-            collapsible
-            contentStyles={{ padding: 0 }}
-            title={t.sale.title_logistics}
-            description={t.sale.subtitle_logistics}
+            title={t.purchase.title_shipping}
+            description={t.purchase.subtitle_shipping}
           >
-            <Horizontal external={1} internal={1}>
-              <Vertical internal={1} className="flex1">
-                <Horizontal internal={1}>
-                  <InputSelect
-                    disabled={loading}
-                    name="shippingMethod"
-                    id="sale_shipping_method"
-                    empty={t.stacks.no_option}
-                    label={t.sale.shipping_method}
-                    value={form?.shippingMethod || ""}
-                    options={SaleShippingMethod.map(function (shipping) {
-                      return {
-                        id: shipping,
-                        value: shipping,
-                        text:
-                          t.sale?.[shipping as keyof typeof t.sale] ||
-                          t.components.unknown,
-                      };
-                    })}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.shippingMethod = (event.currentTarget?.value ||
-                        "") as TypeSaleShippingMethod;
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                  <InputMoney
-                    disabled={loading}
-                    placeholder="0.00"
-                    name="shippingCost"
-                    id="sale_shipping_cost"
-                    label={t.sale.shipping_cost}
-                    value={form?.shippingCost || "0.00"}
-                    onChange={function (value) {
-                      const newForm = { ...form };
-                      newForm.shippingCost = value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                  <Input
-                    disabled={loading}
-                    name="shippingDescription"
-                    id="sale_shipping_description"
-                    label={t.sale.shipping_description}
-                    value={form?.shippingDescription || ""}
-                    placeholder={t.sale.shipping_description_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.shippingDescription =
-                        event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                </Horizontal>
-
-                <Horizontal internal={1}>
-                  <InputMask
-                    disabled={loading}
-                    mask={MaskPostalCode}
-                    name="shippingFromPostal"
-                    id="user_shipping_from_postal"
-                    label={t.sale.shipping_from_postal}
-                    value={form?.shippingFromPostal || ""}
-                    placeholder={t.components.address_postal_code_placeholder}
-                    onChange={async function (event) {
-                      const newForm = { ...form };
-                      const postalCodeRaw = event.currentTarget?.value || "";
-                      const postalCode = postalCodeRaw.replace(/\D/g, "");
-                      newForm.shippingFromPostal = postalCode;
-                      if (postalCode.length === 8) {
-                        setLoading(true);
-                        const toastId = toast.loading(t.components.loading);
-                        try {
-                          const response = await apis.PostalCode(postalCode);
-                          newForm.shippingFromAddress = `${response.data?.street}, ${response.data?.neighborhood}, ${response.data?.city} - ${response.data?.state}`;
-                          toast.dismiss(toastId);
-                          play("ok");
-                          toast.success(t.toast.success, {
-                            description: t.toast.success_find,
-                          });
-                        } catch (err) {
-                          console.error(
-                            "[src/pages/products/sale/SalesInspect.tsx]",
-                            err,
-                          );
-                          toast.dismiss(toastId);
-                          play("alert");
-                          toast.warning(t.toast.warning_error, {
-                            description: t.toast.warning_find,
-                          });
-                        } finally {
-                          setLoading(false);
-                        }
-                      }
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-
-                  <Input
-                    min={4}
-                    max={64}
-                    disabled={loading}
-                    name="shippingFromAddress"
-                    id="shipping_from_address"
-                    label={t.sale.shipping_from_address}
-                    value={form?.shippingFromAddress || ""}
-                    placeholder={t.components.address_street_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.shippingFromAddress =
-                        event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                </Horizontal>
-
-                <Horizontal internal={1}>
-                  <InputMask
-                    disabled={loading}
-                    mask={MaskPostalCode}
-                    name="shippingToPostal"
-                    id="user_shipping_to_postal"
-                    label={t.sale.shipping_to_postal}
-                    value={form?.shippingToPostal || ""}
-                    placeholder={t.components.address_postal_code_placeholder}
-                    onChange={async function (event) {
-                      const newForm = { ...form };
-                      const postalCodeRaw = event.currentTarget?.value || "";
-                      const postalCode = postalCodeRaw.replace(/\D/g, "");
-                      newForm.shippingToPostal = postalCode;
-                      if (postalCode.length === 8) {
-                        setLoading(true);
-                        const toastId = toast.loading(t.components.loading);
-                        try {
-                          const response = await apis.PostalCode(postalCode);
-                          newForm.shippingToAddress = `${response.data?.street}, ${response.data?.neighborhood}, ${response.data?.city} - ${response.data?.state}`;
-                          toast.dismiss(toastId);
-                          play("ok");
-                          toast.success(t.toast.success, {
-                            description: t.toast.success_find,
-                          });
-                        } catch (err) {
-                          console.error(
-                            "[src/pages/products/sale/SalesInspect.tsx]",
-                            err,
-                          );
-                          toast.dismiss(toastId);
-                          play("alert");
-                          toast.warning(t.toast.warning_error, {
-                            description: t.toast.warning_find,
-                          });
-                        } finally {
-                          setLoading(false);
-                        }
-                      }
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-
-                  <Input
-                    min={4}
-                    max={64}
-                    disabled={loading}
-                    name="shippingToAddress"
-                    id="shipping_to_address"
-                    label={t.sale.shipping_to_address}
-                    value={form?.shippingToAddress || ""}
-                    placeholder={t.components.address_street_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.shippingToAddress =
-                        event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                </Horizontal>
-
-                <Callout
-                  Icon={MapTrifold}
-                  IconSize={16}
-                  category="Info"
-                  text={
-                    <Vertical internal={0.2}>
-                      <div>{t.callout.postal_code_search}</div>
-                      <div>{t.callout.shipping_value}</div>
-                    </Vertical>
-                  }
-                  styles={{ fontSize: "var(--textSmall)" }}
-                />
-              </Vertical>
-
-              {Boolean(shippings.length) &&
-                (!form?.shippingCost || form.shippingCost === "0.00") && (
-                  <Vertical internal={0.6} styles={{ minWidth: 280 }}>
-                    {shippings?.map(function (shipping, index) {
-                      if (!shipping?.price) return;
-                      return (
-                        <Button
-                          type="button"
-                          category="Neutral"
-                          key={`shipping-${index}`}
-                          style={{ height: "48px" }}
-                          stylesContainer={{ flex: 1 }}
-                          text={
-                            <Horizontal
-                              className="flex flex1 itemsCenter"
-                              internal={1}
-                              styles={{
-                                textAlign: "left",
-                                justifyContent: "flex-start",
-                              }}
-                            >
-                              <Horizontal
-                                className="flex1 itemsCenter"
-                                internal={0.2}
-                              >
-                                <img
-                                  width={42}
-                                  height={12}
-                                  src={shipping.company.picture}
-                                  style={{ objectFit: "contain" }}
-                                />
-                                <Vertical>
-                                  <span>{shipping.name}</span>
-                                  <span style={{ opacity: 0.6 }}>
-                                    {shipping.company.name}
-                                  </span>
-                                </Vertical>
-                              </Horizontal>
-                              <div>
-                                {shipping.currency} {shipping.price}
-                              </div>
-                            </Horizontal>
-                          }
-                          onClick={function () {
-                            setForm(function (prevState) {
-                              const newForm = { ...prevState };
-                              newForm.shippingCost = shipping.price;
-                              newForm.shippingMethod = "express";
-                              newForm.shippingDescription = `${shipping.company.name} - ${shipping.name}`;
-                              return newForm;
-                            });
-                            return;
-                          }}
-                        />
-                      );
-                    })}
-                  </Vertical>
-                )}
+            <Horizontal internal={1}>
+              <InputMoney
+                disabled={loading}
+                placeholder="0.00"
+                name="shippingCost"
+                id="purchase_shipping_cost"
+                label={t.purchase.shipping_cost}
+                value={form?.shippingCost || "0.00"}
+                onChange={function (value) {
+                  const newForm = { ...form };
+                  newForm.shippingCost = value || "";
+                  setForm(newForm);
+                  return;
+                }}
+              />
+              <Input
+                disabled={loading}
+                name="shippingDescription"
+                id="purchase_shipping_description"
+                label={t.purchase.shipping_description}
+                value={form?.shippingDescription || ""}
+                placeholder={t.purchase.shipping_description_placeholder}
+                onChange={function (event) {
+                  const newForm = { ...form };
+                  newForm.shippingDescription =
+                    event.currentTarget?.value || "";
+                  setForm(newForm);
+                  return;
+                }}
+              />
             </Horizontal>
-          </Wrapper>
-
-          <Wrapper
-            collapsible
-            contentStyles={{ padding: 0 }}
-            title={t.sale.title_document}
-            description={t.sale.subtitle_document}
-          >
-            <Vertical internal={1} external={1} className="flex1">
-              <Horizontal internal={1}>
-                <Horizontal
-                  internal={1}
-                  className=" flex1"
-                  styles={{ alignItems: "flex-end" }}
-                >
-                  <InputSelect
-                    disabled={loading}
-                    name="documentProposal"
-                    id="sale_document_proposal"
-                    empty={t.stacks.no_option}
-                    label={t.sale.document_proposal}
-                    value={form?.documentProposal || ""}
-                    options={documents.map(function (documentItem) {
-                      return {
-                        id: documentItem.id,
-                        value: documentItem.id,
-                        text: documentItem.name,
-                        disabled: documentItem.id === form?.documentContract,
-                      };
-                    })}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.documentProposal =
-                        event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                  <Button
-                    type="button"
-                    Icon={ShareFat}
-                    category="Neutral"
-                    text={t.sale.open_proposal}
-                    disabled={!form?.documentProposal}
-                    onClick={function () {
-                      if (!id) {
-                        console.error(
-                          "[src/pages/products/sale/SalesInspect.tsx]",
-                          "no id",
-                        );
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.stacks.no_items,
-                        });
-                        return;
-                      }
-                      const url = `${window.location.origin}/share/sale/${id}/document/proposal`;
-                      window.open(url, "_blank");
-                      return;
-                    }}
-                  />
-                </Horizontal>
-
-                <Horizontal
-                  internal={1}
-                  className=" flex1"
-                  styles={{ alignItems: "flex-end" }}
-                >
-                  <InputSelect
-                    disabled={loading}
-                    name="documentContract"
-                    id="sale_document_contract"
-                    empty={t.stacks.no_option}
-                    label={t.sale.document_contract}
-                    value={form?.documentContract || ""}
-                    options={documents.map(function (documentItem) {
-                      return {
-                        id: documentItem.id,
-                        value: documentItem.id,
-                        text: documentItem.name,
-                        disabled: documentItem.id === form?.documentProposal,
-                      };
-                    })}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.documentContract =
-                        event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                  <Button
-                    type="button"
-                    Icon={ShareFat}
-                    category="Neutral"
-                    text={t.sale.open_contract}
-                    disabled={!form?.documentContract || !id}
-                    onClick={function () {
-                      if (!id) {
-                        console.error(
-                          "[src/pages/products/sale/SalesInspect.tsx]",
-                          "no id",
-                        );
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.stacks.no_items,
-                        });
-                        return;
-                      }
-                      const url = `${window.location.origin}/share/sale/${id}/document/contract`;
-                      window.open(url, "_blank");
-                      return;
-                    }}
-                  />
-                </Horizontal>
-              </Horizontal>
-            </Vertical>
           </Wrapper>
 
           <Callout
@@ -1468,7 +1031,7 @@ const PurchasesInspect = function () {
                   disabled={loading}
                   text={t.components.cancel}
                   onClick={function () {
-                    navigate("/f/sales");
+                    navigate("/f/purchase");
                     return;
                   }}
                 />

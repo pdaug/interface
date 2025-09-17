@@ -1,7 +1,8 @@
-import { BadgeCategories } from "../components/badges/Badge";
+// types
 import { TypePurchaseStage } from "../types/Purchases";
+import { BadgeCategories } from "../components/badges/Badge";
 
-const PurchaseStagesOptions: TypePurchaseStage[] = [
+export const PurchaseStagesOptions: TypePurchaseStage[] = [
   "draft",
   "pending",
   "negotiation",
@@ -15,7 +16,10 @@ const PurchaseStagesOptions: TypePurchaseStage[] = [
   "returned",
 ];
 
-const PurchaseStagesCategory: Record<TypePurchaseStage, BadgeCategories> = {
+export const PurchaseStagesCategory: Record<
+  TypePurchaseStage,
+  BadgeCategories
+> = {
   draft: "Neutral",
   pending: "Warning",
   negotiation: "Warning",
@@ -29,4 +33,13 @@ const PurchaseStagesCategory: Record<TypePurchaseStage, BadgeCategories> = {
   returned: "Danger",
 };
 
-export { PurchaseStagesOptions, PurchaseStagesCategory };
+export const PurchaseDetailsType = [
+  "tax",
+  "discount",
+  "promo",
+  "fee",
+  "coupon",
+  "voucher",
+];
+
+export const PurchaseDetailsMode = ["percent", "amount"];

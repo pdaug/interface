@@ -98,7 +98,7 @@ const PurchasesList = function () {
           description: t.stacks.no_find_item,
         });
         console.warn(
-          "[src/pages/purchases/list/PurchasesList.tsx]",
+          "[src/pages/products/purchases/PurchasesList.tsx]",
           response.data,
         );
         return;
@@ -111,7 +111,7 @@ const PurchasesList = function () {
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/purchases/list/PurchasesList.tsx]", err);
+      console.error("[src/pages/products/purchases/PurchasesList.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -210,7 +210,7 @@ const PurchasesList = function () {
                 description: t.toast.error_delete,
               });
               console.error(
-                "[src/pages/purchases/list/PurchasesList.tsx]",
+                "[src/pages/products/purchases/PurchasesList.tsx]",
                 err,
               );
               return;
