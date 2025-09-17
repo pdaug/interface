@@ -17,6 +17,7 @@ import Product from "./internal/Product";
 import Vehicle from "./internal/Vehicle";
 import Account from "./internal/Account";
 import Settings from "./internal/Settings";
+import Purchase from "./internal/Purchase";
 import Instance from "./internal/Instance";
 import Customer from "./internal/Customer";
 import WhatsApp from "./internal/WhatsApp";
@@ -42,6 +43,7 @@ export default {
   Order,
   Password,
   Product,
+  Purchase,
   Sale,
   Schedule,
   Service,

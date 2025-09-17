@@ -344,6 +344,7 @@ const TranslatePt = {
     operational: "Operacional",
     products: "Produtos",
     sales: "Vendas",
+    purchases: "Compras",
     services: "Serviços",
     vehicles: "Veículos",
     tools: "Ferramentas",
@@ -527,6 +528,23 @@ const TranslatePt = {
     subtitle_properties: "Preencha as entradas com as propriedades",
     title_attributes: "Atributos",
     subtitle_attributes: "Preencha as entradas com os atributos",
+  },
+  purchase: {
+    // list
+    purchase: "Compra",
+    purchases: "Compras",
+    new: "Nova compra",
+    // inputs
+    id: "Identificação",
+    stage: "Estágio",
+    supplier: "Fornecedor",
+    items: "Itens",
+    details: "Detalhes",
+    empty_details: "Detalhes vazio",
+    shipping: "Envio",
+    addition: "Adição",
+    deduction: "Deducão",
+    purchaser: "Comprador",
   },
   sale: {
     // list
@@ -1313,6 +1331,7 @@ const TranslateEn = {
     operational: "Operational",
     products: "Products",
     sales: "Sales",
+    purchases: "Purchases",
     services: "Services",
     vehicles: "Vehicles",
     tools: "Tools",
@@ -1403,6 +1422,29 @@ const TranslateEn = {
     open_contract: "Open contract",
     document_contract: "Contract document",
   },
+  pages: {
+    error: "Error",
+    error_description: "An error occurred while accessing this page",
+    not_found: "Not Found",
+    not_found_description: "The page you accessed was not found",
+  },
+  password: {
+    email: "Email",
+    email_placeholder: "e.g. johndoe@email.com",
+    password_old: "Current password",
+    password_new: "New password",
+    password_confirm: "Confirm new password",
+    confirm_wrong: "New password is diferrent of confirm password",
+    change: "Change",
+    title_change: "Change password",
+    subtitle_change: "Fill the inputs to change the password",
+    already_changed:
+      "Password was already changed, do again another password request",
+    request_expired: "The password request was expired",
+    request: "Request to change password",
+    sent_request: "The password request was sent in your email",
+    password_changed: "The password was changed",
+  },
   product: {
     // list
     product: "Product",
@@ -1475,28 +1517,22 @@ const TranslateEn = {
     title_attributes: "Attributes",
     subtitle_attributes: "Fill the inputs with the attributes",
   },
-  pages: {
-    error: "Error",
-    error_description: "An error occurred while accessing this page",
-    not_found: "Not Found",
-    not_found_description: "The page you accessed was not found",
-  },
-  password: {
-    email: "Email",
-    email_placeholder: "e.g. johndoe@email.com",
-    password_old: "Current password",
-    password_new: "New password",
-    password_confirm: "Confirm new password",
-    confirm_wrong: "New password is diferrent of confirm password",
-    change: "Change",
-    title_change: "Change password",
-    subtitle_change: "Fill the inputs to change the password",
-    already_changed:
-      "Password was already changed, do again another password request",
-    request_expired: "The password request was expired",
-    request: "Request to change password",
-    sent_request: "The password request was sent in your email",
-    password_changed: "The password was changed",
+  purchase: {
+    // list
+    purchase: "Purchase",
+    purchases: "Purchases",
+    new: "New purchase",
+    // inputs
+    id: "Identification",
+    stage: "Stage",
+    supplier: "Supplier",
+    items: "Items",
+    details: "Details",
+    empty_details: "Empty details",
+    shipping: "Shipping",
+    addition: "Addition",
+    deduction: "Deduction",
+    purchaser: "Purchaser",
   },
   sale: {
     // list

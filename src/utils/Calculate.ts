@@ -1,6 +1,7 @@
 // types
 import { TypeSale } from "../types/Sale";
 import { TypeOrder } from "../types/Order";
+import { TypePurchase } from "../types/Purchases";
 
 const Calculate = {
   productsOrServices: function (arr: Record<string, unknown>[]): number {
@@ -83,6 +84,52 @@ const Calculate = {
     const total = subtotalServices + subtotalAdditions - subtotalDeductions;
 
     return { subtotalServices, subtotalAdditions, subtotalDeductions, total };
+  },
+
+  totalPurchase: function (purchase: TypePurchase) {
+    const subtotalItems = this.productsOrServices(
+      (purchase?.items as Record<string, unknown>[]) || [],
+    );
+
+    const subtotalAdditions = this.details(
+      (purchase?.details as Record<string, unknown>[])?.filter(
+        function (detail) {
+          return (
+            detail?.type === "tax" ||
+            detail?.type === "fee" ||
+            detail?.type === "shipping"
+          );
+        },
+      ) || [],
+      subtotalItems,
+    );
+
+    const subtotalDeductions = this.details(
+      (purchase?.details as Record<string, unknown>[])?.filter(
+        function (detail) {
+          return (
+            detail?.type === "discount" ||
+            detail?.type === "promo" ||
+            detail?.type === "coupon" ||
+            detail?.type === "voucher"
+          );
+        },
+      ) || [],
+      subtotalItems,
+    );
+
+    const subtotalShipping = Number(purchase?.shippingCost) || 0;
+
+    const total =
+      subtotalItems + subtotalAdditions - subtotalDeductions + subtotalShipping;
+
+    return {
+      subtotalItems,
+      subtotalAdditions,
+      subtotalDeductions,
+      subtotalShipping,
+      total,
+    };
   },
 
   details: function (arr: Record<string, unknown>[], total: number): number {

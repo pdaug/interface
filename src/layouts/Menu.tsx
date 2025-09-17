@@ -160,6 +160,11 @@ const Menu = function () {
           label: t.menu.sales,
           onClick: () => navigate("/f/sales"),
         },
+        {
+          id: "purchases",
+          label: t.menu.purchases,
+          onClick: () => navigate("/f/purchases"),
+        },
       ],
     },
     {
