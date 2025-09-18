@@ -27,6 +27,38 @@
   padding: 0.8rem;
 }
 
+.statsIconSuccess {
+  background: var(--successLight) !important;
+  background-color: var(--successLight) !important;
+  border: none !important;
+  border-color: var(--successColor) !important;
+  color: var(--successDark) !important;
+}
+
+.statsIconInfo {
+  background: var(--infoLight) !important;
+  background-color: var(--infoLight) !important;
+  border: none !important;
+  border-color: var(--infoColor) !important;
+  color: var(--infoDark) !important;
+}
+
+.statsIconWarning {
+  background: var(--warningLight) !important;
+  background-color: var(--warningLight) !important;
+  border: none !important;
+  border-color: var(--warningColor) !important;
+  color: var(--warningDark) !important;
+}
+
+.statsIconDanger {
+  background: var(--dangerLight) !important;
+  background-color: var(--dangerLight) !important;
+  border: none !important;
+  border-color: var(--dangerColor) !important;
+  color: var(--dangerDark) !important;
+}
+
 .statsContent {
   display: flex;
   flex: 1;

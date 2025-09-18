@@ -8,6 +8,9 @@ import {
   ShareNetwork,
   QuestionMark,
   DownloadSimple,
+  MoneyWavy,
+  Cardholder,
+  TrendDown,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -45,6 +48,7 @@ import {
   InputSelect,
   InputInterval,
 } from "../../../components/inputs/Input";
+import Stats from "../../../components/stats/Stats";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import Profile from "../../../components/profiles/Profile";
@@ -405,6 +409,110 @@ const SalesList = function () {
             ]}
           />
         </h2>
+      </Horizontal>
+
+      {/* FIXME: this stats is paginated */}
+      <Horizontal internal={1}>
+        <Stats
+          Icon={Receipt}
+          title={t.sale.stats_quantity}
+          value={total}
+          valueUnit={t.sale.sales.toLowerCase()}
+          footer={t.sale.stats_quantity_description}
+        />
+
+        <Stats
+          Icon={MoneyWavy}
+          iconCategory="Success"
+          title={t.sale.stats_value}
+          value={sales?.reduce(function (acc, sale) {
+            if (sale.stage === "draft") return acc + 0;
+            if (
+              sale.stage === "negotiation" ||
+              sale.stage === "pending" ||
+              sale.stage === "processing" ||
+              sale.stage === "open" ||
+              sale.stage === "proposal" ||
+              sale.stage === "shipped"
+            )
+              return acc + 0;
+            if (
+              sale.stage === "canceled" ||
+              sale.stage === "disputed" ||
+              sale.stage === "returned" ||
+              sale.stage === "refunded" ||
+              sale.stage === "lost" ||
+              sale.stage === "failed"
+            )
+              return acc + 0;
+            // paid, won, completed
+            const { total } = Calculate.totalSale(sale);
+            return acc + (total || 0);
+          }, 0)}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.sale.stats_value_description}
+        />
+
+        <Stats
+          Icon={Cardholder}
+          iconCategory="Warning"
+          title={t.sale.stats_pending}
+          value={sales?.reduce(function (acc, sale) {
+            if (sale.stage === "draft") return acc + 0;
+            if (
+              sale.stage === "paid" ||
+              sale.stage === "won" ||
+              sale.stage === "completed"
+            )
+              return acc + 0;
+            if (
+              sale.stage === "canceled" ||
+              sale.stage === "disputed" ||
+              sale.stage === "returned" ||
+              sale.stage === "refunded" ||
+              sale.stage === "lost" ||
+              sale.stage === "failed"
+            )
+              return acc + 0;
+            // negotiation, pending, processing, open, proposal, shipped
+            const { total } = Calculate.totalSale(sale);
+            return acc + (total || 0);
+          }, 0)}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.sale.stats_pending_description}
+        />
+
+        <Stats
+          Icon={TrendDown}
+          iconCategory="Danger"
+          title={t.sale.stats_lost}
+          value={sales?.reduce(function (acc, sale) {
+            if (sale.stage === "draft") return acc + 0;
+            if (
+              sale.stage === "paid" ||
+              sale.stage === "won" ||
+              sale.stage === "completed"
+            )
+              return acc + 0;
+            if (
+              sale.stage === "negotiation" ||
+              sale.stage === "pending" ||
+              sale.stage === "processing" ||
+              sale.stage === "open" ||
+              sale.stage === "proposal" ||
+              sale.stage === "shipped"
+            )
+              return acc + 0;
+            // canceled, disputed, returned, refunded, lost, failed
+            const { total } = Calculate.totalSale(sale);
+            return acc + (total || 0);
+          }, 0)}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.sale.stats_lost_description}
+        />
       </Horizontal>
 
       <Horizontal internal={1}>

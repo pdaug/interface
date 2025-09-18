@@ -685,6 +685,15 @@ const TranslatePt = {
     document_contract: "Documento de contrato",
     open_proposal: "Abrir proposta",
     open_contract: "Abrir contrato",
+    // stats
+    stats_quantity: "Quantidade de vendas",
+    stats_quantity_description: "Total da quantidade de vendas",
+    stats_value: "Valor das vendas",
+    stats_value_description: "Total em valor de vendas",
+    stats_pending: "Vendas pendentes",
+    stats_pending_description: "Total em valor de vendas pendentes",
+    stats_lost: "Vendas perdidas",
+    stats_lost_description: "Total em valor de vendas perdidas",
   },
   schedule: {
     schedule: "Agenda",
@@ -1716,6 +1725,15 @@ const TranslateEn = {
     document_contract: "Contract document",
     open_proposal: "Open proposal",
     open_contract: "Open contract",
+    // stats
+    stats_quantity: "Sales quantity",
+    stats_quantity_description: "Total in quantity of sales",
+    stats_value: "Sales value",
+    stats_value_description: "Total in value of sales",
+    stats_pending: "Pending sales",
+    stats_pending_description: "Total value of sales yet to be received",
+    stats_lost: "Lost sales",
+    stats_lost_description: "Total value of sales losted",
   },
   schedule: {
     schedule: "Schedule",

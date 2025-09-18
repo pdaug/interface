@@ -5,8 +5,11 @@ import "./Stats.css";
 
 export type StatsStatus = "Up" | "Down";
 
+export type StatsIconCategories = "Success" | "Info" | "Warning" | "Danger";
+
 export type StatsProps = {
   Icon?: IconPhosphor;
+  iconCategory?: StatsIconCategories;
   title: string;
   metric?: number;
   metricStatus?: StatsStatus;
@@ -23,6 +26,7 @@ export type StatsProps = {
 
 const Stats = function ({
   Icon,
+  iconCategory,
   title,
   metric,
   metricStatus,
@@ -49,8 +53,10 @@ const Stats = function ({
     <div className="stats" style={styles}>
       <div className="statsContainer" style={stylesContainer}>
         {Icon && (
-          <div className="statsIcon">
-            <Icon size={24} />
+          <div
+            className={`statsIcon ${iconCategory ? `statsIcon${iconCategory}` : ""}`}
+          >
+            <Icon size={20} />
           </div>
         )}
         <div className="statsContent">
