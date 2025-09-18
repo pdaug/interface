@@ -12,8 +12,8 @@ import {
 import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
+import { endOfDay, subDays } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { endOfDay, startOfYear } from "date-fns";
 
 //apis
 import apis from "../../../apis";
@@ -79,7 +79,7 @@ const OrdersList = function () {
   const [provider, setProvider] = useState<string>("all");
   const [stage, setStage] = useState<TypeOrderStage | "all">("all");
   const [interval, setInterval] = useState<TypeInputInterval>({
-    start: startOfYear(new Date()),
+    start: subDays(new Date(), 30),
     end: endOfDay(new Date()),
   });
 

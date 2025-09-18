@@ -9,14 +9,21 @@ import {
 import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
+import { endOfDay, subDays } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { endOfDay, startOfYear } from "date-fns";
 
 //apis
 import apis from "../../../apis";
 
+// assets
+import {
+  PurchaseStagesOptions,
+  PurchaseStagesCategory,
+} from "../../../assets/Purchase";
+
 // utils
 import Download from "../../../utils/Download";
+import Calculate from "../../../utils/Calculate";
 import Clipboard from "../../../utils/Clipboard";
 
 // types
@@ -37,6 +44,11 @@ import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
+import {
+  Input,
+  InputSelect,
+  InputInterval,
+} from "../../../components/inputs/Input";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import Profile from "../../../components/profiles/Profile";
@@ -45,17 +57,7 @@ import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
-import {
-  Input,
-  InputInterval,
-  InputSelect,
-} from "../../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Calculate from "../../../utils/Calculate";
-import {
-  PurchaseStagesCategory,
-  PurchaseStagesOptions,
-} from "../../../assets/Purchase";
 
 const pageSize = 10;
 
@@ -77,7 +79,7 @@ const PurchasesList = function () {
   const [purchases, setPurchases] = useState<TypePurchase[]>([]);
   const [stage, setStage] = useState<TypePurchaseStage | "all">("all");
   const [interval, setInterval] = useState<TypeInputInterval>({
-    start: startOfYear(new Date()),
+    start: subDays(new Date(), 30),
     end: endOfDay(new Date()),
   });
 
