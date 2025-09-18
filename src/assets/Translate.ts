@@ -534,6 +534,8 @@ const TranslatePt = {
     purchase: "Compra",
     purchases: "Compras",
     new: "Nova compra",
+    all_stage: "Todos estágios",
+    all_purchaser: "Todos compradores",
     // inputs
     id: "Identificação",
     stage: "Estágio",
@@ -1562,6 +1564,8 @@ const TranslateEn = {
     purchase: "Purchase",
     purchases: "Purchases",
     new: "New purchase",
+    all_stage: "All stages",
+    all_purchaser: "All purchasers",
     // inputs
     id: "Identification",
     stage: "Stage",

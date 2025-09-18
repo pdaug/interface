@@ -45,10 +45,17 @@ import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
-import { Input, InputInterval } from "../../../components/inputs/Input";
+import {
+  Input,
+  InputInterval,
+  InputSelect,
+} from "../../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import Calculate from "../../../utils/Calculate";
-import { PurchaseStagesCategory } from "../../../assets/Purchase";
+import {
+  PurchaseStagesCategory,
+  PurchaseStagesOptions,
+} from "../../../assets/Purchase";
 
 const pageSize = 10;
 
@@ -66,7 +73,9 @@ const PurchasesList = function () {
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
+  const [purchaser, setPurchaser] = useState<string>("all");
   const [purchases, setPurchases] = useState<TypePurchase[]>([]);
+  const [stage, setStage] = useState<TypePurchaseStage | "all">("all");
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: startOfYear(new Date()),
     end: endOfDay(new Date()),
@@ -85,10 +94,36 @@ const PurchasesList = function () {
         {
           pageSize,
           pageCurrent: searchDebounced ? 1 : page,
-          searchField: "name",
-          search: searchDebounced,
           dateStart: interval.start ? interval.start.toISOString() : undefined,
           dateEnd: interval.end ? interval.end.toISOString() : undefined,
+          showDeleted: "true",
+          filter: JSON.stringify({
+            stage: stage !== "all" ? stage : undefined,
+            $expr:
+              purchaser !== "all"
+                ? {
+                    $eq: [{ $toString: "$purchaserId" }, purchaser],
+                  }
+                : undefined,
+            $and: [
+              { $or: [{ deletedAt: { $exists: false } }, { deletedAt: null }] },
+              {
+                $or: searchDebounced
+                  ? [
+                      {
+                        purchaseId: searchDebounced,
+                      },
+                      {
+                        supplierName: {
+                          $regex: searchDebounced,
+                          $options: "i",
+                        },
+                      },
+                    ]
+                  : undefined,
+              },
+            ],
+          }),
         },
         workspaceId,
       );
@@ -119,7 +154,14 @@ const PurchasesList = function () {
   };
 
   // fetch purchases
-  useAsync(FetchPurchases, [interval, workspaceId, page, searchDebounced]);
+  useAsync(FetchPurchases, [
+    interval,
+    stage,
+    workspaceId,
+    page,
+    purchaser,
+    searchDebounced,
+  ]);
 
   const getOptions = [
     {
@@ -252,6 +294,55 @@ const PurchasesList = function () {
           text={t.purchase.new}
           onClick={() => navigate("/f/purchases/inspect")}
         />
+        <div style={{ maxWidth: 160 }}>
+          <InputSelect
+            label=""
+            value={stage}
+            empty={t.sale.all_stage}
+            options={[...PurchaseStagesOptions, "all"].map(function (stage) {
+              if (stage === "all")
+                return {
+                  id: stage,
+                  value: stage,
+                  text: t.purchase.all_stage,
+                };
+              return {
+                id: stage,
+                value: stage,
+                text: t.purchase[stage as keyof typeof t.purchase],
+              };
+            })}
+            onChange={function (event) {
+              const newStage =
+                (event.currentTarget?.value as TypePurchaseStage) || "";
+              setStage(newStage);
+              return;
+            }}
+          />
+        </div>
+        <div style={{ maxWidth: 256 }}>
+          <InputSelect
+            label=""
+            value={purchaser}
+            empty={t.purchase.purchaser}
+            options={[
+              { id: "all", name: t.purchase.all_purchaser, status: true },
+              ...users,
+            ].map(function (userLocal) {
+              return {
+                id: userLocal.id,
+                value: userLocal.id,
+                text: userLocal.name,
+                disabled: !userLocal.status,
+              };
+            })}
+            onChange={function (event) {
+              const newSeller = event.currentTarget?.value || "";
+              setPurchaser(newSeller);
+              return;
+            }}
+          />
+        </div>
         <div style={{ minWidth: 200, maxWidth: 256 }}>
           <InputInterval
             label=""

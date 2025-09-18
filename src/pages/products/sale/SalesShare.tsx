@@ -394,7 +394,7 @@ const SalesShare = function () {
       )}
 
       {sale?.shippingMethod && (
-        <Wrapper title={t.sale.title_address}>
+        <Wrapper title={t.sale.title_logistics}>
           <Vertical internal={1} className="flex1">
             <Horizontal internal={1}>
               <InputSelect
