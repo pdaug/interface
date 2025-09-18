@@ -571,12 +571,22 @@ const TranslatePt = {
     failed: "Falhou",
     refunded: "Reembolsado",
     returned: "Retornado",
+    // details
+    tax: "Imposto",
+    discount: "Desconto",
+    promo: "Promoção",
+    fee: "Taxa",
+    coupon: "Cupom",
+    voucher: "Vale",
+    percent: "Porcentagem",
+    amount: "Quantia",
     // others
     no_items: "Nenhum item adicionado",
     no_details: "Sem detalhes",
     some_invalid_detail: "Algum detalhe está inválido",
     no_product: "Sem produto",
     // placeholders
+    item_name_placeholder: "Ex. Camiseta Branca",
     description_placeholder: "Preencha aqui uma breve descrição sobre a compra",
     quantity_placeholder: "Ex. 2 produtos",
     details_title_placeholder: "Ex. Impostos, Taxas",
@@ -1610,12 +1620,22 @@ const TranslateEn = {
     failed: "Failed",
     refunded: "Refunded",
     returned: "Returned",
+    // details
+    tax: "Tax",
+    discount: "Discount",
+    promo: "Promo",
+    fee: "Fee",
+    coupon: "Coupon",
+    voucher: "Voucher",
+    percent: "Percent",
+    amount: "Amount",
     // others
     no_items: "No items",
     no_details: "No details",
     some_invalid_detail: "Some invalid details",
     no_product: "No product",
     // placeholders
+    item_name_placeholder: "e.g. Tshirt white",
     description_placeholder:
       "Type here a brief description about this purchase",
     quantity_placeholder: "e.g. 2 products",

@@ -83,7 +83,16 @@ const PurchasesInspect = function () {
     supplierMobile: "",
     supplierDocument: "",
 
-    items: new Array<TypePurchaseItem>(),
+    items: [
+      {
+        itemId: "",
+        itemName: "",
+        variantId: "",
+        variantName: "",
+        quantity: 1,
+        price: "0.00",
+      },
+    ],
 
     details: new Array<TypePurchaseDetails>(),
 
@@ -220,23 +229,23 @@ const PurchasesInspect = function () {
         });
         return;
       }
-      if (response.data.result.items?.[0])
-        setForm(function (prevState) {
-          const newForm = { ...prevState };
-          if (newForm?.items?.length === 0) {
-            newForm.items = [
-              {
-                itemId: response.data.result.items[0].id,
-                itemName: response.data.result.items[0].name,
-                variantId: response.data.result.items[0].variants[0].id,
-                variantName: response.data.result.items[0].variants[0].name,
-                quantity: 1,
-                price: response.data.result.items[0].variants[0].price,
-              },
-            ];
-          }
-          return newForm;
-        });
+      // if (response.data.result.items?.[0])
+      //   setForm(function (prevState) {
+      //     const newForm = { ...prevState };
+      //     if (newForm?.items?.length === 0) {
+      //       newForm.items = [
+      //         {
+      //           itemId: response.data.result.items[0].id,
+      //           itemName: response.data.result.items[0].name,
+      //           variantId: response.data.result.items[0].variants[0].id,
+      //           variantName: response.data.result.items[0].variants[0].name,
+      //           quantity: 1,
+      //           price: response.data.result.items[0].variants[0].price,
+      //         },
+      //       ];
+      //     }
+      //     return newForm;
+      //   });
       setProducts(response.data.result.items);
       return;
     } catch (err) {
@@ -716,6 +725,7 @@ const PurchasesInspect = function () {
                   type: "text",
                   disabled: loading,
                   title: t.purchase.item_name,
+                  placeholder: t.purchase.item_name_placeholder,
                   onChange: function (row) {
                     setForm(function (prevState) {
                       const newForm = { ...prevState };
