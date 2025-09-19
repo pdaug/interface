@@ -597,6 +597,15 @@ const TranslatePt = {
     subtitle: "Preencha as entradas para criar ou editar a compra",
     title_shipping: "Envio",
     subtitle_shipping: "Preencha as entradas com os dados do envio",
+    // stats
+    stats_quantity: "Quantidade de compras",
+    stats_quantity_description: "Total em quantidade de compras",
+    stats_successful: "Compras bem sucedidas",
+    stats_successful_description: "Total em compras bem sucedidas",
+    stats_pending: "Compras pendentes",
+    stats_pending_description: "Total em compras pendentes",
+    stats_unsuccessful: "Compras mal sucedidas",
+    stats_unsuccessful_description: "Total em compras mal sucedidas",
   },
   sale: {
     // list
@@ -1647,6 +1656,15 @@ const TranslateEn = {
     subtitle: "Fill the inputs to create or edit the purchase",
     title_shipping: "Shipping",
     subtitle_shipping: "Fill the inputs with shipping data",
+    // stats
+    stats_quantity: "Purchases quantity",
+    stats_quantity_description: "Total in quantity of purchases",
+    stats_successful: "Successful purchases",
+    stats_successful_description: "Total in successful purchases",
+    stats_pending: "Pending purchases",
+    stats_pending_description: "Total in pending purchases",
+    stats_unsuccessful: "Unsuccessful purchases",
+    stats_unsuccessful_description: "Total in unsuccessful purchases",
   },
   sale: {
     // list

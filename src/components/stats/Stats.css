@@ -24,7 +24,7 @@
   color: var(--textLight);
   display: flex;
   justify-content: center;
-  padding: 0.8rem;
+  padding: 0.4rem;
 }
 
 .statsIconSuccess {

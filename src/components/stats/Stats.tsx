@@ -56,7 +56,7 @@ const Stats = function ({
           <div
             className={`statsIcon ${category ? `statsIcon${category}` : ""}`}
           >
-            <Icon size={20} />
+            <Icon size={24} />
           </div>
         )}
         <div className="statsContent">

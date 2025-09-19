@@ -1,11 +1,9 @@
 import {
+  Tag,
   Plus,
   Trash,
   Receipt,
   FileText,
-  MoneyWavy,
-  TrendDown,
-  Cardholder,
   CopySimple,
   PencilSimple,
   ShareNetwork,
@@ -439,7 +437,7 @@ const SalesList = function () {
 
       <Horizontal internal={1}>
         <Stats
-          Icon={Receipt}
+          Icon={Tag}
           title={t.sale.stats_quantity}
           value={stats?.quantity || 0}
           valueUnit={t.sale.sales.toLowerCase()}
@@ -447,7 +445,7 @@ const SalesList = function () {
         />
 
         <Stats
-          Icon={MoneyWavy}
+          Icon={Tag}
           category="Success"
           title={t.sale.stats_value}
           value={stats?.salesWon || 0}
@@ -457,7 +455,7 @@ const SalesList = function () {
         />
 
         <Stats
-          Icon={Cardholder}
+          Icon={Tag}
           category="Warning"
           title={t.sale.stats_pending}
           value={stats?.salesPending || 0}
@@ -467,7 +465,7 @@ const SalesList = function () {
         />
 
         <Stats
-          Icon={TrendDown}
+          Icon={Tag}
           category="Danger"
           title={t.sale.stats_lost}
           value={stats?.salesLost || 0}
