@@ -77,6 +77,7 @@ const SalesList = function () {
   const [seller, setSeller] = useState<string>("all");
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
+  const [stats, setStats] = useState<Record<string, number>>({});
   const [stage, setStage] = useState<TypeSaleStage | "all">("all");
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: subDays(new Date(), 30),
@@ -137,6 +138,31 @@ const SalesList = function () {
       }
       setSales(response.data.result.items);
       setTotal(response.data.result.pagination.total);
+
+      if (!interval.start || !interval.end) return;
+
+      const responseStats = await apis.Sale.stats<Record<string, number>>(
+        token,
+        instance.name,
+        {
+          dateStart: new Date(interval.start).toISOString(),
+          dateEnd: new Date(interval.end).toISOString(),
+        },
+        workspaceId,
+      );
+      if (!responseStats.data?.result) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.warn(
+          "[src/pages/products/sale/SalesList.tsx]",
+          responseStats.data,
+        );
+        return;
+      }
+      setStats(responseStats.data.result);
+
       return;
     } catch (err) {
       play("alert");
@@ -411,12 +437,11 @@ const SalesList = function () {
         </h2>
       </Horizontal>
 
-      {/* FIXME: this stats is paginated */}
       <Horizontal internal={1}>
         <Stats
           Icon={Receipt}
           title={t.sale.stats_quantity}
-          value={total}
+          value={stats?.quantity || 0}
           valueUnit={t.sale.sales.toLowerCase()}
           footer={t.sale.stats_quantity_description}
         />
@@ -425,30 +450,7 @@ const SalesList = function () {
           Icon={MoneyWavy}
           category="Success"
           title={t.sale.stats_value}
-          value={sales?.reduce(function (acc, sale) {
-            if (sale.stage === "draft") return acc + 0;
-            if (
-              sale.stage === "negotiation" ||
-              sale.stage === "pending" ||
-              sale.stage === "processing" ||
-              sale.stage === "open" ||
-              sale.stage === "proposal" ||
-              sale.stage === "shipped"
-            )
-              return acc + 0;
-            if (
-              sale.stage === "canceled" ||
-              sale.stage === "disputed" ||
-              sale.stage === "returned" ||
-              sale.stage === "refunded" ||
-              sale.stage === "lost" ||
-              sale.stage === "failed"
-            )
-              return acc + 0;
-            // paid, won, completed
-            const { total } = Calculate.totalSale(sale);
-            return acc + (total || 0);
-          }, 0)}
+          value={stats?.salesWon || 0}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.sale.stats_value_description}
@@ -458,27 +460,7 @@ const SalesList = function () {
           Icon={Cardholder}
           category="Warning"
           title={t.sale.stats_pending}
-          value={sales?.reduce(function (acc, sale) {
-            if (sale.stage === "draft") return acc + 0;
-            if (
-              sale.stage === "paid" ||
-              sale.stage === "won" ||
-              sale.stage === "completed"
-            )
-              return acc + 0;
-            if (
-              sale.stage === "canceled" ||
-              sale.stage === "disputed" ||
-              sale.stage === "returned" ||
-              sale.stage === "refunded" ||
-              sale.stage === "lost" ||
-              sale.stage === "failed"
-            )
-              return acc + 0;
-            // negotiation, pending, processing, open, proposal, shipped
-            const { total } = Calculate.totalSale(sale);
-            return acc + (total || 0);
-          }, 0)}
+          value={stats?.salesPending || 0}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.sale.stats_pending_description}
@@ -488,27 +470,7 @@ const SalesList = function () {
           Icon={TrendDown}
           category="Danger"
           title={t.sale.stats_lost}
-          value={sales?.reduce(function (acc, sale) {
-            if (sale.stage === "draft") return acc + 0;
-            if (
-              sale.stage === "paid" ||
-              sale.stage === "won" ||
-              sale.stage === "completed"
-            )
-              return acc + 0;
-            if (
-              sale.stage === "negotiation" ||
-              sale.stage === "pending" ||
-              sale.stage === "processing" ||
-              sale.stage === "open" ||
-              sale.stage === "proposal" ||
-              sale.stage === "shipped"
-            )
-              return acc + 0;
-            // canceled, disputed, returned, refunded, lost, failed
-            const { total } = Calculate.totalSale(sale);
-            return acc + (total || 0);
-          }, 0)}
+          value={stats?.salesLost || 0}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.sale.stats_lost_description}
