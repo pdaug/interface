@@ -9,7 +9,7 @@ export type StatsIconCategories = "Success" | "Info" | "Warning" | "Danger";
 
 export type StatsProps = {
   Icon?: IconPhosphor;
-  iconCategory?: StatsIconCategories;
+  category?: StatsIconCategories;
   title: string;
   metric?: number;
   metricStatus?: StatsStatus;
@@ -26,7 +26,7 @@ export type StatsProps = {
 
 const Stats = function ({
   Icon,
-  iconCategory,
+  category,
   title,
   metric,
   metricStatus,
@@ -54,7 +54,7 @@ const Stats = function ({
       <div className="statsContainer" style={stylesContainer}>
         {Icon && (
           <div
-            className={`statsIcon ${iconCategory ? `statsIcon${iconCategory}` : ""}`}
+            className={`statsIcon ${category ? `statsIcon${category}` : ""}`}
           >
             <Icon size={20} />
           </div>
@@ -69,7 +69,9 @@ const Stats = function ({
               </div>
             )}
           </div>
-          <div className="statsBody">
+          <div
+            className={`statsBody ${category ? `statsBody${category}` : ""}`}
+          >
             {valueFormatted} {valueUnit}
           </div>
           {footer && (

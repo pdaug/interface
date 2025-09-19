@@ -3,14 +3,14 @@ import {
   Trash,
   Receipt,
   FileText,
+  MoneyWavy,
+  TrendDown,
+  Cardholder,
   CopySimple,
   PencilSimple,
   ShareNetwork,
   QuestionMark,
   DownloadSimple,
-  MoneyWavy,
-  Cardholder,
-  TrendDown,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -423,7 +423,7 @@ const SalesList = function () {
 
         <Stats
           Icon={MoneyWavy}
-          iconCategory="Success"
+          category="Success"
           title={t.sale.stats_value}
           value={sales?.reduce(function (acc, sale) {
             if (sale.stage === "draft") return acc + 0;
@@ -456,7 +456,7 @@ const SalesList = function () {
 
         <Stats
           Icon={Cardholder}
-          iconCategory="Warning"
+          category="Warning"
           title={t.sale.stats_pending}
           value={sales?.reduce(function (acc, sale) {
             if (sale.stage === "draft") return acc + 0;
@@ -486,7 +486,7 @@ const SalesList = function () {
 
         <Stats
           Icon={TrendDown}
-          iconCategory="Danger"
+          category="Danger"
           title={t.sale.stats_lost}
           value={sales?.reduce(function (acc, sale) {
             if (sale.stage === "draft") return acc + 0;
