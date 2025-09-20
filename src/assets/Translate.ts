@@ -434,6 +434,15 @@ const TranslatePt = {
     document_quotation: "Documento de cotação",
     open_contract: "Abrir contrato",
     document_contract: "Documento de contrato",
+    // stats
+    stats_quantity: "Quantidade de ordens",
+    stats_quantity_description: "Total em quantidade de ordens",
+    stats_completed: "Ordens completadas",
+    stats_completed_description: "Total em ordens completadas",
+    stats_pending: "Ordens pendentes",
+    stats_pending_description: "Total em ordens pendentes",
+    stats_canceled: "Ordens canceladas",
+    stats_canceled_description: "Total em ordens canceladas",
   },
   pages: {
     error: "Erro",
@@ -1491,6 +1500,15 @@ const TranslateEn = {
     document_quotation: "Quotation document",
     open_contract: "Open contract",
     document_contract: "Contract document",
+    // stats
+    stats_quantity: "Orders quantity",
+    stats_quantity_description: "Total in quantity of orders",
+    stats_completed: "Completed orders",
+    stats_completed_description: "Total in completed orders",
+    stats_pending: "Pending orders",
+    stats_pending_description: "Total in pending orders",
+    stats_canceled: "Canceled orders",
+    stats_canceled_description: "Total in canceled orders",
   },
   pages: {
     error: "Error",

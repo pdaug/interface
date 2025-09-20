@@ -3,6 +3,7 @@ import {
   Trash,
   Receipt,
   FileText,
+  Blueprint,
   CopySimple,
   PencilSimple,
   ShareNetwork,
@@ -49,6 +50,7 @@ import {
   InputSelect,
   InputInterval,
 } from "../../../components/inputs/Input";
+import Stats from "../../../components/stats/Stats";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import Profile from "../../../components/profiles/Profile";
@@ -77,6 +79,7 @@ const OrdersList = function () {
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
   const [provider, setProvider] = useState<string>("all");
+  const [stats, setStats] = useState<Record<string, number>>({});
   const [stage, setStage] = useState<TypeOrderStage | "all">("all");
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: subDays(new Date(), 30),
@@ -133,20 +136,41 @@ const OrdersList = function () {
           description: t.stacks.no_find_item,
         });
         console.warn(
-          "[src/pages/products/order/OrdersList.tsx]",
+          "[src/pages/services/order/OrdersList.tsx]",
           response.data,
         );
         return;
       }
       setOrders(response.data.result.items);
       setTotal(response.data.result.pagination.total);
+
+      if (!interval.start || !interval.end) return;
+
+      const statsResponse = await apis.Order.stats<Record<string, number>>(
+        token,
+        instance.name,
+        {
+          dateStart: interval.start.toISOString(),
+          dateEnd: interval.end.toISOString(),
+        },
+        workspaceId,
+      );
+      if (!statsResponse.data?.result) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        return;
+      }
+      setStats(statsResponse.data.result);
+
       return;
     } catch (err) {
       play("alert");
       toast.error(t.toast.warning_error, {
         description: t.stacks.no_find_item,
       });
-      console.error("[src/pages/products/order/OrdersList.tsx]", err);
+      console.error("[src/pages/services/order/OrdersList.tsx]", err);
       return;
     } finally {
       setLoading(false);
@@ -200,7 +224,7 @@ const OrdersList = function () {
           description: t.stacks.no_items,
         });
         console.error(
-          "[src/pages/products/order/OrdersList.tsx]",
+          "[src/pages/services/order/OrdersList.tsx]",
           "no_to_invoice",
         );
         return;
@@ -258,7 +282,7 @@ const OrdersList = function () {
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_items,
         });
-        console.error("[src/pages/products/order/OrdersList.tsx]", "no_share");
+        console.error("[src/pages/services/order/OrdersList.tsx]", "no_share");
         return;
       },
     },
@@ -283,7 +307,7 @@ const OrdersList = function () {
           description: t.stacks.no_document,
         });
         console.error(
-          "[src/pages/products/order/OrdersList.tsx]",
+          "[src/pages/services/order/OrdersList.tsx]",
           "no_document_quotation",
         );
         return;
@@ -310,7 +334,7 @@ const OrdersList = function () {
           description: t.stacks.no_document,
         });
         console.error(
-          "[src/pages/products/order/OrdersList.tsx]",
+          "[src/pages/services/order/OrdersList.tsx]",
           "no_document_contract",
         );
         return;
@@ -381,7 +405,7 @@ const OrdersList = function () {
               toast.error(t.toast.warning_error, {
                 description: t.toast.error_delete,
               });
-              console.error("[src/pages/products/order/OrdersList.tsx]", err);
+              console.error("[src/pages/services/order/OrdersList.tsx]", err);
               return;
             }
           },
@@ -412,6 +436,50 @@ const OrdersList = function () {
             ]}
           />
         </h2>
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          loading={loading}
+          Icon={Blueprint}
+          title={t.order.stats_quantity}
+          value={stats.quantity || 0}
+          valueUnit={t.order.orders.toLowerCase()}
+          footer={t.order.stats_quantity_description}
+        />
+
+        <Stats
+          loading={loading}
+          category="Success"
+          Icon={Blueprint}
+          title={t.order.stats_completed}
+          value={stats.ordersCompleted || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.order.stats_completed_description}
+        />
+
+        <Stats
+          loading={loading}
+          category="Warning"
+          Icon={Blueprint}
+          title={t.order.stats_pending}
+          value={stats.ordersPending || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.order.stats_pending_description}
+        />
+
+        <Stats
+          category="Danger"
+          loading={loading}
+          Icon={Blueprint}
+          title={t.order.stats_canceled}
+          value={stats.ordersCanceled || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.order.stats_canceled_description}
+        />
       </Horizontal>
 
       <Horizontal internal={1}>

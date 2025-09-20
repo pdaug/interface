@@ -74,7 +74,7 @@ const Stats = function ({
           <div
             className={`statsBody ${category ? `statsBody${category}` : ""}`}
           >
-            {loading ? "- - - -" : valueFormatted} {valueUnit}
+            {loading ? "- - -" : valueFormatted} {valueUnit}
           </div>
           {footer && (
             <div className="statsFooter">
