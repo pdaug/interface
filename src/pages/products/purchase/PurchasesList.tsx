@@ -315,6 +315,7 @@ const PurchasesList = function () {
 
       <Horizontal internal={1}>
         <Stats
+          loading={loading}
           Icon={ShoppingBagOpen}
           title={t.purchase.stats_quantity}
           value={stats.quantity || 0}
@@ -323,8 +324,9 @@ const PurchasesList = function () {
         />
 
         <Stats
-          Icon={ShoppingBagOpen}
+          loading={loading}
           category="Success"
+          Icon={ShoppingBagOpen}
           title={t.purchase.stats_successful}
           value={stats.purchasesSuccessful || 0}
           valueLocale={instance.language}
@@ -333,8 +335,9 @@ const PurchasesList = function () {
         />
 
         <Stats
-          Icon={ShoppingBagOpen}
+          loading={loading}
           category="Warning"
+          Icon={ShoppingBagOpen}
           title={t.purchase.stats_pending}
           value={stats.purchasesPending || 0}
           valueLocale={instance.language}
@@ -343,8 +346,9 @@ const PurchasesList = function () {
         />
 
         <Stats
-          Icon={ShoppingBagOpen}
           category="Danger"
+          loading={loading}
+          Icon={ShoppingBagOpen}
           title={t.purchase.stats_unsuccessful}
           value={stats.purchasesUnsuccessful || 0}
           valueLocale={instance.language}

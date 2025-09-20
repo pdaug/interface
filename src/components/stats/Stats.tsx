@@ -8,6 +8,7 @@ export type StatsStatus = "Up" | "Down";
 export type StatsIconCategories = "Success" | "Info" | "Warning" | "Danger";
 
 export type StatsProps = {
+  loading?: boolean;
   Icon?: IconPhosphor;
   category?: StatsIconCategories;
   title: string;
@@ -25,6 +26,7 @@ export type StatsProps = {
 };
 
 const Stats = function ({
+  loading,
   Icon,
   category,
   title,
@@ -72,7 +74,7 @@ const Stats = function ({
           <div
             className={`statsBody ${category ? `statsBody${category}` : ""}`}
           >
-            {valueFormatted} {valueUnit}
+            {loading ? "- - - -" : valueFormatted} {valueUnit}
           </div>
           {footer && (
             <div className="statsFooter">

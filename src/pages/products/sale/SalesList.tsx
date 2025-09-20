@@ -438,6 +438,7 @@ const SalesList = function () {
       <Horizontal internal={1}>
         <Stats
           Icon={Tag}
+          loading={loading}
           title={t.sale.stats_quantity}
           value={stats?.quantity || 0}
           valueUnit={t.sale.sales.toLowerCase()}
@@ -447,6 +448,7 @@ const SalesList = function () {
         <Stats
           Icon={Tag}
           category="Success"
+          loading={loading}
           title={t.sale.stats_value}
           value={stats?.salesWon || 0}
           valueLocale={instance.language}
@@ -457,6 +459,7 @@ const SalesList = function () {
         <Stats
           Icon={Tag}
           category="Warning"
+          loading={loading}
           title={t.sale.stats_pending}
           value={stats?.salesPending || 0}
           valueLocale={instance.language}
@@ -467,6 +470,7 @@ const SalesList = function () {
         <Stats
           Icon={Tag}
           category="Danger"
+          loading={loading}
           title={t.sale.stats_lost}
           value={stats?.salesLost || 0}
           valueLocale={instance.language}
