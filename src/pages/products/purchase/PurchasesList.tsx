@@ -5,6 +5,7 @@ import {
   PencilSimple,
   QuestionMark,
   DownloadSimple,
+  ShoppingBagOpen,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -49,6 +50,7 @@ import {
   InputSelect,
   InputInterval,
 } from "../../../components/inputs/Input";
+import Stats from "../../../components/stats/Stats";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import Profile from "../../../components/profiles/Profile";
@@ -76,6 +78,7 @@ const PurchasesList = function () {
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
   const [purchaser, setPurchaser] = useState<string>("all");
+  const [stats, setStats] = useState<Record<string, number>>({});
   const [purchases, setPurchases] = useState<TypePurchase[]>([]);
   const [stage, setStage] = useState<TypePurchaseStage | "all">("all");
   const [interval, setInterval] = useState<TypeInputInterval>({
@@ -142,6 +145,27 @@ const PurchasesList = function () {
       }
       setPurchases(response.data.result.items);
       setTotal(response.data.result.pagination.total);
+
+      if (!interval.start || !interval.end) return;
+
+      const statsResponse = await apis.Purchase.stats<Record<string, number>>(
+        token,
+        instance.name,
+        {
+          dateStart: interval.start.toISOString(),
+          dateEnd: interval.end.toISOString(),
+        },
+        workspaceId,
+      );
+      if (!statsResponse.data?.result) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        return;
+      }
+      setStats(statsResponse.data.result);
+
       return;
     } catch (err) {
       play("alert");
@@ -287,6 +311,46 @@ const PurchasesList = function () {
             ]}
           />
         </h2>
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          Icon={ShoppingBagOpen}
+          title={t.purchase.stats_quantity}
+          value={stats.quantity || 0}
+          valueUnit={t.purchase.purchases.toLowerCase()}
+          footer={t.purchase.stats_quantity_description}
+        />
+
+        <Stats
+          Icon={ShoppingBagOpen}
+          category="Success"
+          title={t.purchase.stats_successful}
+          value={stats.purchasesSuccessful || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.purchase.stats_successful_description}
+        />
+
+        <Stats
+          Icon={ShoppingBagOpen}
+          category="Warning"
+          title={t.purchase.stats_pending}
+          value={stats.purchasesPending || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.purchase.stats_pending_description}
+        />
+
+        <Stats
+          Icon={ShoppingBagOpen}
+          category="Danger"
+          title={t.purchase.stats_unsuccessful}
+          value={stats.purchasesUnsuccessful || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.purchase.stats_unsuccessful_description}
+        />
       </Horizontal>
 
       <Horizontal internal={1}>
