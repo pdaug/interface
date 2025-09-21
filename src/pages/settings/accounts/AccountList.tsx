@@ -377,7 +377,11 @@ const AccountList = function () {
                       padding={false}
                       name={data.name as string}
                       photo={bankFinded?.image ?? undefined}
-                      description={data.holderName as string}
+                      description={
+                        (data.holderName as string) ||
+                        (data?.holder as string) ||
+                        ""
+                      }
                     />
                   </div>
                 );
@@ -409,7 +413,7 @@ const AccountList = function () {
               },
             },
             user: {
-              label: t.components.user,
+              label: t.account.user,
               handler: function (data) {
                 const userFinded = users?.find(function (user) {
                   return user.id === data.userId;

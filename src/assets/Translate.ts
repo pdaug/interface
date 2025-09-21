@@ -26,6 +26,7 @@ const TranslatePt = {
     bank_name: "Nome do banco",
     bank_agency: "Agência",
     bank_account: "Conta",
+    user: "Criado por",
     // placeholders
     name_placeholder: "Ex. Minha conta primária",
     holder_placeholder: "Ex. Fulano de Tal",
@@ -1109,6 +1110,7 @@ const TranslateEn = {
     bank_name: "Bank name",
     bank_agency: "Agency",
     bank_account: "Account",
+    user: "Created by",
     // placeholders
     name_placeholder: "e.g Main account",
     holder_placeholder: "e.g John Doe",
