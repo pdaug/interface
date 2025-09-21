@@ -59,14 +59,23 @@ const Sidebar = function ({
                   {groupOrItem?.items?.map(function (item) {
                     if (item.hidden) return;
                     return (
-                      <div
+                      <a
                         key={item.id}
-                        onClick={item?.onClick}
-                        className={`sidebarMenuItem ${selected.includes(item.id) ? "sidebarMenuItemSelected" : ""}`}
+                        href={item.id}
+                        style={{ appearance: "none", textDecoration: "none" }}
+                        onClick={function (event) {
+                          event.preventDefault();
+                          return;
+                        }}
                       >
-                        {item.Icon && <item.Icon size={16} />}
-                        <span>{item.label}</span>
-                      </div>
+                        <div
+                          onClick={item?.onClick}
+                          className={`sidebarMenuItem ${selected.includes(item.id) ? "sidebarMenuItemSelected" : ""}`}
+                        >
+                          {item.Icon && <item.Icon size={16} />}
+                          <span>{item.label}</span>
+                        </div>
+                      </a>
                     );
                   })}
                 </div>

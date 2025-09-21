@@ -13,6 +13,7 @@ import {
   CreditCard,
   SuitcaseSimple,
   ShoppingBagOpen,
+  FolderSimple,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -252,6 +253,7 @@ const Menu = function () {
           id: "integrations",
           Icon: Plug,
           label: t.menu.integrations,
+          disabled: !checkByPlan("advanced"),
           onClick: () => navigate("/f/integrations"),
         },
         {
@@ -259,6 +261,12 @@ const Menu = function () {
           Icon: GearSix,
           label: t.menu.settings,
           onClick: () => navigate("/f/settings"),
+        },
+        {
+          id: "plans",
+          Icon: FolderSimple,
+          label: t.menu.plans,
+          onClick: () => navigate("/f/plans"),
         },
         {
           id: "about",
