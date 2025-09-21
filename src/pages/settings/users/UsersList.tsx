@@ -11,7 +11,6 @@ import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
-import { endOfDay, startOfYear } from "date-fns";
 
 //apis
 import apis from "../../../apis";
@@ -64,8 +63,8 @@ const UsersList = function () {
   const [selected, setSelected] = useState<string[]>([]);
   const [users, setUsers] = useState<TypeUser[]>([]);
   const [interval, setInterval] = useState<TypeInputInterval>({
-    start: startOfYear(new Date()),
-    end: endOfDay(new Date()),
+    start: null,
+    end: null,
   });
 
   const [searchDebounced] = useDebounce(search, 500);
