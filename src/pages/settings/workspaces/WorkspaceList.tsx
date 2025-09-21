@@ -4,6 +4,7 @@ import {
   CopySimple,
   PencilSimple,
   QuestionMark,
+  FolderSimple,
   DownloadSimple,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
@@ -28,11 +29,13 @@ import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import { Input } from "../../../components/inputs/Input";
+import Callout from "../../../components/callouts/Callout";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
@@ -45,6 +48,7 @@ const WorkspaceList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
+  const { checkByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { token, instance, workspaceId, saveWorkspaces } = useSystem();
@@ -99,11 +103,126 @@ const WorkspaceList = function () {
   // fetch workspace
   useAsync(FetchWorkspaces, [page, searchDebounced]);
 
+  const getOptions = [
+    {
+      id: "copy",
+      Icon: CopySimple,
+      label: t.components.copy_id,
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          const result = await Clipboard.copy(data.id as string);
+          if (result) {
+            play("ok");
+            toast.success(t.toast.success, {
+              description: t.toast.success_copy,
+            });
+            return;
+          }
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_copy,
+        });
+        return;
+      },
+    },
+    {
+      id: "download",
+      Icon: DownloadSimple,
+      label: t.components.download,
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          Download.JSON(data, `workspace-${data.id}.json`);
+          play("ok");
+          toast.success(t.toast.success, {
+            description: t.toast.success_download,
+          });
+        }
+        return;
+      },
+    },
+    {
+      id: "edit",
+      Icon: PencilSimple,
+      label: t.components.edit,
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data)
+          navigate(`/f/workspaces/inspect/${data.id}`);
+        return;
+      },
+    },
+    {
+      id: "delete",
+      Icon: Trash,
+      label: t.components.delete,
+      IconColor: "var(--dangerColor",
+      styles: { color: "var(--dangerColor)" },
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (!data || typeof data !== "object" || !("id" in data)) return;
+        if (workspaceId === data.id) {
+          play("alert");
+          toast.error(t.toast.warning_error, {
+            description: t.workspace.not_delete,
+          });
+          return;
+        }
+        OpenDialog({
+          category: "Danger",
+          title: t.dialog.title_delete,
+          description: t.dialog.description_delete,
+          confirmText: t.components.delete,
+          onConfirm: async function () {
+            try {
+              const response = await apis.Workspace.delete(
+                token,
+                instance.name,
+                data.id as string,
+              );
+              if (!response.data?.result) {
+                play("alert");
+                toast.warning(t.toast.warning_error, {
+                  description: t.toast.error_delete,
+                });
+                return;
+              }
+              play("ok");
+              toast.success(t.toast.success, {
+                description: t.toast.success_delete,
+              });
+              CloseDialog();
+              await FetchWorkspaces();
+              return;
+            } catch (err) {
+              play("alert");
+              toast.error(t.toast.warning_error, {
+                description: t.toast.error_delete,
+              });
+              console.error(
+                "[src/pages/settings/workspaces/WorkspaceList.tsx]",
+                err,
+              );
+              return;
+            }
+          },
+        });
+      },
+    },
+  ];
+
   return (
     <React.Fragment>
       <Horizontal>
         <h2>{t.workspace.workspaces}</h2>
       </Horizontal>
+
+      {!checkByPlan("enterprise") && (
+        <Callout
+          Icon={FolderSimple}
+          category="Warning"
+          text={t.callout.plan_limit_workspaces}
+          styles={{ fontSize: "var(--textSmall)" }}
+        />
+      )}
 
       <Horizontal internal={1}>
         <Button
@@ -155,112 +274,7 @@ const WorkspaceList = function () {
           selected={selected}
           setSelected={setSelected}
           data={workspaces as TableData[]}
-          options={[
-            {
-              id: "copy",
-              Icon: CopySimple,
-              label: t.components.copy_id,
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  const result = await Clipboard.copy(data.id as string);
-                  if (result) {
-                    play("ok");
-                    toast.success(t.toast.success, {
-                      description: t.toast.success_copy,
-                    });
-                    return;
-                  }
-                }
-                play("alert");
-                toast.warning(t.toast.warning_error, {
-                  description: t.toast.warning_copy,
-                });
-                return;
-              },
-            },
-            {
-              id: "download",
-              Icon: DownloadSimple,
-              label: t.components.download,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  Download.JSON(data, `workspace-${data.id}.json`);
-                  play("ok");
-                  toast.success(t.toast.success, {
-                    description: t.toast.success_download,
-                  });
-                }
-                return;
-              },
-            },
-            {
-              id: "edit",
-              Icon: PencilSimple,
-              label: t.components.edit,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data)
-                  navigate(`/f/workspaces/inspect/${data.id}`);
-                return;
-              },
-            },
-            {
-              id: "delete",
-              Icon: Trash,
-              label: t.components.delete,
-              IconColor: "var(--dangerColor",
-              styles: { color: "var(--dangerColor)" },
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (!data || typeof data !== "object" || !("id" in data))
-                  return;
-                if (workspaceId === data.id) {
-                  play("alert");
-                  toast.error(t.toast.warning_error, {
-                    description: t.workspace.not_delete,
-                  });
-                  return;
-                }
-                OpenDialog({
-                  category: "Danger",
-                  title: t.dialog.title_delete,
-                  description: t.dialog.description_delete,
-                  confirmText: t.components.delete,
-                  onConfirm: async function () {
-                    try {
-                      const response = await apis.Workspace.delete(
-                        token,
-                        instance.name,
-                        data.id as string,
-                      );
-                      if (!response.data?.result) {
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.toast.error_delete,
-                        });
-                        return;
-                      }
-                      play("ok");
-                      toast.success(t.toast.success, {
-                        description: t.toast.success_delete,
-                      });
-                      CloseDialog();
-                      await FetchWorkspaces();
-                      return;
-                    } catch (err) {
-                      play("alert");
-                      toast.error(t.toast.warning_error, {
-                        description: t.toast.error_delete,
-                      });
-                      console.error(
-                        "[src/pages/settings/workspaces/WorkspaceList.tsx]",
-                        err,
-                      );
-                      return;
-                    }
-                  },
-                });
-              },
-            },
-          ]}
+          options={getOptions}
           columns={{
             status: {
               label: t.components.status,

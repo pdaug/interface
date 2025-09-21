@@ -51,6 +51,8 @@ const TranslatePt = {
     required_fields: "Os campos com asteriscos são obrigatórios",
     shipping_value:
       "Com o código postal do destinatário e do remetente, será mostrado as empresas disponíveis para realizar o envio desta venda",
+    plan_limit_workspaces: "O seu plano contem um limite de organizações",
+    plan_limit_users: "O seu plano contem um limite de usuários",
   },
   components: {
     to_invoice: "Faturar",
@@ -1138,6 +1140,8 @@ const TranslateEn = {
     required_fields: "Fields marked with an asterisk are required",
     shipping_value:
       "With the recipient's and sender's postal code, the companies available to ship this sale will be shown.",
+    plan_limit_workspaces: "Your plan contains a limit of workspaces",
+    plan_limit_users: "Your plan contains a limit of users",
   },
   components: {
     to_invoice: "To invoice",

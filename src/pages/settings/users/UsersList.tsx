@@ -5,6 +5,7 @@ import {
   CopySimple,
   PencilSimple,
   QuestionMark,
+  FolderSimple,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -30,12 +31,14 @@ import useSystem from "../../../hooks/useSystem";
 import useSounds from "../../../hooks/useSounds";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import Profile from "../../../components/profiles/Profile";
+import Callout from "../../../components/callouts/Callout";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
@@ -49,6 +52,7 @@ const UsersList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
+  const { checkByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { user, token, instance, workspaces, workspaceId } = useSystem();
@@ -130,6 +134,15 @@ const UsersList = function () {
           />
         </h2>
       </Horizontal>
+
+      {!checkByPlan("enterprise") && (
+        <Callout
+          Icon={FolderSimple}
+          category="Warning"
+          text={t.callout.plan_limit_users}
+          styles={{ fontSize: "var(--textSmall)" }}
+        />
+      )}
 
       <Horizontal internal={1} styles={{ overflow: "hidden" }}>
         <Button
