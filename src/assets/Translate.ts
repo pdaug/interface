@@ -10,27 +10,35 @@ const TranslatePt = {
     docs: "Documentação",
   },
   account: {
+    // list
     account: "Conta Bancária",
     accounts: "Contas Bancárias",
+    // inputs
     new: "Nova conta",
     name: "Nome da conta",
-    name_placeholder: "Ex. Minha conta primária",
-    is_coorporate: "Empresarial ou Pessoal",
-    corporate: "Empresarial",
+    is_enterprise: "Empresarial ou Pessoal",
+    enterprise: "Empresarial",
     personal: "Pessoal",
     holder: "Nome do responsável",
-    holder_placeholder: "Ex. Fulano de Tal",
     holder_document_1: "Documento (CPF/CNPJ)",
     holder_document_2: "Documento (RG)",
-    holder_document_placeholder: "123.456.789-10",
     bank_code: "Código do banco",
     bank_name: "Nome do banco",
     bank_agency: "Agência",
     bank_account: "Conta",
+    // placeholders
+    name_placeholder: "Ex. Minha conta primária",
+    holder_placeholder: "Ex. Fulano de Tal",
+    holder_document_placeholder: "123.456.789-10",
     bank_number_placeholder: "123456",
+    // titles and subtitles
     title_edit: "Edite a conta",
     title_create: "Crie uma nova conta",
-    subtitle: "Preencha os campos abaixo para criar ou editar a conta",
+    subtitle: "Preencha as entradas para criar ou editar a conta",
+    // messages
+    no_holder: "Nenhum responsável",
+    no_bank_agency: "Nenhuma agência",
+    no_bank_account: "Nenhuma conta",
   },
   callout: {
     company_document_search:
@@ -1085,27 +1093,35 @@ const TranslateEn = {
     docs: "Documentation",
   },
   account: {
+    // list
     account: "Bank Account",
     accounts: "Banks Accounts",
+    // inputs
     new: "New account",
     name: "Account name",
-    name_placeholder: "e.g My primary account",
-    is_coorporate: "Corporate or Personal",
-    corporate: "Corporate",
+    is_enterprise: "Enterprise or Personal",
+    enterprise: "Enterprise",
     personal: "Personal",
     holder: "Holder name",
-    holder_placeholder: "e.g John Doe",
     holder_document_1: "Document 1",
     holder_document_2: "Document 2",
-    holder_document_placeholder: "123 456 789 10",
     bank_code: "Bank code",
     bank_name: "Bank name",
     bank_agency: "Agency",
     bank_account: "Account",
+    // placeholders
+    name_placeholder: "e.g Main account",
+    holder_placeholder: "e.g John Doe",
+    holder_document_placeholder: "123 456 789 10",
     bank_number_placeholder: "123456",
+    // titles and subtitles
     title_edit: "Edit the account",
     title_create: "Create a new account",
-    subtitle: "Fill the below fields to create or edit the account",
+    subtitle: "Fill the inputs to create or edit the account",
+    // messages
+    no_holder: "No holder",
+    no_bank_agency: "No agency",
+    no_bank_account: "No account",
   },
   callout: {
     company_document_search:

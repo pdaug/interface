@@ -3,9 +3,10 @@ export type TypeAccount = {
   status: boolean;
   name: string;
 
-  isCoorporate?: boolean;
+  isEnterprise?: boolean;
 
-  holder: string;
+  holderId: string;
+  holderName: string;
   holderDocument1: string;
   holderDocument2?: string;
 

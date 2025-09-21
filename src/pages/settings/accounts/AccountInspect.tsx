@@ -1,8 +1,8 @@
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import React, { FormEvent, useState } from "react";
-import { Asterisk } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Asterisk, CreditCard } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -11,8 +11,8 @@ import apis from "../../../apis";
 import { TypeAccount } from "../../../types/Account";
 
 // assets
-import { BanksSafely } from "../../../assets/Banks";
-import { MaskDocument1, MaskDocument2 } from "../../../assets/Mask";
+import { Banks, BanksSafely } from "../../../assets/Banks";
+// import { MaskDocument1, MaskDocument2 } from "../../../assets/Mask";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
@@ -25,8 +25,8 @@ import useTranslate from "../../../hooks/useTranslate";
 // components
 import {
   Input,
-  InputMask,
   InputSelect,
+  // InputMask,
 } from "../../../components/inputs/Input";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
@@ -34,6 +34,7 @@ import Callout from "../../../components/callouts/Callout";
 import Profile from "../../../components/profiles/Profile";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import Avatar from "../../../components/avatars/Avatar";
 
 const AccountInspect = function () {
   const t = useTranslate();
@@ -48,8 +49,9 @@ const AccountInspect = function () {
   const [form, setForm] = useState<Partial<TypeAccount>>({
     status: true,
     name: "",
-    isCoorporate: false,
-    holder: "",
+    isEnterprise: false,
+    holderId: "",
+    holderName: "",
     holderDocument1: "",
     holderDocument2: "",
     bankCode: "",
@@ -203,264 +205,310 @@ const AccountInspect = function () {
             title={id ? t.account.title_edit : t.account.title_create}
             description={t.account.subtitle}
           >
-            <Vertical internal={1}>
-              <Horizontal internal={1}>
-                <InputSelect
-                  required
-                  name="status"
-                  id="account_status"
-                  empty={t.stacks.no_option}
-                  value={String(form.status)}
-                  label={t.components.status}
-                  disabled={loading}
-                  options={[
-                    {
-                      id: "true",
-                      value: "true",
-                      text: t.components.active,
-                    },
-                    {
-                      id: "false",
-                      value: "false",
-                      text: t.components.inactive,
-                    },
-                  ]}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.status = event.currentTarget?.value === "true";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <Input
-                  min={1}
-                  max={32}
-                  required
-                  name="name"
-                  id="account_name"
-                  value={form?.name || ""}
-                  label={t.account.name}
-                  disabled={loading}
-                  placeholder={t.account.name_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.name = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <InputSelect
-                  name="isCoorporate"
-                  id="account_is_coorporate"
-                  empty={t.stacks.no_option}
-                  label={t.account.is_coorporate}
-                  disabled={loading}
-                  value={String(form?.isCoorporate)}
-                  options={[
-                    {
-                      id: "true",
-                      value: "true",
-                      text: t.account.corporate,
-                    },
-                    {
-                      id: "false",
-                      value: "false",
-                      text: t.account.personal,
-                    },
-                  ]}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.isCoorporate =
-                      event.currentTarget?.value === "true";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-
-              <Horizontal internal={1}>
-                <Input
-                  min={1}
-                  max={32}
-                  required
-                  name="holder"
-                  id="account_holder"
-                  value={form?.holder || ""}
-                  label={t.account.holder}
-                  disabled={loading}
-                  placeholder={t.account.holder_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.holder = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <InputMask
-                  required
-                  mask={MaskDocument1}
-                  name="holderDocument1"
-                  id="account_holder_document_1"
-                  disabled={loading}
-                  value={form?.holderDocument1 || ""}
-                  label={t.account.holder_document_1}
-                  placeholder={t.account.holder_document_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.holderDocument1 = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <InputMask
-                  mask={MaskDocument2}
-                  name="holderDocument2"
-                  id="account_holder_document_2"
-                  disabled={loading}
-                  value={form?.holderDocument2 || ""}
-                  label={t.account.holder_document_2}
-                  placeholder={t.account.holder_document_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.holderDocument2 = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-
-              <Horizontal internal={1}>
-                <Input
-                  readOnly
-                  name="bankCode"
-                  placeholder="123"
-                  id="account_bank_code"
-                  label={t.account.bank_code}
-                  value={form?.bankCode || ""}
-                  onChange={function () {
-                    return;
-                  }}
-                />
-                <InputSelect
-                  required
-                  name="bankName"
-                  id="account_bank_name"
-                  empty={t.stacks.no_option}
-                  label={t.account.bank_name}
-                  value={form?.bankCode || ""}
-                  disabled={loading}
-                  options={BanksSafely.map(function (bank) {
-                    return {
-                      id: bank.code,
-                      value: bank.code,
-                      text: bank.name,
-                    };
-                  })}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    const bankCode = event.currentTarget?.value || "";
-                    newForm.bankCode = bankCode;
-                    newForm.bankName =
-                      BanksSafely.find(function (bank) {
-                        return bank.code === bankCode;
-                      })?.name || "no_bank_name";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <Input
-                  min={1}
-                  max={16}
-                  required
-                  name="bankAgency"
-                  id="account_bank_agency"
-                  value={form?.bankAgency || ""}
-                  label={t.account.bank_agency}
-                  disabled={loading}
-                  placeholder={t.account.bank_number_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.bankAgency = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-                <Input
-                  min={1}
-                  max={16}
-                  required
-                  name="bankAccount"
-                  id="account_bank_account"
-                  value={form?.bankAccount || ""}
-                  label={t.account.bank_account}
-                  disabled={loading}
-                  placeholder={t.account.bank_number_placeholder}
-                  onChange={function (event) {
-                    const newForm = { ...form };
-                    newForm.bankAccount = event.currentTarget?.value || "";
-                    setForm(newForm);
-                    return;
-                  }}
-                />
-              </Horizontal>
-
-              {Boolean(id) && (
+            <Horizontal internal={1} className="itemsCenter">
+              <Avatar
+                label=""
+                size={14}
+                Icon={CreditCard}
+                photo={
+                  Banks.find(function (bank) {
+                    return form.bankCode?.toLowerCase() === bank.code;
+                  })?.image || ""
+                }
+              />
+              <Vertical internal={1} className="flex1">
                 <Horizontal internal={1}>
-                  <div
-                    className="flex flex1"
-                    style={{ alignItems: "flex-end" }}
-                  >
-                    <Profile
-                      padding={false}
-                      photo={userFinded?.photo || ""}
-                      description={userFinded?.email || ""}
-                      name={userFinded?.name || t.components.unknown}
-                    />
-                  </div>
-                  <Input
-                    readOnly
-                    placeholder=""
-                    name="createdAt"
-                    id="account_created_at"
-                    label={t.components.created_at}
-                    value={instanceDateTime(form.createdAt as string)}
-                    onChange={function () {
+                  <InputSelect
+                    required
+                    name="status"
+                    id="account_status"
+                    empty={t.stacks.no_option}
+                    value={String(form.status)}
+                    label={t.components.status}
+                    disabled={loading}
+                    options={[
+                      {
+                        id: "true",
+                        value: "true",
+                        text: t.components.active,
+                      },
+                      {
+                        id: "false",
+                        value: "false",
+                        text: t.components.inactive,
+                      },
+                    ]}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.status = event.currentTarget?.value === "true";
+                      setForm(newForm);
                       return;
                     }}
                   />
                   <Input
-                    readOnly
-                    placeholder=""
-                    name="updatedAt"
-                    id="account_updated_at"
-                    label={t.components.updated_at}
-                    value={
-                      form?.updatedAt
-                        ? instanceDateTime(form.updatedAt as string)
-                        : "-"
-                    }
-                    onChange={function () {
+                    min={1}
+                    max={32}
+                    required
+                    name="name"
+                    id="account_name"
+                    disabled={loading}
+                    label={t.account.name}
+                    value={form?.name || ""}
+                    placeholder={t.account.name_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.name = event.currentTarget?.value || "";
+                      setForm(newForm);
                       return;
                     }}
                   />
-                  <Input
-                    readOnly
-                    placeholder=""
-                    name="deletedAt"
-                    id="account_deleted_at"
-                    label={t.components.deletedAt}
-                    value={
-                      form?.deletedAt
-                        ? instanceDateTime(form.deletedAt as string)
-                        : "-"
-                    }
-                    onChange={function () {
+                  <InputSelect
+                    disabled={loading}
+                    name="isEnterprise"
+                    id="account_is_enterprise"
+                    empty={t.stacks.no_option}
+                    label={t.account.is_enterprise}
+                    value={String(form?.isEnterprise)}
+                    options={[
+                      {
+                        id: "true",
+                        value: "true",
+                        text: t.account.enterprise,
+                      },
+                      {
+                        id: "false",
+                        value: "false",
+                        text: t.account.personal,
+                      },
+                    ]}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.isEnterprise =
+                        event.currentTarget?.value === "true";
+                      setForm(newForm);
                       return;
                     }}
                   />
                 </Horizontal>
-              )}
-            </Vertical>
+
+                {/* <Horizontal internal={1}>
+                  
+                  <Input
+                    min={1}
+                    max={32}
+                    required
+                    name="holderName"
+                    disabled={loading}
+                    id="account_holder_name"
+                    label={t.account.holder}
+                    value={form?.holderName || ""}
+                    placeholder={t.account.holder_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.holderName = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <InputMask
+                    required
+                    mask={MaskDocument1}
+                    name="holderDocument1"
+                    id="account_holder_document_1"
+                    disabled={loading}
+                    value={form?.holderDocument1 || ""}
+                    label={t.account.holder_document_1}
+                    placeholder={t.account.holder_document_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.holderDocument1 =
+                        event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <InputMask
+                    mask={MaskDocument2}
+                    name="holderDocument2"
+                    id="account_holder_document_2"
+                    disabled={loading}
+                    value={form?.holderDocument2 || ""}
+                    label={t.account.holder_document_2}
+                    placeholder={t.account.holder_document_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.holderDocument2 =
+                        event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                </Horizontal> */}
+
+                <Horizontal internal={1}>
+                  <InputSelect
+                    required
+                    name="holderId"
+                    disabled={loading}
+                    id="account_holder_id"
+                    label={t.account.holder}
+                    empty={t.stacks.no_option}
+                    value={form?.holderId || ""}
+                    options={users.map(function (user) {
+                      return {
+                        id: user.id,
+                        value: user.id,
+                        text: user.name,
+                      };
+                    })}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      const userFinded = users.find(function (user) {
+                        return user.id === event.currentTarget?.value;
+                      });
+                      if (!userFinded) {
+                        play("alert");
+                        toast.error(t.toast.warning_error, {
+                          description: t.stacks.no_user,
+                        });
+                        return;
+                      }
+                      newForm.holderId = userFinded.id;
+                      newForm.holderName = userFinded.name;
+                      newForm.holderDocument1 = userFinded.document1;
+                      newForm.holderDocument2 = userFinded.document2;
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  {/* <Input
+                    readOnly
+                    name="bankCode"
+                    placeholder="123"
+                    id="account_bank_code"
+                    label={t.account.bank_code}
+                    value={form?.bankCode || ""}
+                    onChange={function () {
+                      return;
+                    }}
+                  /> */}
+                  <InputSelect
+                    required
+                    name="bankName"
+                    disabled={loading}
+                    id="account_bank_name"
+                    empty={t.stacks.no_option}
+                    label={t.account.bank_name}
+                    value={form?.bankCode || ""}
+                    options={BanksSafely.map(function (bank) {
+                      return {
+                        id: bank.code,
+                        value: bank.code,
+                        text: bank.name,
+                      };
+                    })}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      const bankCode = event.currentTarget?.value || "";
+                      newForm.bankCode = bankCode;
+                      newForm.bankName =
+                        BanksSafely.find(function (bank) {
+                          return bank.code === bankCode;
+                        })?.name || "no_bank_name";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <Input
+                    max={16}
+                    name="bankAgency"
+                    disabled={loading}
+                    id="account_bank_agency"
+                    value={form?.bankAgency || ""}
+                    label={t.account.bank_agency}
+                    placeholder={t.account.bank_number_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.bankAgency = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                  <Input
+                    max={16}
+                    name="bankAccount"
+                    disabled={loading}
+                    id="account_bank_account"
+                    value={form?.bankAccount || ""}
+                    label={t.account.bank_account}
+                    placeholder={t.account.bank_number_placeholder}
+                    onChange={function (event) {
+                      const newForm = { ...form };
+                      newForm.bankAccount = event.currentTarget?.value || "";
+                      setForm(newForm);
+                      return;
+                    }}
+                  />
+                </Horizontal>
+
+                {Boolean(id) && (
+                  <Horizontal internal={1}>
+                    <div
+                      className="flex flex1"
+                      style={{ alignItems: "flex-end" }}
+                    >
+                      <Profile
+                        padding={false}
+                        photo={userFinded?.photo || ""}
+                        description={userFinded?.email || ""}
+                        name={userFinded?.name || t.components.unknown}
+                      />
+                    </div>
+                    <Input
+                      readOnly
+                      placeholder=""
+                      name="createdAt"
+                      id="account_created_at"
+                      label={t.components.created_at}
+                      value={instanceDateTime(form.createdAt as string)}
+                      onChange={function () {
+                        return;
+                      }}
+                    />
+                    <Input
+                      readOnly
+                      placeholder=""
+                      name="updatedAt"
+                      id="account_updated_at"
+                      label={t.components.updated_at}
+                      value={
+                        form?.updatedAt
+                          ? instanceDateTime(form.updatedAt as string)
+                          : "-"
+                      }
+                      onChange={function () {
+                        return;
+                      }}
+                    />
+                    <Input
+                      readOnly
+                      placeholder=""
+                      name="deletedAt"
+                      id="account_deleted_at"
+                      label={t.components.deletedAt}
+                      value={
+                        form?.deletedAt
+                          ? instanceDateTime(form.deletedAt as string)
+                          : "-"
+                      }
+                      onChange={function () {
+                        return;
+                      }}
+                    />
+                  </Horizontal>
+                )}
+              </Vertical>
+            </Horizontal>
           </Wrapper>
 
           <Callout

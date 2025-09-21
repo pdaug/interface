@@ -14,6 +14,9 @@ import { useNavigate } from "react-router-dom";
 // apis
 import apis from "../../../apis";
 
+// assets
+import { Banks } from "../../../assets/Banks";
+
 // utils
 import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
@@ -339,16 +342,16 @@ const AccountList = function () {
                 );
               },
             },
-            isCoorporate: {
-              label: t.account.is_coorporate,
-              maxWidth: "96px",
+            isEnterprise: {
+              label: t.account.is_enterprise,
+              maxWidth: "128px",
               handler: function (data) {
                 return (
                   <Badge
-                    category="Info"
+                    category="Neutral"
                     value={
-                      data.isCoorporate
-                        ? t.account.corporate
+                      data.isEnterprise
+                        ? t.account.enterprise
                         : t.account.personal
                     }
                   />
@@ -358,6 +361,9 @@ const AccountList = function () {
             name: {
               label: t.account.name,
               handler: function (data) {
+                const bankFinded = Banks.find(function (bank) {
+                  return bank.code === data.bankCode;
+                });
                 return (
                   <div
                     className="cursor"
@@ -366,15 +372,42 @@ const AccountList = function () {
                       return;
                     }}
                   >
-                    {data.name as string}
+                    <Profile
+                      photoSize={4}
+                      padding={false}
+                      name={data.name as string}
+                      photo={bankFinded?.image ?? undefined}
+                      description={data.holderName as string}
+                    />
                   </div>
                 );
               },
             },
-            holder: { label: t.account.holder },
             bankName: { label: t.account.bank_name },
-            bankAgency: { label: t.account.bank_agency },
-            bankAccount: { label: t.account.bank_account },
+            bankAgency: {
+              label: t.account.bank_agency,
+              handler: function (data) {
+                return data?.bankAgency ? (
+                  <span>{data.bankAgency as string}</span>
+                ) : (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.account.no_bank_agency}
+                  </i>
+                );
+              },
+            },
+            bankAccount: {
+              label: t.account.bank_account,
+              handler: function (data) {
+                return data?.bankAccount ? (
+                  <span>{data.bankAccount as string}</span>
+                ) : (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.account.no_bank_account}
+                  </i>
+                );
+              },
+            },
             user: {
               label: t.components.user,
               handler: function (data) {
