@@ -24,6 +24,7 @@ import useSounds from "../../../hooks/useSounds";
 import useSchema from "../../../hooks/useSchema";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import {
@@ -45,6 +46,7 @@ const ServicesInspect = function () {
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
+  const { renderByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
@@ -170,7 +172,8 @@ const ServicesInspect = function () {
     }
   };
 
-  return (
+  return renderByPlan(
+    "advanced",
     <React.Fragment>
       <Horizontal>
         <h2>
@@ -416,7 +419,7 @@ const ServicesInspect = function () {
           </Wrapper>
         </Vertical>
       </form>
-    </React.Fragment>
+    </React.Fragment>,
   );
 };
 

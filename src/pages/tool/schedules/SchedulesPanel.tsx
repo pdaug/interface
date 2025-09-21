@@ -27,6 +27,7 @@ import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
 import useSchema from "../../../hooks/useSchema";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import {
@@ -36,16 +37,17 @@ import {
 } from "../../../components/inputs/Input";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
+import Profile from "../../../components/profiles/Profile";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Agenda, AgendaDate } from "../../../components/Agendas/Agenda";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Profile from "../../../components/profiles/Profile";
 
 const SchedulesPanel = function () {
   const t = useTranslate();
   const play = useSounds();
   const Schema = useSchema();
+  const { renderByPlan } = usePermission();
   const { OpenDialog, CloseDialog } = useDialog();
   const { user, users, token, instance, workspaceId, workspaces } = useSystem();
 
@@ -238,7 +240,8 @@ const SchedulesPanel = function () {
     }
   };
 
-  return (
+  return renderByPlan(
+    "advanced",
     <React.Fragment>
       <Horizontal>
         <h2>
@@ -502,7 +505,7 @@ const SchedulesPanel = function () {
           )}
         </Vertical>
       </Horizontal>
-    </React.Fragment>
+    </React.Fragment>,
   );
 };
 

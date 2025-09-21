@@ -5,6 +5,7 @@ import {
   PencilSimple,
   QuestionMark,
   DownloadSimple,
+  ShoppingBagOpen,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -31,6 +32,7 @@ import useSystem from "../../../hooks/useSystem";
 import useSounds from "../../../hooks/useSounds";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import Badge from "../../../components/badges/Badge";
@@ -50,6 +52,7 @@ const SuppliersList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
+  const { checkByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { users, token, instance, workspaces, workspaceId } = useSystem();
@@ -152,6 +155,123 @@ const SuppliersList = function () {
 
   // fetch suppliers
   useAsync(FetchSuppliers, [interval, page, workspaceId, searchDebounced]);
+
+  const getOptions = [
+    {
+      id: "copy",
+      Icon: CopySimple,
+      label: t.components.copy_id,
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          const result = await Clipboard.copy(data.id as string);
+          if (result) {
+            play("ok");
+            toast.success(t.toast.success, {
+              description: t.toast.success_copy,
+            });
+            return;
+          }
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_copy,
+        });
+        return;
+      },
+    },
+    {
+      id: "purchases",
+      Icon: ShoppingBagOpen,
+      label: t.purchase.purchases,
+      disabled: !checkByPlan("advanced"),
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          navigate(`/f/suppliers/purchase/${data.id}`);
+          return;
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_copy,
+        });
+        return;
+      },
+    },
+    {
+      id: "download",
+      Icon: DownloadSimple,
+      label: t.components.download,
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          Download.JSON(data, `supplier-${data.id}.json`);
+          play("ok");
+          toast.success(t.toast.success, {
+            description: t.toast.success_download,
+          });
+        }
+        return;
+      },
+    },
+    {
+      id: "edit",
+      Icon: PencilSimple,
+      label: t.components.edit,
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data)
+          navigate(`/f/suppliers/inspect/${data.id}`);
+        return;
+      },
+    },
+    {
+      id: "delete",
+      Icon: Trash,
+      label: t.components.delete,
+      IconColor: "var(--dangerColor",
+      styles: { color: "var(--dangerColor)" },
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (!data || typeof data !== "object" || !("id" in data)) return;
+        OpenDialog({
+          category: "Danger",
+          title: t.dialog.title_delete,
+          description: t.dialog.description_delete,
+          confirmText: t.components.delete,
+          onConfirm: async function () {
+            try {
+              const response = await apis.Supplier.delete(
+                token,
+                instance.name,
+                data.id as string,
+                workspaceId,
+              );
+              if (!response.data?.result) {
+                play("alert");
+                toast.warning(t.toast.warning_error, {
+                  description: t.toast.error_delete,
+                });
+                return;
+              }
+              play("ok");
+              toast.success(t.toast.success, {
+                description: t.toast.success_delete,
+              });
+              CloseDialog();
+              await FetchSuppliers();
+              return;
+            } catch (err) {
+              play("alert");
+              toast.error(t.toast.warning_error, {
+                description: t.toast.error_delete,
+              });
+              console.error(
+                "[src/pages/administrative/suppliers/SuppliersList.tsx]",
+                err,
+              );
+              return;
+            }
+          },
+        });
+      },
+    },
+  ];
 
   return (
     <React.Fragment>
@@ -437,106 +557,7 @@ const SuppliersList = function () {
           }}
           selected={selected}
           setSelected={setSelected}
-          options={[
-            {
-              id: "copy",
-              Icon: CopySimple,
-              label: t.components.copy_id,
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  const result = await Clipboard.copy(data.id as string);
-                  if (result) {
-                    play("ok");
-                    toast.success(t.toast.success, {
-                      description: t.toast.success_copy,
-                    });
-                    return;
-                  }
-                }
-                play("alert");
-                toast.warning(t.toast.warning_error, {
-                  description: t.toast.warning_copy,
-                });
-                return;
-              },
-            },
-            {
-              id: "download",
-              Icon: DownloadSimple,
-              label: t.components.download,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  Download.JSON(data, `supplier-${data.id}.json`);
-                  play("ok");
-                  toast.success(t.toast.success, {
-                    description: t.toast.success_download,
-                  });
-                }
-                return;
-              },
-            },
-            {
-              id: "edit",
-              Icon: PencilSimple,
-              label: t.components.edit,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data)
-                  navigate(`/f/suppliers/inspect/${data.id}`);
-                return;
-              },
-            },
-            {
-              id: "delete",
-              Icon: Trash,
-              label: t.components.delete,
-              IconColor: "var(--dangerColor",
-              styles: { color: "var(--dangerColor)" },
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (!data || typeof data !== "object" || !("id" in data))
-                  return;
-                OpenDialog({
-                  category: "Danger",
-                  title: t.dialog.title_delete,
-                  description: t.dialog.description_delete,
-                  confirmText: t.components.delete,
-                  onConfirm: async function () {
-                    try {
-                      const response = await apis.Supplier.delete(
-                        token,
-                        instance.name,
-                        data.id as string,
-                        workspaceId,
-                      );
-                      if (!response.data?.result) {
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.toast.error_delete,
-                        });
-                        return;
-                      }
-                      play("ok");
-                      toast.success(t.toast.success, {
-                        description: t.toast.success_delete,
-                      });
-                      CloseDialog();
-                      await FetchSuppliers();
-                      return;
-                    } catch (err) {
-                      play("alert");
-                      toast.error(t.toast.warning_error, {
-                        description: t.toast.error_delete,
-                      });
-                      console.error(
-                        "[src/pages/administrative/suppliers/SuppliersList.tsx]",
-                        err,
-                      );
-                      return;
-                    }
-                  },
-                });
-              },
-            },
-          ]}
+          options={getOptions}
         />
         <Pagination
           display

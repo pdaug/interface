@@ -23,6 +23,7 @@ import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
 import useSchema from "../../../hooks/useSchema";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import {
@@ -46,6 +47,7 @@ const DocumentsEditor = function () {
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
+  const { renderByPlan } = usePermission();
   const { OpenDialog, CloseDialog } = useDialog();
   const { token, user, instance, workspaces, workspaceId } = useSystem();
 
@@ -222,7 +224,8 @@ const DocumentsEditor = function () {
     }
   };
 
-  return (
+  return renderByPlan(
+    "advanced",
     <React.Fragment>
       <Horizontal>
         <h2>
@@ -532,7 +535,7 @@ const DocumentsEditor = function () {
           </Wrapper>
         </Vertical>
       )}
-    </React.Fragment>
+    </React.Fragment>,
   );
 };
 

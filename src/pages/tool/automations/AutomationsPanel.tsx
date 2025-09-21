@@ -16,19 +16,21 @@ import {
 } from "@xyflow/react";
 
 // components
-import Badge from "../../../components/badges/Badge";
-import { Vertical } from "../../../components/aligns/Align";
 import {
   Input,
-  InputSelect,
   InputText,
+  InputSelect,
 } from "../../../components/inputs/Input";
+import Badge from "../../../components/badges/Badge";
+import { Vertical } from "../../../components/aligns/Align";
 
 // hooks
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 const AutomationsPanel = function () {
   const t = useTranslate();
+  const { renderByPlan } = usePermission();
 
   const [nodes, setNodes] = useState<Node[]>([
     {
@@ -95,7 +97,8 @@ const AutomationsPanel = function () {
     return;
   };
 
-  return (
+  return renderByPlan(
+    "advanced",
     <ReactFlow
       fitView
       nodes={nodes}
@@ -566,7 +569,7 @@ const AutomationsPanel = function () {
       zoomOnScroll={false}
       zoomOnPinch={false}
       panOnScroll={false}
-    />
+    />,
   );
 };
 

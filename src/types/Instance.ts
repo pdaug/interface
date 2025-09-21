@@ -1,5 +1,7 @@
 import { TypeSettings } from "./Settings";
 
+export type TypeInstancePlan = "personal" | "advanced" | "enterprise";
+
 export type TypeInstance = TypeSettings & {
   id: string;
   name: string;
@@ -8,7 +10,7 @@ export type TypeInstance = TypeSettings & {
   agreementDate: string | null;
   paymentDay: number;
   paymentValue: number;
-  paymentPlan: "standard" | "plus" | "enterprise";
+  paymentPlan: TypeInstancePlan;
   responsibleName: string;
   responsibleDocument1: string;
   responsibleDocument2: string;

@@ -31,6 +31,7 @@ import useSounds from "../../../hooks/useSounds";
 import useCurrency from "../../../hooks/useCurrency";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import Badge from "../../../components/badges/Badge";
@@ -51,6 +52,7 @@ const ServicesList = function () {
   const play = useSounds();
   const navigate = useNavigate();
   const Currency = useCurrency();
+  const { renderByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { users, token, instance, workspaces, workspaceId } = useSystem();
@@ -115,7 +117,8 @@ const ServicesList = function () {
   // fetch services
   useAsync(FetchServices, [interval, workspaceId, page, searchDebounced]);
 
-  return (
+  return renderByPlan(
+    "advanced",
     <React.Fragment>
       <Horizontal>
         <h2>
@@ -483,7 +486,7 @@ const ServicesList = function () {
           pageSize={pageSize}
         />
       </Vertical>
-    </React.Fragment>
+    </React.Fragment>,
   );
 };
 

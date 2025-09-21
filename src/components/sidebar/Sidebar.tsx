@@ -10,6 +10,7 @@ export type SidebarMenuItem = {
   Icon?: IconPhosphor;
   id: string;
   label: string;
+  hidden?: boolean;
   onClick?: () => void;
 };
 
@@ -19,6 +20,7 @@ export type SidebarOptions = (
       name: string;
       Icon?: IconPhosphor;
       items: SidebarMenuItem[];
+      hidden?: boolean;
     }
   | SidebarMenuItem
 )[];
@@ -46,6 +48,7 @@ const Sidebar = function ({
         {header && <Profile {...header} />}
         <div className="sidebarMenu" style={stylesMenu}>
           {options?.map(function (groupOrItem) {
+            if (groupOrItem.hidden) return;
             return "items" in groupOrItem ? (
               <div className="sidebarMenuGroup" key={groupOrItem.id}>
                 <div className="sidebarMenuName">
@@ -54,6 +57,7 @@ const Sidebar = function ({
                 </div>
                 <div className="sidebarMenuContent">
                   {groupOrItem?.items?.map(function (item) {
+                    if (item.hidden) return;
                     return (
                       <div
                         key={item.id}

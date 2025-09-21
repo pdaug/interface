@@ -34,6 +34,7 @@ import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import Badge from "../../../components/badges/Badge";
@@ -53,6 +54,7 @@ const VehiclesList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
+  const { renderByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { users, token, instance, workspaces, workspaceId } = useSystem();
@@ -217,7 +219,8 @@ const VehiclesList = function () {
     },
   ];
 
-  return (
+  return renderByPlan(
+    "advanced",
     <React.Fragment>
       <Horizontal>
         <h2>
@@ -517,7 +520,7 @@ const VehiclesList = function () {
           pageSize={pageSize}
         />
       </Vertical>
-    </React.Fragment>
+    </React.Fragment>,
   );
 };
 

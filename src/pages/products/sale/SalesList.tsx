@@ -39,6 +39,7 @@ import useSystem from "../../../hooks/useSystem";
 import useCurrency from "../../../hooks/useCurrency";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import {
@@ -64,6 +65,7 @@ const SalesList = function () {
   const play = useSounds();
   const navigate = useNavigate();
   const Currency = useCurrency();
+  const { renderByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { users, token, instance, workspaces, workspaceId } = useSystem();
@@ -411,7 +413,8 @@ const SalesList = function () {
     },
   ];
 
-  return (
+  return renderByPlan(
+    "advanced",
     <React.Fragment>
       <Horizontal>
         <h2>
@@ -786,7 +789,7 @@ const SalesList = function () {
           pageSize={pageSize}
         />
       </Vertical>
-    </React.Fragment>
+    </React.Fragment>,
   );
 };
 

@@ -28,6 +28,7 @@ import useSounds from "../../../hooks/useSounds";
 import useSchema from "../../../hooks/useSchema";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import {
@@ -53,6 +54,7 @@ const VehiclesInspect = function () {
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
+  const { renderByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
@@ -197,7 +199,8 @@ const VehiclesInspect = function () {
     }
   };
 
-  return (
+  return renderByPlan(
+    "advanced",
     <React.Fragment>
       <Horizontal>
         <h2>
@@ -586,7 +589,7 @@ const VehiclesInspect = function () {
           </Wrapper>
         </Vertical>
       </form>
-    </React.Fragment>
+    </React.Fragment>,
   );
 };
 

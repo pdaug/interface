@@ -44,6 +44,7 @@ import useSchema from "../../../hooks/useSchema";
 import useCurrency from "../../../hooks/useCurrency";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import {
@@ -69,6 +70,7 @@ const SalesInspect = function () {
   const Schema = useSchema();
   const Currency = useCurrency();
   const navigate = useNavigate();
+  const { renderByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
@@ -489,7 +491,8 @@ const SalesInspect = function () {
     }
   };
 
-  return (
+  return renderByPlan(
+    "advanced",
     <React.Fragment>
       <Horizontal>
         <h2>
@@ -1485,7 +1488,7 @@ const SalesInspect = function () {
           <div style={{ height: 128 }}></div>
         </Vertical>
       </form>
-    </React.Fragment>
+    </React.Fragment>,
   );
 };
 

@@ -24,11 +24,12 @@ import { useNavigate } from "react-router-dom";
 import useSystem from "../hooks/useSystem";
 import useSounds from "../hooks/useSounds";
 import useTranslate from "../hooks/useTranslate";
+import usePermission from "../hooks/usePermission";
 
 // components
-import { Horizontal, Vertical } from "../components/aligns/Align";
 import { useDialog } from "../components/dialogs/Dialog";
 import { DropdownValue } from "../components/dropdowns/Dropdown";
+import { Horizontal, Vertical } from "../components/aligns/Align";
 import Sidebar, { SidebarOptions } from "../components/sidebar/Sidebar";
 
 const Menu = function () {
@@ -45,6 +46,7 @@ const Menu = function () {
   const t = useTranslate();
   const navigate = useNavigate();
   const { OpenDialog } = useDialog();
+  const { checkByPlan } = usePermission();
 
   const workspaceOptions = workspaces
     ?.map(function (workspace) {
@@ -149,6 +151,7 @@ const Menu = function () {
       id: "product",
       name: t.menu.products,
       Icon: ShoppingBagOpen,
+      hidden: !checkByPlan("advanced"),
       items: [
         {
           id: "products",
@@ -171,6 +174,7 @@ const Menu = function () {
       id: "service",
       name: t.menu.services,
       Icon: Truck,
+      hidden: !checkByPlan("advanced"),
       items: [
         {
           id: "services",
@@ -193,6 +197,7 @@ const Menu = function () {
       id: "tools",
       name: t.menu.tools,
       Icon: Wrench,
+      hidden: !checkByPlan("advanced"),
       items: [
         {
           id: "automations",

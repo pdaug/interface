@@ -458,6 +458,9 @@ const TranslatePt = {
     error_description: "Houve um erro ao acessar esta página",
     not_found: "Não encontrado",
     not_found_description: "Não foi encontrado a página que você acessou",
+    no_permission: "Sem permissão",
+    no_permission_description:
+      "Você não tem permissão para acessar esta página",
   },
   password: {
     email: "Email",
@@ -1533,6 +1536,8 @@ const TranslateEn = {
     error_description: "An error occurred while accessing this page",
     not_found: "Not Found",
     not_found_description: "The page you accessed was not found",
+    no_permission: "No permission",
+    no_permission_description: "You do not have permission to access this page",
   },
   password: {
     email: "Email",

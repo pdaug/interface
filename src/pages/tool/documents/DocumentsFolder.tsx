@@ -32,6 +32,7 @@ import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import Card from "../../../components/cards/Card";
@@ -41,12 +42,12 @@ import Button from "../../../components/buttons/Button";
 import { Input } from "../../../components/inputs/Input";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Tooltip from "../../../components/tooltips/Tooltip";
+import Profile from "../../../components/profiles/Profile";
 import Dropdown from "../../../components/dropdowns/Dropdown";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Profile from "../../../components/profiles/Profile";
 
 const pageSize = 10;
 
@@ -54,6 +55,7 @@ const DocumentsFolder = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
+  const { renderByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { users, token, instance, workspaces, workspaceId } = useSystem();
@@ -311,7 +313,8 @@ const DocumentsFolder = function () {
     },
   ];
 
-  return (
+  return renderByPlan(
+    "advanced",
     <Horizontal internal={1} styles={{ flex: 1 }}>
       <Vertical internal={1} styles={{ flex: 1 }}>
         <Horizontal>
@@ -696,7 +699,7 @@ const DocumentsFolder = function () {
           </Vertical>
         )}
       </div>
-    </Horizontal>
+    </Horizontal>,
   );
 };
 

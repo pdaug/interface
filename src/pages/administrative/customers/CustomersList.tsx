@@ -1,12 +1,12 @@
 import {
+  Tag,
   Plus,
   Trash,
-  Truck,
+  Blueprint,
   CopySimple,
   PencilSimple,
   QuestionMark,
   DownloadSimple,
-  ShoppingBagOpen,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -33,6 +33,7 @@ import useSystem from "../../../hooks/useSystem";
 import useSounds from "../../../hooks/useSounds";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import Badge from "../../../components/badges/Badge";
@@ -52,6 +53,7 @@ const CustomersList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
+  const { checkByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { users, token, instance, workspaces, workspaceId } = useSystem();
@@ -180,8 +182,9 @@ const CustomersList = function () {
     },
     {
       id: "sales",
-      Icon: ShoppingBagOpen,
+      Icon: Tag,
       label: t.sale.sales,
+      disabled: !checkByPlan("advanced"),
       onClick: async function (_: React.MouseEvent, data: unknown) {
         if (data && typeof data === "object" && "id" in data) {
           navigate(`/f/customers/sales/${data.id}`);
@@ -196,8 +199,9 @@ const CustomersList = function () {
     },
     {
       id: "orders",
-      Icon: Truck,
+      Icon: Blueprint,
       label: t.order.orders,
+      disabled: !checkByPlan("advanced"),
       onClick: async function (_: React.MouseEvent, data: unknown) {
         if (data && typeof data === "object" && "id" in data) {
           navigate(`/f/customers/orders/${data.id}`);
