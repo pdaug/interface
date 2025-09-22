@@ -7,6 +7,7 @@ import "./Dropdown.css";
 export type DropdownValue = {
   id: string;
   label: string;
+  hidden?: boolean | ((data: unknown) => boolean);
   styles?: React.CSSProperties;
   disabled?: boolean;
   Icon?: PhosphorIcons;
@@ -110,6 +111,7 @@ const Dropdown = function ({ children, values, data }: DropdownProps) {
           IconColor,
           IconWeight,
           disabled,
+          hidden,
           onClick,
         }) {
           const onClickWithClose = function (
@@ -119,6 +121,7 @@ const Dropdown = function ({ children, values, data }: DropdownProps) {
             setDropdownOpen(false);
             return;
           };
+          if (typeof hidden === "function" ? hidden(data) : hidden) return null;
           return (
             <button
               key={id}

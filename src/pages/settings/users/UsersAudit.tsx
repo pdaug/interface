@@ -296,7 +296,7 @@ const UsersAudit = function () {
           <Table
             border
             headless
-            nonselect
+            noSelect
             loading={loading}
             data={audits as unknown as TableData[]}
             columns={{

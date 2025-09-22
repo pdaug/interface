@@ -124,7 +124,10 @@ const Login = function () {
       // fetch workspace
       const responseWorkspace = await apis.Workspace.list<
         ApiResponsePaginate<TypeWorkspace>
-      >(responseLogin.data.result.token, form.instance);
+      >(responseLogin.data.result.token, form.instance, {
+        orderSort: "asc",
+        orderField: "createdAt",
+      });
       if (!responseWorkspace?.data?.result?.items?.length) {
         play("alert");
         toast.dismiss(toastId);

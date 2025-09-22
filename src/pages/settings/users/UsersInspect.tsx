@@ -30,6 +30,7 @@ import useSounds from "../../../hooks/useSounds";
 import useSchema from "../../../hooks/useSchema";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import {
@@ -38,30 +39,34 @@ import {
   InputMask,
   InputSelect,
 } from "../../../components/inputs/Input";
+import NoPermission from "../../NoPermission";
 import Button from "../../../components/buttons/Button";
 import Avatar from "../../../components/avatars/Avatar";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
+import Profile from "../../../components/profiles/Profile";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
+// TODO: birthdate
+// TODO: gender
+// TODO: marital status
+// TODO: nationality
+// TODO: optional address
+// TODO: user id
+// TODO: change translate
 const UsersInspect = function () {
   const t = useTranslate();
   const play = useSounds();
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
+  const { checkByRole } = usePermission();
   const { instanceDateTime } = useDateTime();
-  const {
-    user,
-    users,
-    token,
-    instance,
-    workspaces,
-    workspaceId,
-    setUsers,
-    saveUser,
-  } = useSystem();
+  const { user, users, token, instance, setUsers, saveUser } = useSystem();
+
+  if (id !== user.id && !checkByRole("admin"))
+    return <NoPermission path="/f/users" />;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [photoTemp, setPhotoTemp] = useState<File | null>(null);
@@ -86,6 +91,12 @@ const UsersInspect = function () {
     addressCity: "",
     addressState: "",
   });
+
+  const userFinded = form.id
+    ? users.find(function (userLocal) {
+        return form.id === userLocal.id;
+      })
+    : null;
 
   // fetch users
   useAsync(async function () {
@@ -285,14 +296,6 @@ const UsersInspect = function () {
           <Breadcrumb
             links={[
               {
-                id: "workspace",
-                label:
-                  workspaces.find(function (workspace) {
-                    return workspace.id === workspaceId;
-                  })?.name || "",
-                url: "/f/",
-              },
-              {
                 id: "users",
                 label: t.user.users,
                 url: "/f/users",
@@ -310,10 +313,7 @@ const UsersInspect = function () {
       <form onSubmit={onSubmit}>
         <Vertical internal={1}>
           <Horizontal internal={1}>
-            <Wrapper
-              styles={{ maxWidth: "40%" }}
-              contentStyles={{ display: "flex" }}
-            >
+            <Wrapper contentStyles={{ display: "flex" }}>
               <Horizontal internal={1} className="flex1 itemsCenter">
                 <Avatar
                   label=""
@@ -348,26 +348,6 @@ const UsersInspect = function () {
                   }}
                 />
               </Horizontal>
-            </Wrapper>
-
-            <Wrapper
-              title={t.user.schedules_title}
-              description={t.user.schedules_description}
-            >
-              <Vertical
-                internal={0.4}
-                className="itemsCenter"
-                styles={{ height: 96 }}
-              >
-                <span
-                  style={{
-                    color: "var(--textLight)",
-                    fontSize: "var(--textSmall)",
-                  }}
-                >
-                  {t.stacks.no_items}
-                </span>
-              </Vertical>
             </Wrapper>
           </Horizontal>
 
@@ -587,6 +567,17 @@ const UsersInspect = function () {
 
               {Boolean(id) && (
                 <Horizontal internal={1}>
+                  <div
+                    className="flex flex1"
+                    style={{ alignItems: "flex-end" }}
+                  >
+                    <Profile
+                      padding={false}
+                      photo={userFinded?.photo || ""}
+                      description={userFinded?.email || ""}
+                      name={userFinded?.name || t.components.unknown}
+                    />
+                  </div>
                   <Input
                     readOnly
                     placeholder=""
@@ -853,7 +844,7 @@ const UsersInspect = function () {
                     />
                   )}
 
-                  {(user.id === id || user.role === "master") && (
+                  {(user.id === id || checkByRole("admin")) && (
                     <Button
                       type="button"
                       category="Neutral"

@@ -39,7 +39,7 @@ export type TableProps = {
   options?: DropdownValue[];
   styles?: React.CSSProperties;
   loading?: boolean;
-  nonselect?: boolean;
+  noSelect?: boolean;
 };
 
 const Table = function ({
@@ -52,7 +52,7 @@ const Table = function ({
   styles,
   loading,
   headless,
-  nonselect,
+  noSelect,
 }: TableProps) {
   const t = useTranslate();
 
@@ -67,7 +67,7 @@ const Table = function ({
       {!headless && (
         <div className="tableHead">
           <div className="tableHeadRow">
-            {!nonselect && (
+            {!noSelect && (
               <div
                 style={{ maxWidth: "min-content" }}
                 className="tableHeadData"
@@ -140,7 +140,7 @@ const Table = function ({
                 key={`${row.id}-${indexRow}`}
                 className={`tableBodyRow ${selected?.includes(row.id) ? "tableBodyRowSelected" : ""}`}
               >
-                {!nonselect && (
+                {!noSelect && (
                   <div
                     className="tableBodyData"
                     style={{ maxWidth: "min-content" }}

@@ -7,7 +7,11 @@ import useTranslate from "../hooks/useTranslate";
 import Wrapper from "../components/wrapper/Wrapper";
 import { Center } from "../components/aligns/Align";
 
-const NoPermission = function () {
+type NoPermissionProps = {
+  path?: string;
+};
+
+const NoPermission = function ({ path }: NoPermissionProps) {
   const t = useTranslate();
   const navigate = useNavigate();
 
@@ -23,7 +27,7 @@ const NoPermission = function () {
               category: "Neutral",
               text: t.components.back,
               onClick: function () {
-                navigate("/f");
+                navigate(path || "/f");
                 return;
               },
             },

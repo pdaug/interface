@@ -17,6 +17,7 @@ import apis from "../../../apis";
 
 // utils
 import Clipboard from "../../../utils/Clipboard";
+import Formatter from "../../../utils/Formatter";
 import PhoneNumber from "../../../utils/PhoneNumber";
 
 // types
@@ -50,16 +51,15 @@ const UsersList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
-  const { checkByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { user, token, instance } = useSystem();
   const { OpenDialog, CloseDialog } = useDialog();
+  const { checkByPlan, checkByRole } = usePermission();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
-  const [selected, setSelected] = useState<string[]>([]);
   const [users, setUsers] = useState<TypeUser[]>([]);
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: null,
@@ -68,7 +68,6 @@ const UsersList = function () {
 
   const [searchDebounced] = useDebounce(search, 500);
 
-  // TODO: format document
   const FetchUsers = async function () {
     setLoading(true);
     try {
@@ -110,6 +109,109 @@ const UsersList = function () {
   // fetch users
   useAsync(FetchUsers, [interval, page, searchDebounced]);
 
+  const getOptions = [
+    {
+      id: "copy",
+      Icon: CopySimple,
+      label: t.components.copy_id,
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          const result = await Clipboard.copy(data.id as string);
+          if (result) {
+            play("ok");
+            toast.success(t.toast.success, {
+              description: t.toast.success_copy,
+            });
+            return;
+          }
+        }
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.toast.warning_copy,
+        });
+        return;
+      },
+    },
+    {
+      id: "audit",
+      Icon: Newspaper,
+      label: t.user.to_audit,
+      hidden: !checkByRole("admin"),
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data)
+          navigate(`/f/users/audit/${data.id}`);
+        return;
+      },
+    },
+    {
+      id: "edit",
+      Icon: PencilSimple,
+      label: t.components.edit,
+      hidden: function (data: unknown) {
+        return (
+          Boolean(
+            data &&
+              typeof data === "object" &&
+              "id" in data &&
+              data.id !== user.id,
+          ) && !checkByRole("admin")
+        );
+      },
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data)
+          navigate(`/f/users/inspect/${data.id}`);
+        return;
+      },
+    },
+    {
+      id: "delete",
+      Icon: Trash,
+      label: t.components.delete,
+      IconColor: "var(--dangerColor",
+      styles: { color: "var(--dangerColor)" },
+      hidden: !checkByRole("admin"),
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (!data || typeof data !== "object" || !("id" in data)) return;
+        OpenDialog({
+          category: "Danger",
+          title: t.dialog.title_delete,
+          description: t.dialog.description_delete,
+          confirmText: t.components.delete,
+          onConfirm: async function () {
+            try {
+              const response = await apis.User.delete(
+                token,
+                instance.name,
+                data.id as string,
+              );
+              if (!response.data?.result) {
+                play("alert");
+                toast.warning(t.toast.warning_error, {
+                  description: t.toast.error_delete,
+                });
+                return;
+              }
+              play("ok");
+              toast.success(t.toast.success, {
+                description: t.toast.success_delete,
+              });
+              CloseDialog();
+              await FetchUsers();
+              return;
+            } catch (err) {
+              play("alert");
+              toast.error(t.toast.warning_error, {
+                description: t.toast.error_delete,
+              });
+              console.error("[src/pages/settings/users/UsersList.tsx]", err);
+              return;
+            }
+          },
+        });
+      },
+    },
+  ];
+
   return (
     <React.Fragment>
       <Horizontal>
@@ -126,12 +228,14 @@ const UsersList = function () {
       )}
 
       <Horizontal internal={1} styles={{ overflow: "hidden" }}>
-        <Button
-          Icon={Plus}
-          category="Success"
-          text={t.user.new}
-          onClick={() => navigate("/f/users/inspect")}
-        />
+        {checkByRole("admin") && (
+          <Button
+            Icon={Plus}
+            category="Success"
+            text={t.user.new}
+            onClick={() => navigate("/f/users/inspect")}
+          />
+        )}
         <div style={{ minWidth: 200, maxWidth: 256 }}>
           <InputInterval
             label=""
@@ -185,8 +289,17 @@ const UsersList = function () {
       <Vertical internal={1} styles={{ flex: 1 }}>
         <Table
           border
+          noSelect
+          selected={[user.id]}
           loading={loading}
-          data={users as TableData[]}
+          options={getOptions}
+          data={
+            users.sort((a, b) => {
+              if (a.id === user.id) return -1;
+              if (b.id === user.id) return 1;
+              return 0;
+            }) as TableData[]
+          }
           columns={{
             status: {
               label: t.components.status,
@@ -195,71 +308,88 @@ const UsersList = function () {
                 return (
                   <Badge
                     category={data.status ? "Success" : "Danger"}
-                    value={String(data.status)}
-                    options={[
-                      {
-                        id: "true",
-                        value: "true",
-                        label: t.components.active,
-                      },
-                      {
-                        id: "false",
-                        value: "false",
-                        label: t.components.inactive,
-                      },
-                    ]}
-                    onChange={async function (event) {
-                      try {
-                        if (data.id === user.id) {
-                          play("alert");
-                          toast.warning(t.toast.warning_error, {
-                            description: t.user.not_change_status,
-                          });
-                          return;
-                        }
-                        const response = await apis.User.update(
-                          token,
-                          instance.name,
-                          data.id,
-                          {
-                            status: event.currentTarget?.value === "true",
-                          },
-                        );
-                        if (!response.data?.result || response.status !== 200) {
-                          play("alert");
-                          toast.warning(t.toast.warning_error, {
-                            description: t.toast.warning_edit,
-                          });
-                          return;
-                        }
-                        play("ok");
-                        toast.success(t.toast.success, {
-                          description: t.toast.success_edit,
-                        });
-                        await FetchUsers();
-                      } catch (err) {
-                        play("alert");
-                        toast.error(t.toast.warning_error, {
-                          description: t.toast.error_edit,
-                        });
-                        console.error(
-                          "[src/pages/settings/users/UsersList.tsx]",
-                          err,
-                        );
-                      }
-                      return;
-                    }}
+                    value={
+                      !checkByRole("admin")
+                        ? data.status
+                          ? t.components.active
+                          : t.components.inactive
+                        : String(data.status)
+                    }
+                    options={
+                      !checkByRole("admin")
+                        ? undefined
+                        : [
+                            {
+                              id: "true",
+                              value: "true",
+                              label: t.components.active,
+                            },
+                            {
+                              id: "false",
+                              value: "false",
+                              label: t.components.inactive,
+                            },
+                          ]
+                    }
+                    onChange={
+                      !checkByRole("admin")
+                        ? undefined
+                        : async function (event) {
+                            try {
+                              if (data.id === user.id) {
+                                play("alert");
+                                toast.warning(t.toast.warning_error, {
+                                  description: t.user.not_change_status,
+                                });
+                                return;
+                              }
+                              const response = await apis.User.update(
+                                token,
+                                instance.name,
+                                data.id,
+                                {
+                                  status: event.currentTarget?.value === "true",
+                                },
+                              );
+                              if (
+                                !response.data?.result ||
+                                response.status !== 200
+                              ) {
+                                play("alert");
+                                toast.warning(t.toast.warning_error, {
+                                  description: t.toast.warning_edit,
+                                });
+                                return;
+                              }
+                              play("ok");
+                              toast.success(t.toast.success, {
+                                description: t.toast.success_edit,
+                              });
+                              await FetchUsers();
+                            } catch (err) {
+                              play("alert");
+                              toast.error(t.toast.warning_error, {
+                                description: t.toast.error_edit,
+                              });
+                              console.error(
+                                "[src/pages/settings/users/UsersList.tsx]",
+                                err,
+                              );
+                            }
+                            return;
+                          }
+                    }
                   />
                 );
               },
             },
             role: {
               label: t.user.role,
-              maxWidth: "96px",
+              maxWidth: "128px",
               handler: function (data) {
                 return (
                   <Badge
-                    category="Info"
+                    category="Neutral"
                     value={
                       t.components?.[data.role as keyof typeof t.components] ||
                       t.components.collaborator
@@ -273,8 +403,13 @@ const UsersList = function () {
               handler: function (data) {
                 return (
                   <div
-                    className="cursor"
+                    className={
+                      user.id === data.id || checkByRole("admin")
+                        ? "cursor"
+                        : ""
+                    }
                     onClick={function () {
+                      if (user.id !== data.id && !checkByRole("admin")) return;
                       navigate(`/f/users/inspect/${data.id}`);
                       return;
                     }}
@@ -287,21 +422,6 @@ const UsersList = function () {
                       photo={(data.photo as string) ?? undefined}
                     />
                   </div>
-                );
-              },
-            },
-            document1: { label: t.user.document },
-            mobile: {
-              label: t.user.mobile,
-              handler: function (data) {
-                return (
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={`tel:${data.mobile as string}`}
-                  >
-                    {PhoneNumber.Internacional((data?.mobile as string) || "")}
-                  </a>
                 );
               },
             },
@@ -319,10 +439,24 @@ const UsersList = function () {
                 );
               },
             },
-            address: {
-              label: t.user.address,
+            mobile: {
+              label: t.user.mobile,
               handler: function (data) {
-                return `${data?.addressStreet}, ${data?.addressNumber}, ${data?.addressCity} - ${data?.addressState}`;
+                return (
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`tel:${data.mobile as string}`}
+                  >
+                    {PhoneNumber.Internacional((data?.mobile as string) || "")}
+                  </a>
+                );
+              },
+            },
+            document1: {
+              label: t.user.document,
+              handler: function (data) {
+                return Formatter.document1(data.document1 as string);
               },
             },
             createdAt: {
@@ -333,102 +467,6 @@ const UsersList = function () {
               },
             },
           }}
-          selected={selected}
-          setSelected={setSelected}
-          options={[
-            {
-              id: "copy",
-              Icon: CopySimple,
-              label: t.components.copy_id,
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  const result = await Clipboard.copy(data.id as string);
-                  if (result) {
-                    play("ok");
-                    toast.success(t.toast.success, {
-                      description: t.toast.success_copy,
-                    });
-                    return;
-                  }
-                }
-                play("alert");
-                toast.warning(t.toast.warning_error, {
-                  description: t.toast.warning_copy,
-                });
-                return;
-              },
-            },
-            {
-              id: "audit",
-              Icon: Newspaper,
-              label: t.user.to_audit,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data)
-                  navigate(`/f/users/audit/${data.id}`);
-                return;
-              },
-            },
-            {
-              id: "edit",
-              Icon: PencilSimple,
-              label: t.components.edit,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data)
-                  navigate(`/f/users/inspect/${data.id}`);
-                return;
-              },
-            },
-            {
-              id: "delete",
-              Icon: Trash,
-              label: t.components.delete,
-              IconColor: "var(--dangerColor",
-              styles: { color: "var(--dangerColor)" },
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (!data || typeof data !== "object" || !("id" in data))
-                  return;
-                OpenDialog({
-                  category: "Danger",
-                  title: t.dialog.title_delete,
-                  description: t.dialog.description_delete,
-                  confirmText: t.components.delete,
-                  onConfirm: async function () {
-                    try {
-                      const response = await apis.User.delete(
-                        token,
-                        instance.name,
-                        data.id as string,
-                      );
-                      if (!response.data?.result) {
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.toast.error_delete,
-                        });
-                        return;
-                      }
-                      play("ok");
-                      toast.success(t.toast.success, {
-                        description: t.toast.success_delete,
-                      });
-                      CloseDialog();
-                      await FetchUsers();
-                      return;
-                    } catch (err) {
-                      play("alert");
-                      toast.error(t.toast.warning_error, {
-                        description: t.toast.error_delete,
-                      });
-                      console.error(
-                        "[src/pages/settings/users/UsersList.tsx]",
-                        err,
-                      );
-                      return;
-                    }
-                  },
-                });
-              },
-            },
-          ]}
         />
         <Pagination
           display

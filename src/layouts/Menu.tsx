@@ -47,7 +47,7 @@ const Menu = function () {
   const t = useTranslate();
   const navigate = useNavigate();
   const { OpenDialog } = useDialog();
-  const { checkByPlan } = usePermission();
+  const { checkByPlan, checkByRole } = usePermission();
 
   const workspaceOptions = workspaces
     ?.map(function (workspace) {
@@ -254,18 +254,21 @@ const Menu = function () {
           Icon: Plug,
           label: t.menu.integrations,
           disabled: !checkByPlan("advanced"),
+          hidden: !checkByRole("admin"),
           onClick: () => navigate("/f/integrations"),
         },
         {
           id: "settings",
           Icon: GearSix,
           label: t.menu.settings,
+          hidden: !checkByRole("admin"),
           onClick: () => navigate("/f/settings"),
         },
         {
           id: "plans",
           Icon: FolderSimple,
           label: t.menu.plans,
+          hidden: !checkByRole("admin"),
           onClick: () => navigate("/f/plans"),
         },
         {
