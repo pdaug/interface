@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { Asterisk, ImageBroken, MapTrifold } from "@phosphor-icons/react";
 
 // apis
-import apis from "../../../apis";
+import apis from "../../apis";
 
 // utils
-import { GenerateId } from "../../../utils/GenerateId";
+import { GenerateId } from "../../utils/GenerateId";
 
 // types
 import {
@@ -17,7 +17,7 @@ import {
   TypeSettingsLanguage,
   TypeSettingsCurrency,
   TypeSettingsDateFormat,
-} from "../../../types/Settings";
+} from "../../types/Settings";
 
 // assets
 import {
@@ -27,15 +27,15 @@ import {
   SettingsCurrencies,
   SettingsAddressState,
   SettingsCompanyActivities,
-} from "../../../assets/Settings";
-import { MaskPhone, MaskPostalCode } from "../../../assets/Mask";
+} from "../../assets/Settings";
+import { MaskPhone, MaskPostalCode } from "../../assets/Mask";
 
 // hooks
-import useAsync from "../../../hooks/useAsync";
-import useSystem from "../../../hooks/useSystem";
-import useSchema from "../../../hooks/useSchema";
-import useSounds from "../../../hooks/useSounds";
-import useTranslate from "../../../hooks/useTranslate";
+import useAsync from "../../hooks/useAsync";
+import useSystem from "../../hooks/useSystem";
+import useSchema from "../../hooks/useSchema";
+import useSounds from "../../hooks/useSounds";
+import useTranslate from "../../hooks/useTranslate";
 
 // components
 import {
@@ -44,12 +44,12 @@ import {
   InputMask,
   InputColor,
   InputSelect,
-} from "../../../components/inputs/Input";
-import Button from "../../../components/buttons/Button";
-import Avatar from "../../../components/avatars/Avatar";
-import Wrapper from "../../../components/wrapper/Wrapper";
-import Callout from "../../../components/callouts/Callout";
-import { Horizontal, Vertical } from "../../../components/aligns/Align";
+} from "../../components/inputs/Input";
+import Button from "../../components/buttons/Button";
+import Avatar from "../../components/avatars/Avatar";
+import Wrapper from "../../components/wrapper/Wrapper";
+import Callout from "../../components/callouts/Callout";
+import { Horizontal, Vertical } from "../../components/aligns/Align";
 
 const SettingsPanel = function () {
   const t = useTranslate();

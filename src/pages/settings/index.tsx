@@ -3,12 +3,17 @@ import users from "./users";
 import accounts from "./accounts";
 import workspaces from "./workspaces";
 import integrations from "./integrations";
-import SettingsPanel from "./panel/SettingsPanel";
+import SettingsPanel from "./SettingsPanel";
+import PlansPanel from "./plans/PlansPanel";
 
 export default [
   {
     path: "settings",
     Component: SettingsPanel,
+  },
+  {
+    path: "plans",
+    Component: PlansPanel,
   },
   {
     path: "users",

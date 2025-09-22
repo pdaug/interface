@@ -36,7 +36,7 @@ const usePermission = function () {
     const permissions = {
       personal: ["personal"],
       advanced: ["personal", "advanced"],
-      enterprise: ["personal", "advanced", "enterprise"],
+      professional: ["personal", "advanced", "professional"],
     };
     return permissions[currentPlan].includes(needs);
   };

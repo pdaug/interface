@@ -1,6 +1,6 @@
 import { TypeSettings } from "./Settings";
 
-export type TypeInstancePlan = "personal" | "advanced" | "enterprise";
+export type TypeInstancePlan = "personal" | "advanced" | "professional";
 
 export type TypeInstance = TypeSettings & {
   id: string;
