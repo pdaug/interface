@@ -72,12 +72,7 @@ const AccountInspect = function () {
     if (!id) return;
     setLoading(true);
     try {
-      const response = await apis.Account.get(
-        token,
-        instance.name,
-        id,
-        workspaceId,
-      );
+      const response = await apis.Account.get(token, instance.name, id);
       if (!response.data?.result || response.status !== 200) {
         play("alert");
         toast.warning(t.toast.warning_error, {
@@ -112,7 +107,6 @@ const AccountInspect = function () {
           instance.name,
           id,
           form,
-          workspaceId,
         );
         if (!response.data?.result || response.status !== 200) {
           play("alert");
@@ -129,12 +123,7 @@ const AccountInspect = function () {
         return;
       }
       // is creating
-      const response = await apis.Account.create(
-        token,
-        instance.name,
-        form,
-        workspaceId,
-      );
+      const response = await apis.Account.create(token, instance.name, form);
       if (!response.data?.result || response.status !== 201) {
         play("alert");
         toast.warning(t.toast.warning_error, {

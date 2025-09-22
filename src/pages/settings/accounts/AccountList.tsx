@@ -39,7 +39,6 @@ import { Input } from "../../../components/inputs/Input";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import Profile from "../../../components/profiles/Profile";
 import { useDialog } from "../../../components/dialogs/Dialog";
-import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
@@ -52,7 +51,7 @@ const AccountList = function () {
   const navigate = useNavigate();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { users, token, instance, workspaces, workspaceId } = useSystem();
+  const { users, token, instance, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -68,17 +67,12 @@ const AccountList = function () {
     try {
       const response = await apis.Account.list<
         ApiResponsePaginate<TypeAccount>
-      >(
-        token,
-        instance.name,
-        {
-          pageSize,
-          pageCurrent: searchDebounced ? 1 : page,
-          searchField: "name",
-          search: searchDebounced,
-        },
-        workspaceId,
-      );
+      >(token, instance.name, {
+        pageSize,
+        pageCurrent: searchDebounced ? 1 : page,
+        searchField: "name",
+        search: searchDebounced,
+      });
       if (!response.data?.result?.items) {
         play("alert");
         toast.warning(t.toast.warning_error, {
@@ -111,25 +105,7 @@ const AccountList = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h2>
-          <Breadcrumb
-            links={[
-              {
-                id: "workspace",
-                label:
-                  workspaces.find(function (workspace) {
-                    return workspace.id === workspaceId;
-                  })?.name || "",
-                url: "/f/",
-              },
-              {
-                id: "accounts",
-                label: t.account.accounts,
-                url: "/f/accounts",
-              },
-            ]}
-          />
-        </h2>
+        <h2>{t.account.accounts}</h2>
       </Horizontal>
 
       <Horizontal internal={1}>
@@ -250,7 +226,6 @@ const AccountList = function () {
                         token,
                         instance.name,
                         data.id as string,
-                        workspaceId,
                       );
                       if (!response.data?.result) {
                         play("alert");
@@ -312,7 +287,6 @@ const AccountList = function () {
                           {
                             status: event.currentTarget?.value === "true",
                           },
-                          workspaceId,
                         );
                         if (!response.data?.result || response.status !== 200) {
                           play("alert");

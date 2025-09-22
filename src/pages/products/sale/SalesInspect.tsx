@@ -266,17 +266,12 @@ const SalesInspect = function () {
     try {
       const response = await apis.Account.list<
         ApiResponsePaginate<TypeAccount>
-      >(
-        token,
-        instance.name,
-        {
-          pageSize: 999,
-          pageCurrent: 1,
-          orderField: "name",
-          orderSort: "asc",
-        },
-        workspaceId,
-      );
+      >(token, instance.name, {
+        pageSize: 999,
+        pageCurrent: 1,
+        orderField: "name",
+        orderSort: "asc",
+      });
       if (!response.data?.result || response.status !== 200) {
         play("alert");
         toast.warning(t.toast.warning_error, {

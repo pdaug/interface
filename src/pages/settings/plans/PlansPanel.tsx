@@ -8,7 +8,6 @@ import useTranslate from "../../../hooks/useTranslate";
 // components
 import Badge from "../../../components/badges/Badge";
 import Wrapper from "../../../components/wrapper/Wrapper";
-import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import Button, { ButtonCategories } from "../../../components/buttons/Button";
 
@@ -123,30 +122,12 @@ const Plan = function ({
 
 const PlansPanel = function () {
   const t = useTranslate();
-  const { instance, workspaces, workspaceId } = useSystem();
+  const { instance } = useSystem();
 
   return (
     <React.Fragment>
       <Horizontal>
-        <h2>
-          <Breadcrumb
-            links={[
-              {
-                id: "workspace",
-                label:
-                  workspaces.find(function (workspace) {
-                    return workspace.id === workspaceId;
-                  })?.name || "",
-                url: "/f/",
-              },
-              {
-                id: "plans",
-                label: t.plans.plans,
-                url: "/f/plans",
-              },
-            ]}
-          />
-        </h2>
+        <h2>{t.plans.plans}</h2>
       </Horizontal>
 
       <Vertical

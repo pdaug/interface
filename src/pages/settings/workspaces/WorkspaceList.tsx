@@ -215,7 +215,7 @@ const WorkspaceList = function () {
         <h2>{t.workspace.workspaces}</h2>
       </Horizontal>
 
-      {!checkByPlan("enterprise") && (
+      {!checkByPlan("professional") && (
         <Callout
           Icon={FolderSimple}
           category="Warning"

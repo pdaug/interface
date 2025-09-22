@@ -41,7 +41,6 @@ import Callout from "../../../components/callouts/Callout";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
-import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import { Input, InputInterval } from "../../../components/inputs/Input";
 
@@ -53,8 +52,8 @@ const UsersList = function () {
   const navigate = useNavigate();
   const { checkByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
+  const { user, token, instance } = useSystem();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { user, token, instance, workspaces, workspaceId } = useSystem();
 
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -114,27 +113,10 @@ const UsersList = function () {
   return (
     <React.Fragment>
       <Horizontal>
-        <h2>
-          <Breadcrumb
-            links={[
-              {
-                id: "workspace",
-                label:
-                  workspaces.find(function (workspace) {
-                    return workspace.id === workspaceId;
-                  })?.name || "",
-                url: "/f/",
-              },
-              {
-                id: "users",
-                label: t.user.users,
-              },
-            ]}
-          />
-        </h2>
+        <h2>{t.user.users}</h2>
       </Horizontal>
 
-      {!checkByPlan("enterprise") && (
+      {!checkByPlan("professional") && (
         <Callout
           Icon={FolderSimple}
           category="Warning"
