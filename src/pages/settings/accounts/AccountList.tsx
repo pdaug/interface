@@ -74,6 +74,8 @@ const AccountList = function () {
         pageCurrent: searchDebounced ? 1 : page,
         searchField: "name",
         search: searchDebounced,
+        orderSort: "asc",
+        orderField: "createdAt",
       });
       if (!response.data?.result?.items) {
         play("alert");

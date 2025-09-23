@@ -48,13 +48,6 @@ import Profile from "../../../components/profiles/Profile";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
-// TODO: birthdate
-// TODO: gender
-// TODO: marital status
-// TODO: nationality
-// TODO: optional address
-// TODO: user id
-// TODO: change translate
 const UsersInspect = function () {
   const t = useTranslate();
   const play = useSounds();
@@ -90,11 +83,12 @@ const UsersInspect = function () {
     addressNeighborhood: "",
     addressCity: "",
     addressState: "",
+    userId: user.id,
   });
 
-  const userFinded = form.id
+  const userFinded = form.userId
     ? users.find(function (userLocal) {
-        return form.id === userLocal.id;
+        return form.userId === userLocal.id;
       })
     : null;
 
@@ -402,7 +396,6 @@ const UsersInspect = function () {
                   }}
                 />
                 <InputSelect
-                  required
                   name="role"
                   id="user_role"
                   label={t.user.role}
@@ -462,17 +455,20 @@ const UsersInspect = function () {
               </Horizontal>
 
               <Horizontal internal={1}>
-                <InputMask
-                  name="phone"
-                  mask={MaskPhone}
-                  id="user_phone"
-                  label={t.user.phone}
-                  value={form?.phone || ""}
+                <Input
+                  min={4}
+                  max={32}
+                  required
+                  type="email"
+                  name="email"
+                  id="user_email"
+                  value={form?.email || ""}
+                  label={t.user.email}
                   disabled={loading}
-                  placeholder={t.user.phone_placeholder}
+                  placeholder={t.user.email_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
-                    newForm.phone = event.currentTarget?.value || "";
+                    newForm.email = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}
@@ -545,20 +541,116 @@ const UsersInspect = function () {
                     return;
                   }}
                 />
-                <Input
-                  min={4}
-                  max={32}
-                  required
-                  type="email"
-                  name="email"
-                  id="user_email"
-                  value={form?.email || ""}
-                  label={t.user.email}
+                <InputMask
+                  name="phone"
+                  mask={MaskPhone}
+                  id="user_phone"
+                  label={t.user.phone}
+                  value={form?.phone || ""}
                   disabled={loading}
-                  placeholder={t.user.email_placeholder}
+                  placeholder={t.user.phone_placeholder}
                   onChange={function (event) {
                     const newForm = { ...form };
-                    newForm.email = event.currentTarget?.value || "";
+                    newForm.phone = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+              </Horizontal>
+
+              <Horizontal internal={1}>
+                <Input
+                  type="date"
+                  name="birthdate"
+                  id="user_birthdate"
+                  disabled={loading}
+                  placeholder="yyyy-MM-dd"
+                  label={t.user.birthdate}
+                  value={form?.birthdate || ""}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.birthdate = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <InputSelect
+                  name="gender"
+                  id="user_gender"
+                  label={t.user.gender}
+                  value={form?.gender || ""}
+                  disabled={loading}
+                  empty={t.stacks.no_option}
+                  options={[
+                    {
+                      id: "none",
+                      value: "none",
+                      text: t.user.gender_none,
+                    },
+                    {
+                      id: "male",
+                      value: "male",
+                      text: t.user.gender_male,
+                    },
+                    {
+                      id: "female",
+                      value: "female",
+                      text: t.user.gender_female,
+                    },
+                  ]}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.gender = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <InputSelect
+                  disabled={loading}
+                  name="maritalStatus"
+                  id="user_marital_status"
+                  label={t.user.marital_status}
+                  value={form?.maritalStatus || ""}
+                  empty={t.stacks.no_option}
+                  options={[
+                    {
+                      id: "single",
+                      value: "single",
+                      text: t.user.marital_status_single,
+                    },
+                    {
+                      id: "married",
+                      value: "married",
+                      text: t.user.marital_status_married,
+                    },
+                    {
+                      id: "divorced",
+                      value: "divorced",
+                      text: t.user.marital_status_divorced,
+                    },
+                    {
+                      id: "widowed",
+                      value: "widowed",
+                      text: t.user.marital_status_widowed,
+                    },
+                  ]}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.maritalStatus = event.currentTarget?.value || "";
+                    setForm(newForm);
+                    return;
+                  }}
+                />
+                <Input
+                  name="nationality"
+                  id="user_nationality"
+                  label={t.user.nationality}
+                  value={form?.nationality || ""}
+                  disabled={loading}
+                  placeholder={t.user.nationality_placeholder}
+                  onChange={function (event) {
+                    const newForm = { ...form };
+                    newForm.nationality = event.currentTarget?.value || "";
                     setForm(newForm);
                     return;
                   }}
@@ -636,7 +728,6 @@ const UsersInspect = function () {
               <Vertical internal={1} className="flex1">
                 <Horizontal internal={1}>
                   <InputMask
-                    required
                     mask={MaskPostalCode}
                     name="addressPostalCode"
                     id="user_address_postal_code"
@@ -687,9 +778,7 @@ const UsersInspect = function () {
                     }}
                   />
                   <Input
-                    min={4}
                     max={64}
-                    required
                     name="addressStreet"
                     id="user_address_street"
                     disabled={loading}
@@ -707,9 +796,7 @@ const UsersInspect = function () {
 
                 <Horizontal internal={1}>
                   <Input
-                    min={1}
                     max={8}
-                    required
                     name="addressNumber"
                     id="user_address_number"
                     disabled={loading}
@@ -760,9 +847,7 @@ const UsersInspect = function () {
 
                 <Horizontal internal={1}>
                   <Input
-                    min={2}
                     max={64}
-                    required
                     name="addressCity"
                     id="user_address_city"
                     value={form?.addressCity || ""}
@@ -777,7 +862,6 @@ const UsersInspect = function () {
                     }}
                   />
                   <InputSelect
-                    required
                     name="addressState"
                     empty={t.stacks.no_option}
                     id="user_address_state"

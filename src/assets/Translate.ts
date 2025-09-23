@@ -991,15 +991,13 @@ const TranslatePt = {
     error_delete: "Houve um erro ao deletar o item.",
   },
   user: {
+    // list
     user: "Usuário",
     users: "Usuários",
     new: "Novo usuário",
-    title_edit: "Edite o usuário",
-    title_create: "Crie um novo usuário",
-    subtitle: "Preencha os campos abaixo para criar ou editar o usuário",
-    role: "Função",
+    // inputs
     name: "Nome do usuário",
-    name_placeholder: "Ex. Fulano de Tal",
+    role: "Função",
     document: "Documento",
     photo: "Foto",
     mobile: "Número de celular",
@@ -1007,18 +1005,33 @@ const TranslatePt = {
     address: "Endereço",
     document_1: "Documento (CPF)",
     document_2: "Documento (RG)",
-    document_placeholder: "123.456.789-10",
     phone: "Número de telefone",
+    birthdate: "Data de nascimento",
+    gender: "Gênero",
+    gender_none: "Não especificado",
+    gender_male: "Masculino",
+    gender_female: "Feminino",
+    marital_status: "Estado civil",
+    marital_status_single: "Solteiro",
+    marital_status_married: "Casado",
+    marital_status_divorced: "Divorciado",
+    marital_status_widowed: "Viúvo",
+    nationality: "Nacionalidade",
+    // placeholders
+    name_placeholder: "Ex. Fulano de Tal",
+    document_placeholder: "123.456.789-10",
     phone_placeholder: "+55 (11) 1234-5678",
     email_placeholder: "Ex. fulanotal@empresa.com",
+    nationality_placeholder: "Ex. Brasileiro",
+    // titles and subtitles
+    title_edit: "Edite o usuário",
+    title_create: "Crie um novo usuário",
+    subtitle: "Preencha as entradas para criar ou editar o usuário",
     title_audit: "Auditoria",
     subtitle_audit: "Veja todos os registros de ações do usuário",
-    title_address: "Endereço do usuário",
-    subtitle_address:
-      "Preencha os campos abaixo com os dados de endereço do usuário",
-    schedules_title: "Horários reservados",
-    schedules_description:
-      "Todos os horários que foram reservados na agenda deste usuário",
+    title_address: "Endereço",
+    subtitle_address: "Preencha as entradas com os dados de endereço",
+    // messages
     not_change_status: "Não é permitido desativar o próprio usuário",
     // audit
     insert: "Criado",
@@ -1095,14 +1108,19 @@ const TranslatePt = {
     subtitle: "Preencha as entradas para criar ou editar o veículo",
   },
   workspace: {
+    //list
     workspaces: "Organizações",
     new: "Nova organização",
+    // inputs
     name: "Nome da Organização",
+    // placeholders
     name_placeholder: "Ex. Setor 123",
+    description_placeholder: "Uma breve descrição sobre a organização",
+    // titles and subtitles
     title_edit: "Edite a organização",
     title_create: "Crie uma nova organização",
-    subtitle: "Preencha os campos abaixo para criar ou editar a organização",
-    description_placeholder: "Uma breve descrição sobre a organização",
+    subtitle: "Preencha as entradas para criar ou editar a organização",
+    // options
     units: "Unidades",
     teams: "Times",
     offices: "Escritórios",
@@ -1114,6 +1132,7 @@ const TranslatePt = {
     operations: "Operações",
     departments: "Departamentos",
     subsidiaries: "Subsidiárias",
+    // messages
     not_change_status: "Não é permitido desativar a organização selecionada",
     not_delete: "Não é permitido deletar a organização selecionada",
     already_selected_workspace: "Essa organização já foi selecionada!",
@@ -2100,33 +2119,47 @@ const TranslateEn = {
     error_delete: "An error occurred while deleting the item.",
   },
   user: {
+    // list
     user: "User",
     users: "Users",
     new: "New user",
-    title_edit: "Edit the user",
-    title_create: "Create a new user",
-    subtitle: "Fill the below fields to create or edit the user",
-    role: "Role",
-    photo: "Photo",
+    // inputs
     name: "User name",
-    name_placeholder: "e.g. John Doe",
+    role: "Role",
     document: "Document",
+    photo: "Photo",
     mobile: "Mobile",
     email: "Email",
     address: "Address",
     document_1: "Document 1",
     document_2: "Document 2",
-    document_placeholder: "123.456.789-10",
     phone: "Phone number",
+    birthdate: "Birthdate",
+    gender: "Gender",
+    gender_none: "Not specified",
+    gender_male: "Male",
+    gender_female: "Female",
+    marital_status: "Marital status",
+    marital_status_single: "Single",
+    marital_status_married: "Married",
+    marital_status_divorced: "Divorced",
+    marital_status_widowed: "Widowed",
+    nationality: "Nationality",
+    // placeholders
+    name_placeholder: "e.g. John Doe",
+    document_placeholder: "123.456.789-10",
     phone_placeholder: "+1 (123) 234-5678",
     email_placeholder: "e.g. johndoe@company.com",
+    nationality_placeholder: "e.g. American",
+    // titles and subtitles
+    title_edit: "Edit the user",
+    title_create: "Create a new user",
+    subtitle: "Fill the below fields to create or edit the user",
     title_audit: "Audit",
     subtitle_audit: "See all logs of user actions",
     title_address: "User address",
     subtitle_address: "Fill the inputs with the address data from user",
-    schedules_title: "Schedules",
-    schedules_description:
-      "All schedules that reservade in schedule list in this user",
+    // messages
     not_change_status: "It is not allowed to deactivate the user himself",
     // audit
     insert: "Created",
@@ -2202,14 +2235,19 @@ const TranslateEn = {
     subtitle: "Fill the inputs to create or edit the vehicle",
   },
   workspace: {
+    // list
     workspaces: "Workspaces",
     new: "New workspace",
+    // inputs
     name: "Workspace Name",
+    // placeholders
     name_placeholder: "e.g. Head Office",
+    description_placeholder: "A brief description about the workspace",
+    // titles and subtitles
     title_edit: "Edit the workspace",
     title_create: "Create a new workspace",
-    subtitle: "Fill the below fields to create or edit the workspaces",
-    description_placeholder: "A brief description about the workspace",
+    subtitle: "Fill the inputs to create or edit the workspaces",
+    // options
     units: "Units",
     teams: "Teams",
     offices: "Offices",
@@ -2221,6 +2259,7 @@ const TranslateEn = {
     operations: "Operations",
     departments: "Departments",
     subsidiaries: "Subdidiaries",
+    // messages
     not_change_status: "Not allowed disabled selected workspace",
     not_delete: "Not allowed delete selected workspace",
     already_selected_workspace: "This workspace already selected!",

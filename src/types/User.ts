@@ -12,6 +12,10 @@ export type TypeUser = {
   mobile: string;
   email: string;
   role: TypeUserRole;
+  birthdate?: string;
+  gender?: string;
+  maritalStatus?: string;
+  nationality?: string;
   addressStreet: string;
   addressNumber: string;
   addressComplement: string;
@@ -19,6 +23,7 @@ export type TypeUser = {
   addressNeighborhood: string;
   addressCity: string;
   addressState: string;
+  userId: string;
   createdAt: string;
   updatedAt: string | null;
   deletedAt: string | null;
