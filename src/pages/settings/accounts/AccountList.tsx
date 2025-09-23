@@ -31,6 +31,7 @@ import useSystem from "../../../hooks/useSystem";
 import useSounds from "../../../hooks/useSounds";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import Badge from "../../../components/badges/Badge";
@@ -49,6 +50,7 @@ const AccountList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
+  const { checkByRole } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { users, token, instance, workspaceId } = useSystem();
@@ -102,6 +104,107 @@ const AccountList = function () {
   // fetch accounts
   useAsync(FetchAccounts, [page, searchDebounced, workspaceId]);
 
+  const getOptions = checkByRole("admin")
+    ? [
+        {
+          id: "copy",
+          Icon: CopySimple,
+          label: t.components.copy_id,
+          onClick: async function (_: React.MouseEvent, data: unknown) {
+            if (data && typeof data === "object" && "id" in data) {
+              const result = await Clipboard.copy(data.id as string);
+              if (result) {
+                play("ok");
+                toast.success(t.toast.success, {
+                  description: t.toast.success_copy,
+                });
+                return;
+              }
+            }
+            play("alert");
+            toast.warning(t.toast.warning_error, {
+              description: t.toast.warning_copy,
+            });
+            return;
+          },
+        },
+        {
+          id: "download",
+          Icon: DownloadSimple,
+          label: t.components.download,
+          onClick: function (_: React.MouseEvent, data: unknown) {
+            if (data && typeof data === "object" && "id" in data) {
+              Download.JSON(data, `account-${data.id}.json`);
+              play("ok");
+              toast.success(t.toast.success, {
+                description: t.toast.success_download,
+              });
+            }
+            return;
+          },
+        },
+        {
+          id: "edit",
+          Icon: PencilSimple,
+          label: t.components.edit,
+          onClick: function (_: React.MouseEvent, data: unknown) {
+            if (data && typeof data === "object" && "id" in data)
+              navigate(`/f/accounts/inspect/${data.id}`);
+            return;
+          },
+        },
+        {
+          id: "delete",
+          Icon: Trash,
+          label: t.components.delete,
+          IconColor: "var(--dangerColor",
+          styles: { color: "var(--dangerColor)" },
+          onClick: async function (_: React.MouseEvent, data: unknown) {
+            if (!data || typeof data !== "object" || !("id" in data)) return;
+            OpenDialog({
+              category: "Danger",
+              title: t.dialog.title_delete,
+              description: t.dialog.description_delete,
+              confirmText: t.components.delete,
+              onConfirm: async function () {
+                try {
+                  const response = await apis.Account.delete(
+                    token,
+                    instance.name,
+                    data.id as string,
+                  );
+                  if (!response.data?.result) {
+                    play("alert");
+                    toast.warning(t.toast.warning_error, {
+                      description: t.toast.error_delete,
+                    });
+                    return;
+                  }
+                  play("ok");
+                  toast.success(t.toast.success, {
+                    description: t.toast.success_delete,
+                  });
+                  CloseDialog();
+                  await FetchAccounts();
+                  return;
+                } catch (err) {
+                  play("alert");
+                  toast.error(t.toast.warning_error, {
+                    description: t.toast.error_delete,
+                  });
+                  console.error(
+                    "[src/pages/settings/accounts/AccountList.tsx]",
+                    err,
+                  );
+                  return;
+                }
+              },
+            });
+          },
+        },
+      ]
+    : undefined;
+
   return (
     <React.Fragment>
       <Horizontal>
@@ -109,12 +212,14 @@ const AccountList = function () {
       </Horizontal>
 
       <Horizontal internal={1}>
-        <Button
-          Icon={Plus}
-          category="Success"
-          text={t.account.new}
-          onClick={() => navigate("/f/accounts/inspect")}
-        />
+        {checkByRole("admin") && (
+          <Button
+            Icon={Plus}
+            category="Success"
+            text={t.account.new}
+            onClick={() => navigate("/f/accounts/inspect")}
+          />
+        )}
         <Input
           label=""
           value={search}
@@ -154,109 +259,12 @@ const AccountList = function () {
       <Vertical internal={1}>
         <Table
           border
+          noSelect
           loading={loading}
           selected={selected}
           setSelected={setSelected}
           data={accounts as TableData[]}
-          options={[
-            {
-              id: "copy",
-              Icon: CopySimple,
-              label: t.components.copy_id,
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  const result = await Clipboard.copy(data.id as string);
-                  if (result) {
-                    play("ok");
-                    toast.success(t.toast.success, {
-                      description: t.toast.success_copy,
-                    });
-                    return;
-                  }
-                }
-                play("alert");
-                toast.warning(t.toast.warning_error, {
-                  description: t.toast.warning_copy,
-                });
-                return;
-              },
-            },
-            {
-              id: "download",
-              Icon: DownloadSimple,
-              label: t.components.download,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data) {
-                  Download.JSON(data, `account-${data.id}.json`);
-                  play("ok");
-                  toast.success(t.toast.success, {
-                    description: t.toast.success_download,
-                  });
-                }
-                return;
-              },
-            },
-            {
-              id: "edit",
-              Icon: PencilSimple,
-              label: t.components.edit,
-              onClick: function (_: React.MouseEvent, data: unknown) {
-                if (data && typeof data === "object" && "id" in data)
-                  navigate(`/f/accounts/inspect/${data.id}`);
-                return;
-              },
-            },
-            {
-              id: "delete",
-              Icon: Trash,
-              label: t.components.delete,
-              IconColor: "var(--dangerColor",
-              styles: { color: "var(--dangerColor)" },
-              onClick: async function (_: React.MouseEvent, data: unknown) {
-                if (!data || typeof data !== "object" || !("id" in data))
-                  return;
-                OpenDialog({
-                  category: "Danger",
-                  title: t.dialog.title_delete,
-                  description: t.dialog.description_delete,
-                  confirmText: t.components.delete,
-                  onConfirm: async function () {
-                    try {
-                      const response = await apis.Account.delete(
-                        token,
-                        instance.name,
-                        data.id as string,
-                      );
-                      if (!response.data?.result) {
-                        play("alert");
-                        toast.warning(t.toast.warning_error, {
-                          description: t.toast.error_delete,
-                        });
-                        return;
-                      }
-                      play("ok");
-                      toast.success(t.toast.success, {
-                        description: t.toast.success_delete,
-                      });
-                      CloseDialog();
-                      await FetchAccounts();
-                      return;
-                    } catch (err) {
-                      play("alert");
-                      toast.error(t.toast.warning_error, {
-                        description: t.toast.error_delete,
-                      });
-                      console.error(
-                        "[src/pages/settings/accounts/AccountList.tsx]",
-                        err,
-                      );
-                      return;
-                    }
-                  },
-                });
-              },
-            },
-          ]}
+          options={getOptions}
           columns={{
             status: {
               label: t.components.status,
@@ -265,19 +273,29 @@ const AccountList = function () {
                 return (
                   <Badge
                     category={data.status ? "Success" : "Danger"}
-                    value={String(data.status)}
-                    options={[
-                      {
-                        id: "true",
-                        value: "true",
-                        label: t.components.active,
-                      },
-                      {
-                        id: "false",
-                        value: "false",
-                        label: t.components.inactive,
-                      },
-                    ]}
+                    value={
+                      checkByRole("admin")
+                        ? String(data.status)
+                        : data.status
+                          ? t.components.active
+                          : t.components.inactive
+                    }
+                    options={
+                      checkByRole("admin")
+                        ? [
+                            {
+                              id: "true",
+                              value: "true",
+                              label: t.components.active,
+                            },
+                            {
+                              id: "false",
+                              value: "false",
+                              label: t.components.inactive,
+                            },
+                          ]
+                        : undefined
+                    }
                     onChange={async function (event) {
                       try {
                         const response = await apis.Account.update(
@@ -340,8 +358,9 @@ const AccountList = function () {
                 });
                 return (
                   <div
-                    className="cursor"
+                    className={checkByRole("admin") ? "cursor" : ""}
                     onClick={function () {
+                      if (!checkByRole("admin")) return;
                       navigate(`/f/accounts/inspect/${data.id}`);
                       return;
                     }}

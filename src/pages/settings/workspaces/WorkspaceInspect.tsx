@@ -20,6 +20,7 @@ import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
 import {
@@ -27,10 +28,12 @@ import {
   InputText,
   InputSelect,
 } from "../../../components/inputs/Input";
+import NoPermission from "../../NoPermission";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 
 const WorkspaceInspect = function () {
   const t = useTranslate();
@@ -38,6 +41,7 @@ const WorkspaceInspect = function () {
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
+  const { checkByRole } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { token, instance, workspaceId } = useSystem();
 
@@ -159,10 +163,27 @@ const WorkspaceInspect = function () {
     }
   };
 
+  if (!checkByRole("admin")) return <NoPermission path="/f/workspaces" />;
+
   return (
     <React.Fragment>
       <Horizontal>
-        <h2>{t.workspace.workspaces}</h2>
+        <h2>
+          <Breadcrumb
+            links={[
+              {
+                id: "workspaces",
+                label: t.workspace.workspaces,
+                url: "/f/workspaces",
+              },
+              {
+                id: "workspace",
+                label: form?.name || t.components.empty_name,
+                url: `/f/workspaces/inspect${id ? `/${id}` : ""}`,
+              },
+            ]}
+          />
+        </h2>
       </Horizontal>
 
       <form onSubmit={onSubmit}>

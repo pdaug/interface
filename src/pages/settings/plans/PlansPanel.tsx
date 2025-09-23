@@ -23,7 +23,7 @@ type TypePlan = {
   description: string;
   currency: string;
   price: number;
-  items: string[];
+  items: { content: string; bold?: boolean }[];
   buttonLabel: string;
   buttonCategory: ButtonCategories;
   buttonDisabled: boolean;
@@ -94,12 +94,23 @@ const Plan = function ({
           <span>/{t.components.month}</span>
         </Horizontal>
 
-        <Vertical internal={0.2} className="flex1 wFull">
+        <Vertical internal={0.4} className="flex1 wFull">
           {items.map(function (item) {
             return (
-              <Horizontal internal={0.2} className="itemsCenter" key={item}>
+              <Horizontal
+                internal={0.4}
+                key={item.content}
+                className="itemsCenter"
+              >
                 <Check weight="bold" size={20} color="var(--successColor)" />
-                <span>{item}</span>
+                <span
+                  style={{
+                    fontSize: "var(--textSmall)",
+                    fontWeight: item.bold ? "bold" : "normal",
+                  }}
+                >
+                  {item.content}
+                </span>
               </Horizontal>
             );
           })}
@@ -126,16 +137,18 @@ const PlansPanel = function () {
 
   return (
     <React.Fragment>
-      <Horizontal>
-        <h2>{t.plans.plans}</h2>
-      </Horizontal>
-
-      <Vertical
-        internal={0.4}
-        styles={{ justifyContent: "center", textAlign: "center" }}
-      >
+      <Vertical internal={0.4}>
         <h2 style={{ margin: 0, padding: 0 }}>{t.plans.plan}</h2>
-        <p style={{ margin: 0, padding: 0 }}>{t.plans.subtitle}</p>
+        <p
+          style={{
+            fontSize: "var(--textSmall)",
+            margin: 0,
+            opacity: 0.6,
+            padding: 0,
+          }}
+        >
+          {t.plans.subtitle}
+        </p>
       </Vertical>
 
       <Horizontal
@@ -150,11 +163,11 @@ const PlansPanel = function () {
           currency={instance.currency}
           price={28}
           items={[
-            t.plans.item_suport,
-            t.plans.item_app_mobile,
-            t.plans.item_only_1_user,
-            t.plans.item_only_1_workspace,
-            t.plans.item_financial_module,
+            { content: t.plans.item_suport },
+            { content: t.plans.item_app_mobile },
+            { content: t.plans.item_only_1_user },
+            { content: t.plans.item_only_1_workspace },
+            { content: t.plans.item_financial_module },
           ]}
           buttonLabel={t.plans.upgrade}
           buttonDisabled={
@@ -174,13 +187,13 @@ const PlansPanel = function () {
           currency={instance.currency}
           price={120}
           items={[
-            t.plans.item_suport,
-            t.plans.item_app_mobile,
-            t.plans.item_until_5_users,
-            t.plans.item_until_2_workspaces,
-            t.plans.item_until_5_automations,
-            t.plans.item_all_modules,
-            t.plans.item_artificial_intelligence,
+            { content: t.plans.item_suport },
+            { content: t.plans.item_app_mobile },
+            { content: t.plans.item_until_5_users },
+            { content: t.plans.item_until_2_workspaces },
+            { content: t.plans.item_until_5_automations },
+            { content: t.plans.item_all_modules, bold: true },
+            { content: t.plans.item_artificial_intelligence, bold: true },
           ]}
           buttonLabel={t.plans.upgrade}
           buttonDisabled={
@@ -198,17 +211,18 @@ const PlansPanel = function () {
           title={t.plans.plan_professional}
           description={t.plans.plan_professional_description}
           currency={instance.currency}
-          price={360}
+          price={420}
           items={[
-            t.plans.item_suport,
-            t.plans.item_app_mobile,
-            t.plans.item_user_unlimited,
-            t.plans.item_workspace_unlimited,
-            t.plans.item_automations_unlimited,
-            t.plans.item_all_modules,
-            t.plans.item_artificial_intelligence,
-            t.plans.item_team_training,
-            t.plans.item_domain_customization,
+            { content: t.plans.item_suport },
+            { content: t.plans.item_app_mobile },
+            { content: t.plans.item_user_unlimited, bold: true },
+            { content: t.plans.item_workspace_unlimited, bold: true },
+            { content: t.plans.item_automations_unlimited, bold: true },
+            { content: t.plans.item_all_modules },
+            { content: t.plans.item_artificial_intelligence },
+            { content: t.plans.item_team_training, bold: true },
+            { content: t.plans.item_access_api, bold: true },
+            { content: t.plans.item_domain_customization, bold: true },
           ]}
           buttonLabel={t.plans.upgrade}
           buttonDisabled={

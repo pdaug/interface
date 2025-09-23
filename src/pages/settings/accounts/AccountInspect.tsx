@@ -12,7 +12,6 @@ import { TypeAccount } from "../../../types/Account";
 
 // assets
 import { Banks, BanksSafely } from "../../../assets/Banks";
-// import { MaskDocument1, MaskDocument2 } from "../../../assets/Mask";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
@@ -21,20 +20,18 @@ import useSounds from "../../../hooks/useSounds";
 import useSchema from "../../../hooks/useSchema";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
+import usePermission from "../../../hooks/usePermission";
 
 // components
-import {
-  Input,
-  InputSelect,
-  // InputMask,
-} from "../../../components/inputs/Input";
+import NoPermission from "../../NoPermission";
 import Button from "../../../components/buttons/Button";
+import Avatar from "../../../components/avatars/Avatar";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
 import Profile from "../../../components/profiles/Profile";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
+import { Input, InputSelect } from "../../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Avatar from "../../../components/avatars/Avatar";
 
 const AccountInspect = function () {
   const t = useTranslate();
@@ -42,8 +39,9 @@ const AccountInspect = function () {
   const { id } = useParams();
   const Schema = useSchema();
   const navigate = useNavigate();
+  const { checkByRole } = usePermission();
   const { instanceDateTime } = useDateTime();
-  const { user, users, token, instance, workspaces, workspaceId } = useSystem();
+  const { user, users, token, instance } = useSystem();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [form, setForm] = useState<Partial<TypeAccount>>({
@@ -159,20 +157,14 @@ const AccountInspect = function () {
     }
   };
 
+  if (!checkByRole("admin")) return <NoPermission path="/f/accounts" />;
+
   return (
     <React.Fragment>
       <Horizontal>
         <h2>
           <Breadcrumb
             links={[
-              {
-                id: "workspace",
-                label:
-                  workspaces.find(function (workspace) {
-                    return workspace.id === workspaceId;
-                  })?.name || "",
-                url: "/f/",
-              },
               {
                 id: "accounts",
                 label: t.account.accounts,
@@ -280,60 +272,6 @@ const AccountInspect = function () {
                   />
                 </Horizontal>
 
-                {/* <Horizontal internal={1}>
-                  
-                  <Input
-                    min={1}
-                    max={32}
-                    required
-                    name="holderName"
-                    disabled={loading}
-                    id="account_holder_name"
-                    label={t.account.holder}
-                    value={form?.holderName || ""}
-                    placeholder={t.account.holder_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.holderName = event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                  <InputMask
-                    required
-                    mask={MaskDocument1}
-                    name="holderDocument1"
-                    id="account_holder_document_1"
-                    disabled={loading}
-                    value={form?.holderDocument1 || ""}
-                    label={t.account.holder_document_1}
-                    placeholder={t.account.holder_document_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.holderDocument1 =
-                        event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                  <InputMask
-                    mask={MaskDocument2}
-                    name="holderDocument2"
-                    id="account_holder_document_2"
-                    disabled={loading}
-                    value={form?.holderDocument2 || ""}
-                    label={t.account.holder_document_2}
-                    placeholder={t.account.holder_document_placeholder}
-                    onChange={function (event) {
-                      const newForm = { ...form };
-                      newForm.holderDocument2 =
-                        event.currentTarget?.value || "";
-                      setForm(newForm);
-                      return;
-                    }}
-                  />
-                </Horizontal> */}
-
                 <Horizontal internal={1}>
                   <InputSelect
                     required
@@ -370,17 +308,6 @@ const AccountInspect = function () {
                       return;
                     }}
                   />
-                  {/* <Input
-                    readOnly
-                    name="bankCode"
-                    placeholder="123"
-                    id="account_bank_code"
-                    label={t.account.bank_code}
-                    value={form?.bankCode || ""}
-                    onChange={function () {
-                      return;
-                    }}
-                  /> */}
                   <InputSelect
                     required
                     name="bankName"

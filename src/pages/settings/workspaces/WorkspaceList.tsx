@@ -48,9 +48,9 @@ const WorkspaceList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
-  const { checkByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
+  const { checkByPlan, checkByRole } = usePermission();
   const { token, instance, workspaceId, saveWorkspaces } = useSystem();
 
   const [page, setPage] = useState<number>(1);
@@ -72,6 +72,8 @@ const WorkspaceList = function () {
         pageCurrent: searchDebounced ? 1 : page,
         searchField: "name",
         search: searchDebounced,
+        orderSort: "asc",
+        orderField: "createdAt",
       });
       if (!response.data?.result?.items) {
         play("alert");
@@ -103,111 +105,113 @@ const WorkspaceList = function () {
   // fetch workspace
   useAsync(FetchWorkspaces, [page, searchDebounced]);
 
-  const getOptions = [
-    {
-      id: "copy",
-      Icon: CopySimple,
-      label: t.components.copy_id,
-      onClick: async function (_: React.MouseEvent, data: unknown) {
-        if (data && typeof data === "object" && "id" in data) {
-          const result = await Clipboard.copy(data.id as string);
-          if (result) {
-            play("ok");
-            toast.success(t.toast.success, {
-              description: t.toast.success_copy,
-            });
-            return;
-          }
-        }
-        play("alert");
-        toast.warning(t.toast.warning_error, {
-          description: t.toast.warning_copy,
-        });
-        return;
-      },
-    },
-    {
-      id: "download",
-      Icon: DownloadSimple,
-      label: t.components.download,
-      onClick: function (_: React.MouseEvent, data: unknown) {
-        if (data && typeof data === "object" && "id" in data) {
-          Download.JSON(data, `workspace-${data.id}.json`);
-          play("ok");
-          toast.success(t.toast.success, {
-            description: t.toast.success_download,
-          });
-        }
-        return;
-      },
-    },
-    {
-      id: "edit",
-      Icon: PencilSimple,
-      label: t.components.edit,
-      onClick: function (_: React.MouseEvent, data: unknown) {
-        if (data && typeof data === "object" && "id" in data)
-          navigate(`/f/workspaces/inspect/${data.id}`);
-        return;
-      },
-    },
-    {
-      id: "delete",
-      Icon: Trash,
-      label: t.components.delete,
-      IconColor: "var(--dangerColor",
-      styles: { color: "var(--dangerColor)" },
-      onClick: async function (_: React.MouseEvent, data: unknown) {
-        if (!data || typeof data !== "object" || !("id" in data)) return;
-        if (workspaceId === data.id) {
-          play("alert");
-          toast.error(t.toast.warning_error, {
-            description: t.workspace.not_delete,
-          });
-          return;
-        }
-        OpenDialog({
-          category: "Danger",
-          title: t.dialog.title_delete,
-          description: t.dialog.description_delete,
-          confirmText: t.components.delete,
-          onConfirm: async function () {
-            try {
-              const response = await apis.Workspace.delete(
-                token,
-                instance.name,
-                data.id as string,
-              );
-              if (!response.data?.result) {
-                play("alert");
-                toast.warning(t.toast.warning_error, {
-                  description: t.toast.error_delete,
+  const getOptions = checkByRole("admin")
+    ? [
+        {
+          id: "copy",
+          Icon: CopySimple,
+          label: t.components.copy_id,
+          onClick: async function (_: React.MouseEvent, data: unknown) {
+            if (data && typeof data === "object" && "id" in data) {
+              const result = await Clipboard.copy(data.id as string);
+              if (result) {
+                play("ok");
+                toast.success(t.toast.success, {
+                  description: t.toast.success_copy,
                 });
                 return;
               }
+            }
+            play("alert");
+            toast.warning(t.toast.warning_error, {
+              description: t.toast.warning_copy,
+            });
+            return;
+          },
+        },
+        {
+          id: "download",
+          Icon: DownloadSimple,
+          label: t.components.download,
+          onClick: function (_: React.MouseEvent, data: unknown) {
+            if (data && typeof data === "object" && "id" in data) {
+              Download.JSON(data, `workspace-${data.id}.json`);
               play("ok");
               toast.success(t.toast.success, {
-                description: t.toast.success_delete,
+                description: t.toast.success_download,
               });
-              CloseDialog();
-              await FetchWorkspaces();
-              return;
-            } catch (err) {
+            }
+            return;
+          },
+        },
+        {
+          id: "edit",
+          Icon: PencilSimple,
+          label: t.components.edit,
+          onClick: function (_: React.MouseEvent, data: unknown) {
+            if (data && typeof data === "object" && "id" in data)
+              navigate(`/f/workspaces/inspect/${data.id}`);
+            return;
+          },
+        },
+        {
+          id: "delete",
+          Icon: Trash,
+          label: t.components.delete,
+          IconColor: "var(--dangerColor",
+          styles: { color: "var(--dangerColor)" },
+          onClick: async function (_: React.MouseEvent, data: unknown) {
+            if (!data || typeof data !== "object" || !("id" in data)) return;
+            if (workspaceId === data.id) {
               play("alert");
               toast.error(t.toast.warning_error, {
-                description: t.toast.error_delete,
+                description: t.workspace.not_delete,
               });
-              console.error(
-                "[src/pages/settings/workspaces/WorkspaceList.tsx]",
-                err,
-              );
               return;
             }
+            OpenDialog({
+              category: "Danger",
+              title: t.dialog.title_delete,
+              description: t.dialog.description_delete,
+              confirmText: t.components.delete,
+              onConfirm: async function () {
+                try {
+                  const response = await apis.Workspace.delete(
+                    token,
+                    instance.name,
+                    data.id as string,
+                  );
+                  if (!response.data?.result) {
+                    play("alert");
+                    toast.warning(t.toast.warning_error, {
+                      description: t.toast.error_delete,
+                    });
+                    return;
+                  }
+                  play("ok");
+                  toast.success(t.toast.success, {
+                    description: t.toast.success_delete,
+                  });
+                  CloseDialog();
+                  await FetchWorkspaces();
+                  return;
+                } catch (err) {
+                  play("alert");
+                  toast.error(t.toast.warning_error, {
+                    description: t.toast.error_delete,
+                  });
+                  console.error(
+                    "[src/pages/settings/workspaces/WorkspaceList.tsx]",
+                    err,
+                  );
+                  return;
+                }
+              },
+            });
           },
-        });
-      },
-    },
-  ];
+        },
+      ]
+    : undefined;
 
   return (
     <React.Fragment>
@@ -225,12 +229,14 @@ const WorkspaceList = function () {
       )}
 
       <Horizontal internal={1}>
-        <Button
-          Icon={Plus}
-          category="Success"
-          text={t.workspace.new}
-          onClick={() => navigate("/f/workspaces/inspect")}
-        />
+        {checkByRole("admin") && (
+          <Button
+            Icon={Plus}
+            category="Success"
+            text={t.workspace.new}
+            onClick={() => navigate("/f/workspaces/inspect")}
+          />
+        )}
         <Input
           label=""
           value={search}
@@ -270,6 +276,7 @@ const WorkspaceList = function () {
       <Vertical internal={1}>
         <Table
           border
+          noSelect
           loading={loading}
           selected={selected}
           setSelected={setSelected}
@@ -283,19 +290,29 @@ const WorkspaceList = function () {
                 return (
                   <Badge
                     category={data.status ? "Success" : "Danger"}
-                    value={String(data.status)}
-                    options={[
-                      {
-                        id: "true",
-                        value: "true",
-                        label: t.components.active,
-                      },
-                      {
-                        id: "false",
-                        value: "false",
-                        label: t.components.inactive,
-                      },
-                    ]}
+                    value={
+                      checkByRole("admin")
+                        ? String(data.status)
+                        : data.status
+                          ? t.components.active
+                          : t.components.inactive
+                    }
+                    options={
+                      checkByRole("admin")
+                        ? [
+                            {
+                              id: "true",
+                              value: "true",
+                              label: t.components.active,
+                            },
+                            {
+                              id: "false",
+                              value: "false",
+                              label: t.components.inactive,
+                            },
+                          ]
+                        : undefined
+                    }
                     onChange={async function (event) {
                       if (workspaceId === data.id) {
                         play("alert");
@@ -346,8 +363,9 @@ const WorkspaceList = function () {
               handler: function (data) {
                 return (
                   <div
-                    className="cursor"
+                    className={checkByRole("admin") ? "cursor" : ""}
                     onClick={function () {
+                      if (!checkByRole("admin")) return;
                       navigate(`/f/workspaces/inspect/${data.id}`);
                       return;
                     }}
