@@ -1,11 +1,30 @@
-import React, { useState } from "react";
-import { endOfDay, startOfYear } from "date-fns";
-import { QuestionMark, DownloadSimple } from "@phosphor-icons/react";
+import {
+  Tag,
+  Toolbox,
+  Package,
+  PaintBrush,
+  ChartLineUp,
+  FunnelSimple,
+  QuestionMark,
+  ChartLineDown,
+  DownloadSimple,
+  ShoppingBagOpen,
+} from "@phosphor-icons/react";
+import { toast } from "sonner";
+import { endOfDay, subDays } from "date-fns";
+import React, { useEffect, useState } from "react";
+
+// apis
+import apis from "../apis";
 
 // types
+import { TypeProduct } from "../types/Product";
+import { ApiResponsePaginate } from "../types/Api";
 import { TypeInputInterval } from "../types/Components";
 
 // hooks
+import useAsync from "../hooks/useAsync";
+import useSounds from "../hooks/useSounds";
 import useSystem from "../hooks/useSystem";
 import useTranslate from "../hooks/useTranslate";
 
@@ -18,67 +37,264 @@ import { ChartLine } from "../components/charts/Chart";
 import Dropdown from "../components/dropdowns/Dropdown";
 import { Horizontal } from "../components/aligns/Align";
 import { useDialog } from "../components/dialogs/Dialog";
-import Breadcrumb from "../components/breadcrumbs/Breadcrumb";
 import { InputInterval, InputSelect } from "../components/inputs/Input";
+import { TypeService } from "../types/Service";
+import { TypeAccount } from "../types/Account";
 
 const Dashboard = function () {
   const t = useTranslate();
+  const play = useSounds();
   const { OpenDialog } = useDialog();
-  const { instance, workspaces, workspaceId } = useSystem();
+  const { user, token, instance, workspaceId, workspaces } = useSystem();
 
   const [interval, setInterval] = useState<TypeInputInterval>({
-    start: startOfYear(new Date()),
+    start: subDays(new Date(), 30),
     end: endOfDay(new Date()),
   });
 
+  const [greeting, setGreeting] = useState<string>("");
+  const [accounts, setAccounts] = useState<TypeAccount[]>([]);
+  const [products, setProducts] = useState<TypeProduct[]>([]);
+  const [services, setServices] = useState<TypeService[]>([]);
+  const [statsSales, setStatsSales] = useState<Record<string, number>>({});
+  const [statsPurchases, setStatsPurchases] = useState<Record<string, number>>(
+    {},
+  );
+
+  // get greeting
+  useEffect(function () {
+    const random = Math.floor(Math.random() * 6) + 1;
+    const hour = new Date().getHours();
+    let greetingText = "";
+    // dawn -> hour 06 - 09
+    if (hour >= 6 && hour <= 9)
+      greetingText =
+        t.dashboard[`good_dawn_${random}` as keyof typeof t.dashboard];
+    // morning -> hour 10 - 12
+    if (hour >= 10 && hour <= 12)
+      greetingText =
+        t.dashboard[`good_morning_${random}` as keyof typeof t.dashboard];
+    // afternoon -> hour 13 - 17
+    if (hour >= 13 && hour <= 17)
+      greetingText =
+        t.dashboard[`good_afternoon_${random}` as keyof typeof t.dashboard];
+    // night -> hour 18 - 23
+    if (hour >= 18 && hour <= 23)
+      greetingText =
+        t.dashboard[`good_night_${random}` as keyof typeof t.dashboard];
+    // rest -> hour 00 - 05
+    if (hour >= 0 && hour <= 5)
+      greetingText =
+        t.dashboard[`good_rest_${random}` as keyof typeof t.dashboard];
+    const userName = user.name.split(" ")[0];
+    const greetingNamed = greetingText.replace("{{name}}", userName);
+    setGreeting(greetingNamed);
+    return;
+  }, []);
+
+  // fetch accounts
+  useAsync(
+    async function () {
+      try {
+        const response = await apis.Account.list<
+          ApiResponsePaginate<TypeAccount>
+        >(
+          token,
+          instance.name,
+          {
+            pageSize: 999,
+            pageCurrent: 1,
+            orderField: "createdAt",
+            orderSort: "asc",
+          },
+          workspaceId,
+        );
+        if (!response.data?.result || response.status !== 200) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          return;
+        }
+        setAccounts(response.data.result.items);
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/Dashboard.tsx]", err);
+        return;
+      }
+    },
+    [workspaceId],
+  );
+
+  // fetch products
+  useAsync(
+    async function () {
+      try {
+        const responseProducts = await apis.Product.list<
+          ApiResponsePaginate<TypeProduct>
+        >(
+          token,
+          instance.name,
+          {
+            pageSize: 999,
+            pageCurrent: 1,
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : undefined,
+            dateEnd: interval.end ? interval.end.toISOString() : undefined,
+          },
+          workspaceId,
+        );
+        if (!responseProducts.data?.result || responseProducts.status !== 200) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.error("[src/pages/Dashboard.tsx]", responseProducts.data);
+          return;
+        }
+        setProducts(responseProducts.data.result.items);
+
+        const responseSales = await apis.Sale.stats<Record<string, number>>(
+          token,
+          instance.name,
+          {
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : subDays(new Date(), 30).toISOString(),
+            dateEnd: interval.end
+              ? interval.end.toISOString()
+              : endOfDay(new Date()).toISOString(),
+          },
+          workspaceId,
+        );
+        if (!responseSales.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.warn("[src/pages/Dashboard.tsx]", responseSales.data);
+          return;
+        }
+        setStatsSales(responseSales.data.result);
+
+        const responsePurchases = await apis.Purchase.stats<
+          Record<string, number>
+        >(
+          token,
+          instance.name,
+          {
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : subDays(new Date(), 30).toISOString(),
+            dateEnd: interval.end
+              ? interval.end.toISOString()
+              : endOfDay(new Date()).toISOString(),
+          },
+          workspaceId,
+        );
+        if (!responsePurchases.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.warn("[src/pages/Dashboard.tsx]", responsePurchases.data);
+          return;
+        }
+        setStatsPurchases(responsePurchases.data.result);
+
+        return;
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/Dashboard.tsx]", err);
+        return;
+      }
+    },
+    [interval, workspaceId],
+  );
+
+  // fetch services
+  useAsync(
+    async function () {
+      try {
+        const responseServices = await apis.Service.list<
+          ApiResponsePaginate<TypeService>
+        >(
+          token,
+          instance.name,
+          {
+            pageSize: 999,
+            pageCurrent: 1,
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : undefined,
+            dateEnd: interval.end ? interval.end.toISOString() : undefined,
+          },
+          workspaceId,
+        );
+        if (!responseServices.data?.result?.items) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.warn("[src/pages/Dashboard.tsx]", responseServices.data);
+          return;
+        }
+        setServices(responseServices.data.result.items);
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/Dashboard.tsx]", err);
+        return;
+      }
+    },
+    [interval, workspaceId],
+  );
+
   return (
     <React.Fragment>
-      <Horizontal>
-        <h2>
-          <Breadcrumb
-            links={[
-              {
-                id: "workspace",
-                label:
-                  workspaces.find(function (workspace) {
-                    return workspace.id === workspaceId;
-                  })?.name || "",
-                url: "/f/",
-              },
-              {
-                id: "dashboard",
-                label: t.dashboard.dashboard,
-                url: "/f/dashboard",
-              },
-            ]}
-          />
-        </h2>
+      <Horizontal internal={1}>
+        <h1>{greeting}</h1>
       </Horizontal>
+
       <Horizontal internal={1}>
         <InputSelect
           label=""
           empty=""
           disabled
-          value="general"
-          styles={{ maxWidth: "10rem" }}
-          options={[
-            {
-              id: "inflow",
-              value: "inflow",
-              text: t.menu.inflows,
-            },
-            {
-              id: "outflow",
-              value: "outflow",
-              text: t.menu.outflows,
-            },
-            {
-              id: "general",
-              value: "general",
-              text: t.components.all,
-            },
-          ]}
+          value={workspaceId}
+          styles={{ maxWidth: 200 }}
+          options={workspaces.map(function (workspace) {
+            return {
+              id: workspace.id,
+              value: workspace.id,
+              text: workspace.name,
+            };
+          })}
         />
+
+        <InputSelect
+          label=""
+          empty=""
+          styles={{ maxWidth: 200 }}
+          value={accounts[0]?.id || ""}
+          options={accounts.map(function (account) {
+            return {
+              id: account.id,
+              value: account.id,
+              text: account.name,
+            };
+          })}
+        />
+
         <div style={{ minWidth: 200, maxWidth: 256 }}>
           <InputInterval
             label=""
@@ -93,7 +309,9 @@ const Dashboard = function () {
             }}
           />
         </div>
+
         <div style={{ flex: 1 }}></div>
+
         <Dropdown
           values={[
             {
@@ -117,6 +335,14 @@ const Dashboard = function () {
             Icon={DownloadSimple}
           />
         </Dropdown>
+
+        <Button
+          category="Neutral"
+          Icon={PaintBrush}
+          IconSize={18}
+          text={t.dashboard.customize}
+        />
+
         <Tooltip content={t.components.help}>
           <Button
             text=""
@@ -143,68 +369,71 @@ const Dashboard = function () {
           />
         </Tooltip>
       </Horizontal>
+
       <Horizontal internal={1}>
         <Stats
+          metric={0.1}
+          metricStatus="Up"
+          metricLocale="pt-BR"
+          metricOptions={{ style: "percent" }}
           title={t.dashboard.stats_inflows_title}
+          Icon={ChartLineUp}
+          category="Success"
           value={5000}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_inflows_description}
         />
         <Stats
-          metric={0.1}
-          metricStatus="Up"
-          metricLocale="pt-BR"
-          metricOptions={{ style: "percent" }}
           title={t.dashboard.stats_inflows_receive_title}
+          Icon={ChartLineUp}
           value={500}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_inflows_receive_description}
         />
         <Stats
-          metric={0.2}
-          metricStatus="Up"
-          metricLocale="pt-BR"
-          metricOptions={{ style: "percent" }}
           title={t.dashboard.stats_inflows_late_title}
+          Icon={ChartLineUp}
           value={1000}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_inflows_late_description}
         />
       </Horizontal>
+
       <Horizontal internal={1}>
-        <Stats
-          title={t.dashboard.stats_outflows_title}
-          value={1000}
-          valueLocale={instance.language}
-          valueOptions={{ style: "currency", currency: instance.currency }}
-          footer={t.dashboard.stats_outflows_description}
-        />
         <Stats
           metric={0.05}
           metricStatus="Down"
           metricLocale="pt-BR"
           metricOptions={{ style: "percent" }}
           title={t.dashboard.stats_outflows_receive_title}
+          Icon={ChartLineDown}
+          category="Danger"
+          value={1000}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.dashboard.stats_outflows_description}
+        />
+        <Stats
+          title={t.dashboard.stats_outflows_title}
+          Icon={ChartLineDown}
           value={50}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_outflows_receive_description}
         />
         <Stats
-          metric={0.1}
-          metricStatus="Down"
-          metricLocale="pt-BR"
-          metricOptions={{ style: "percent" }}
           title={t.dashboard.stats_outflows_late_title}
+          Icon={ChartLineDown}
           value={100}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_outflows_late_description}
         />
       </Horizontal>
+
       <Horizontal internal={1}>
         <Wrapper
           title={t.dashboard.chart_inflows_title}
@@ -253,6 +482,7 @@ const Dashboard = function () {
             ]}
           />
         </Wrapper>
+
         <Wrapper
           title={t.dashboard.chart_outflows_title}
           description={t.dashboard.chart_outflows_description}
@@ -301,10 +531,118 @@ const Dashboard = function () {
           />
         </Wrapper>
       </Horizontal>
+
+      <Horizontal internal={1} className="itemsCenter">
+        <h3 className="flex1">{t.product.products}</h3>
+        <Button
+          category="Neutral"
+          Icon={FunnelSimple}
+          text={t.components.filter}
+        />
+      </Horizontal>
+
       <Horizontal internal={1}>
+        <Stats
+          title={t.dashboard.stats_products_title}
+          Icon={Package}
+          value={products.length}
+          valueUnit={t.product.products.toLowerCase()}
+          footer={t.dashboard.stats_products_description}
+        />
+        <Stats
+          title={t.dashboard.stats_products_title}
+          Icon={Package}
+          value={products.length}
+          valueUnit={t.product.products.toLowerCase()}
+          footer={t.dashboard.stats_products_description}
+        />
+        <Stats
+          title={t.dashboard.stats_products_title}
+          Icon={Package}
+          value={products.length}
+          valueUnit={t.product.products.toLowerCase()}
+          footer={t.dashboard.stats_products_description}
+        />
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          title={t.sale.stats_quantity}
+          Icon={Tag}
+          value={statsSales?.quantity || 0}
+          valueUnit={t.sale.sales.toLowerCase()}
+          footer={t.sale.stats_quantity_description}
+        />
+        <Stats
+          title={t.sale.stats_value}
+          Icon={Tag}
+          category="Success"
+          value={statsSales?.salesWon || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.sale.stats_value_description}
+        />
+        <Stats
+          title={t.sale.stats_pending}
+          Icon={Tag}
+          category="Warning"
+          value={statsSales?.salesPending || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.sale.stats_pending_description}
+        />
+        <Stats
+          title={t.sale.stats_lost}
+          Icon={Tag}
+          category="Danger"
+          value={statsSales?.salesLost || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.sale.stats_lost_description}
+        />
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          title={t.purchase.stats_quantity}
+          Icon={ShoppingBagOpen}
+          value={statsPurchases?.quantity || 0}
+          valueUnit={t.purchase.purchases.toLowerCase()}
+          footer={t.purchase.stats_quantity_description}
+        />
+        <Stats
+          title={t.purchase.stats_successful}
+          Icon={ShoppingBagOpen}
+          category="Success"
+          value={statsPurchases?.purchasesSuccessful || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.purchase.stats_successful_description}
+        />
+        <Stats
+          title={t.purchase.stats_pending}
+          Icon={ShoppingBagOpen}
+          category="Warning"
+          value={statsPurchases?.purchasesPending || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.purchase.stats_pending_description}
+        />
+        <Stats
+          title={t.purchase.stats_unsuccessful}
+          Icon={ShoppingBagOpen}
+          category="Danger"
+          value={statsPurchases?.purchasesUnsuccessful || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.purchase.stats_unsuccessful_description}
+        />
+      </Horizontal>
+
+      <div>
         <Wrapper
-          title={t.dashboard.chart_inflows_resume_title}
-          description={t.dashboard.chart_inflows_resume_description}
+          title={t.dashboard.chart_inflows_title}
+          description={t.dashboard.chart_inflows_description}
         >
           <ChartLine
             height={320}
@@ -317,15 +655,7 @@ const Dashboard = function () {
             lines={[
               {
                 type: "monotone",
-                dataKey: "inflowPending",
-                stroke: "#22c55e",
-                strokeDasharray: "1",
-                strokeWidth: 4,
-                dot: false,
-              },
-              {
-                type: "monotone",
-                dataKey: "inflowOverdue",
+                dataKey: "inflow",
                 stroke: "#22c55e",
                 strokeDasharray: "1",
                 strokeWidth: 4,
@@ -347,73 +677,51 @@ const Dashboard = function () {
               width: 24,
             }}
             data={[
-              { date: "01/01", inflowPending: 0, inflowOverdue: 100 },
-              { date: "02/01", inflowPending: 50, inflowOverdue: 100 },
-              { date: "03/01", inflowPending: 100, inflowOverdue: 200 },
-              { date: "04/01", inflowPending: 50, inflowOverdue: 200 },
-              { date: "05/01", inflowPending: 0, inflowOverdue: 200 },
-              { date: "06/01", inflowPending: 150, inflowOverdue: 200 },
-              { date: "07/01", inflowPending: 150, inflowOverdue: 200 },
+              { date: "01/01", inflow: 1000 },
+              { date: "02/01", inflow: 500 },
+              { date: "03/01", inflow: 2000 },
+              { date: "04/01", inflow: 500 },
+              { date: "05/01", inflow: 0 },
+              { date: "06/01", inflow: 0 },
+              { date: "07/01", inflow: 1000 },
             ]}
           />
         </Wrapper>
-        <Wrapper
-          title={t.dashboard.chart_outflows_resume_title}
-          description={t.dashboard.chart_outflows_resume_description}
-        >
-          <ChartLine
-            height={320}
-            gridProps={{
-              stroke: "#dedede",
-              strokeWidth: 1,
-              vertical: false,
-              horizontal: true,
-            }}
-            lines={[
-              {
-                type: "monotone",
-                dataKey: "outflowPending",
-                stroke: "#ef4444",
-                strokeDasharray: "1",
-                strokeWidth: 4,
-                dot: false,
-              },
-              {
-                type: "monotone",
-                dataKey: "outflowOverdue",
-                stroke: "#ef4444",
-                strokeDasharray: "1",
-                strokeWidth: 4,
-                dot: false,
-              },
-            ]}
-            axisXProps={{
-              angle: 20,
-              stroke: "#bebebe",
-              strokeWidth: 1,
-              dataKey: "date",
-              tick: { fontSize: 10, fill: "#222" },
-              interval: 0,
-              padding: { left: 10, right: 10 },
-            }}
-            axisYProps={{
-              tick: { fontSize: 10, fill: "#222" },
-              stroke: "",
-              strokeWidth: 0,
-              width: 24,
-            }}
-            data={[
-              { date: "01/01", outflowPending: 0, outflowOverdue: 10 },
-              { date: "02/01", outflowPending: 10, outflowOverdue: 20 },
-              { date: "03/01", outflowPending: 0, outflowOverdue: 10 },
-              { date: "04/01", outflowPending: 10, outflowOverdue: 20 },
-              { date: "05/01", outflowPending: 10, outflowOverdue: 20 },
-              { date: "06/01", outflowPending: 10, outflowOverdue: 10 },
-              { date: "07/01", outflowPending: 10, outflowOverdue: 10 },
-            ]}
-          />
-        </Wrapper>
+      </div>
+
+      <Horizontal internal={1} className="itemsCenter">
+        <h3 className="flex1">{t.service.services}</h3>
+        <Button
+          category="Neutral"
+          Icon={FunnelSimple}
+          text={t.components.filter}
+        />
       </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          title={t.dashboard.stats_services_title}
+          Icon={Toolbox}
+          value={services.length}
+          valueUnit={t.service.services.toLowerCase()}
+          footer={t.dashboard.stats_services_description}
+        />
+        <Stats
+          title={t.dashboard.stats_services_title}
+          Icon={Toolbox}
+          value={services.length}
+          valueUnit={t.service.services.toLowerCase()}
+          footer={t.dashboard.stats_services_description}
+        />
+        <Stats
+          title={t.dashboard.stats_services_title}
+          Icon={Toolbox}
+          value={services.length}
+          valueUnit={t.service.services.toLowerCase()}
+          footer={t.dashboard.stats_services_description}
+        />
+      </Horizontal>
+
       <div style={{ minHeight: 128 }}></div>
     </React.Fragment>
   );
