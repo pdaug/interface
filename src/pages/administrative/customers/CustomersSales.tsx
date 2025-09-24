@@ -1,12 +1,7 @@
+import { Tag, CopySimple, ArrowSquareIn } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  ArrowSquareIn,
-  CopySimple,
-  MoneyWavy,
-  Receipt,
-} from "@phosphor-icons/react";
 
 //apis
 import apis from "../../../apis";
@@ -32,16 +27,16 @@ import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 
 // components
+import Stats from "../../../components/stats/Stats";
 import Badge from "../../../components/badges/Badge";
+import Wrapper from "../../../components/wrapper/Wrapper";
 import Profile from "../../../components/profiles/Profile";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Stats from "../../../components/stats/Stats";
 import { ChartData, ChartLine } from "../../../components/charts/Chart";
-import Wrapper from "../../../components/wrapper/Wrapper";
 
 const pageSize = 999;
 
@@ -214,7 +209,7 @@ const CustomersSales = function () {
         <Stats
           title={t.customer.stats_sale_title_quantity}
           value={sales?.length || 0}
-          Icon={Receipt}
+          Icon={Tag}
           valueUnit={t.components.total}
           footer={t.customer.stats_sale_description_quantity}
           styles={{ display: "flex" }}
@@ -226,7 +221,7 @@ const CustomersSales = function () {
             const { total } = Calculate.totalSale(item);
             return acc + total;
           }, 0)}
-          Icon={MoneyWavy}
+          Icon={Tag}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.customer.stats_sale_description_total}

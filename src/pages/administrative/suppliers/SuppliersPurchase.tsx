@@ -1,12 +1,17 @@
+import {
+  CopySimple,
+  ArrowSquareIn,
+  ShoppingBagOpen,
+} from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CopySimple, ArrowSquareIn, Blueprint } from "@phosphor-icons/react";
 
 //apis
 import apis from "../../../apis";
 
-import { OrderStagesCategory } from "../../../assets/Order";
+// assets
+import { PurchaseStagesCategory } from "../../../assets/Purchase";
 
 // utils
 import Clipboard from "../../../utils/Clipboard";
@@ -14,11 +19,11 @@ import Calculate from "../../../utils/Calculate";
 
 // types
 import {
-  TypeOrder,
-  TypeOrderStage,
-  TypeOrderService,
-} from "../../../types/Order";
-import { TypeCustomer } from "../../../types/Customers";
+  TypePurchase,
+  TypePurchaseItem,
+  TypePurchaseStage,
+} from "../../../types/Purchases";
+import { TypeSupplier } from "../../../types/Supplier";
 import { ApiResponsePaginate } from "../../../types/Api";
 
 // hooks
@@ -43,7 +48,7 @@ import { ChartData, ChartLine } from "../../../components/charts/Chart";
 
 const pageSize = 999;
 
-const CustomersOrders = function () {
+const SuppliersPurchase = function () {
   const t = useTranslate();
   const play = useSounds();
   const { id } = useParams();
@@ -52,22 +57,25 @@ const CustomersOrders = function () {
   const { instanceDateTime } = useDateTime();
   const { users, token, instance, workspaces, workspaceId } = useSystem();
 
-  const [orders, setOrders] = useState<TypeOrder[]>([]);
+  const [purchases, setPurchases] = useState<TypePurchase[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [customer, setCustomer] = useState<TypeCustomer | null>(null);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [supplier, setSupplier] = useState<TypeSupplier | null>(null);
 
-  // fetch orders
+  // fetch purchases
   useAsync(
     async function () {
       setLoading(true);
       try {
-        const response = await apis.Order.list<ApiResponsePaginate<TypeOrder>>(
+        const response = await apis.Purchase.list<
+          ApiResponsePaginate<TypePurchase>
+        >(
           token,
           instance.name,
           {
             pageSize,
             pageCurrent: 1,
-            filter: JSON.stringify({ customerId: id }),
+            filter: JSON.stringify({ supplierId: id }),
           },
           workspaceId,
         );
@@ -77,12 +85,12 @@ const CustomersOrders = function () {
             description: t.stacks.no_find_item,
           });
           console.warn(
-            "[src/pages/administrative/customers/CustomersOrders.tsx]",
+            "[src/pages/administrative/suppliers/SuppliersPurchase.tsx]",
             response.data,
           );
           return;
         }
-        setOrders(response.data.result.items);
+        setPurchases(response.data.result.items);
         return;
       } catch (err) {
         play("alert");
@@ -90,7 +98,7 @@ const CustomersOrders = function () {
           description: t.stacks.no_find_item,
         });
         console.error(
-          "[src/pages/administrative/customers/CustomersOrders.tsx]",
+          "[src/pages/administrative/suppliers/SuppliersPurchase.tsx]",
           err,
         );
         return;
@@ -101,12 +109,12 @@ const CustomersOrders = function () {
     [workspaceId],
   );
 
-  // fetch customer
+  // fetch supplier
   useAsync(async function () {
     if (!id) return;
     setLoading(true);
     try {
-      const response = await apis.Customer.get<TypeCustomer>(
+      const response = await apis.Supplier.get<TypeSupplier>(
         token,
         instance.name,
         id,
@@ -117,10 +125,10 @@ const CustomersOrders = function () {
         toast.warning(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        navigate("/f/customers");
+        navigate("/f/suppliers");
         return;
       }
-      setCustomer(response.data.result);
+      setSupplier(response.data.result);
       return;
     } catch (err) {
       play("alert");
@@ -128,10 +136,10 @@ const CustomersOrders = function () {
         description: t.stacks.no_find_item,
       });
       console.error(
-        "[src/pages/administrative/customers/CustomersOrders.tsx]",
+        "[src/pages/administrative/suppliers/SuppliersPurchase.tsx]",
         err,
       );
-      navigate("/f/customers");
+      navigate("/f/suppliers");
       return;
     } finally {
       setLoading(false);
@@ -167,7 +175,7 @@ const CustomersOrders = function () {
       Icon: ArrowSquareIn,
       onClick: function (_: React.MouseEvent, data: unknown) {
         if (data && typeof data === "object" && "id" in data)
-          navigate(`/f/orders/inspect/${data.id}`);
+          navigate(`/f/sales/inspect/${data.id}`);
         return;
       },
     },
@@ -188,19 +196,19 @@ const CustomersOrders = function () {
                 url: "/f/",
               },
               {
-                id: "customers",
-                label: t.customer.customers,
-                url: "/f/customers",
+                id: "suppliers",
+                label: t.supplier.suppliers,
+                url: "/f/suppliers",
               },
               {
-                id: "customer",
-                label: customer?.name || t.components.empty_name,
-                url: `/f/customers/inspect${id ? `/${id}` : ""}`,
+                id: "suppliers",
+                label: supplier?.name || t.components.empty_name,
+                url: `/f/suppliers/inspect${id ? `/${id}` : ""}`,
               },
               {
-                id: "orders",
-                label: t.order.orders,
-                url: "/f/orders",
+                id: "purchase",
+                label: t.purchase.purchases,
+                url: "/f/purchase",
               },
             ]}
           />
@@ -209,24 +217,24 @@ const CustomersOrders = function () {
 
       <Horizontal internal={1}>
         <Stats
-          title={t.customer.stats_order_title_quantity}
-          value={orders?.length || 0}
-          Icon={Blueprint}
+          title={t.supplier.stats_purchase_title_quantity}
+          value={purchases?.length || 0}
+          Icon={ShoppingBagOpen}
           valueUnit={t.components.total}
-          footer={t.customer.stats_order_description_quantity}
+          footer={t.supplier.stats_purchase_description_quantity}
           styles={{ display: "flex" }}
           stylesContainer={{ flex: 1 }}
         />
         <Stats
-          title={t.customer.stats_order_title_total}
-          value={orders?.reduce(function (acc, item) {
-            const { total } = Calculate.totalOrder(item);
+          title={t.supplier.stats_purchase_title_total}
+          value={purchases?.reduce(function (acc, item) {
+            const { total } = Calculate.totalPurchase(item);
             return acc + total;
           }, 0)}
-          Icon={Blueprint}
+          Icon={ShoppingBagOpen}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
-          footer={t.customer.stats_order_description_total}
+          footer={t.supplier.stats_purchase_description_total}
           styles={{ display: "flex" }}
           stylesContainer={{ flex: 1 }}
         />
@@ -264,10 +272,10 @@ const CustomersOrders = function () {
               width: 24,
             }}
             data={
-              orders?.map(function (order) {
-                const { total } = Calculate.totalOrder(order);
+              purchases?.map(function (purchase) {
+                const { total } = Calculate.totalPurchase(purchase);
                 return {
-                  date: order.createdAt.slice(0, 10),
+                  date: purchase.createdAt.slice(0, 10),
                   value: total,
                 };
               }) as unknown as ChartData[]
@@ -280,63 +288,67 @@ const CustomersOrders = function () {
         <Table
           border
           loading={loading}
-          data={orders as TableData[]}
+          selected={selected}
+          options={getOptions}
+          setSelected={setSelected}
+          data={purchases as TableData[]}
           columns={{
-            orderId: {
-              label: t.order.id,
+            purchaseId: {
+              label: t.purchase.id,
               maxWidth: 96,
               handler: function (data) {
                 return (
                   <Badge
                     category="Neutral"
-                    value={(data?.orderId as string) || ""}
+                    value={(data?.purchaseId as string) || ""}
                   />
                 );
               },
             },
             stage: {
-              label: t.order.stage,
+              label: t.purchase.stage,
               maxWidth: 96,
               handler: function (data) {
                 return (
                   <Badge
                     value={
-                      t.order?.[data.stage as keyof typeof t.order] ||
+                      t.purchase?.[data.stage as keyof typeof t.purchase] ||
                       t.components.unknown
                     }
                     category={
-                      OrderStagesCategory?.[data.stage as TypeOrderStage] ||
-                      "Neutral"
+                      PurchaseStagesCategory?.[
+                        data.stage as TypePurchaseStage
+                      ] || "Neutral"
                     }
                   />
                 );
               },
             },
-            customerName: {
-              label: t.order.customer,
+            supplierName: {
+              label: t.purchase.supplier,
               handler: function (data) {
                 return (
                   <div
                     className="cursor"
                     onClick={function () {
-                      navigate(`/f/orders/inspect/${data.id}`);
+                      navigate(`/f/suppliers/inspect/${data.id}`);
                       return;
                     }}
                   >
-                    {data?.customerName as string}
+                    {data?.supplierName as string}
                   </div>
                 );
               },
             },
-            services: {
-              label: t.order.service_name,
+            items: {
+              label: t.purchase.items,
               handler: function (data) {
-                const serviceNamesFrequency = (
-                  data?.services as TypeOrderService[]
+                const itemNamesFrequency = (
+                  data?.items as TypePurchaseItem[]
                 ).reduce(
                   function (acc, item) {
-                    acc[item.serviceName] =
-                      (acc[item.serviceName] || 0) + item.quantity;
+                    acc[item.itemName] =
+                      (acc[item.itemName] || 0) + item.quantity;
                     return acc;
                   },
                   {} as Record<string, number>,
@@ -344,13 +356,13 @@ const CustomersOrders = function () {
 
                 return (
                   <div>
-                    {Object.entries(serviceNamesFrequency)?.map(function (
-                      [serviceName, value],
+                    {Object.entries(itemNamesFrequency)?.map(function (
+                      [itemName, value],
                       index,
                     ) {
                       return (
-                        <div key={`service-name-${index}`}>
-                          {String(value)}x {serviceName}
+                        <div key={`item-name-${index}`}>
+                          {String(value)}x {itemName}
                         </div>
                       );
                     })}
@@ -359,10 +371,10 @@ const CustomersOrders = function () {
               },
             },
             details: {
-              label: t.order.details,
+              label: t.purchase.details,
               handler: function (data) {
-                const subtotalServices = Calculate.productsOrServices(
-                  (data?.services as Record<string, unknown>[]) || [],
+                const subtotalItems = Calculate.productsOrServices(
+                  (data?.items as Record<string, unknown>[]) || [],
                 );
 
                 const subtotalAdditions = Calculate.details(
@@ -375,7 +387,7 @@ const CustomersOrders = function () {
                       );
                     },
                   ) || [],
-                  subtotalServices,
+                  subtotalItems,
                 );
 
                 const subtotalDeductions = Calculate.details(
@@ -389,29 +401,42 @@ const CustomersOrders = function () {
                       );
                     },
                   ) || [],
-                  subtotalServices,
+                  subtotalItems,
                 );
+
+                const subtotalShipping = Number(data?.shippingCost) || 0;
 
                 return (
                   <Vertical
                     internal={0.4}
                     styles={{ alignItems: "flex-start" }}
                   >
-                    {!subtotalAdditions && !subtotalDeductions && (
-                      <i style={{ opacity: 0.6 }}>{t.order.empty_details}</i>
+                    {!subtotalAdditions &&
+                      !subtotalDeductions &&
+                      !subtotalShipping && (
+                        <i style={{ opacity: 0.6 }}>
+                          {t.purchase.empty_details}
+                        </i>
+                      )}
+                    {Boolean(subtotalShipping) && (
+                      <Badge
+                        category="Danger"
+                        styles={{ justifyContent: "flex-start" }}
+                        value={`${t.purchase.shipping}: +${Currency(subtotalShipping)}`}
+                      />
                     )}
                     {Boolean(subtotalAdditions) && (
                       <Badge
                         category="Danger"
                         styles={{ justifyContent: "flex-start" }}
-                        value={`${t.order.addition}: +${Currency(subtotalAdditions)}`}
+                        value={`${t.purchase.addition}: +${Currency(subtotalAdditions)}`}
                       />
                     )}
                     {Boolean(subtotalDeductions) && (
                       <Badge
                         category="Success"
                         styles={{ justifyContent: "flex-start" }}
-                        value={`${t.order.deduction}: +${Currency(subtotalDeductions)}`}
+                        value={`${t.purchase.deduction}: +${Currency(subtotalDeductions)}`}
                       />
                     )}
                   </Vertical>
@@ -422,8 +447,8 @@ const CustomersOrders = function () {
               label: t.components.total,
               maxWidth: 128,
               handler: function (data) {
-                const subtotalServices = Calculate.productsOrServices(
-                  (data?.services as Record<string, unknown>[]) || [],
+                const subtotalItems = Calculate.productsOrServices(
+                  (data?.items as Record<string, unknown>[]) || [],
                 );
 
                 const subtotalAdditions = Calculate.details(
@@ -436,7 +461,7 @@ const CustomersOrders = function () {
                       );
                     },
                   ) || [],
-                  subtotalServices,
+                  subtotalItems,
                 );
 
                 const subtotalDeductions = Calculate.details(
@@ -450,33 +475,44 @@ const CustomersOrders = function () {
                       );
                     },
                   ) || [],
-                  subtotalServices,
+                  subtotalItems,
                 );
 
+                const subtotalShipping = Number(data?.shippingCost) || 0;
+
                 const total =
-                  subtotalServices + subtotalAdditions - subtotalDeductions;
+                  subtotalItems +
+                  subtotalAdditions -
+                  subtotalDeductions +
+                  subtotalShipping;
 
                 return <div>{Currency(total || 0)}</div>;
               },
             },
-            providerId: {
-              label: t.order.provider,
+            user: {
+              label: t.purchase.purchaser,
               handler: function (data) {
                 const userFinded = users?.find(function (user) {
-                  return user.id === data.providerId;
+                  return user.id === data.userId;
                 });
+                const purchaserFinded =
+                  users?.find(function (user) {
+                    return user.id === data.purchaserId;
+                  }) || userFinded;
                 return (
                   <Tooltip
-                    content={t.components[userFinded?.role || "collaborator"]}
+                    content={
+                      t.components[purchaserFinded?.role || "collaborator"]
+                    }
                   >
                     <Profile
                       photoCircle
                       photoSize={3}
                       padding={false}
                       styles={{ lineHeight: 1 }}
-                      photo={userFinded?.photo || ""}
-                      description={userFinded?.email || ""}
-                      name={userFinded?.name || t.components.unknown}
+                      photo={purchaserFinded?.photo || ""}
+                      description={purchaserFinded?.email || ""}
+                      name={purchaserFinded?.name || t.components.unknown}
                     />
                   </Tooltip>
                 );
@@ -490,14 +526,13 @@ const CustomersOrders = function () {
               },
             },
           }}
-          options={getOptions}
         />
 
         <Pagination
           display
           pageCurrent={1}
           setPage={() => {}}
-          itemsTotal={orders.length}
+          itemsTotal={purchases.length}
           pageSize={pageSize}
         />
       </Vertical>
@@ -505,4 +540,4 @@ const CustomersOrders = function () {
   );
 };
 
-export default CustomersOrders;
+export default SuppliersPurchase;

@@ -468,6 +468,7 @@ const TranslatePt = {
       "Você não tem permissão para acessar esta página",
   },
   password: {
+    change_password: "Alterar senha",
     email: "Email",
     email_placeholder: "Ex. fulano@email.com",
     password_old: "Senha atual",
@@ -962,6 +963,12 @@ const TranslatePt = {
     subtitle_addresses: "Preencha as entradas com os dados de endereço",
     // messages
     no_delete_address: "Não é possível excluir todos os endereços",
+    // stats
+    stats_purchase_title_quantity: "Quantidade de compras",
+    stats_purchase_description_quantity:
+      "Total de quantidade de compras do fornecedor",
+    stats_purchase_title_total: "Valor das compras",
+    stats_purchase_description_total: "Total de valor de compras do fornecedor",
   },
   toast: {
     // title
@@ -1600,6 +1607,7 @@ const TranslateEn = {
     no_permission_description: "You do not have permission to access this page",
   },
   password: {
+    change_password: "Change password",
     email: "Email",
     email_placeholder: "e.g. johndoe@email.com",
     password_old: "Current password",
@@ -2052,6 +2060,11 @@ const TranslateEn = {
     subtitle_representative: "Fill the inputs with representative data",
     // messages
     no_delete_address: "Do not delete all addresses",
+    // stats
+    stats_purchase_title_quantity: "Purchases quantity",
+    stats_purchase_description_quantity: "Total of quantity supplier purchases",
+    stats_purchase_title_total: "Purchases value",
+    stats_purchase_description_total: "Total of value supplier purchases",
   },
   stacks: {
     // no

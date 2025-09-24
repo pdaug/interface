@@ -1,6 +1,7 @@
 // pages
 import SuppliersList from "./SuppliersList.tsx";
 import SuppliersInspect from "./SuppliersInspect.tsx";
+import SuppliersPurchase from "./SuppliersPurchase.tsx";
 
 export default [
   {
@@ -14,5 +15,9 @@ export default [
   {
     path: "inspect/:id",
     Component: SuppliersInspect,
+  },
+  {
+    path: "purchase/:id",
+    Component: SuppliersPurchase,
   },
 ];

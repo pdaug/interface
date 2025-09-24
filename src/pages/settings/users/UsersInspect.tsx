@@ -933,7 +933,7 @@ const UsersInspect = function () {
                       type="button"
                       category="Neutral"
                       disabled={loading}
-                      text={t.password.request}
+                      text={t.password.change_password}
                       onClick={async function () {
                         try {
                           const response = await apis.Password.setRequest(
@@ -998,6 +998,7 @@ const UsersInspect = function () {
                   )}
                 </React.Fragment>
               )}
+
               <Button
                 type="button"
                 category="Neutral"
@@ -1008,6 +1009,7 @@ const UsersInspect = function () {
                   return;
                 }}
               />
+
               <Button
                 type="submit"
                 disabled={loading}
