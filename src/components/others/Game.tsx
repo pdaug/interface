@@ -116,12 +116,17 @@ export default function DinoGame() {
       {/* Dino */}
       <div
         style={{
+          // backgroundColor: "red",
+          backgroundImage: "url('/icons/icon512.png')",
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          borderRadius: "var(--borderRadius)",
           position: "absolute",
           left: 20,
           bottom: dinoBottom,
           width: DINO_SIZE,
           height: DINO_SIZE,
-          backgroundColor: "red",
         }}
       />
 
@@ -131,6 +136,16 @@ export default function DinoGame() {
           position: "absolute",
           left: obstacleLeft,
           bottom: 0,
+          width: OBSTACLE_WIDTH,
+          height: OBSTACLE_HEIGHT,
+          backgroundColor: "black",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          left: obstacleLeft,
+          bottom: GAME_HEIGHT - OBSTACLE_HEIGHT,
           width: OBSTACLE_WIDTH,
           height: OBSTACLE_HEIGHT,
           backgroundColor: "black",

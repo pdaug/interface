@@ -124,6 +124,7 @@ const TranslatePt = {
     address_city_placeholder: "Ex. Cores",
     address_state: "Estado",
     // buttons
+    print: "Imprimir",
     yes: "Sim",
     no: "Não",
     copy: "Copiar",
@@ -1265,6 +1266,7 @@ const TranslateEn = {
     address_city_placeholder: "e.g. Colors",
     address_state: "State",
     // buttons
+    print: "Print",
     yes: "Yes",
     no: "No",
     copy: "Copy",

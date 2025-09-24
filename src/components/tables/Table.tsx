@@ -11,6 +11,7 @@ import Tooltip from "../tooltips/Tooltip";
 import { Horizontal } from "../aligns/Align";
 import { InputCheck } from "../inputs/Input";
 import Dropdown, { DropdownValue } from "../dropdowns/Dropdown";
+import { forwardRef } from "react";
 
 export type TableColumn = {
   [key: string]: {
@@ -42,18 +43,21 @@ export type TableProps = {
   noSelect?: boolean;
 };
 
-const Table = function ({
-  columns,
-  data,
-  border,
-  selected,
-  setSelected,
-  options,
-  styles,
-  loading,
-  headless,
-  noSelect,
-}: TableProps) {
+const Table = forwardRef<HTMLDivElement, TableProps>(function (
+  {
+    columns,
+    data,
+    border,
+    selected,
+    setSelected,
+    options,
+    styles,
+    loading,
+    headless,
+    noSelect,
+  },
+  ref,
+) {
   const t = useTranslate();
 
   const rowsId = data.map((item) => item.id);
@@ -63,7 +67,11 @@ const Table = function ({
       : false;
 
   return (
-    <div style={styles} className={`table ${border ? "tableBorder" : ""}`}>
+    <div
+      ref={ref}
+      style={styles}
+      className={`table ${border ? "tableBorder" : ""}`}
+    >
       {!headless && (
         <div className="tableHead">
           <div className="tableHeadRow">
@@ -202,6 +210,8 @@ const Table = function ({
       )}
     </div>
   );
-};
+});
+
+Table.displayName = "Table";
 
 export default Table;
