@@ -124,6 +124,7 @@ const TranslatePt = {
     address_city_placeholder: "Ex. Cores",
     address_state: "Estado",
     // buttons
+    hide_and_show: "Ocultar e mostrar",
     filter: "Filtrar",
     print: "Imprimir",
     yes: "Sim",
@@ -296,9 +297,19 @@ const TranslatePt = {
     // stats products
     stats_products_title: "Quantidade de produtos",
     stats_products_description: "Total em quantidade de produtos",
+    stats_products_active_title: "Produtos ativos",
+    stats_products_active_description: "Total em quantidade de produtos ativos",
+    stats_products_inactive_title: "Produtos inativos",
+    stats_products_inactive_description:
+      "Total em quantidade de produtos inativos",
     // stats services
     stats_services_title: "Quantidade de serviços",
     stats_services_description: "Total em quantidade de serviços",
+    stats_services_active_title: "Serviços ativos",
+    stats_services_active_description: "Total em quantidade de serviços ativos",
+    stats_services_inactive_title: "Serviços inativos",
+    stats_services_inactive_description:
+      "Total em quantidade de serviços inativos",
   },
   dialog: {
     title_delete: "Deletar",
@@ -1307,6 +1318,7 @@ const TranslateEn = {
     address_city_placeholder: "e.g. Colors",
     address_state: "State",
     // buttons
+    hide_and_show: "Hide and show",
     filter: "Filter",
     print: "Print",
     yes: "Yes",
@@ -1474,9 +1486,19 @@ const TranslateEn = {
     // stats products
     stats_products_title: "Quantity of products",
     stats_products_description: "Total in quantity of products",
+    stats_products_active_title: "Active products",
+    stats_products_active_description: "Total in quantity of active products",
+    stats_products_inactive_title: "Inactive products",
+    stats_products_inactive_description:
+      "Total in quantity of inactive products",
     // stats services
     stats_services_title: "Quantity of services",
     stats_services_description: "Total in quantity of services",
+    stats_services_active_title: "Active services",
+    stats_services_active_description: "Total in quantity of active services",
+    stats_services_inactive_title: "Inactive services",
+    stats_services_inactive_description:
+      "Total in quantity of inactive services",
   },
   dialog: {
     title_delete: "Delete",

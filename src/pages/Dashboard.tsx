@@ -9,16 +9,18 @@ import {
   ChartLineDown,
   DownloadSimple,
   ShoppingBagOpen,
+  Eye,
+  Blueprint,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
-import { endOfDay, subDays } from "date-fns";
+import { endOfDay, startOfYear, subDays } from "date-fns";
 import React, { useEffect, useState } from "react";
 
 // apis
 import apis from "../apis";
 
 // types
-import { TypeProduct } from "../types/Product";
+import { TypeAccount } from "../types/Account";
 import { ApiResponsePaginate } from "../types/Api";
 import { TypeInputInterval } from "../types/Components";
 
@@ -38,8 +40,8 @@ import Dropdown from "../components/dropdowns/Dropdown";
 import { Horizontal } from "../components/aligns/Align";
 import { useDialog } from "../components/dialogs/Dialog";
 import { InputInterval, InputSelect } from "../components/inputs/Input";
-import { TypeService } from "../types/Service";
-import { TypeAccount } from "../types/Account";
+
+type TypeStats = Record<string, number>;
 
 const Dashboard = function () {
   const t = useTranslate();
@@ -53,13 +55,15 @@ const Dashboard = function () {
   });
 
   const [greeting, setGreeting] = useState<string>("");
+  const [hidden, setHidden] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [accounts, setAccounts] = useState<TypeAccount[]>([]);
-  const [products, setProducts] = useState<TypeProduct[]>([]);
-  const [services, setServices] = useState<TypeService[]>([]);
-  const [statsSales, setStatsSales] = useState<Record<string, number>>({});
-  const [statsPurchases, setStatsPurchases] = useState<Record<string, number>>(
-    {},
-  );
+
+  const [statsSales, setStatsSales] = useState<TypeStats>({});
+  const [statsOrders, setStatsOrders] = useState<TypeStats>({});
+  const [statsProducts, setStatsProducts] = useState<TypeStats>({});
+  const [statsServices, setStatsServices] = useState<TypeStats>({});
+  const [statsPurchases, setStatsPurchases] = useState<TypeStats>({});
 
   // get greeting
   useEffect(function () {
@@ -129,132 +133,144 @@ const Dashboard = function () {
     [workspaceId],
   );
 
-  // fetch products
+  // fetch stats
   useAsync(
     async function () {
       try {
-        const responseProducts = await apis.Product.list<
-          ApiResponsePaginate<TypeProduct>
-        >(
-          token,
-          instance.name,
-          {
-            pageSize: 999,
-            pageCurrent: 1,
-            dateStart: interval.start
-              ? interval.start.toISOString()
-              : undefined,
-            dateEnd: interval.end ? interval.end.toISOString() : undefined,
-          },
-          workspaceId,
-        );
-        if (!responseProducts.data?.result || responseProducts.status !== 200) {
-          play("alert");
-          toast.warning(t.toast.warning_error, {
-            description: t.stacks.no_find_item,
-          });
-          console.error("[src/pages/Dashboard.tsx]", responseProducts.data);
-          return;
-        }
-        setProducts(responseProducts.data.result.items);
-
-        const responseSales = await apis.Sale.stats<Record<string, number>>(
+        setLoading(true);
+        const responseProductsStats = await apis.Product.stats<TypeStats>(
           token,
           instance.name,
           {
             dateStart: interval.start
               ? interval.start.toISOString()
-              : subDays(new Date(), 30).toISOString(),
+              : startOfYear(new Date()).toISOString(),
             dateEnd: interval.end
               ? interval.end.toISOString()
               : endOfDay(new Date()).toISOString(),
           },
           workspaceId,
         );
-        if (!responseSales.data?.result) {
+        if (
+          !responseProductsStats.data?.result ||
+          responseProductsStats.status !== 200
+        ) {
           play("alert");
           toast.warning(t.toast.warning_error, {
             description: t.stacks.no_find_item,
           });
-          console.warn("[src/pages/Dashboard.tsx]", responseSales.data);
+          console.error(
+            "[src/pages/Dashboard.tsx]",
+            responseProductsStats.data,
+          );
           return;
         }
-        setStatsSales(responseSales.data.result);
+        setStatsProducts(responseProductsStats.data.result);
 
-        const responsePurchases = await apis.Purchase.stats<
-          Record<string, number>
-        >(
+        const responseSalesStats = await apis.Sale.stats<TypeStats>(
           token,
           instance.name,
           {
             dateStart: interval.start
               ? interval.start.toISOString()
-              : subDays(new Date(), 30).toISOString(),
+              : startOfYear(new Date()).toISOString(),
             dateEnd: interval.end
               ? interval.end.toISOString()
               : endOfDay(new Date()).toISOString(),
           },
           workspaceId,
         );
-        if (!responsePurchases.data?.result) {
+        if (!responseSalesStats.data?.result) {
           play("alert");
           toast.warning(t.toast.warning_error, {
             description: t.stacks.no_find_item,
           });
-          console.warn("[src/pages/Dashboard.tsx]", responsePurchases.data);
+          console.warn("[src/pages/Dashboard.tsx]", responseSalesStats.data);
           return;
         }
-        setStatsPurchases(responsePurchases.data.result);
+        setStatsSales(responseSalesStats.data.result);
 
-        return;
-      } catch (err) {
-        play("alert");
-        toast.error(t.toast.warning_error, {
-          description: t.stacks.no_find_item,
-        });
-        console.error("[src/pages/Dashboard.tsx]", err);
-        return;
-      }
-    },
-    [interval, workspaceId],
-  );
-
-  // fetch services
-  useAsync(
-    async function () {
-      try {
-        const responseServices = await apis.Service.list<
-          ApiResponsePaginate<TypeService>
-        >(
+        const responsePurchasesStats = await apis.Purchase.stats<TypeStats>(
           token,
           instance.name,
           {
-            pageSize: 999,
-            pageCurrent: 1,
             dateStart: interval.start
               ? interval.start.toISOString()
-              : undefined,
-            dateEnd: interval.end ? interval.end.toISOString() : undefined,
+              : startOfYear(new Date()).toISOString(),
+            dateEnd: interval.end
+              ? interval.end.toISOString()
+              : endOfDay(new Date()).toISOString(),
           },
           workspaceId,
         );
-        if (!responseServices.data?.result?.items) {
+        if (!responsePurchasesStats.data?.result) {
           play("alert");
           toast.warning(t.toast.warning_error, {
             description: t.stacks.no_find_item,
           });
-          console.warn("[src/pages/Dashboard.tsx]", responseServices.data);
+          console.warn(
+            "[src/pages/Dashboard.tsx]",
+            responsePurchasesStats.data,
+          );
           return;
         }
-        setServices(responseServices.data.result.items);
+        setStatsPurchases(responsePurchasesStats.data.result);
+
+        const responseServicesStats = await apis.Service.stats<TypeStats>(
+          token,
+          instance.name,
+          {
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : startOfYear(new Date()).toISOString(),
+            dateEnd: interval.end
+              ? interval.end.toISOString()
+              : endOfDay(new Date()).toISOString(),
+          },
+          workspaceId,
+        );
+        if (!responseServicesStats.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.warn("[src/pages/Dashboard.tsx]", responseServicesStats.data);
+          return;
+        }
+        setStatsServices(responseServicesStats.data.result);
+
+        const responseOrdersStats = await apis.Order.stats<TypeStats>(
+          token,
+          instance.name,
+          {
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : startOfYear(new Date()).toISOString(),
+            dateEnd: interval.end
+              ? interval.end.toISOString()
+              : endOfDay(new Date()).toISOString(),
+          },
+          workspaceId,
+        );
+        if (!responseOrdersStats.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.warn("[src/pages/Dashboard.tsx]", responseOrdersStats.data);
+          return;
+        }
+        setStatsOrders(responseOrdersStats.data.result);
       } catch (err) {
         play("alert");
         toast.error(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
         console.error("[src/pages/Dashboard.tsx]", err);
-        return;
+      } finally {
+        setLoading(false);
       }
+      return;
     },
     [interval, workspaceId],
   );
@@ -312,6 +328,26 @@ const Dashboard = function () {
 
         <div style={{ flex: 1 }}></div>
 
+        <Button
+          category="Neutral"
+          Icon={PaintBrush}
+          IconSize={18}
+          text={t.dashboard.customize}
+        />
+
+        <Tooltip content={t.components.hide_and_show}>
+          <Button
+            onlyIcon
+            Icon={Eye}
+            category="Neutral"
+            text=""
+            onClick={function () {
+              setHidden(!hidden);
+              return;
+            }}
+          />
+        </Tooltip>
+
         <Dropdown
           values={[
             {
@@ -329,19 +365,13 @@ const Dashboard = function () {
           ]}
         >
           <Button
+            onlyIcon
             disabled
+            text=""
             category="Neutral"
-            text={t.components.download}
             Icon={DownloadSimple}
           />
         </Dropdown>
-
-        <Button
-          category="Neutral"
-          Icon={PaintBrush}
-          IconSize={18}
-          text={t.dashboard.customize}
-        />
 
         <Tooltip content={t.components.help}>
           <Button
@@ -372,6 +402,7 @@ const Dashboard = function () {
 
       <Horizontal internal={1}>
         <Stats
+          loading={loading}
           metric={0.1}
           metricStatus="Up"
           metricLocale="pt-BR"
@@ -384,7 +415,9 @@ const Dashboard = function () {
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_inflows_description}
         />
+
         <Stats
+          loading={loading}
           title={t.dashboard.stats_inflows_receive_title}
           Icon={ChartLineUp}
           value={500}
@@ -392,7 +425,9 @@ const Dashboard = function () {
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_inflows_receive_description}
         />
+
         <Stats
+          loading={loading}
           title={t.dashboard.stats_inflows_late_title}
           Icon={ChartLineUp}
           value={1000}
@@ -404,6 +439,7 @@ const Dashboard = function () {
 
       <Horizontal internal={1}>
         <Stats
+          loading={loading}
           metric={0.05}
           metricStatus="Down"
           metricLocale="pt-BR"
@@ -416,7 +452,9 @@ const Dashboard = function () {
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_outflows_description}
         />
+
         <Stats
+          loading={loading}
           title={t.dashboard.stats_outflows_title}
           Icon={ChartLineDown}
           value={50}
@@ -424,7 +462,9 @@ const Dashboard = function () {
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_outflows_receive_description}
         />
+
         <Stats
+          loading={loading}
           title={t.dashboard.stats_outflows_late_title}
           Icon={ChartLineDown}
           value={100}
@@ -543,37 +583,47 @@ const Dashboard = function () {
 
       <Horizontal internal={1}>
         <Stats
+          loading={loading}
           title={t.dashboard.stats_products_title}
           Icon={Package}
-          value={products.length}
+          value={statsProducts?.quantity || 0}
           valueUnit={t.product.products.toLowerCase()}
           footer={t.dashboard.stats_products_description}
         />
+
         <Stats
-          title={t.dashboard.stats_products_title}
+          loading={loading}
+          title={t.dashboard.stats_products_active_title}
           Icon={Package}
-          value={products.length}
+          category="Success"
+          value={statsProducts?.productsActive || 0}
           valueUnit={t.product.products.toLowerCase()}
-          footer={t.dashboard.stats_products_description}
+          footer={t.dashboard.stats_products_active_description}
         />
+
         <Stats
-          title={t.dashboard.stats_products_title}
+          loading={loading}
+          title={t.dashboard.stats_products_inactive_title}
           Icon={Package}
-          value={products.length}
+          category="Danger"
+          value={statsProducts?.productsInactive || 0}
           valueUnit={t.product.products.toLowerCase()}
-          footer={t.dashboard.stats_products_description}
+          footer={t.dashboard.stats_products_inactive_description}
         />
       </Horizontal>
 
       <Horizontal internal={1}>
         <Stats
+          loading={loading}
           title={t.sale.stats_quantity}
           Icon={Tag}
           value={statsSales?.quantity || 0}
           valueUnit={t.sale.sales.toLowerCase()}
           footer={t.sale.stats_quantity_description}
         />
+
         <Stats
+          loading={loading}
           title={t.sale.stats_value}
           Icon={Tag}
           category="Success"
@@ -582,7 +632,9 @@ const Dashboard = function () {
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.sale.stats_value_description}
         />
+
         <Stats
+          loading={loading}
           title={t.sale.stats_pending}
           Icon={Tag}
           category="Warning"
@@ -591,7 +643,9 @@ const Dashboard = function () {
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.sale.stats_pending_description}
         />
+
         <Stats
+          loading={loading}
           title={t.sale.stats_lost}
           Icon={Tag}
           category="Danger"
@@ -604,13 +658,16 @@ const Dashboard = function () {
 
       <Horizontal internal={1}>
         <Stats
+          loading={loading}
           title={t.purchase.stats_quantity}
           Icon={ShoppingBagOpen}
           value={statsPurchases?.quantity || 0}
           valueUnit={t.purchase.purchases.toLowerCase()}
           footer={t.purchase.stats_quantity_description}
         />
+
         <Stats
+          loading={loading}
           title={t.purchase.stats_successful}
           Icon={ShoppingBagOpen}
           category="Success"
@@ -619,7 +676,9 @@ const Dashboard = function () {
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.purchase.stats_successful_description}
         />
+
         <Stats
+          loading={loading}
           title={t.purchase.stats_pending}
           Icon={ShoppingBagOpen}
           category="Warning"
@@ -628,7 +687,9 @@ const Dashboard = function () {
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.purchase.stats_pending_description}
         />
+
         <Stats
+          loading={loading}
           title={t.purchase.stats_unsuccessful}
           Icon={ShoppingBagOpen}
           category="Danger"
@@ -700,25 +761,76 @@ const Dashboard = function () {
 
       <Horizontal internal={1}>
         <Stats
+          loading={loading}
           title={t.dashboard.stats_services_title}
           Icon={Toolbox}
-          value={services.length}
+          value={statsServices.quantity || 0}
           valueUnit={t.service.services.toLowerCase()}
           footer={t.dashboard.stats_services_description}
         />
+
         <Stats
-          title={t.dashboard.stats_services_title}
+          loading={loading}
+          title={t.dashboard.stats_services_active_title}
           Icon={Toolbox}
-          value={services.length}
+          category="Success"
+          value={statsServices.servicesActive || 0}
           valueUnit={t.service.services.toLowerCase()}
-          footer={t.dashboard.stats_services_description}
+          footer={t.dashboard.stats_services_active_description}
         />
+
         <Stats
-          title={t.dashboard.stats_services_title}
+          loading={loading}
+          title={t.dashboard.stats_services_inactive_title}
           Icon={Toolbox}
-          value={services.length}
+          category="Danger"
+          value={statsServices.servicesInactive || 0}
           valueUnit={t.service.services.toLowerCase()}
-          footer={t.dashboard.stats_services_description}
+          footer={t.dashboard.stats_services_inactive_description}
+        />
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          loading={loading}
+          Icon={Blueprint}
+          title={t.order.stats_quantity}
+          value={statsOrders.quantity || 0}
+          valueUnit={t.order.orders.toLowerCase()}
+          footer={t.order.stats_quantity_description}
+        />
+
+        <Stats
+          loading={loading}
+          category="Success"
+          Icon={Blueprint}
+          title={t.order.stats_completed}
+          value={statsOrders.ordersCompleted || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.order.stats_completed_description}
+        />
+
+        <Stats
+          loading={loading}
+          category="Warning"
+          Icon={Blueprint}
+          title={t.order.stats_pending}
+          value={statsOrders.ordersPending || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.order.stats_pending_description}
+        />
+
+        <Stats
+          loading={loading}
+          category="Danger"
+          Icon={Blueprint}
+          title={t.order.stats_canceled}
+          value={statsOrders.ordersCanceled || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.order.stats_canceled_description}
         />
       </Horizontal>
 
