@@ -71,8 +71,6 @@ const Dashboard = function () {
     { date: string; sales: number; purchases: number }[]
   >([]);
 
-  console.log(chartSalesPurchases);
-
   // get greeting
   useEffect(function () {
     const random = Math.floor(Math.random() * 6) + 1;
@@ -772,15 +770,21 @@ const Dashboard = function () {
               vertical: false,
               horizontal: true,
             }}
+            margin={{ top: 8, right: 8, left: 48, bottom: 16 }}
             lines={[
               {
                 type: "monotone",
                 name: t.sale.sales,
                 dataKey: "sale",
-                stroke: "var(--chartColor2)",
+                stroke: "var(--chartColor1)",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,
+                formatter: (value: number) =>
+                  new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  }).format(value),
               },
               {
                 type: "monotone",
@@ -790,13 +794,18 @@ const Dashboard = function () {
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,
+                formatter: (value: number) =>
+                  new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  }).format(value),
               },
             ]}
             axisXProps={{
               stroke: "#bebebe",
               strokeWidth: 1,
               dataKey: "date",
-              tick: { fontSize: 10, fill: "#222", angle: 20, dy: 10 } as Record<
+              tick: { fontSize: 10, fill: "#222", angle: 30, dy: 16 } as Record<
                 string,
                 number | string
               >,
@@ -808,6 +817,11 @@ const Dashboard = function () {
               stroke: "",
               strokeWidth: 0,
               width: 24,
+              tickFormatter: (value) =>
+                new Intl.NumberFormat(instance.language, {
+                  currency: instance.currency,
+                  style: "currency",
+                }).format(value),
             }}
             data={chartSalesPurchases}
           />

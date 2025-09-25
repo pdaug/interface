@@ -20,6 +20,7 @@ import {
 } from "recharts";
 import { useState } from "react";
 import { LayoutType, Margin } from "recharts/types/util/types";
+import { Payload } from "recharts/types/component/DefaultTooltipContent";
 
 // styles
 import "./Chart.css";
@@ -37,7 +38,17 @@ const ChartTooltip = function (props: TooltipProps<string, string>) {
                 className="chartTooltipPayloadColor"
               ></div>
               <div className="chartTooltipPayloadName">{payload?.name}</div>
-              <div className="chartTooltipPayloadValue">{payload?.value}</div>
+              <div className="chartTooltipPayloadValue">
+                {typeof payload?.formatter === "function"
+                  ? payload?.formatter(
+                      payload.value as string,
+                      payload.name as string,
+                      payload,
+                      index,
+                      payload as unknown as Payload<string, string>[],
+                    )
+                  : payload?.value}
+              </div>
             </div>
           );
         })}
@@ -77,6 +88,7 @@ export type ChartLineProps = ChartProps & {
     strokeWidth?: number;
     strokeDasharray?: string;
     unit?: number;
+    formatter?: (value: number) => string;
   }[];
 };
 
@@ -87,7 +99,7 @@ const ChartLine = function ({
   // chart
   data,
   layout = "horizontal",
-  margin = { top: 5, right: 5, left: 0, bottom: 5 },
+  margin = { top: 10, right: 10, left: 10, bottom: 10 },
   lines,
   // others props
   gridProps,
