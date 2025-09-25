@@ -1,16 +1,17 @@
 import {
+  Eye,
   Tag,
   Toolbox,
   Package,
+  TrendUp,
+  EyeSlash,
+  TrendDown,
+  Blueprint,
   PaintBrush,
-  ChartLineUp,
   FunnelSimple,
   QuestionMark,
-  ChartLineDown,
   DownloadSimple,
   ShoppingBagOpen,
-  Eye,
-  Blueprint,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { endOfDay, startOfYear, subDays } from "date-fns";
@@ -338,9 +339,9 @@ const Dashboard = function () {
         <Tooltip content={t.components.hide_and_show}>
           <Button
             onlyIcon
-            Icon={Eye}
-            category="Neutral"
             text=""
+            category={hidden ? "Danger" : "Neutral"}
+            Icon={hidden ? EyeSlash : Eye}
             onClick={function () {
               setHidden(!hidden);
               return;
@@ -402,13 +403,14 @@ const Dashboard = function () {
 
       <Horizontal internal={1}>
         <Stats
+          hidden={hidden}
           loading={loading}
           metric={0.1}
           metricStatus="Up"
           metricLocale="pt-BR"
           metricOptions={{ style: "percent" }}
           title={t.dashboard.stats_inflows_title}
-          Icon={ChartLineUp}
+          Icon={TrendUp}
           category="Success"
           value={5000}
           valueLocale={instance.language}
@@ -417,9 +419,10 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_inflows_receive_title}
-          Icon={ChartLineUp}
+          Icon={TrendUp}
           value={500}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
@@ -427,9 +430,10 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_inflows_late_title}
-          Icon={ChartLineUp}
+          Icon={TrendUp}
           value={1000}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
@@ -439,13 +443,14 @@ const Dashboard = function () {
 
       <Horizontal internal={1}>
         <Stats
+          hidden={hidden}
           loading={loading}
           metric={0.05}
           metricStatus="Down"
           metricLocale="pt-BR"
           metricOptions={{ style: "percent" }}
           title={t.dashboard.stats_outflows_receive_title}
-          Icon={ChartLineDown}
+          Icon={TrendDown}
           category="Danger"
           value={1000}
           valueLocale={instance.language}
@@ -454,9 +459,10 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_outflows_title}
-          Icon={ChartLineDown}
+          Icon={TrendDown}
           value={50}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
@@ -464,9 +470,10 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_outflows_late_title}
-          Icon={ChartLineDown}
+          Icon={TrendDown}
           value={100}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
@@ -583,6 +590,7 @@ const Dashboard = function () {
 
       <Horizontal internal={1}>
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_products_title}
           Icon={Package}
@@ -592,28 +600,31 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_products_active_title}
           Icon={Package}
           category="Success"
           value={statsProducts?.productsActive || 0}
-          valueUnit={t.product.products.toLowerCase()}
+          valueUnit={`${t.components.of} ${statsProducts?.quantity || 0} ${t.product.products.toLowerCase()}`}
           footer={t.dashboard.stats_products_active_description}
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_products_inactive_title}
           Icon={Package}
           category="Danger"
           value={statsProducts?.productsInactive || 0}
-          valueUnit={t.product.products.toLowerCase()}
+          valueUnit={`${t.components.of} ${statsProducts?.quantity || 0} ${t.product.products.toLowerCase()}`}
           footer={t.dashboard.stats_products_inactive_description}
         />
       </Horizontal>
 
       <Horizontal internal={1}>
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.sale.stats_quantity}
           Icon={Tag}
@@ -623,6 +634,7 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.sale.stats_value}
           Icon={Tag}
@@ -634,6 +646,7 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.sale.stats_pending}
           Icon={Tag}
@@ -645,6 +658,7 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.sale.stats_lost}
           Icon={Tag}
@@ -658,6 +672,7 @@ const Dashboard = function () {
 
       <Horizontal internal={1}>
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.purchase.stats_quantity}
           Icon={ShoppingBagOpen}
@@ -667,6 +682,7 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.purchase.stats_successful}
           Icon={ShoppingBagOpen}
@@ -678,6 +694,7 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.purchase.stats_pending}
           Icon={ShoppingBagOpen}
@@ -689,6 +706,7 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.purchase.stats_unsuccessful}
           Icon={ShoppingBagOpen}
@@ -761,6 +779,7 @@ const Dashboard = function () {
 
       <Horizontal internal={1}>
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_services_title}
           Icon={Toolbox}
@@ -770,28 +789,31 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_services_active_title}
           Icon={Toolbox}
           category="Success"
           value={statsServices.servicesActive || 0}
-          valueUnit={t.service.services.toLowerCase()}
+          valueUnit={`${t.components.of} ${statsServices.quantity || 0} ${t.service.services.toLowerCase()}`}
           footer={t.dashboard.stats_services_active_description}
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_services_inactive_title}
           Icon={Toolbox}
           category="Danger"
           value={statsServices.servicesInactive || 0}
-          valueUnit={t.service.services.toLowerCase()}
+          valueUnit={`${t.components.of} ${statsServices.quantity || 0} ${t.service.services.toLowerCase()}`}
           footer={t.dashboard.stats_services_inactive_description}
         />
       </Horizontal>
 
       <Horizontal internal={1}>
         <Stats
+          hidden={hidden}
           loading={loading}
           Icon={Blueprint}
           title={t.order.stats_quantity}
@@ -801,6 +823,7 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           category="Success"
           Icon={Blueprint}
@@ -812,6 +835,7 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           category="Warning"
           Icon={Blueprint}
@@ -823,6 +847,7 @@ const Dashboard = function () {
         />
 
         <Stats
+          hidden={hidden}
           loading={loading}
           category="Danger"
           Icon={Blueprint}

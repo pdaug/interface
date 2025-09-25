@@ -55,6 +55,7 @@ const TranslatePt = {
     plan_limit_users: "O seu plano contem um limite de usuários",
   },
   components: {
+    of: "de",
     to_invoice: "Faturar",
     total: "Total",
     ai_short: "AI",
@@ -1249,6 +1250,7 @@ const TranslateEn = {
     plan_limit_users: "Your plan contains a limit of users",
   },
   components: {
+    of: "of",
     to_invoice: "To invoice",
     total: "Total",
     ai_short: "AI",
