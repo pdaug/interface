@@ -1,4 +1,6 @@
 import {
+  Area,
+  AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
@@ -6,7 +8,6 @@ import {
   Cell,
   LegendProps,
   Line,
-  LineChart,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -62,6 +63,7 @@ export type ChartData = {
 };
 
 export type ChartProps = {
+  id: string;
   // container
   width?: string | number;
   height?: string | number;
@@ -93,6 +95,7 @@ export type ChartLineProps = ChartProps & {
 };
 
 const ChartLine = function ({
+  id,
   // container
   width = "100%",
   height = 480,
@@ -109,7 +112,7 @@ const ChartLine = function ({
   return (
     <div className="chartContainer">
       <ResponsiveContainer width={width} minWidth={320} height={height}>
-        <LineChart data={data} margin={margin} layout={layout}>
+        <AreaChart data={data} margin={margin} layout={layout}>
           <CartesianGrid {...gridProps} />
           <XAxis {...axisXProps} />
           <YAxis {...axisYProps} />
@@ -119,19 +122,19 @@ const ChartLine = function ({
             {lines?.map((lineProps, index) => (
               <linearGradient
                 key={index}
-                id={`gradient-${index}`}
+                id={`gradient-${id}-${index}`}
                 x1="0"
                 y1="0"
                 x2="0"
                 y2="1"
               >
                 <stop
-                  offset="5%"
+                  offset="25%"
                   stopColor={lineProps.stroke}
-                  stopOpacity={0.8}
+                  stopOpacity={0.2}
                 />
                 <stop
-                  offset="95%"
+                  offset="100%"
                   stopColor={lineProps.stroke}
                   stopOpacity={0}
                 />
@@ -141,14 +144,15 @@ const ChartLine = function ({
 
           {lines?.map(function (lineProps, index) {
             return (
-              <Line
-                key={`chart-line-${index}`}
+              <Area
+                key={`chart-line-${id}-${index}`}
+                fill={`url(#gradient-${id}-${index})`}
                 {...lineProps}
                 strokeDasharray="none"
               />
             );
           })}
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );

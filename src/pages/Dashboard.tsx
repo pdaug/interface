@@ -526,6 +526,7 @@ const Dashboard = function () {
           description={t.dashboard.chart_inflows_description}
         >
           <ChartLine
+            id="chart_inflows"
             height={320}
             gridProps={{
               stroke: "#dedede",
@@ -574,6 +575,7 @@ const Dashboard = function () {
           description={t.dashboard.chart_outflows_description}
         >
           <ChartLine
+            id="chart_outflows"
             height={320}
             gridProps={{
               stroke: "#dedede",
@@ -763,6 +765,7 @@ const Dashboard = function () {
           description={t.dashboard.chart_sales_purchases_description}
         >
           <ChartLine
+            id="chart_sales_purchases"
             height={320}
             gridProps={{
               stroke: "#dedede",
@@ -776,7 +779,7 @@ const Dashboard = function () {
                 type: "monotone",
                 name: t.sale.sales,
                 dataKey: "sale",
-                stroke: "var(--chartColor1)",
+                stroke: "var(--chartColor2)",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,
@@ -790,7 +793,7 @@ const Dashboard = function () {
                 type: "monotone",
                 name: t.purchase.purchases,
                 dataKey: "purchase",
-                stroke: "var(--chartColor4)",
+                stroke: "var(--chartColor5)",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,
