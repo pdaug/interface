@@ -775,16 +775,18 @@ const Dashboard = function () {
             lines={[
               {
                 type: "monotone",
+                name: t.sale.sales,
                 dataKey: "sale",
-                stroke: "#22c55e",
+                stroke: "var(--chartColor2)",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,
               },
               {
                 type: "monotone",
+                name: t.purchase.purchases,
                 dataKey: "purchase",
-                stroke: "#ef4444",
+                stroke: "var(--chartColor4)",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,

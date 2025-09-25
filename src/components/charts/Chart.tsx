@@ -69,6 +69,7 @@ export type ChartProps = {
 export type ChartLineProps = ChartProps & {
   lines: {
     dataKey: string;
+    name?: string;
     type?: Line["props"]["type"];
     dot?: object | boolean;
     label?: string;
@@ -101,6 +102,31 @@ const ChartLine = function ({
           <XAxis {...axisXProps} />
           <YAxis {...axisYProps} />
           <Tooltip content={<ChartTooltip />} cursor={{ stroke: "#dedede" }} />
+
+          <defs>
+            {lines?.map((lineProps, index) => (
+              <linearGradient
+                key={index}
+                id={`gradient-${index}`}
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop
+                  offset="5%"
+                  stopColor={lineProps.stroke}
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={lineProps.stroke}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            ))}
+          </defs>
+
           {lines?.map(function (lineProps, index) {
             return (
               <Line
