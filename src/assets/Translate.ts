@@ -289,28 +289,40 @@ const TranslatePt = {
     stats_outflows_late_title: "Despesas em atraso",
     stats_outflows_late_description:
       "Total do valor em despesas que estão em atraso",
+    // charts
     chart_inflows_title: "Receitas ao longo do tempo",
     chart_inflows_description:
       "As receitas distribuídas ao longo do intervalo de tempo.",
     chart_outflows_title: "Despesas ao longo do tempo",
     chart_outflows_description:
       "As despesas distribuídas ao longo do intervalo de tempo.",
+    chart_sales_purchases_title: "Vendas e compras ao longo do tempo",
+    chart_sales_purchases_description:
+      "As vendas e compras distribuídas ao longo do intervalo de tempo.",
     // stats products
-    stats_products_title: "Quantidade de produtos",
+    stats_products_title: "Produtos catalogados",
     stats_products_description: "Total em quantidade de produtos",
-    stats_products_active_title: "Produtos ativos",
+    stats_products_active_title: "Produtos catalogados ativos",
     stats_products_active_description: "Total em quantidade de produtos ativos",
-    stats_products_inactive_title: "Produtos inativos",
+    stats_products_inactive_title: "Produtos catalogados inativos",
     stats_products_inactive_description:
       "Total em quantidade de produtos inativos",
     // stats services
-    stats_services_title: "Quantidade de serviços",
+    stats_services_title: "Serviços catalogados",
     stats_services_description: "Total em quantidade de serviços",
-    stats_services_active_title: "Serviços ativos",
+    stats_services_active_title: "Serviços catalogados ativos",
     stats_services_active_description: "Total em quantidade de serviços ativos",
-    stats_services_inactive_title: "Serviços inativos",
+    stats_services_inactive_title: "Serviços catalogados inativos",
     stats_services_inactive_description:
       "Total em quantidade de serviços inativos",
+    // stats vehicles
+    stats_vehicles_title: "Veículos catalogados",
+    stats_vehicles_description: "Total em quantidade de veículos",
+    stats_vehicles_fuel: "Abastecimento de veículos",
+    stats_vehicles_fuel_description: "Total gasto em abastecimento de veículos",
+    stats_vehicles_maintenance: "Manutenção de veículos",
+    stats_vehicles_maintenance_description:
+      "Total gasto em manutenção de veículos",
   },
   dialog: {
     title_delete: "Deletar",
@@ -1479,28 +1491,40 @@ const TranslateEn = {
     stats_outflows_late_title: "Overdue outflows",
     stats_outflows_late_description:
       "Total outflows that should have already been made",
+    // charts
     chart_inflows_title: "Financial Inflows",
     chart_inflows_description:
       "Inflows distributed over the selected time range.",
     chart_outflows_title: "Financial Outflows",
     chart_outflows_description:
       "Outflows distributed over the selected time range.",
+    chart_sales_purchases_title: "Sales and purchases over time",
+    chart_sales_purchases_description:
+      "Sales and purchases distributed over the selected time range.",
     // stats products
-    stats_products_title: "Quantity of products",
+    stats_products_title: "Products cataloged",
     stats_products_description: "Total in quantity of products",
-    stats_products_active_title: "Active products",
+    stats_products_active_title: "Products cataloged active",
     stats_products_active_description: "Total in quantity of active products",
-    stats_products_inactive_title: "Inactive products",
+    stats_products_inactive_title: "Products cataloged inactive",
     stats_products_inactive_description:
       "Total in quantity of inactive products",
     // stats services
-    stats_services_title: "Quantity of services",
+    stats_services_title: "Services cataloged",
     stats_services_description: "Total in quantity of services",
-    stats_services_active_title: "Active services",
+    stats_services_active_title: "Services cataloged active",
     stats_services_active_description: "Total in quantity of active services",
-    stats_services_inactive_title: "Inactive services",
+    stats_services_inactive_title: "Services cataloged inactive",
     stats_services_inactive_description:
       "Total in quantity of inactive services",
+    // stats vehicles
+    stats_vehicles_title: "Vehicles cataloged",
+    stats_vehicles_description: "Total in quantity of vehicles",
+    stats_vehicles_fuel: "Vehicles fuel",
+    stats_vehicles_fuel_description: "Total in quantity of vehicles fuel",
+    stats_vehicles_maintenance: "Vehicles maintenance",
+    stats_vehicles_maintenance_description:
+      "Total in quantity of vehicles maintenance",
   },
   dialog: {
     title_delete: "Delete",

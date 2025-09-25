@@ -11,9 +11,9 @@ import {
   GearSix,
   CaretDown,
   CreditCard,
+  FolderSimple,
   SuitcaseSimple,
   ShoppingBagOpen,
-  FolderSimple,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";

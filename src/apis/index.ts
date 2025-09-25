@@ -24,6 +24,7 @@ import WhatsApp from "./internal/WhatsApp";
 import Password from "./internal/Password";
 import Supplier from "./internal/Supplier";
 import Schedule from "./internal/Schedule";
+import Dashboard from "./internal/Dashboard";
 import Workspace from "./internal/Workspace";
 import DocumentApi from "./internal/Document";
 
@@ -37,6 +38,7 @@ export default {
   Account,
   Audit,
   Customer,
+  Dashboard,
   DocumentApi,
   Instance,
   Login,

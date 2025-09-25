@@ -12,6 +12,7 @@ import {
   QuestionMark,
   DownloadSimple,
   ShoppingBagOpen,
+  Truck,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { endOfDay, startOfYear, subDays } from "date-fns";
@@ -65,6 +66,12 @@ const Dashboard = function () {
   const [statsProducts, setStatsProducts] = useState<TypeStats>({});
   const [statsServices, setStatsServices] = useState<TypeStats>({});
   const [statsPurchases, setStatsPurchases] = useState<TypeStats>({});
+
+  const [chartSalesPurchases, setChartSalesPurchases] = useState<
+    { date: string; sales: number; purchases: number }[]
+  >([]);
+
+  console.log(chartSalesPurchases);
 
   // get greeting
   useEffect(function () {
@@ -270,6 +277,40 @@ const Dashboard = function () {
         console.error("[src/pages/Dashboard.tsx]", err);
       } finally {
         setLoading(false);
+      }
+      return;
+    },
+    [interval, workspaceId],
+  );
+
+  // fetch charts
+  useAsync(
+    async function () {
+      try {
+        const response = await apis.Dashboard.ChartSalesPurchases<
+          { date: string; sales: number; purchases: number }[]
+        >(instance.name, token, workspaceId, {
+          dateStart: interval.start
+            ? interval.start.toISOString()
+            : startOfYear(new Date()).toISOString(),
+          dateEnd: interval.end
+            ? interval.end.toISOString()
+            : endOfDay(new Date()).toISOString(),
+        });
+        if (!response.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          return;
+        }
+        setChartSalesPurchases(response.data.result);
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/Dashboard.tsx]", err);
       }
       return;
     },
@@ -720,8 +761,8 @@ const Dashboard = function () {
 
       <div>
         <Wrapper
-          title={t.dashboard.chart_inflows_title}
-          description={t.dashboard.chart_inflows_description}
+          title={t.dashboard.chart_sales_purchases_title}
+          description={t.dashboard.chart_sales_purchases_description}
         >
           <ChartLine
             height={320}
@@ -734,8 +775,16 @@ const Dashboard = function () {
             lines={[
               {
                 type: "monotone",
-                dataKey: "inflow",
+                dataKey: "sale",
                 stroke: "#22c55e",
+                strokeDasharray: "1",
+                strokeWidth: 4,
+                dot: false,
+              },
+              {
+                type: "monotone",
+                dataKey: "purchase",
+                stroke: "#ef4444",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,
@@ -745,7 +794,10 @@ const Dashboard = function () {
               stroke: "#bebebe",
               strokeWidth: 1,
               dataKey: "date",
-              tick: { fontSize: 10, fill: "#222" },
+              tick: { fontSize: 10, fill: "#222", angle: 20, dy: 10 } as Record<
+                string,
+                number | string
+              >,
               interval: 0,
               padding: { left: 15, right: 15 },
             }}
@@ -755,15 +807,7 @@ const Dashboard = function () {
               strokeWidth: 0,
               width: 24,
             }}
-            data={[
-              { date: "01/01", inflow: 1000 },
-              { date: "02/01", inflow: 500 },
-              { date: "03/01", inflow: 2000 },
-              { date: "04/01", inflow: 500 },
-              { date: "05/01", inflow: 0 },
-              { date: "06/01", inflow: 0 },
-              { date: "07/01", inflow: 1000 },
-            ]}
+            data={chartSalesPurchases}
           />
         </Wrapper>
       </div>
@@ -856,6 +900,42 @@ const Dashboard = function () {
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.order.stats_canceled_description}
+        />
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          Icon={Truck}
+          title={t.dashboard.stats_vehicles_title}
+          value={0}
+          valueUnit={t.vehicle.vehicle.toLowerCase()}
+          footer={t.dashboard.stats_vehicles_description}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          category="Warning"
+          Icon={Truck}
+          title={t.dashboard.stats_vehicles_fuel}
+          value={0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.dashboard.stats_vehicles_fuel_description}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          category="Warning"
+          Icon={Truck}
+          title={t.dashboard.stats_vehicles_maintenance}
+          value={0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+          footer={t.dashboard.stats_vehicles_maintenance_description}
         />
       </Horizontal>
 
