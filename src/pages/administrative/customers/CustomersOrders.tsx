@@ -232,6 +232,7 @@ const CustomersOrders = function () {
         />
         <Wrapper>
           <ChartLine
+            id="chart_order"
             height={96}
             gridProps={{
               stroke: "#dedede",

@@ -20,6 +20,7 @@ export const Line: StoryObj = {
       <Horizontal internal={1} styles={{ width: "70rem" }}>
         <Wrapper title="Chart Line Basic">
           <ChartLine
+            id="chart_line_basic"
             height={320}
             gridProps={{
               stroke: "#dedede",
@@ -63,6 +64,7 @@ export const Line: StoryObj = {
         </Wrapper>
         <Wrapper title="Chart Line Full">
           <ChartLine
+            id="chart_line_full"
             height={320}
             gridProps={{
               stroke: "#dedede",
@@ -131,6 +133,7 @@ export const Bar: StoryObj = {
       <Horizontal internal={1} styles={{ width: "70rem" }}>
         <Wrapper title="Chart Bar Basic">
           <ChartBar
+            id="chart_bar_basic"
             height={320}
             gridProps={{
               stroke: "#dedede",
@@ -172,6 +175,7 @@ export const Bar: StoryObj = {
         </Wrapper>
         <Wrapper title="Chart Bar Full">
           <ChartBar
+            id="chart_bar_full"
             height={320}
             gridProps={{
               stroke: "#dedede",
@@ -229,6 +233,7 @@ export const Pie: StoryObj = {
       <Horizontal internal={1} styles={{ width: "70rem" }}>
         <Wrapper title="Chart Pie Basic">
           <ChartPie
+            id="chart_pie_basic"
             height={320}
             gridProps={{
               stroke: "#dedede",
@@ -258,6 +263,7 @@ export const Pie: StoryObj = {
         </Wrapper>
         <Wrapper title="Chart Pie Basic">
           <ChartPie
+            id="chart_pie_basic"
             height={320}
             gridProps={{
               stroke: "#dedede",
