@@ -125,6 +125,8 @@ const TranslatePt = {
     address_city_placeholder: "Ex. Cores",
     address_state: "Estado",
     // buttons
+    show: "Mostrar",
+    hide: "Ocultar",
     hide_and_show: "Ocultar e mostrar",
     filter: "Filtrar",
     print: "Imprimir",
@@ -241,6 +243,7 @@ const TranslatePt = {
   dashboard: {
     dashboard: "Painel",
     customize: "Personalizar",
+    exchange_indexes: "Cotações e índices",
     // greetings
     good_dawn_1: "Boa manhãzinha, {{name}}!",
     good_dawn_2: "Ótimo início de dia, {{name}}!",
@@ -289,6 +292,13 @@ const TranslatePt = {
     stats_outflows_late_title: "Despesas em atraso",
     stats_outflows_late_description:
       "Total do valor em despesas que estão em atraso",
+    // exchange and indexes
+    stats_index_selic: "SELIC",
+    stats_index_cdi: "CDI",
+    stats_index_ipca: "IPCA",
+    stats_exchange_dollar: "Dólar",
+    stats_exchange_euro: "Euro",
+    stats_exchange_pound: "Libra Esterlina",
     // charts
     chart_inflows_title: "Receitas ao longo do tempo",
     chart_inflows_description:
@@ -323,6 +333,8 @@ const TranslatePt = {
     stats_vehicles_maintenance: "Manutenção de veículos",
     stats_vehicles_maintenance_description:
       "Total gasto em manutenção de veículos",
+    stats_exchange_bitcoin: "Bitcoin",
+    stats_exchange_bitcoin_description: "Cotação atual da criptomoeda bitcoin",
   },
   dialog: {
     title_delete: "Deletar",
@@ -362,6 +374,10 @@ const TranslatePt = {
     not_public: "Este documento não está publico",
     recycle_bin: "Lixeira",
     open_recycle_bin: "Abrir a lixeira",
+  },
+  financial: {
+    financial: "Financeiro",
+    financials: "Financeiros",
   },
   integration: {
     integration: "Integração",
@@ -1332,6 +1348,8 @@ const TranslateEn = {
     address_city_placeholder: "e.g. Colors",
     address_state: "State",
     // buttons
+    show: "Show",
+    hide: "Hide",
     hide_and_show: "Hide and show",
     filter: "Filter",
     print: "Print",
@@ -1445,6 +1463,7 @@ const TranslateEn = {
   dashboard: {
     dashboard: "Dashboard",
     customize: "Customize",
+    exchange_indexes: "Exchange rates and Indexes",
     // greetings
     good_dawn_1: "Good morning, {{name}}!",
     good_dawn_2: "Great start of day, {{name}}!",
@@ -1491,6 +1510,14 @@ const TranslateEn = {
     stats_outflows_late_title: "Overdue outflows",
     stats_outflows_late_description:
       "Total outflows that should have already been made",
+    // exchange and indexes
+    stats_index_selic: "SELIC",
+    stats_index_cdi: "CDI",
+    stats_index_ipca: "IPCA",
+    stats_exchange_dollar: "Dollar",
+    stats_exchange_euro: "Euro",
+    stats_exchange_pound: "Pound Sterling",
+    stats_exchange_bitcoin: "Bitcoin",
     // charts
     chart_inflows_title: "Financial Inflows",
     chart_inflows_description:
@@ -1563,6 +1590,10 @@ const TranslateEn = {
     not_public: "This document is not public",
     recycle_bin: "Recycle bin",
     open_recycle_bin: "Open recycle bin",
+  },
+  financial: {
+    financial: "Financial",
+    financials: "Financials",
   },
   integration: {
     integration: "Integration",

@@ -1,6 +1,7 @@
 import {
   Eye,
   Tag,
+  Truck,
   Toolbox,
   Package,
   TrendUp,
@@ -8,11 +9,13 @@ import {
   TrendDown,
   Blueprint,
   PaintBrush,
+  CurrencyBtc,
   FunnelSimple,
+  CoinVertical,
   QuestionMark,
   DownloadSimple,
   ShoppingBagOpen,
-  Truck,
+  PresentationChart,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { endOfDay, startOfYear, subDays } from "date-fns";
@@ -22,8 +25,13 @@ import React, { useEffect, useState } from "react";
 import apis from "../apis";
 
 // types
+import {
+  ApiBitcoinContent,
+  ApiExchangeContent,
+  ApiIndexes,
+  ApiResponsePaginate,
+} from "../types/Api";
 import { TypeAccount } from "../types/Account";
-import { ApiResponsePaginate } from "../types/Api";
 import { TypeInputInterval } from "../types/Components";
 
 // hooks
@@ -70,6 +78,12 @@ const Dashboard = function () {
   const [chartSalesPurchases, setChartSalesPurchases] = useState<
     { date: string; sales: number; purchases: number }[]
   >([]);
+
+  const [indexes, setIndexes] = useState<ApiIndexes>([]);
+  const [euro, setEuro] = useState<ApiExchangeContent | null>(null);
+  const [pound, setPound] = useState<ApiExchangeContent | null>(null);
+  const [dollar, setDollar] = useState<ApiExchangeContent | null>(null);
+  const [bitcoin, setBitcoin] = useState<ApiBitcoinContent | null>(null);
 
   // get greeting
   useEffect(function () {
@@ -315,6 +329,84 @@ const Dashboard = function () {
     [interval, workspaceId],
   );
 
+  // fetch exchange rates
+  useAsync(
+    async function () {
+      try {
+        if (!instance?.currency) return;
+
+        if (instance.currency !== "USD") {
+          const responseDollar = await apis.Exchange(
+            `USD-${instance.currency}`,
+          );
+          if (!responseDollar.data) {
+            play("alert");
+            toast.warning(t.toast.warning_error, {
+              description: t.stacks.no_find_item,
+            });
+            return;
+          }
+          const newDollar = Object.values(responseDollar.data)[0];
+          setDollar(newDollar);
+        }
+
+        if (instance.currency !== "EUR") {
+          const responseEuro = await apis.Exchange(`EUR-${instance.currency}`);
+          if (!responseEuro.data) {
+            play("alert");
+            toast.warning(t.toast.warning_error, {
+              description: t.stacks.no_find_item,
+            });
+            return;
+          }
+          const newEuro = Object.values(responseEuro.data)[0];
+          setEuro(newEuro);
+        }
+
+        if (instance.currency !== "GBP") {
+          const responsePound = await apis.Exchange(`GBP-${instance.currency}`);
+          if (!responsePound.data) {
+            play("alert");
+            toast.warning(t.toast.warning_error, {
+              description: t.stacks.no_find_item,
+            });
+            return;
+          }
+          const newPound = Object.values(responsePound.data)[0];
+          setPound(newPound);
+        }
+
+        const responseBitcoin = await apis.Bitcoin();
+        if (!responseBitcoin.data) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+        }
+        const newBitcoin = responseBitcoin.data?.[instance.currency] || null;
+        setBitcoin(newBitcoin);
+
+        const responeindexes = await apis.Indexes();
+        if (!responeindexes.data) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+        }
+        const newIndexes = responeindexes.data || [];
+        setIndexes(newIndexes);
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/Dashboard.tsx]", err);
+      }
+      return;
+    },
+    [instance.currency],
+  );
+
   return (
     <React.Fragment>
       <Horizontal internal={1}>
@@ -368,25 +460,25 @@ const Dashboard = function () {
 
         <div style={{ flex: 1 }}></div>
 
-        <Button
-          category="Neutral"
-          Icon={PaintBrush}
-          IconSize={18}
-          text={t.dashboard.customize}
-        />
-
         <Tooltip content={t.components.hide_and_show}>
           <Button
-            onlyIcon
-            text=""
-            category={hidden ? "Danger" : "Neutral"}
             Icon={hidden ? EyeSlash : Eye}
+            IconSize={18}
+            category={hidden ? "Info" : "Neutral"}
+            text={hidden ? t.components.show : t.components.hide}
             onClick={function () {
               setHidden(!hidden);
               return;
             }}
           />
         </Tooltip>
+
+        <Button
+          category="Neutral"
+          Icon={PaintBrush}
+          IconSize={18}
+          text={t.dashboard.customize}
+        />
 
         <Dropdown
           values={[
@@ -440,6 +532,111 @@ const Dashboard = function () {
         </Tooltip>
       </Horizontal>
 
+      <Horizontal internal={1} className="itemsCenter">
+        <h3 className="flex1">{t.dashboard.exchange_indexes}</h3>
+        <Button
+          category="Neutral"
+          Icon={FunnelSimple}
+          text={t.components.filter}
+        />
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          loading={loading}
+          title={t.dashboard.stats_index_selic}
+          Icon={PresentationChart}
+          value={
+            (indexes.find((index) => index.nome === "Selic")?.valor || 0) / 100
+          }
+          valueLocale={instance.language}
+          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
+        />
+
+        <Stats
+          loading={loading}
+          title={t.dashboard.stats_index_cdi}
+          Icon={PresentationChart}
+          value={
+            (indexes.find((index) => index.nome === "CDI")?.valor || 0) / 100
+          }
+          valueLocale={instance.language}
+          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
+        />
+
+        <Stats
+          loading={loading}
+          title={t.dashboard.stats_index_ipca}
+          Icon={PresentationChart}
+          value={
+            (indexes.find((index) => index.nome === "IPCA")?.valor || 0) / 100
+          }
+          valueLocale={instance.language}
+          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
+        />
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          loading={loading}
+          metric={Math.abs(parseFloat(dollar?.pctChange || "0")) / 100}
+          metricStatus={
+            parseFloat(dollar?.pctChange || "0") > 0 ? "Up" : "Down"
+          }
+          metricLocale={instance.language}
+          metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
+          title={t.dashboard.stats_exchange_dollar}
+          Icon={CoinVertical}
+          value={parseFloat(dollar?.bid || "1")}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+        />
+
+        <Stats
+          loading={loading}
+          metric={Math.abs(parseFloat(euro?.pctChange || "0")) / 100}
+          metricStatus={parseFloat(euro?.pctChange || "0") > 0 ? "Up" : "Down"}
+          metricLocale={instance.language}
+          metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
+          title={t.dashboard.stats_exchange_euro}
+          Icon={CoinVertical}
+          value={parseFloat(euro?.bid || "1")}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+        />
+
+        <Stats
+          loading={loading}
+          metric={Math.abs(parseFloat(pound?.pctChange || "0")) / 100}
+          metricStatus={parseFloat(pound?.pctChange || "0") > 0 ? "Up" : "Down"}
+          metricLocale={instance.language}
+          metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
+          title={t.dashboard.stats_exchange_pound}
+          Icon={CoinVertical}
+          value={parseFloat(pound?.bid || "1")}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+        />
+
+        <Stats
+          loading={loading}
+          title={t.dashboard.stats_exchange_bitcoin}
+          Icon={CurrencyBtc}
+          value={bitcoin?.buy || 0}
+          valueLocale={instance.language}
+          valueOptions={{ style: "currency", currency: instance.currency }}
+        />
+      </Horizontal>
+
+      <Horizontal internal={1} className="itemsCenter">
+        <h3 className="flex1">{t.financial.financial}</h3>
+        <Button
+          category="Neutral"
+          Icon={FunnelSimple}
+          text={t.components.filter}
+        />
+      </Horizontal>
+
       <Horizontal internal={1}>
         <Stats
           hidden={hidden}
@@ -491,7 +688,7 @@ const Dashboard = function () {
           title={t.dashboard.stats_outflows_receive_title}
           Icon={TrendDown}
           category="Danger"
-          value={1000}
+          value={-1000}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_outflows_description}
@@ -502,7 +699,7 @@ const Dashboard = function () {
           loading={loading}
           title={t.dashboard.stats_outflows_title}
           Icon={TrendDown}
-          value={50}
+          value={-50}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_outflows_receive_description}
@@ -513,7 +710,7 @@ const Dashboard = function () {
           loading={loading}
           title={t.dashboard.stats_outflows_late_title}
           Icon={TrendDown}
-          value={100}
+          value={-100}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_outflows_late_description}
@@ -704,7 +901,7 @@ const Dashboard = function () {
           title={t.sale.stats_lost}
           Icon={Tag}
           category="Danger"
-          value={statsSales?.salesLost || 0}
+          value={-statsSales?.salesLost || 0}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.sale.stats_lost_description}
@@ -752,7 +949,7 @@ const Dashboard = function () {
           title={t.purchase.stats_unsuccessful}
           Icon={ShoppingBagOpen}
           category="Danger"
-          value={statsPurchases?.purchasesUnsuccessful || 0}
+          value={-statsPurchases?.purchasesUnsuccessful || 0}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.purchase.stats_unsuccessful_description}
@@ -779,7 +976,7 @@ const Dashboard = function () {
                 type: "monotone",
                 name: t.sale.sales,
                 dataKey: "sale",
-                stroke: "var(--chartColor2)",
+                stroke: "var(--chartColor3)",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,
@@ -793,7 +990,7 @@ const Dashboard = function () {
                 type: "monotone",
                 name: t.purchase.purchases,
                 dataKey: "purchase",
-                stroke: "var(--chartColor5)",
+                stroke: "var(--chartColor6)",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,
@@ -915,7 +1112,7 @@ const Dashboard = function () {
           category="Danger"
           Icon={Blueprint}
           title={t.order.stats_canceled}
-          value={statsOrders.ordersCanceled || 0}
+          value={-statsOrders.ordersCanceled || 0}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.order.stats_canceled_description}
@@ -951,7 +1148,7 @@ const Dashboard = function () {
           category="Warning"
           Icon={Truck}
           title={t.dashboard.stats_vehicles_maintenance}
-          value={0}
+          value={-0}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
           footer={t.dashboard.stats_vehicles_maintenance_description}

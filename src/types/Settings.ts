@@ -2,7 +2,7 @@ export type TypeSettingsTheme = "light" | "dark";
 
 export type TypeSettingsLanguage = "pt" | "en" | "es";
 
-export type TypeSettingsCurrency = "BRL" | "USD" | "BTC" | "EUR";
+export type TypeSettingsCurrency = "BRL" | "USD" | "BTC" | "EUR" | "GBP";
 
 export type TypeSettingsDateFormat = "yyyy-MM-dd" | "dd/MM/yyyy" | "MM/dd/yyyy";
 

@@ -95,3 +95,55 @@ export type ApiShipping = {
     max: number;
   };
 }[];
+
+export type ApiExchangeContent = {
+  code: string;
+  codein: string;
+  name: string;
+  high: string;
+  low: string;
+  varBid: string;
+
+  // percentage change
+  pctChange: string;
+
+  // value of purchase
+  bid: string;
+
+  // value of sale
+  ask: string;
+
+  timestamp: string;
+  create_date: string;
+};
+
+export type ApiExchange = {
+  [currency: string]: ApiExchangeContent;
+};
+
+export type ApiBitcoinContent = {
+  "15m": number;
+  last: number;
+  buy: number;
+  sell: number;
+  symbol: string;
+};
+
+export type ApiBitcoin = {
+  [currency: string]: ApiBitcoinContent;
+};
+
+export type ApiIbovespa = {
+  currencyType: number;
+  currency: string;
+  symbol: number;
+  prices: {
+    price: number;
+    date: string;
+  }[];
+}[];
+
+export type ApiIndexes = {
+  nome: string;
+  valor: number;
+}[];

@@ -1,8 +1,12 @@
 // apis external
+import Bitcoin from "./external/Bitcoin";
+import Indexes from "./external/Indexes";
+import Shipping from "./external/Shipping";
+import Exchange from "./external/Exchange";
+import Ibovespa from "./external/Ibovespa";
 import PostalCode from "./external/PostalCode";
 import CompanyData from "./external/CompanyData";
 import AddressPosition from "./external/Address";
-import Shipping from "./external/Shipping";
 
 // apis internal
 import User from "./internal/User";
@@ -30,9 +34,13 @@ import DocumentApi from "./internal/Document";
 
 export default {
   // external
-  PostalCode,
   AddressPosition,
+  Bitcoin,
   CompanyData,
+  Exchange,
+  Ibovespa,
+  Indexes,
+  PostalCode,
   Shipping,
   // internal
   Account,
