@@ -53,286 +53,31 @@ import { InputInterval, InputSelect } from "../components/inputs/Input";
 
 type TypeStats = Record<string, number>;
 
-const Dashboard = function () {
+type DashboardHiddenProps = {
+  hidden?: boolean;
+};
+
+type DashboardIntervalProps = {
+  interval: TypeInputInterval;
+};
+
+const DashboardExchangesIndexes = function () {
   const t = useTranslate();
   const play = useSounds();
-  const { OpenDialog } = useDialog();
-  const { user, token, instance, workspaceId, workspaces } = useSystem();
+  const { instance } = useSystem();
 
-  const [interval, setInterval] = useState<TypeInputInterval>({
-    start: subDays(new Date(), 30),
-    end: endOfDay(new Date()),
-  });
-
-  const [greeting, setGreeting] = useState<string>("");
-  const [hidden, setHidden] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [accounts, setAccounts] = useState<TypeAccount[]>([]);
-
-  const [statsSales, setStatsSales] = useState<TypeStats>({});
-  const [statsOrders, setStatsOrders] = useState<TypeStats>({});
-  const [statsProducts, setStatsProducts] = useState<TypeStats>({});
-  const [statsServices, setStatsServices] = useState<TypeStats>({});
-  const [statsPurchases, setStatsPurchases] = useState<TypeStats>({});
-
-  const [chartSalesPurchases, setChartSalesPurchases] = useState<
-    { date: string; sales: number; purchases: number }[]
-  >([]);
-
+  const [loading, setLoading] = useState<boolean>(true);
   const [indexes, setIndexes] = useState<ApiIndexes>([]);
   const [euro, setEuro] = useState<ApiExchangeContent | null>(null);
   const [pound, setPound] = useState<ApiExchangeContent | null>(null);
   const [dollar, setDollar] = useState<ApiExchangeContent | null>(null);
   const [bitcoin, setBitcoin] = useState<ApiBitcoinContent | null>(null);
 
-  // get greeting
-  useEffect(function () {
-    const random = Math.floor(Math.random() * 6) + 1;
-    const hour = new Date().getHours();
-    let greetingText = "";
-    // dawn -> hour 06 - 09
-    if (hour >= 6 && hour <= 9)
-      greetingText =
-        t.dashboard[`good_dawn_${random}` as keyof typeof t.dashboard];
-    // morning -> hour 10 - 12
-    if (hour >= 10 && hour <= 12)
-      greetingText =
-        t.dashboard[`good_morning_${random}` as keyof typeof t.dashboard];
-    // afternoon -> hour 13 - 17
-    if (hour >= 13 && hour <= 17)
-      greetingText =
-        t.dashboard[`good_afternoon_${random}` as keyof typeof t.dashboard];
-    // night -> hour 18 - 23
-    if (hour >= 18 && hour <= 23)
-      greetingText =
-        t.dashboard[`good_night_${random}` as keyof typeof t.dashboard];
-    // rest -> hour 00 - 05
-    if (hour >= 0 && hour <= 5)
-      greetingText =
-        t.dashboard[`good_rest_${random}` as keyof typeof t.dashboard];
-    const userName = user.name.split(" ")[0];
-    const greetingNamed = greetingText.replace("{{name}}", userName);
-    setGreeting(greetingNamed);
-    return;
-  }, []);
-
-  // fetch accounts
-  useAsync(
-    async function () {
-      try {
-        const response = await apis.Account.list<
-          ApiResponsePaginate<TypeAccount>
-        >(
-          token,
-          instance.name,
-          {
-            pageSize: 999,
-            pageCurrent: 1,
-            orderField: "createdAt",
-            orderSort: "asc",
-          },
-          workspaceId,
-        );
-        if (!response.data?.result || response.status !== 200) {
-          play("alert");
-          toast.warning(t.toast.warning_error, {
-            description: t.stacks.no_find_item,
-          });
-          return;
-        }
-        setAccounts(response.data.result.items);
-      } catch (err) {
-        play("alert");
-        toast.error(t.toast.warning_error, {
-          description: t.stacks.no_find_item,
-        });
-        console.error("[src/pages/Dashboard.tsx]", err);
-        return;
-      }
-    },
-    [workspaceId],
-  );
-
-  // fetch stats
+  // fetch exchanges and indexes
   useAsync(
     async function () {
       try {
         setLoading(true);
-        const responseProductsStats = await apis.Product.stats<TypeStats>(
-          token,
-          instance.name,
-          {
-            dateStart: interval.start
-              ? interval.start.toISOString()
-              : startOfYear(new Date()).toISOString(),
-            dateEnd: interval.end
-              ? interval.end.toISOString()
-              : endOfDay(new Date()).toISOString(),
-          },
-          workspaceId,
-        );
-        if (
-          !responseProductsStats.data?.result ||
-          responseProductsStats.status !== 200
-        ) {
-          play("alert");
-          toast.warning(t.toast.warning_error, {
-            description: t.stacks.no_find_item,
-          });
-          console.error(
-            "[src/pages/Dashboard.tsx]",
-            responseProductsStats.data,
-          );
-          return;
-        }
-        setStatsProducts(responseProductsStats.data.result);
-
-        const responseSalesStats = await apis.Sale.stats<TypeStats>(
-          token,
-          instance.name,
-          {
-            dateStart: interval.start
-              ? interval.start.toISOString()
-              : startOfYear(new Date()).toISOString(),
-            dateEnd: interval.end
-              ? interval.end.toISOString()
-              : endOfDay(new Date()).toISOString(),
-          },
-          workspaceId,
-        );
-        if (!responseSalesStats.data?.result) {
-          play("alert");
-          toast.warning(t.toast.warning_error, {
-            description: t.stacks.no_find_item,
-          });
-          console.warn("[src/pages/Dashboard.tsx]", responseSalesStats.data);
-          return;
-        }
-        setStatsSales(responseSalesStats.data.result);
-
-        const responsePurchasesStats = await apis.Purchase.stats<TypeStats>(
-          token,
-          instance.name,
-          {
-            dateStart: interval.start
-              ? interval.start.toISOString()
-              : startOfYear(new Date()).toISOString(),
-            dateEnd: interval.end
-              ? interval.end.toISOString()
-              : endOfDay(new Date()).toISOString(),
-          },
-          workspaceId,
-        );
-        if (!responsePurchasesStats.data?.result) {
-          play("alert");
-          toast.warning(t.toast.warning_error, {
-            description: t.stacks.no_find_item,
-          });
-          console.warn(
-            "[src/pages/Dashboard.tsx]",
-            responsePurchasesStats.data,
-          );
-          return;
-        }
-        setStatsPurchases(responsePurchasesStats.data.result);
-
-        const responseServicesStats = await apis.Service.stats<TypeStats>(
-          token,
-          instance.name,
-          {
-            dateStart: interval.start
-              ? interval.start.toISOString()
-              : startOfYear(new Date()).toISOString(),
-            dateEnd: interval.end
-              ? interval.end.toISOString()
-              : endOfDay(new Date()).toISOString(),
-          },
-          workspaceId,
-        );
-        if (!responseServicesStats.data?.result) {
-          play("alert");
-          toast.warning(t.toast.warning_error, {
-            description: t.stacks.no_find_item,
-          });
-          console.warn("[src/pages/Dashboard.tsx]", responseServicesStats.data);
-          return;
-        }
-        setStatsServices(responseServicesStats.data.result);
-
-        const responseOrdersStats = await apis.Order.stats<TypeStats>(
-          token,
-          instance.name,
-          {
-            dateStart: interval.start
-              ? interval.start.toISOString()
-              : startOfYear(new Date()).toISOString(),
-            dateEnd: interval.end
-              ? interval.end.toISOString()
-              : endOfDay(new Date()).toISOString(),
-          },
-          workspaceId,
-        );
-        if (!responseOrdersStats.data?.result) {
-          play("alert");
-          toast.warning(t.toast.warning_error, {
-            description: t.stacks.no_find_item,
-          });
-          console.warn("[src/pages/Dashboard.tsx]", responseOrdersStats.data);
-          return;
-        }
-        setStatsOrders(responseOrdersStats.data.result);
-      } catch (err) {
-        play("alert");
-        toast.error(t.toast.warning_error, {
-          description: t.stacks.no_find_item,
-        });
-        console.error("[src/pages/Dashboard.tsx]", err);
-      } finally {
-        setLoading(false);
-      }
-      return;
-    },
-    [interval, workspaceId],
-  );
-
-  // fetch charts
-  useAsync(
-    async function () {
-      try {
-        const response = await apis.Dashboard.ChartSalesPurchases<
-          { date: string; sales: number; purchases: number }[]
-        >(instance.name, token, workspaceId, {
-          dateStart: interval.start
-            ? interval.start.toISOString()
-            : startOfYear(new Date()).toISOString(),
-          dateEnd: interval.end
-            ? interval.end.toISOString()
-            : endOfDay(new Date()).toISOString(),
-        });
-        if (!response.data?.result) {
-          play("alert");
-          toast.warning(t.toast.warning_error, {
-            description: t.stacks.no_find_item,
-          });
-          return;
-        }
-        setChartSalesPurchases(response.data.result);
-      } catch (err) {
-        play("alert");
-        toast.error(t.toast.warning_error, {
-          description: t.stacks.no_find_item,
-        });
-        console.error("[src/pages/Dashboard.tsx]", err);
-      }
-      return;
-    },
-    [interval, workspaceId],
-  );
-
-  // fetch exchange rates
-  useAsync(
-    async function () {
-      try {
         if (!instance?.currency) return;
 
         if (instance.currency !== "USD") {
@@ -401,6 +146,8 @@ const Dashboard = function () {
           description: t.stacks.no_find_item,
         });
         console.error("[src/pages/Dashboard.tsx]", err);
+      } finally {
+        setLoading(false);
       }
       return;
     },
@@ -409,129 +156,6 @@ const Dashboard = function () {
 
   return (
     <React.Fragment>
-      <Horizontal internal={1}>
-        <h1>{greeting}</h1>
-      </Horizontal>
-
-      <Horizontal internal={1}>
-        <InputSelect
-          label=""
-          empty=""
-          disabled
-          value={workspaceId}
-          styles={{ maxWidth: 200 }}
-          options={workspaces.map(function (workspace) {
-            return {
-              id: workspace.id,
-              value: workspace.id,
-              text: workspace.name,
-            };
-          })}
-        />
-
-        <InputSelect
-          label=""
-          empty=""
-          styles={{ maxWidth: 200 }}
-          value={accounts[0]?.id || ""}
-          options={accounts.map(function (account) {
-            return {
-              id: account.id,
-              value: account.id,
-              text: account.name,
-            };
-          })}
-        />
-
-        <div style={{ minWidth: 200, maxWidth: 256 }}>
-          <InputInterval
-            label=""
-            value={[interval.start, interval.end]}
-            onChange={function (interval) {
-              const [start, end] = interval;
-              setInterval({
-                start: start ? new Date(start) : null,
-                end: end ? new Date(end) : null,
-              });
-              return;
-            }}
-          />
-        </div>
-
-        <div style={{ flex: 1 }}></div>
-
-        <Tooltip content={t.components.hide_and_show}>
-          <Button
-            Icon={hidden ? EyeSlash : Eye}
-            IconSize={18}
-            category={hidden ? "Info" : "Neutral"}
-            text={hidden ? t.components.show : t.components.hide}
-            onClick={function () {
-              setHidden(!hidden);
-              return;
-            }}
-          />
-        </Tooltip>
-
-        <Button
-          category="Neutral"
-          Icon={PaintBrush}
-          IconSize={18}
-          text={t.dashboard.customize}
-        />
-
-        <Dropdown
-          values={[
-            {
-              id: "xlsx",
-              label: t.components.xlsx,
-            },
-            {
-              id: "csv",
-              label: t.components.csv,
-            },
-            {
-              id: "json",
-              label: t.components.json,
-            },
-          ]}
-        >
-          <Button
-            onlyIcon
-            disabled
-            text=""
-            category="Neutral"
-            Icon={DownloadSimple}
-          />
-        </Dropdown>
-
-        <Tooltip content={t.components.help}>
-          <Button
-            text=""
-            onlyIcon
-            category="Neutral"
-            Icon={QuestionMark}
-            onClick={function () {
-              OpenDialog({
-                width: 700,
-                category: "Success",
-                title: t.components.help,
-                cancelText: t.components.close,
-                description: (
-                  <iframe
-                    height={400}
-                    style={{ border: "none", width: "100%" }}
-                    src="https://www.youtube.com/embed/L-yA7-puosA"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  />
-                ),
-              });
-              return;
-            }}
-          />
-        </Tooltip>
-      </Horizontal>
-
       <Horizontal internal={1} className="itemsCenter">
         <h3 className="flex1">{t.dashboard.exchange_indexes}</h3>
         <Button
@@ -627,7 +251,29 @@ const Dashboard = function () {
           valueOptions={{ style: "currency", currency: instance.currency }}
         />
       </Horizontal>
+    </React.Fragment>
+  );
+};
 
+const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
+  const t = useTranslate();
+  const { instance } = useSystem();
+
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useAsync(async function () {
+    try {
+      setLoading(true);
+    } catch (err) {
+      console.error("[src/pages/Dashboard.tsx]", err);
+    } finally {
+      setLoading(false);
+    }
+    return;
+  }, []);
+
+  return (
+    <React.Fragment>
       <Horizontal internal={1} className="itemsCenter">
         <h3 className="flex1">{t.financial.financial}</h3>
         <Button
@@ -816,7 +462,159 @@ const Dashboard = function () {
           />
         </Wrapper>
       </Horizontal>
+    </React.Fragment>
+  );
+};
 
+const DashboardProducts = function ({
+  interval,
+  hidden,
+}: DashboardIntervalProps & DashboardHiddenProps) {
+  const t = useTranslate();
+  const play = useSounds();
+  const { instance, token, workspaceId } = useSystem();
+
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const [statsSales, setStatsSales] = useState<TypeStats>({});
+  const [statsProducts, setStatsProducts] = useState<TypeStats>({});
+  const [statsPurchases, setStatsPurchases] = useState<TypeStats>({});
+  const [chartSalesPurchases, setChartSalesPurchases] = useState<
+    { date: string; sales: number; purchases: number }[]
+  >([]);
+
+  // fetch stats
+  useAsync(
+    async function () {
+      try {
+        setLoading(true);
+        const responseProductsStats = await apis.Product.stats<TypeStats>(
+          token,
+          instance.name,
+          {
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : startOfYear(new Date()).toISOString(),
+            dateEnd: interval.end
+              ? interval.end.toISOString()
+              : endOfDay(new Date()).toISOString(),
+          },
+          workspaceId,
+        );
+        if (
+          !responseProductsStats.data?.result ||
+          responseProductsStats.status !== 200
+        ) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.error(
+            "[src/pages/Dashboard.tsx]",
+            responseProductsStats.data,
+          );
+          return;
+        }
+        setStatsProducts(responseProductsStats.data.result);
+
+        const responseSalesStats = await apis.Sale.stats<TypeStats>(
+          token,
+          instance.name,
+          {
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : startOfYear(new Date()).toISOString(),
+            dateEnd: interval.end
+              ? interval.end.toISOString()
+              : endOfDay(new Date()).toISOString(),
+          },
+          workspaceId,
+        );
+        if (!responseSalesStats.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.warn("[src/pages/Dashboard.tsx]", responseSalesStats.data);
+          return;
+        }
+        setStatsSales(responseSalesStats.data.result);
+
+        const responsePurchasesStats = await apis.Purchase.stats<TypeStats>(
+          token,
+          instance.name,
+          {
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : startOfYear(new Date()).toISOString(),
+            dateEnd: interval.end
+              ? interval.end.toISOString()
+              : endOfDay(new Date()).toISOString(),
+          },
+          workspaceId,
+        );
+        if (!responsePurchasesStats.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.warn(
+            "[src/pages/Dashboard.tsx]",
+            responsePurchasesStats.data,
+          );
+          return;
+        }
+        setStatsPurchases(responsePurchasesStats.data.result);
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/Dashboard.tsx]", err);
+      } finally {
+        setLoading(false);
+      }
+      return;
+    },
+    [interval, workspaceId],
+  );
+
+  // fetch charts
+  useAsync(
+    async function () {
+      try {
+        const response = await apis.Dashboard.ChartSalesPurchases<
+          { date: string; sales: number; purchases: number }[]
+        >(instance.name, token, workspaceId, {
+          dateStart: interval.start
+            ? interval.start.toISOString()
+            : startOfYear(new Date()).toISOString(),
+          dateEnd: interval.end
+            ? interval.end.toISOString()
+            : endOfDay(new Date()).toISOString(),
+        });
+        if (!response.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          return;
+        }
+        setChartSalesPurchases(response.data.result);
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/Dashboard.tsx]", err);
+      }
+      return;
+    },
+    [interval, workspaceId],
+  );
+
+  return (
+    <React.Fragment>
       <Horizontal internal={1} className="itemsCenter">
         <h3 className="flex1">{t.product.products}</h3>
         <Button
@@ -1027,7 +825,90 @@ const Dashboard = function () {
           />
         </Wrapper>
       </div>
+    </React.Fragment>
+  );
+};
 
+const DashboardServices = function ({
+  hidden,
+  interval,
+}: DashboardIntervalProps & DashboardHiddenProps) {
+  const t = useTranslate();
+  const play = useSounds();
+  const { instance, token, workspaceId } = useSystem();
+
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const [statsOrders, setStatsOrders] = useState<TypeStats>({});
+  const [statsServices, setStatsServices] = useState<TypeStats>({});
+
+  // fetch stats
+  useAsync(
+    async function () {
+      try {
+        setLoading(true);
+
+        const responseServicesStats = await apis.Service.stats<TypeStats>(
+          token,
+          instance.name,
+          {
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : startOfYear(new Date()).toISOString(),
+            dateEnd: interval.end
+              ? interval.end.toISOString()
+              : endOfDay(new Date()).toISOString(),
+          },
+          workspaceId,
+        );
+        if (!responseServicesStats.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.warn("[src/pages/Dashboard.tsx]", responseServicesStats.data);
+          return;
+        }
+        setStatsServices(responseServicesStats.data.result);
+
+        const responseOrdersStats = await apis.Order.stats<TypeStats>(
+          token,
+          instance.name,
+          {
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : startOfYear(new Date()).toISOString(),
+            dateEnd: interval.end
+              ? interval.end.toISOString()
+              : endOfDay(new Date()).toISOString(),
+          },
+          workspaceId,
+        );
+        if (!responseOrdersStats.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.warn("[src/pages/Dashboard.tsx]", responseOrdersStats.data);
+          return;
+        }
+        setStatsOrders(responseOrdersStats.data.result);
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/Dashboard.tsx]", err);
+      } finally {
+        setLoading(false);
+      }
+      return;
+    },
+    [interval, workspaceId],
+  );
+
+  return (
+    <React.Fragment>
       <Horizontal internal={1} className="itemsCenter">
         <h3 className="flex1">{t.service.services}</h3>
         <Button
@@ -1154,6 +1035,225 @@ const Dashboard = function () {
           footer={t.dashboard.stats_vehicles_maintenance_description}
         />
       </Horizontal>
+    </React.Fragment>
+  );
+};
+
+const Dashboard = function () {
+  const t = useTranslate();
+  const play = useSounds();
+  const { OpenDialog } = useDialog();
+  const { user, token, instance, workspaceId, workspaces } = useSystem();
+
+  const [interval, setInterval] = useState<TypeInputInterval>({
+    start: subDays(new Date(), 30),
+    end: endOfDay(new Date()),
+  });
+
+  const [greeting, setGreeting] = useState<string>("");
+  const [hidden, setHidden] = useState<boolean>(false);
+  const [accounts, setAccounts] = useState<TypeAccount[]>([]);
+
+  // get greeting
+  useEffect(function () {
+    const random = Math.floor(Math.random() * 6) + 1;
+    const hour = new Date().getHours();
+    let greetingText = "";
+    // dawn -> hour 06 - 09
+    if (hour >= 6 && hour <= 9)
+      greetingText =
+        t.dashboard[`good_dawn_${random}` as keyof typeof t.dashboard];
+    // morning -> hour 10 - 12
+    if (hour >= 10 && hour <= 12)
+      greetingText =
+        t.dashboard[`good_morning_${random}` as keyof typeof t.dashboard];
+    // afternoon -> hour 13 - 17
+    if (hour >= 13 && hour <= 17)
+      greetingText =
+        t.dashboard[`good_afternoon_${random}` as keyof typeof t.dashboard];
+    // night -> hour 18 - 23
+    if (hour >= 18 && hour <= 23)
+      greetingText =
+        t.dashboard[`good_night_${random}` as keyof typeof t.dashboard];
+    // rest -> hour 00 - 05
+    if (hour >= 0 && hour <= 5)
+      greetingText =
+        t.dashboard[`good_rest_${random}` as keyof typeof t.dashboard];
+    const userName = user.name.split(" ")[0];
+    const greetingNamed = greetingText.replace("{{name}}", userName);
+    setGreeting(greetingNamed);
+    return;
+  }, []);
+
+  // fetch accounts
+  useAsync(
+    async function () {
+      try {
+        const response = await apis.Account.list<
+          ApiResponsePaginate<TypeAccount>
+        >(
+          token,
+          instance.name,
+          {
+            pageSize: 999,
+            pageCurrent: 1,
+            orderField: "createdAt",
+            orderSort: "asc",
+          },
+          workspaceId,
+        );
+        if (!response.data?.result || response.status !== 200) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          return;
+        }
+        setAccounts(response.data.result.items);
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/Dashboard.tsx]", err);
+        return;
+      }
+    },
+    [workspaceId],
+  );
+
+  return (
+    <React.Fragment>
+      <Horizontal internal={1}>
+        <h1>{greeting}</h1>
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <InputSelect
+          label=""
+          empty=""
+          disabled
+          value={workspaceId}
+          styles={{ maxWidth: 200 }}
+          options={workspaces.map(function (workspace) {
+            return {
+              id: workspace.id,
+              value: workspace.id,
+              text: workspace.name,
+            };
+          })}
+        />
+
+        <InputSelect
+          label=""
+          empty=""
+          styles={{ maxWidth: 200 }}
+          value={accounts[0]?.id || ""}
+          options={accounts.map(function (account) {
+            return {
+              id: account.id,
+              value: account.id,
+              text: account.name,
+            };
+          })}
+        />
+
+        <div style={{ minWidth: 200, maxWidth: 256 }}>
+          <InputInterval
+            label=""
+            value={[interval.start, interval.end]}
+            onChange={function (interval) {
+              const [start, end] = interval;
+              setInterval({
+                start: start ? new Date(start) : null,
+                end: end ? new Date(end) : null,
+              });
+              return;
+            }}
+          />
+        </div>
+
+        <div style={{ flex: 1 }}></div>
+
+        <Tooltip content={t.components.hide_and_show}>
+          <Button
+            Icon={hidden ? EyeSlash : Eye}
+            IconSize={18}
+            category={hidden ? "Info" : "Neutral"}
+            text={hidden ? t.components.show : t.components.hide}
+            onClick={function () {
+              setHidden(!hidden);
+              return;
+            }}
+          />
+        </Tooltip>
+
+        <Button
+          category="Neutral"
+          Icon={PaintBrush}
+          IconSize={18}
+          text={t.dashboard.customize}
+        />
+
+        <Dropdown
+          values={[
+            {
+              id: "xlsx",
+              label: t.components.xlsx,
+            },
+            {
+              id: "csv",
+              label: t.components.csv,
+            },
+            {
+              id: "json",
+              label: t.components.json,
+            },
+          ]}
+        >
+          <Button
+            onlyIcon
+            disabled
+            text=""
+            category="Neutral"
+            Icon={DownloadSimple}
+          />
+        </Dropdown>
+
+        <Tooltip content={t.components.help}>
+          <Button
+            text=""
+            onlyIcon
+            category="Neutral"
+            Icon={QuestionMark}
+            onClick={function () {
+              OpenDialog({
+                width: 700,
+                category: "Success",
+                title: t.components.help,
+                cancelText: t.components.close,
+                description: (
+                  <iframe
+                    height={400}
+                    style={{ border: "none", width: "100%" }}
+                    src="https://www.youtube.com/embed/L-yA7-puosA"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  />
+                ),
+              });
+              return;
+            }}
+          />
+        </Tooltip>
+      </Horizontal>
+
+      <DashboardExchangesIndexes />
+
+      <DashboardFinancial hidden={hidden} />
+
+      <DashboardProducts interval={interval} hidden={hidden} />
+
+      <DashboardServices interval={interval} hidden={hidden} />
 
       <div style={{ minHeight: 128 }}></div>
     </React.Fragment>
