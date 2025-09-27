@@ -29,29 +29,44 @@ import "./Chart.css";
 const RADIAN = Math.PI / 180;
 
 const ChartTooltip = function (props: TooltipProps<string, string>) {
+  console.log(props);
+
   return (
     <div className="chartTooltip">
-      <div className="chartTooltipTitle">{props.label}</div>
+      {props?.label && <div className="chartTooltipTitle">{props.label}</div>}
       <div className="chartTooltipContent">
         {props?.payload?.map(function (payload, index) {
+          const name = payload?.name || payload?.payload?.name;
+
+          const value = payload?.value || payload?.payload?.value;
+
           return (
             <div className="chartTooltipPayload" key={`payload-${index}`}>
               <div
-                style={{ background: payload?.stroke || payload?.fill }}
+                style={{
+                  background:
+                    payload?.stroke || payload?.fill || payload?.payload?.fill,
+                }}
                 className="chartTooltipPayloadColor"
               ></div>
-              <div className="chartTooltipPayloadName">{payload?.name}</div>
-              <div className="chartTooltipPayloadValue">
-                {typeof payload?.formatter === "function"
-                  ? payload?.formatter(
-                      payload.value as string,
-                      payload.name as string,
-                      payload,
-                      index,
-                      payload as unknown as Payload<string, string>[],
-                    )
-                  : payload?.value}
-              </div>
+              {name && (
+                <div className="chartTooltipPayloadName">
+                  {payload?.name || payload?.payload?.name}
+                </div>
+              )}
+              {value && (
+                <div className="chartTooltipPayloadValue">
+                  {typeof payload?.formatter === "function"
+                    ? payload?.formatter(
+                        payload.value as string,
+                        payload.name as string,
+                        payload,
+                        index,
+                        payload as unknown as Payload<string, string>[],
+                      )
+                    : payload?.value || payload?.payload?.value}
+                </div>
+              )}
             </div>
           );
         })}
@@ -273,10 +288,18 @@ const ChartPie = function ({
 
           <Label
             value={total}
+            fill="var(--textColor)"
             position="center"
-            style={{ color: "var(--textColor)", fontSize: "var(--textTitle)" }}
+            style={{
+              color: "var(--textColor)",
+              fontSize: "var(--textTitle)",
+              fontWeight: "bold",
+            }}
           />
         </Pie>
+
+        <Tooltip content={<ChartTooltip />} cursor={{ fill: "#ebebeb" }} />
+
         <Legend
           align="right"
           layout="vertical"
