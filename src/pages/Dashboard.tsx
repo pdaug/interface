@@ -964,18 +964,23 @@ const DashboardSchedules = function ({
               stroke: "#bebebe",
               strokeWidth: 1,
               dataKey: "date",
-              tick: { fontSize: 10, fill: "#222", angle: 30, dy: 16 } as Record<
-                string,
-                number | string
-              >,
+              tick: {
+                fontSize: 10,
+                fill: "var(--textColor)",
+                angle: 30,
+                dy: 16,
+              } as Record<string, number | string>,
               interval: 0,
               padding: { left: 15, right: 15 },
             }}
             axisYProps={{
-              tick: { fontSize: 0, fill: "" },
+              tick: {
+                fontSize: 10,
+                fill: "var(--textColor)",
+              },
               stroke: "",
               strokeWidth: 0,
-              width: 0,
+              width: 24,
             }}
             data={chartSchedules}
           />
