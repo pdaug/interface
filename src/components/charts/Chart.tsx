@@ -6,13 +6,13 @@ import {
   CartesianGrid,
   CartesianGridProps,
   Cell,
+  Label,
   Legend,
   LegendProps,
   Line,
   Pie,
   PieChart,
   ResponsiveContainer,
-  Sector,
   Tooltip,
   TooltipProps,
   XAxis,
@@ -20,7 +20,6 @@ import {
   YAxis,
   YAxisProps,
 } from "recharts";
-import { useState } from "react";
 import { LayoutType, Margin } from "recharts/types/util/types";
 import { Payload } from "recharts/types/component/DefaultTooltipContent";
 
@@ -208,8 +207,8 @@ export type ChartPieProps = ChartProps & {
     label?: boolean;
     cx?: number | string;
     cy?: number | string;
-    innerRadius: number;
-    outerRadius: number;
+    innerRadius: number | string;
+    outerRadius: number | string;
     paddingAngle: number;
     dataKey: string;
     pieces: {
@@ -228,7 +227,7 @@ const ChartPie = function ({
   margin = { top: 5, right: 5, left: 0, bottom: 5 },
   pie,
 }: ChartPieProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const total = data.reduce((acc, cur) => acc + Number(cur?.value) || 0, 0);
 
   return (
     <ResponsiveContainer width={width} height={height}>
@@ -252,8 +251,9 @@ const ChartPie = function ({
                 x={x}
                 y={y}
                 fill="white"
-                textAnchor={x > cx ? "start" : "end"}
                 dominantBaseline="central"
+                textAnchor={x > cx ? "start" : "end"}
+                style={{ fontSize: "var(--textSmall)" }}
               >
                 {`${((percent ?? 1) * 100).toFixed(0)}%`}
               </text>
@@ -266,54 +266,16 @@ const ChartPie = function ({
           cx={pie?.cx || "50%"}
           cy={pie?.cy || "50%"}
           dataKey={pie.dataKey}
-          {...(pie.label
-            ? {
-                activeIndex: activeIndex,
-                activeShape: function (props: Record<string, any>) {
-                  console.log(props);
-                  return (
-                    <g>
-                      <Sector
-                        cx={props.cx}
-                        cy={props.cy}
-                        innerRadius={props.innerRadius - 10}
-                        outerRadius={props.outerRadius}
-                        startAngle={props.startAngle}
-                        endAngle={props.endAngle}
-                        fill={props.fill}
-                      />
-                      <text
-                        dy={8}
-                        x={props.cx}
-                        y={props.cy + 10}
-                        fontSize={20}
-                        fontWeight="bold"
-                        fill={props.fill}
-                        textAnchor="middle"
-                      >
-                        {props.payload.value}
-                      </text>
-                      <text
-                        dy={8}
-                        x={props.cx}
-                        y={props.cy - 10}
-                        fontSize={20}
-                        fontWeight="bold"
-                        fill={props.fill}
-                        textAnchor="middle"
-                      >
-                        {props.payload.date}
-                      </text>
-                    </g>
-                  );
-                },
-                onMouseEnter: (_, index) => setActiveIndex(index),
-              }
-            : {})}
         >
           {pie.pieces?.map(function (pieceProps, index) {
             return <Cell key={`cell-${index}`} fill={pieceProps.fill} />;
           })}
+
+          <Label
+            value={total}
+            position="center"
+            style={{ color: "var(--textColor)", fontSize: "var(--textTitle)" }}
+          />
         </Pie>
         <Legend
           align="right"
@@ -329,6 +291,7 @@ const ChartPie = function ({
                       display: "flex",
                       alignItems: "center",
                       marginBottom: 4,
+                      fontSize: "var(--textSmall)",
                     }}
                   >
                     <span

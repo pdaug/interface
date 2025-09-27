@@ -17,6 +17,7 @@ import {
   TrendDown,
   Blueprint,
   PaintBrush,
+  LinkSimple,
   CurrencyBtc,
   FunnelSimple,
   CoinVertical,
@@ -59,11 +60,12 @@ import Button from "../components/buttons/Button";
 import Wrapper from "../components/wrapper/Wrapper";
 import Profile from "../components/profiles/Profile";
 import Tooltip from "../components/tooltips/Tooltip";
-import { ChartLine } from "../components/charts/Chart";
-import Dropdown from "../components/dropdowns/Dropdown";
+import Callout from "../components/callouts/Callout";
 import { Horizontal } from "../components/aligns/Align";
+import Dropdown from "../components/dropdowns/Dropdown";
 import { useDialog } from "../components/dialogs/Dialog";
 import Table, { TableData } from "../components/tables/Table";
+import { ChartLine, ChartPie } from "../components/charts/Chart";
 import Badge, { BadgeCategories } from "../components/badges/Badge";
 import { InputInterval, InputSelect } from "../components/inputs/Input";
 
@@ -192,7 +194,6 @@ const DashboardExchangesIndexes = function () {
           metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
           title={t.dashboard.stats_exchange_dollar}
           Icon={CoinVertical}
-          category="Info"
           value={parseFloat(dollar?.bid || "1")}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
@@ -206,7 +207,6 @@ const DashboardExchangesIndexes = function () {
           metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
           title={t.dashboard.stats_exchange_euro}
           Icon={CoinVertical}
-          category="Info"
           value={parseFloat(euro?.bid || "1")}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
@@ -220,7 +220,6 @@ const DashboardExchangesIndexes = function () {
           metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
           title={t.dashboard.stats_exchange_pound}
           Icon={CoinVertical}
-          category="Info"
           value={parseFloat(pound?.bid || "1")}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
@@ -230,7 +229,6 @@ const DashboardExchangesIndexes = function () {
           loading={loading}
           title={t.dashboard.stats_exchange_bitcoin}
           Icon={CurrencyBtc}
-          category="Info"
           value={bitcoin?.buy || 0}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
@@ -248,13 +246,16 @@ const DashboardExchangesIndexes = function () {
           valueLocale={instance.language}
           valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
           footer={
-            <a
-              href="https://www.bcb.gov.br/controleinflacao/taxaselic"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {t.dashboard.stats_index_selic_description}
-            </a>
+            <Horizontal internal={0.4} className="itemsCenter">
+              <LinkSimple size={16} color="var(--infoColor)" />
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href="https://www.bcb.gov.br/controleinflacao/taxaselic"
+              >
+                {t.dashboard.stats_index_selic_description}
+              </a>
+            </Horizontal>
           }
         />
 
@@ -268,13 +269,16 @@ const DashboardExchangesIndexes = function () {
           valueLocale={instance.language}
           valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
           footer={
-            <a
-              href="https://pt.wikipedia.org/wiki/Certificado_de_Dep%C3%B3sito_Interbanc%C3%A1rio"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {t.dashboard.stats_index_cdi_description}
-            </a>
+            <Horizontal internal={0.4} className="itemsCenter">
+              <LinkSimple size={16} color="var(--infoColor)" />
+              <a
+                href="https://pt.wikipedia.org/wiki/Certificado_de_Dep%C3%B3sito_Interbanc%C3%A1rio"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t.dashboard.stats_index_cdi_description}
+              </a>
+            </Horizontal>
           }
         />
 
@@ -288,13 +292,16 @@ const DashboardExchangesIndexes = function () {
           valueLocale={instance.language}
           valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
           footer={
-            <a
-              href="https://pt.wikipedia.org/wiki/%C3%8Dndice_de_pre%C3%A7os_no_consumidor"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {t.dashboard.stats_index_ipca_description}
-            </a>
+            <Horizontal internal={0.4} className="itemsCenter">
+              <LinkSimple size={16} color="var(--infoColor)" />
+              <a
+                href="https://pt.wikipedia.org/wiki/%C3%8Dndice_de_pre%C3%A7os_no_consumidor"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t.dashboard.stats_index_ipca_description}
+              </a>
+            </Horizontal>
           }
         />
       </Horizontal>
@@ -610,6 +617,38 @@ const DashboardSchedules = function ({
     [interval, workspaceId],
   );
 
+  const schedulesLow =
+    schedules?.filter((schedule) => schedule.priority === "low")?.length || 0;
+  const schedulesMedium =
+    schedules?.filter((schedule) => schedule.priority === "medium")?.length ||
+    0;
+  const schedulesHigh =
+    schedules?.filter((schedule) => schedule.priority === "high")?.length || 0;
+  const schedulesCritical =
+    schedules?.filter((schedule) => schedule.priority === "critical")?.length ||
+    0;
+
+  const schedulesTask =
+    schedules?.filter((schedule) => schedule.category === "task")?.length || 0;
+  const schedulesNote =
+    schedules?.filter((schedule) => schedule.category === "note")?.length || 0;
+  const schedulesEvent =
+    schedules?.filter((schedule) => schedule.category === "event")?.length || 0;
+  const schedulesRemind =
+    schedules?.filter((schedule) => schedule.category === "remind")?.length ||
+    0;
+  const schedulesDeadline =
+    schedules?.filter((schedule) => schedule.category === "deadline")?.length ||
+    0;
+  const schedulesWork =
+    schedules?.filter((schedule) => schedule.category === "work")?.length || 0;
+  const schedulesReserved =
+    schedules?.filter((schedule) => schedule.category === "reserved")?.length ||
+    0;
+  const schedulesMeeting =
+    schedules?.filter((schedule) => schedule.category === "meeting")?.length ||
+    0;
+
   return (
     <React.Fragment>
       <Horizontal internal={1} className="itemsCenter">
@@ -639,10 +678,7 @@ const DashboardSchedules = function ({
           title={t.dashboard.stats_schedules_low}
           Icon={CalendarDots}
           category="Success"
-          value={
-            schedules?.filter((schedule) => schedule.priority === "low")
-              ?.length || 0
-          }
+          value={schedulesLow}
           valueUnit={t.components.items.toLowerCase()}
           styles={{ display: "flex" }}
         />
@@ -653,10 +689,7 @@ const DashboardSchedules = function ({
           title={t.dashboard.stats_schedules_medium}
           Icon={CalendarDots}
           category="Info"
-          value={
-            schedules?.filter((schedule) => schedule.priority === "medium")
-              ?.length || 0
-          }
+          value={schedulesMedium}
           valueUnit={t.components.items.toLowerCase()}
           styles={{ display: "flex" }}
         />
@@ -667,10 +700,7 @@ const DashboardSchedules = function ({
           title={t.dashboard.stats_schedules_high}
           Icon={CalendarDots}
           category="Warning"
-          value={
-            schedules?.filter((schedule) => schedule.priority === "high")
-              ?.length || 0
-          }
+          value={schedulesHigh}
           valueUnit={t.components.items.toLowerCase()}
           styles={{ display: "flex" }}
         />
@@ -681,13 +711,214 @@ const DashboardSchedules = function ({
           title={t.dashboard.stats_schedules_critical}
           Icon={CalendarDots}
           category="Danger"
-          value={
-            schedules?.filter((schedule) => schedule.priority === "critical")
-              ?.length || 0
-          }
+          value={schedulesCritical}
           valueUnit={t.components.items.toLowerCase()}
           styles={{ display: "flex" }}
         />
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.schedule.task}
+          category="Success"
+          value={schedulesTask}
+          valueUnit={t.components.items.toLowerCase()}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.schedule.note}
+          category="Success"
+          value={schedulesNote}
+          valueUnit={t.components.items.toLowerCase()}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.schedule.event}
+          category="Info"
+          value={schedulesEvent}
+          valueUnit={t.components.items.toLowerCase()}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.schedule.remind}
+          category="Info"
+          value={schedulesRemind}
+          valueUnit={t.components.items.toLowerCase()}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.schedule.deadline}
+          category="Warning"
+          value={schedulesDeadline}
+          valueUnit={t.components.items.toLowerCase()}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.schedule.work}
+          category="Warning"
+          value={schedulesWork}
+          valueUnit={t.components.items.toLowerCase()}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.schedule.reserved}
+          category="Danger"
+          value={schedulesReserved}
+          valueUnit={t.components.items.toLowerCase()}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.schedule.meeting}
+          category="Danger"
+          value={schedulesMeeting}
+          valueUnit={t.components.items.toLowerCase()}
+        />
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Wrapper
+          title={t.dashboard.chart_schedules_priority}
+          description={t.dashboard.chart_schedules_priority_description}
+        >
+          <ChartPie
+            id="chart_schedules_priority"
+            height={240}
+            gridProps={{
+              stroke: "#dedede",
+              strokeWidth: 1,
+              vertical: false,
+              horizontal: true,
+            }}
+            pie={{
+              cx: "50%",
+              cy: "50%",
+              dataKey: "value",
+              innerRadius: "50%",
+              outerRadius: "100%",
+              paddingAngle: 2,
+              pieces: [
+                { fill: "var(--successColor)" },
+                { fill: "var(--infoColor)" },
+                { fill: "var(--warningColor)" },
+                { fill: "var(--dangerColor)" },
+              ],
+            }}
+            data={[
+              {
+                name: t.dashboard.stats_schedules_low,
+                date: "low",
+                value: schedulesLow,
+              },
+              {
+                name: t.dashboard.stats_schedules_medium,
+                date: "medium",
+                value: schedulesMedium,
+              },
+              {
+                name: t.dashboard.stats_schedules_high,
+                date: "high",
+                value: schedulesHigh,
+              },
+              {
+                name: t.dashboard.stats_schedules_critical,
+                date: "critical",
+                value: schedulesCritical,
+              },
+            ]}
+          />
+        </Wrapper>
+
+        <Wrapper
+          title={t.dashboard.chart_schedules_category}
+          description={t.dashboard.chart_schedules_category_description}
+        >
+          <ChartPie
+            id="chart_schedules_category"
+            height={240}
+            gridProps={{
+              stroke: "#dedede",
+              strokeWidth: 1,
+              vertical: false,
+              horizontal: true,
+            }}
+            pie={{
+              cx: "50%",
+              cy: "50%",
+              dataKey: "value",
+              innerRadius: "50%",
+              outerRadius: "100%",
+              paddingAngle: 2,
+              pieces: [
+                { fill: "var(--successColor)" },
+                { fill: "var(--successDark)" },
+                { fill: "var(--infoColor)" },
+                { fill: "var(--infoDark)" },
+                { fill: "var(--warningColor)" },
+                { fill: "var(--warningDark)" },
+                { fill: "var(--dangerColor)" },
+                { fill: "var(--dangerDark)" },
+              ],
+            }}
+            data={[
+              {
+                name: t.schedule.task,
+                date: "task",
+                value: schedulesTask,
+              },
+              {
+                name: t.schedule.note,
+                date: "note",
+                value: schedulesNote,
+              },
+              {
+                name: t.schedule.event,
+                date: "event",
+                value: schedulesEvent,
+              },
+              {
+                name: t.schedule.remind,
+                date: "remind",
+                value: schedulesRemind,
+              },
+              {
+                name: t.schedule.deadline,
+                date: "deadline",
+                value: schedulesDeadline,
+              },
+              {
+                name: t.schedule.work,
+                date: "work",
+                value: schedulesWork,
+              },
+              {
+                name: t.schedule.reserved,
+                date: "reserved",
+                value: schedulesReserved,
+              },
+              {
+                name: t.schedule.meeting,
+                date: "meeting",
+                value: schedulesMeeting,
+              },
+            ]}
+          />
+        </Wrapper>
       </Horizontal>
 
       <div style={{ maxHeight: 400 }}>
@@ -819,6 +1050,16 @@ const DashboardSchedules = function ({
               },
             },
           }}
+        />
+      </div>
+
+      <div>
+        <Callout
+          Icon={CalendarDots}
+          IconSize={16}
+          category="Warning"
+          text={t.callout.only_schedules_with_priority}
+          styles={{ fontSize: "var(--textSmall)" }}
         />
       </div>
     </React.Fragment>
@@ -1133,7 +1374,7 @@ const DashboardProducts = function ({
                 type: "monotone",
                 name: t.sale.sales,
                 dataKey: "sale",
-                stroke: "var(--chartColor3)",
+                stroke: "var(--successColor)",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,
@@ -1147,7 +1388,7 @@ const DashboardProducts = function ({
                 type: "monotone",
                 name: t.purchase.purchases,
                 dataKey: "purchase",
-                stroke: "var(--chartColor6)",
+                stroke: "var(--infoColor)",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,

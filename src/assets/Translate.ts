@@ -53,6 +53,8 @@ const TranslatePt = {
       "Com o código postal do destinatário e do remetente, será mostrado as empresas disponíveis para realizar o envio desta venda",
     plan_limit_workspaces: "O seu plano contem um limite de organizações",
     plan_limit_users: "O seu plano contem um limite de usuários",
+    only_schedules_with_priority:
+      "Somente os itens com prioridade serão mostrados na tabela",
   },
   components: {
     of: "de",
@@ -310,6 +312,12 @@ const TranslatePt = {
     chart_sales_purchases_title: "Vendas e compras ao longo do período",
     chart_sales_purchases_description:
       "As vendas e compras distribuídas ao longo do intervalo de tempo.",
+    chart_schedules_priority: "Prioridade dos itens",
+    chart_schedules_priority_description:
+      "Visualização das prioridades dos itens agendados ao longo do período.",
+    chart_schedules_category: "Categorias dos itens",
+    chart_schedules_category_description:
+      "Visualização das categorias dos itens agendados ao longo do período.",
     // stats schedules
     stats_schedules_title: "Itens agendados",
     stats_schedules_description: "Quantidade de itens agendados no período.",
@@ -1289,6 +1297,8 @@ const TranslateEn = {
       "With the recipient's and sender's postal code, the companies available to ship this sale will be shown.",
     plan_limit_workspaces: "Your plan contains a limit of workspaces",
     plan_limit_users: "Your plan contains a limit of users",
+    only_schedules_with_priority:
+      "Only schedules with priority will be shown in the table",
   },
   components: {
     of: "of",
@@ -1546,6 +1556,12 @@ const TranslateEn = {
     chart_sales_purchases_title: "Sales and purchases over time",
     chart_sales_purchases_description:
       "Sales and purchases distributed over the selected time range.",
+    chart_schedules_priority: "Items priority",
+    chart_schedules_priority_description:
+      "Visualization of the priorities of scheduled items over the selected time range.",
+    chart_schedules_category: "Items category",
+    chart_schedules_category_description:
+      "Visualization of the categories of scheduled items over the selected time range.",
     // stats schedules
     stats_schedules_title: "Items scheduled",
     stats_schedules_description: "Quantity of items scheduled in the period.",
