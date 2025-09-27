@@ -318,6 +318,9 @@ const TranslatePt = {
     chart_schedules_category: "Categorias dos itens",
     chart_schedules_category_description:
       "Visualização das categorias dos itens agendados ao longo do período.",
+    chart_schedules_time: "Itens agendados ao longo do tempo",
+    chart_schedules_time_description:
+      "Visualização dos itens agendados ao longo do período.",
     // stats schedules
     stats_schedules_title: "Itens agendados",
     stats_schedules_description: "Quantidade de itens agendados no período.",
@@ -1562,6 +1565,9 @@ const TranslateEn = {
     chart_schedules_category: "Items category",
     chart_schedules_category_description:
       "Visualization of the categories of scheduled items over the selected time range.",
+    chart_schedules_time: "Items scheduled over time",
+    chart_schedules_time_description:
+      "Visualization of the scheduled items over the selected time range.",
     // stats schedules
     stats_schedules_title: "Items scheduled",
     stats_schedules_description: "Quantity of items scheduled in the period.",

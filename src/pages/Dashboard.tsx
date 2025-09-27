@@ -1,10 +1,12 @@
 import {
+  format,
   subDays,
   isEqual,
   endOfDay,
   isSameDay,
   startOfDay,
   startOfYear,
+  eachDayOfInterval,
 } from "date-fns";
 import {
   Eye,
@@ -65,9 +67,9 @@ import { Horizontal } from "../components/aligns/Align";
 import Dropdown from "../components/dropdowns/Dropdown";
 import { useDialog } from "../components/dialogs/Dialog";
 import Table, { TableData } from "../components/tables/Table";
-import { ChartLine, ChartPie } from "../components/charts/Chart";
 import Badge, { BadgeCategories } from "../components/badges/Badge";
 import { InputInterval, InputSelect } from "../components/inputs/Input";
+import { ChartBar, ChartLine, ChartPie } from "../components/charts/Chart";
 
 type TypeStats = Record<string, number>;
 
@@ -649,6 +651,19 @@ const DashboardSchedules = function ({
     schedules?.filter((schedule) => schedule.category === "meeting")?.length ||
     0;
 
+  const allDates = eachDayOfInterval({
+    start: interval.start || startOfYear(new Date()),
+    end: interval.end || endOfDay(new Date()),
+  }).map((d) => format(d, "yyyy-MM-dd"));
+
+  const chartSchedules = allDates?.map(function (date) {
+    const items = schedules?.filter((s) => isSameDay(s.start, date));
+    return {
+      date,
+      items: items?.length || 0,
+    };
+  });
+
   return (
     <React.Fragment>
       <Horizontal internal={1} className="itemsCenter">
@@ -921,7 +936,53 @@ const DashboardSchedules = function ({
         </Wrapper>
       </Horizontal>
 
-      <div style={{ maxHeight: 400 }}>
+      <Horizontal internal={1}>
+        <Wrapper
+          title={t.dashboard.chart_schedules_time}
+          description={t.dashboard.chart_schedules_time_description}
+        >
+          <ChartBar
+            id="chart_schedule_time"
+            height={240}
+            margin={{ top: 8, right: 8, left: 8, bottom: 16 }}
+            gridProps={{
+              stroke: "#dedede",
+              strokeWidth: 1,
+              vertical: false,
+              horizontal: true,
+            }}
+            bars={[
+              {
+                dataKey: "items",
+                fill: "var(--infoColor)",
+                radius: [4, 4, 0, 0],
+                barSize: 32,
+                barSizeMax: 32,
+              },
+            ]}
+            axisXProps={{
+              stroke: "#bebebe",
+              strokeWidth: 1,
+              dataKey: "date",
+              tick: { fontSize: 10, fill: "#222", angle: 30, dy: 16 } as Record<
+                string,
+                number | string
+              >,
+              interval: 0,
+              padding: { left: 15, right: 15 },
+            }}
+            axisYProps={{
+              tick: { fontSize: 0, fill: "" },
+              stroke: "",
+              strokeWidth: 0,
+              width: 0,
+            }}
+            data={chartSchedules}
+          />
+        </Wrapper>
+      </Horizontal>
+
+      <Horizontal styles={{ maxHeight: 400 }}>
         <Table
           border
           noSelect
@@ -1051,7 +1112,7 @@ const DashboardSchedules = function ({
             },
           }}
         />
-      </div>
+      </Horizontal>
 
       <div>
         <Callout
