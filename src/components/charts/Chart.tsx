@@ -6,6 +6,7 @@ import {
   CartesianGrid,
   CartesianGridProps,
   Cell,
+  Legend,
   LegendProps,
   Line,
   Pie,
@@ -25,6 +26,8 @@ import { Payload } from "recharts/types/component/DefaultTooltipContent";
 
 // styles
 import "./Chart.css";
+
+const RADIAN = Math.PI / 180;
 
 const ChartTooltip = function (props: TooltipProps<string, string>) {
   return (
@@ -226,11 +229,40 @@ const ChartPie = function ({
   pie,
 }: ChartPieProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <ResponsiveContainer width={width} height={height}>
       <PieChart data={data} margin={margin} layout={layout}>
         <Pie
+          labelLine={false}
+          label={function ({
+            cx,
+            cy,
+            midAngle,
+            innerRadius,
+            outerRadius,
+            percent,
+          }: Record<string, number>) {
+            const radius = innerRadius + (outerRadius - innerRadius) * 0.3;
+            const x = cx + radius * Math.cos(-(midAngle ?? 0) * RADIAN);
+            const y = cy + radius * Math.sin(-(midAngle ?? 0) * RADIAN);
+
+            return percent !== 0 ? (
+              <text
+                x={x}
+                y={y}
+                fill="white"
+                textAnchor={x > cx ? "start" : "end"}
+                dominantBaseline="central"
+              >
+                {`${((percent ?? 1) * 100).toFixed(0)}%`}
+              </text>
+            ) : null;
+          }}
           data={data}
+          innerRadius={pie.innerRadius}
+          outerRadius={pie.outerRadius}
+          paddingAngle={pie.paddingAngle}
           cx={pie?.cx || "50%"}
           cy={pie?.cy || "50%"}
           dataKey={pie.dataKey}
@@ -278,14 +310,44 @@ const ChartPie = function ({
                 onMouseEnter: (_, index) => setActiveIndex(index),
               }
             : {})}
-          innerRadius={pie.innerRadius}
-          outerRadius={pie.outerRadius}
-          paddingAngle={pie.paddingAngle}
         >
           {pie.pieces?.map(function (pieceProps, index) {
             return <Cell key={`cell-${index}`} fill={pieceProps.fill} />;
           })}
         </Pie>
+        <Legend
+          align="right"
+          layout="vertical"
+          verticalAlign="middle"
+          content={function ({ payload }) {
+            return (
+              <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                {payload?.map((entry, index) => (
+                  <li
+                    key={`item-${index}`}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: 4,
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "inline-block",
+                        width: 12,
+                        height: 12,
+                        backgroundColor: entry.color,
+                        marginRight: 8,
+                        borderRadius: "50%",
+                      }}
+                    />
+                    {data[index].value} - {entry.value}
+                  </li>
+                ))}
+              </ul>
+            );
+          }}
+        />
       </PieChart>
     </ResponsiveContainer>
   );
