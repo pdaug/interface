@@ -17,7 +17,7 @@ import tool from "./pages/tool";
 import settings from "./pages/settings";
 import services from "./pages/services";
 import products from "./pages/products";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/dashboard";
 import financial from "./pages/financial";
 import administrative from "./pages/administrative";
 
