@@ -93,6 +93,8 @@ const TranslatePt = {
     image: "Imagem",
     to: "Para",
     by: "Por",
+    item: "Item",
+    items: "Itens",
     // editor
     bold: "Negrito",
     italic: "Itálico",
@@ -277,54 +279,64 @@ const TranslatePt = {
     good_rest_6: "Feche os olhos, {{name}}!",
     // stats
     stats_inflows_title: "Receitas",
-    stats_inflows_description: "Total do valor em receitas",
+    stats_inflows_description: "Valor da receita no período.",
     stats_inflows_receive_title: "Receitas a receber",
-    stats_inflows_receive_description:
-      "Total do valor em receitas a serem recebidas",
+    stats_inflows_receive_description: "Valor da receita a receber no período.",
     stats_inflows_late_title: "Receitas em atraso",
-    stats_inflows_late_description:
-      "Total do valor em receitas que estão em atraso",
+    stats_inflows_late_description: "Valor da receita em atraso no período.",
     stats_outflows_title: "Despesas",
-    stats_outflows_description: "Total do valor em despesas",
-    stats_outflows_receive_title: "Despesas a pagar",
-    stats_outflows_receive_description:
-      "Total do valor em despesas a serem pagas",
+    stats_outflows_description: "Valor da despesa no período.",
+    stats_outflows_pay_title: "Despesas a pagar",
+    stats_outflows_pay_description: "Valor da despesa a pagar no período.",
     stats_outflows_late_title: "Despesas em atraso",
-    stats_outflows_late_description:
-      "Total do valor em despesas que estão em atraso",
+    stats_outflows_late_description: "Valor da despesa em atraso no período.",
     // exchange and indexes
     stats_index_selic: "SELIC",
+    stats_index_selic_description: "O que é a SELIC?",
     stats_index_cdi: "CDI",
+    stats_index_cdi_description: "O que é o CDI?",
     stats_index_ipca: "IPCA",
+    stats_index_ipca_description: "O que é o IPCA?",
     stats_exchange_dollar: "Dólar",
     stats_exchange_euro: "Euro",
     stats_exchange_pound: "Libra Esterlina",
     // charts
-    chart_inflows_title: "Receitas ao longo do tempo",
+    chart_inflows_title: "Receitas ao longo do período",
     chart_inflows_description:
-      "As receitas distribuídas ao longo do intervalo de tempo.",
-    chart_outflows_title: "Despesas ao longo do tempo",
+      "Visualização das receitas diárias no período selecionado.",
+    chart_outflows_title: "Despesas ao longo do período",
     chart_outflows_description:
-      "As despesas distribuídas ao longo do intervalo de tempo.",
-    chart_sales_purchases_title: "Vendas e compras ao longo do tempo",
+      "Visualização das despesas diárias no período selecionado.",
+    chart_sales_purchases_title: "Vendas e compras ao longo do período",
     chart_sales_purchases_description:
       "As vendas e compras distribuídas ao longo do intervalo de tempo.",
+    // stats schedules
+    stats_schedules_title: "Itens agendados",
+    stats_schedules_description: "Quantidade de itens agendados no período.",
+    stats_schedules_low: "Baixa prioridade",
+    stats_schedules_medium: "Média prioridade",
+    stats_schedules_high: "Alta prioridade",
+    stats_schedules_critical: "Crítica",
     // stats products
     stats_products_title: "Produtos catalogados",
-    stats_products_description: "Total em quantidade de produtos",
-    stats_products_active_title: "Produtos catalogados ativos",
-    stats_products_active_description: "Total em quantidade de produtos ativos",
-    stats_products_inactive_title: "Produtos catalogados inativos",
+    stats_products_description:
+      "Quantidade de produtos catalogados no período.",
+    stats_products_active_title: "Produtos ativos",
+    stats_products_active_description:
+      "Produtos que foram catalogados e estão ativos.",
+    stats_products_inactive_title: "Produtos inativos",
     stats_products_inactive_description:
-      "Total em quantidade de produtos inativos",
+      "Produtos que foram catalogados e estão inativos.",
     // stats services
     stats_services_title: "Serviços catalogados",
-    stats_services_description: "Total em quantidade de serviços",
-    stats_services_active_title: "Serviços catalogados ativos",
-    stats_services_active_description: "Total em quantidade de serviços ativos",
-    stats_services_inactive_title: "Serviços catalogados inativos",
+    stats_services_description:
+      "Quantidade de serviços catalogados no período.",
+    stats_services_active_title: "Serviços ativos",
+    stats_services_active_description:
+      "Quantos serviços catalogados que estão ativos.",
+    stats_services_inactive_title: "Serviços inativos",
     stats_services_inactive_description:
-      "Total em quantidade de serviços inativos",
+      "Quantos serviços catalogados que estão inativos.",
     // stats vehicles
     stats_vehicles_title: "Veículos catalogados",
     stats_vehicles_description: "Total em quantidade de veículos",
@@ -885,6 +897,7 @@ const TranslatePt = {
     start_date: "Data e hora inicial",
     end_date: "Date e hora final",
     more: "mais",
+    same_day: "Mesmo dia",
   },
   service: {
     // list
@@ -1316,6 +1329,8 @@ const TranslateEn = {
     image: "Image",
     to: "To",
     by: "By",
+    item: "Item",
+    items: "Items",
     // editor
     bold: "Bold",
     italic: "Italic",
@@ -1505,15 +1520,18 @@ const TranslateEn = {
       "Total inflows that should have already been received",
     stats_outflows_title: "Outflows",
     stats_outflows_description: "Total outflows already made",
-    stats_outflows_receive_title: "Pending outflows",
-    stats_outflows_receive_description: "Total outflows yet to be made",
+    stats_outflows_pay_title: "Pending outflows",
+    stats_outflows_pay_description: "Total outflows yet to be made",
     stats_outflows_late_title: "Overdue outflows",
     stats_outflows_late_description:
       "Total outflows that should have already been made",
     // exchange and indexes
     stats_index_selic: "SELIC",
+    stats_index_selic_description: "What is the SELIC?",
     stats_index_cdi: "CDI",
+    stats_index_cdi_description: "What is the CDI?",
     stats_index_ipca: "IPCA",
+    stats_index_ipca_description: "What is the IPCA?",
     stats_exchange_dollar: "Dollar",
     stats_exchange_euro: "Euro",
     stats_exchange_pound: "Pound Sterling",
@@ -1528,6 +1546,13 @@ const TranslateEn = {
     chart_sales_purchases_title: "Sales and purchases over time",
     chart_sales_purchases_description:
       "Sales and purchases distributed over the selected time range.",
+    // stats schedules
+    stats_schedules_title: "Items scheduled",
+    stats_schedules_description: "Quantity of items scheduled in the period.",
+    stats_schedules_low: "Low priority",
+    stats_schedules_medium: "Medium priority",
+    stats_schedules_high: "High priority",
+    stats_schedules_critical: "Critical",
     // stats products
     stats_products_title: "Products cataloged",
     stats_products_description: "Total in quantity of products",
@@ -2101,6 +2126,7 @@ const TranslateEn = {
     start_date: "Start date",
     end_date: "End date",
     more: "more",
+    same_day: "Same day",
   },
   service: {
     // list

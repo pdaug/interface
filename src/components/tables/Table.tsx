@@ -39,6 +39,7 @@ export type TableProps = {
   setSelected?: React.Dispatch<React.SetStateAction<string[]>>;
   options?: DropdownValue[];
   styles?: React.CSSProperties;
+  stylesBody?: React.CSSProperties;
   loading?: boolean;
   noSelect?: boolean;
 };
@@ -52,6 +53,7 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function (
     setSelected,
     options,
     styles,
+    stylesBody,
     loading,
     headless,
     noSelect,
@@ -141,7 +143,7 @@ const Table = forwardRef<HTMLDivElement, TableProps>(function (
           </i>
         </Horizontal>
       ) : (
-        <div className="tableBody">
+        <div className="tableBody" style={stylesBody}>
           {data?.map(function (row, indexRow) {
             return (
               <div

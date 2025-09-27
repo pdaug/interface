@@ -1,4 +1,12 @@
 import {
+  subDays,
+  isEqual,
+  endOfDay,
+  isSameDay,
+  startOfDay,
+  startOfYear,
+} from "date-fns";
+import {
   Eye,
   Tag,
   Truck,
@@ -12,43 +20,51 @@ import {
   CurrencyBtc,
   FunnelSimple,
   CoinVertical,
+  CalendarDots,
   QuestionMark,
   DownloadSimple,
   ShoppingBagOpen,
   PresentationChart,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
-import { endOfDay, startOfYear, subDays } from "date-fns";
 import React, { useEffect, useState } from "react";
 
 // apis
 import apis from "../apis";
 
+// assets
+import { ScheduleCategoriesColors } from "../assets/Schedules";
+
 // types
 import {
+  ApiIndexes,
   ApiBitcoinContent,
   ApiExchangeContent,
-  ApiIndexes,
   ApiResponsePaginate,
 } from "../types/Api";
 import { TypeAccount } from "../types/Account";
+import { TypeSchedule } from "../types/Schedules";
 import { TypeInputInterval } from "../types/Components";
 
 // hooks
 import useAsync from "../hooks/useAsync";
 import useSounds from "../hooks/useSounds";
 import useSystem from "../hooks/useSystem";
+import useDateTime from "../hooks/useDateTime";
 import useTranslate from "../hooks/useTranslate";
 
 // components
 import Stats from "../components/stats/Stats";
 import Button from "../components/buttons/Button";
 import Wrapper from "../components/wrapper/Wrapper";
+import Profile from "../components/profiles/Profile";
 import Tooltip from "../components/tooltips/Tooltip";
 import { ChartLine } from "../components/charts/Chart";
 import Dropdown from "../components/dropdowns/Dropdown";
 import { Horizontal } from "../components/aligns/Align";
 import { useDialog } from "../components/dialogs/Dialog";
+import Table, { TableData } from "../components/tables/Table";
+import Badge, { BadgeCategories } from "../components/badges/Badge";
 import { InputInterval, InputSelect } from "../components/inputs/Input";
 
 type TypeStats = Record<string, number>;
@@ -168,41 +184,6 @@ const DashboardExchangesIndexes = function () {
       <Horizontal internal={1}>
         <Stats
           loading={loading}
-          title={t.dashboard.stats_index_selic}
-          Icon={PresentationChart}
-          value={
-            (indexes.find((index) => index.nome === "Selic")?.valor || 0) / 100
-          }
-          valueLocale={instance.language}
-          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
-        />
-
-        <Stats
-          loading={loading}
-          title={t.dashboard.stats_index_cdi}
-          Icon={PresentationChart}
-          value={
-            (indexes.find((index) => index.nome === "CDI")?.valor || 0) / 100
-          }
-          valueLocale={instance.language}
-          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
-        />
-
-        <Stats
-          loading={loading}
-          title={t.dashboard.stats_index_ipca}
-          Icon={PresentationChart}
-          value={
-            (indexes.find((index) => index.nome === "IPCA")?.valor || 0) / 100
-          }
-          valueLocale={instance.language}
-          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
-        />
-      </Horizontal>
-
-      <Horizontal internal={1}>
-        <Stats
-          loading={loading}
           metric={Math.abs(parseFloat(dollar?.pctChange || "0")) / 100}
           metricStatus={
             parseFloat(dollar?.pctChange || "0") > 0 ? "Up" : "Down"
@@ -211,6 +192,7 @@ const DashboardExchangesIndexes = function () {
           metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
           title={t.dashboard.stats_exchange_dollar}
           Icon={CoinVertical}
+          category="Info"
           value={parseFloat(dollar?.bid || "1")}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
@@ -224,6 +206,7 @@ const DashboardExchangesIndexes = function () {
           metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
           title={t.dashboard.stats_exchange_euro}
           Icon={CoinVertical}
+          category="Info"
           value={parseFloat(euro?.bid || "1")}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
@@ -237,6 +220,7 @@ const DashboardExchangesIndexes = function () {
           metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
           title={t.dashboard.stats_exchange_pound}
           Icon={CoinVertical}
+          category="Info"
           value={parseFloat(pound?.bid || "1")}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
@@ -246,9 +230,72 @@ const DashboardExchangesIndexes = function () {
           loading={loading}
           title={t.dashboard.stats_exchange_bitcoin}
           Icon={CurrencyBtc}
+          category="Info"
           value={bitcoin?.buy || 0}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
+        />
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          loading={loading}
+          title={t.dashboard.stats_index_selic}
+          Icon={PresentationChart}
+          value={
+            (indexes.find((index) => index.nome === "Selic")?.valor || 0) / 100
+          }
+          valueLocale={instance.language}
+          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
+          footer={
+            <a
+              href="https://www.bcb.gov.br/controleinflacao/taxaselic"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t.dashboard.stats_index_selic_description}
+            </a>
+          }
+        />
+
+        <Stats
+          loading={loading}
+          title={t.dashboard.stats_index_cdi}
+          Icon={PresentationChart}
+          value={
+            (indexes.find((index) => index.nome === "CDI")?.valor || 0) / 100
+          }
+          valueLocale={instance.language}
+          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
+          footer={
+            <a
+              href="https://pt.wikipedia.org/wiki/Certificado_de_Dep%C3%B3sito_Interbanc%C3%A1rio"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t.dashboard.stats_index_cdi_description}
+            </a>
+          }
+        />
+
+        <Stats
+          loading={loading}
+          title={t.dashboard.stats_index_ipca}
+          Icon={PresentationChart}
+          value={
+            (indexes.find((index) => index.nome === "IPCA")?.valor || 0) / 100
+          }
+          valueLocale={instance.language}
+          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
+          footer={
+            <a
+              href="https://pt.wikipedia.org/wiki/%C3%8Dndice_de_pre%C3%A7os_no_consumidor"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t.dashboard.stats_index_ipca_description}
+            </a>
+          }
         />
       </Horizontal>
     </React.Fragment>
@@ -331,7 +378,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
           metricStatus="Down"
           metricLocale="pt-BR"
           metricOptions={{ style: "percent" }}
-          title={t.dashboard.stats_outflows_receive_title}
+          title={t.dashboard.stats_outflows_title}
           Icon={TrendDown}
           category="Danger"
           value={-1000}
@@ -343,12 +390,12 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
         <Stats
           hidden={hidden}
           loading={loading}
-          title={t.dashboard.stats_outflows_title}
+          title={t.dashboard.stats_outflows_pay_title}
           Icon={TrendDown}
           value={-50}
           valueLocale={instance.language}
           valueOptions={{ style: "currency", currency: instance.currency }}
-          footer={t.dashboard.stats_outflows_receive_description}
+          footer={t.dashboard.stats_outflows_pay_description}
         />
 
         <Stats
@@ -371,6 +418,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
           <ChartLine
             id="chart_inflows"
             height={320}
+            margin={{ top: 8, right: 8, left: 48, bottom: 16 }}
             gridProps={{
               stroke: "#dedede",
               strokeWidth: 1,
@@ -380,11 +428,17 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
             lines={[
               {
                 type: "monotone",
+                name: t.dashboard.stats_inflows_title,
                 dataKey: "inflow",
                 stroke: "#22c55e",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,
+                formatter: (value: number) =>
+                  new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: instance.currency,
+                  }).format(value),
               },
             ]}
             axisXProps={{
@@ -400,6 +454,11 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
               stroke: "",
               strokeWidth: 0,
               width: 24,
+              tickFormatter: (value) =>
+                new Intl.NumberFormat(instance.language, {
+                  currency: instance.currency,
+                  style: "currency",
+                }).format(value),
             }}
             data={[
               { date: "01/01", inflow: 1000 },
@@ -420,6 +479,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
           <ChartLine
             id="chart_outflows"
             height={320}
+            margin={{ top: 8, right: 8, left: 48, bottom: 16 }}
             gridProps={{
               stroke: "#dedede",
               strokeWidth: 1,
@@ -430,10 +490,16 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
               {
                 type: "monotone",
                 dataKey: "outflow",
+                name: t.dashboard.stats_outflows_title,
                 stroke: "#ef4444",
                 strokeDasharray: "1",
                 strokeWidth: 4,
                 dot: false,
+                formatter: (value: number) =>
+                  new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: instance.currency,
+                  }).format(value),
               },
             ]}
             axisXProps={{
@@ -449,6 +515,11 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
               stroke: "",
               strokeWidth: 0,
               width: 24,
+              tickFormatter: (value) =>
+                new Intl.NumberFormat(instance.language, {
+                  currency: instance.currency,
+                  style: "currency",
+                }).format(value),
             }}
             data={[
               { date: "01/01", outflow: 50 },
@@ -462,6 +533,294 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
           />
         </Wrapper>
       </Horizontal>
+    </React.Fragment>
+  );
+};
+
+const DashboardSchedules = function ({
+  interval,
+  hidden,
+}: DashboardHiddenProps & DashboardIntervalProps) {
+  const t = useTranslate();
+  const play = useSounds();
+  const { instanceDateTime, instanceDate } = useDateTime();
+  const { users, token, instance, workspaceId } = useSystem();
+
+  const [loading, setLoading] = useState<boolean>(true);
+  const [schedules, setSchedules] = useState<TypeSchedule[]>([]);
+
+  // fetch schedules
+  useAsync(
+    async function () {
+      setLoading(true);
+      try {
+        const response = await apis.Schedule.list<
+          ApiResponsePaginate<TypeSchedule>
+        >(
+          token,
+          instance.name,
+          {
+            pageSize: 999,
+            pageCurrent: 1,
+            orderField: "start",
+            orderSort: "desc",
+            showDeleted: "true",
+            filter: JSON.stringify({
+              start: {
+                $gte: interval.start
+                  ? new Date(interval.start)
+                  : startOfYear(new Date()),
+                $lt: interval.end
+                  ? new Date(interval.end)
+                  : endOfDay(new Date()),
+              },
+              $or: [{ deletedAt: { $exists: false } }, { deletedAt: null }],
+            }),
+          },
+          workspaceId,
+        );
+        if (!response.data?.result?.items) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.warn("[src/pages/Dashboard.tsx]", response.data);
+          return;
+        }
+        const parse = response.data.result.items?.map(function (item) {
+          return {
+            ...item,
+            start: new Date(item.start),
+            end: item?.end ? new Date(item.end) : null,
+          };
+        });
+        setSchedules(parse as TypeSchedule[]);
+        return;
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/Dashboard.tsx]", err);
+        return;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [interval, workspaceId],
+  );
+
+  return (
+    <React.Fragment>
+      <Horizontal internal={1} className="itemsCenter">
+        <h3 className="flex1">{t.schedule.schedules}</h3>
+        <Button
+          category="Neutral"
+          Icon={FunnelSimple}
+          text={t.components.filter}
+        />
+      </Horizontal>
+
+      <Horizontal internal={1}>
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.dashboard.stats_schedules_title}
+          Icon={CalendarDots}
+          value={schedules?.length || 0}
+          valueUnit={t.components.items.toLowerCase()}
+          footer={t.dashboard.stats_schedules_description}
+          styles={{ minWidth: "28%" }}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.dashboard.stats_schedules_low}
+          Icon={CalendarDots}
+          category="Success"
+          value={
+            schedules?.filter((schedule) => schedule.priority === "low")
+              ?.length || 0
+          }
+          valueUnit={t.components.items.toLowerCase()}
+          styles={{ display: "flex" }}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.dashboard.stats_schedules_medium}
+          Icon={CalendarDots}
+          category="Info"
+          value={
+            schedules?.filter((schedule) => schedule.priority === "medium")
+              ?.length || 0
+          }
+          valueUnit={t.components.items.toLowerCase()}
+          styles={{ display: "flex" }}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.dashboard.stats_schedules_high}
+          Icon={CalendarDots}
+          category="Warning"
+          value={
+            schedules?.filter((schedule) => schedule.priority === "high")
+              ?.length || 0
+          }
+          valueUnit={t.components.items.toLowerCase()}
+          styles={{ display: "flex" }}
+        />
+
+        <Stats
+          hidden={hidden}
+          loading={loading}
+          title={t.dashboard.stats_schedules_critical}
+          Icon={CalendarDots}
+          category="Danger"
+          value={
+            schedules?.filter((schedule) => schedule.priority === "critical")
+              ?.length || 0
+          }
+          valueUnit={t.components.items.toLowerCase()}
+          styles={{ display: "flex" }}
+        />
+      </Horizontal>
+
+      <div style={{ maxHeight: 400 }}>
+        <Table
+          border
+          noSelect
+          loading={loading}
+          data={
+            schedules?.filter(
+              (schedule) => schedule.priority !== "none",
+            ) as TableData[]
+          }
+          styles={{ display: "flex", flexDirection: "column", height: "100%" }}
+          stylesBody={{ overflowY: "scroll" }}
+          columns={{
+            priority: {
+              label: t.schedule.priority,
+              maxWidth: 128,
+              handler: function (data) {
+                return (
+                  <Badge
+                    category={
+                      ScheduleCategoriesColors[
+                        data.priority as BadgeCategories
+                      ] || "Neutral"
+                    }
+                    value={
+                      t.schedule?.[data.priority as keyof typeof t.schedule] ||
+                      t.components.unknown
+                    }
+                  />
+                );
+              },
+            },
+            category: {
+              label: t.schedule.category,
+              maxWidth: 96,
+              handler: function (data) {
+                return (
+                  <Badge
+                    category="Neutral"
+                    value={
+                      t.schedule?.[data.category as keyof typeof t.schedule] ||
+                      t.components.unknown
+                    }
+                  />
+                );
+              },
+            },
+            title: {
+              label: t.schedule.title,
+            },
+            description: {
+              label: t.schedule.description,
+              handler: function (data) {
+                return data.description ? (
+                  <span>{(data?.description as string) || ""}</span>
+                ) : (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.stacks.no_description}
+                  </i>
+                );
+              },
+            },
+            start: {
+              label: t.schedule.start_date,
+              maxWidth: 160,
+              handler: function (data) {
+                const startSameDayEnd = isSameDay(
+                  data.start as string,
+                  data.end as string,
+                );
+                const isStartDay = isEqual(
+                  data.start as string,
+                  startOfDay(data.start as string),
+                );
+                const datetime =
+                  startSameDayEnd || isStartDay
+                    ? instanceDate(data.start as string)
+                    : instanceDateTime(data.start as string, true);
+                return datetime;
+              },
+            },
+            end: {
+              label: t.schedule.end_date,
+              maxWidth: 160,
+              handler: function (data) {
+                const startSameDayStart = isSameDay(
+                  data.start as string,
+                  data.end as string,
+                );
+                const isEndDay = isEqual(
+                  data.end as string,
+                  endOfDay(data.end as string),
+                );
+                const datetime = startSameDayStart ? (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.schedule.same_day}
+                  </i>
+                ) : isEndDay ? (
+                  instanceDate(data.end as string)
+                ) : (
+                  instanceDateTime(data.end as string, true)
+                );
+                return datetime;
+              },
+            },
+            user: {
+              label: t.components.user,
+              handler: function (data) {
+                const userFinded = users?.find(function (user) {
+                  return user.id === data.userId;
+                });
+                return (
+                  <Tooltip
+                    content={t.components[userFinded?.role || "collaborator"]}
+                  >
+                    <Profile
+                      photoCircle
+                      photoSize={3}
+                      padding={false}
+                      styles={{ lineHeight: 1 }}
+                      photo={userFinded?.photo || ""}
+                      description={userFinded?.email || ""}
+                      name={userFinded?.name || t.components.unknown}
+                    />
+                  </Tooltip>
+                );
+              },
+            },
+          }}
+        />
+      </div>
     </React.Fragment>
   );
 };
@@ -1063,12 +1422,12 @@ const Dashboard = function () {
     if (hour >= 6 && hour <= 9)
       greetingText =
         t.dashboard[`good_dawn_${random}` as keyof typeof t.dashboard];
-    // morning -> hour 10 - 12
-    if (hour >= 10 && hour <= 12)
+    // morning -> hour 10 - 11
+    if (hour >= 10 && hour <= 11)
       greetingText =
         t.dashboard[`good_morning_${random}` as keyof typeof t.dashboard];
-    // afternoon -> hour 13 - 17
-    if (hour >= 13 && hour <= 17)
+    // afternoon -> hour 12 - 17
+    if (hour >= 12 && hour <= 17)
       greetingText =
         t.dashboard[`good_afternoon_${random}` as keyof typeof t.dashboard];
     // night -> hour 18 - 23
@@ -1250,6 +1609,8 @@ const Dashboard = function () {
       <DashboardExchangesIndexes />
 
       <DashboardFinancial hidden={hidden} />
+
+      <DashboardSchedules interval={interval} hidden={hidden} />
 
       <DashboardProducts interval={interval} hidden={hidden} />
 

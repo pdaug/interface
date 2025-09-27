@@ -28,9 +28,12 @@ const useDateTime = function () {
 
   const instanceDateTime = function (
     source?: Date | number | string | null,
+    noSeconds?: boolean,
   ): string {
     const datetime = new Date(source || Date.now());
-    const formatString = DateTimeFormat?.[instance.dateFormat];
+    const formatString = noSeconds
+      ? DateTimeFormat?.[instance.dateFormat].slice(0, -3)
+      : DateTimeFormat?.[instance.dateFormat];
     if (formatString) {
       const formatted = format(datetime, formatString);
       return formatted;

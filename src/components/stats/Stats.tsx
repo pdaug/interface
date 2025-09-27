@@ -21,7 +21,7 @@ export type StatsProps = {
   valueUnit?: string;
   valueLocale?: Intl.LocalesArgument;
   valueOptions?: Intl.NumberFormatOptions;
-  footer?: string;
+  footer?: string | React.ReactNode;
   styles?: React.CSSProperties;
   stylesContainer?: React.CSSProperties;
 };

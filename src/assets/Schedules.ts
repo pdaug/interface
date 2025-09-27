@@ -1,3 +1,6 @@
+// types
+import { BadgeCategories } from "../components/badges/Badge";
+
 export const ScheduleCategoriesOptions = [
   "task",
   "note",
@@ -9,11 +12,14 @@ export const ScheduleCategoriesOptions = [
   "meeting",
 ];
 
-// none -> neutral
-// low -> success
-// medium -> info
-// high -> warning
-// critical -> danger
+export const ScheduleCategoriesColors: Record<string, BadgeCategories> = {
+  none: "Neutral",
+  low: "Success",
+  medium: "Info",
+  high: "Warning",
+  critical: "Danger",
+};
+
 export const SchedulePrioritiesOptions = [
   "none",
   "low",
