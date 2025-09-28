@@ -1,21 +1,21 @@
-import { enUS, ptBR } from "date-fns/locale";
 import {
-  endOfDay,
-  format,
-  getDay,
-  isSameDay,
-  isToday,
-  isWithinInterval,
   parse,
+  getDay,
+  format,
+  isToday,
+  endOfDay,
+  isSameDay,
   startOfDay,
   startOfWeek,
+  isWithinInterval,
 } from "date-fns";
 import {
   Calendar,
+  ToolbarProps,
   CalendarProps,
   dateFnsLocalizer,
-  ToolbarProps,
 } from "react-big-calendar";
+import { enUS, ptBR } from "date-fns/locale";
 
 // styles
 import "./Agenda.css";
@@ -23,15 +23,15 @@ import "./Agenda.css";
 // types
 import { TypeSchedulePriority } from "../../types/Schedules";
 
-// components
-import Wrapper from "../wrapper/Wrapper";
-import { Horizontal, Vertical } from "../aligns/Align";
-
 // hooks
 import useSystem from "../../hooks/useSystem";
 import useDateTime from "../../hooks/useDateTime";
 import useTranslate from "../../hooks/useTranslate";
+
+// components
 import Button from "../buttons/Button";
+import Wrapper from "../wrapper/Wrapper";
+import { Horizontal, Vertical } from "../aligns/Align";
 
 const locales = {
   "en-US": enUS,

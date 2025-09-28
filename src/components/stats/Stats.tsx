@@ -3,6 +3,9 @@ import { Icon as IconPhosphor } from "@phosphor-icons/react";
 // styles
 import "./Stats.css";
 
+// components
+import AnimationCount from "../animations/AnimationCount";
+
 export type StatsStatus = "Up" | "Down";
 
 export type StatsIconCategories = "Success" | "Info" | "Warning" | "Danger";
@@ -24,6 +27,7 @@ export type StatsProps = {
   footer?: string | React.ReactNode;
   styles?: React.CSSProperties;
   stylesContainer?: React.CSSProperties;
+  animation?: boolean;
 };
 
 const Stats = function ({
@@ -43,6 +47,7 @@ const Stats = function ({
   footer,
   styles,
   stylesContainer,
+  animation,
 }: StatsProps) {
   const metricFormatted = metric
     ? new Intl.NumberFormat(metricLocale, metricOptions).format(metric)
@@ -76,7 +81,21 @@ const Stats = function ({
           <div
             className={`statsBody ${category ? `statsBody${category}` : ""}`}
           >
-            {loading || hidden ? "- - -" : valueFormatted} {valueUnit}
+            {loading || hidden ? (
+              "- - -"
+            ) : animation ? (
+              <AnimationCount
+                value={value}
+                duration={1000}
+                isPercent={valueOptions?.style === "percent"}
+                formatter={(value) =>
+                  new Intl.NumberFormat(valueLocale, valueOptions).format(value)
+                }
+              />
+            ) : (
+              valueFormatted
+            )}{" "}
+            {valueUnit}
           </div>
           {footer && (
             <div className="statsFooter">

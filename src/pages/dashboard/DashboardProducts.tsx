@@ -191,6 +191,7 @@ const DashboardProducts = function ({
 
       <Horizontal internal={1}>
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_products_title}
@@ -201,6 +202,7 @@ const DashboardProducts = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_products_active_title}
@@ -212,6 +214,7 @@ const DashboardProducts = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_products_inactive_title}
@@ -225,6 +228,7 @@ const DashboardProducts = function ({
 
       <Horizontal internal={1}>
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.sale.stats_quantity}
@@ -235,6 +239,7 @@ const DashboardProducts = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.sale.stats_value}
@@ -247,6 +252,7 @@ const DashboardProducts = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.sale.stats_pending}
@@ -259,6 +265,7 @@ const DashboardProducts = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.sale.stats_lost}
@@ -273,6 +280,7 @@ const DashboardProducts = function ({
 
       <Horizontal internal={1}>
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.purchase.stats_quantity}
@@ -283,6 +291,7 @@ const DashboardProducts = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.purchase.stats_successful}
@@ -295,6 +304,7 @@ const DashboardProducts = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.purchase.stats_pending}
@@ -307,6 +317,7 @@ const DashboardProducts = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.purchase.stats_unsuccessful}

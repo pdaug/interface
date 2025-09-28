@@ -115,6 +115,7 @@ const DashboardServices = function ({
 
       <Horizontal internal={1}>
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_services_title}
@@ -125,6 +126,7 @@ const DashboardServices = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_services_active_title}
@@ -136,6 +138,7 @@ const DashboardServices = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_services_inactive_title}
@@ -149,6 +152,7 @@ const DashboardServices = function ({
 
       <Horizontal internal={1}>
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           Icon={Blueprint}
@@ -159,6 +163,7 @@ const DashboardServices = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           category="Success"
@@ -171,6 +176,7 @@ const DashboardServices = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           category="Warning"
@@ -183,6 +189,7 @@ const DashboardServices = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           category="Danger"
@@ -197,6 +204,7 @@ const DashboardServices = function ({
 
       <Horizontal internal={1}>
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           Icon={Truck}
@@ -207,6 +215,7 @@ const DashboardServices = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           category="Warning"
@@ -219,6 +228,7 @@ const DashboardServices = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           category="Warning"

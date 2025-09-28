@@ -175,6 +175,7 @@ const DashboardSchedules = function ({
 
       <Horizontal internal={1}>
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_schedules_title}
@@ -186,6 +187,7 @@ const DashboardSchedules = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_schedules_low}
@@ -197,6 +199,7 @@ const DashboardSchedules = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_schedules_medium}
@@ -208,6 +211,7 @@ const DashboardSchedules = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_schedules_high}
@@ -219,6 +223,7 @@ const DashboardSchedules = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_schedules_critical}
@@ -232,6 +237,7 @@ const DashboardSchedules = function ({
 
       <Horizontal internal={1}>
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.schedule.task}
@@ -241,6 +247,7 @@ const DashboardSchedules = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.schedule.note}
@@ -250,6 +257,7 @@ const DashboardSchedules = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.schedule.event}
@@ -259,6 +267,7 @@ const DashboardSchedules = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.schedule.remind}
@@ -268,6 +277,7 @@ const DashboardSchedules = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.schedule.deadline}
@@ -277,6 +287,7 @@ const DashboardSchedules = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.schedule.work}
@@ -286,6 +297,7 @@ const DashboardSchedules = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.schedule.reserved}
@@ -295,6 +307,7 @@ const DashboardSchedules = function ({
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.schedule.meeting}

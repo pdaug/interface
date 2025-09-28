@@ -46,6 +46,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
 
       <Horizontal internal={1}>
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           metric={0.1}
@@ -62,6 +63,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_inflows_receive_title}
@@ -73,6 +75,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_inflows_late_title}
@@ -86,6 +89,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
 
       <Horizontal internal={1}>
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           metric={0.05}
@@ -102,6 +106,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_outflows_pay_title}
@@ -113,6 +118,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
         />
 
         <Stats
+          animation
           hidden={hidden}
           loading={loading}
           title={t.dashboard.stats_outflows_late_title}

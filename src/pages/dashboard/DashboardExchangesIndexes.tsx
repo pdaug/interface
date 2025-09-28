@@ -135,6 +135,7 @@ const DashboardExchangesIndexes = function () {
 
       <Horizontal internal={1}>
         <Stats
+          animation
           loading={loading}
           metric={Math.abs(parseFloat(dollar?.pctChange || "0")) / 100}
           metricStatus={
@@ -150,6 +151,7 @@ const DashboardExchangesIndexes = function () {
         />
 
         <Stats
+          animation
           loading={loading}
           metric={Math.abs(parseFloat(euro?.pctChange || "0")) / 100}
           metricStatus={parseFloat(euro?.pctChange || "0") > 0 ? "Up" : "Down"}
@@ -163,6 +165,7 @@ const DashboardExchangesIndexes = function () {
         />
 
         <Stats
+          animation
           loading={loading}
           metric={Math.abs(parseFloat(pound?.pctChange || "0")) / 100}
           metricStatus={parseFloat(pound?.pctChange || "0") > 0 ? "Up" : "Down"}
@@ -176,6 +179,7 @@ const DashboardExchangesIndexes = function () {
         />
 
         <Stats
+          animation
           loading={loading}
           title={t.dashboard.stats_exchange_bitcoin}
           Icon={CurrencyBtc}
@@ -187,6 +191,7 @@ const DashboardExchangesIndexes = function () {
 
       <Horizontal internal={1}>
         <Stats
+          animation
           loading={loading}
           title={t.dashboard.stats_index_selic}
           Icon={PresentationChart}
@@ -210,6 +215,7 @@ const DashboardExchangesIndexes = function () {
         />
 
         <Stats
+          animation
           loading={loading}
           title={t.dashboard.stats_index_cdi}
           Icon={PresentationChart}
@@ -233,6 +239,7 @@ const DashboardExchangesIndexes = function () {
         />
 
         <Stats
+          animation
           loading={loading}
           title={t.dashboard.stats_index_ipca}
           Icon={PresentationChart}

@@ -40,7 +40,7 @@ import Wrapper from "../../../components/wrapper/Wrapper";
 import Profile from "../../../components/profiles/Profile";
 import { useDialog } from "../../../components/dialogs/Dialog";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
-import { Agenda, AgendaDate } from "../../../components/Agendas/Agenda";
+import { Agenda, AgendaDate } from "../../../components/agenda/Agenda";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
 
 const SchedulesPanel = function () {
