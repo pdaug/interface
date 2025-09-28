@@ -29,17 +29,16 @@ import "./Chart.css";
 const RADIAN = Math.PI / 180;
 
 const ChartTooltip = function (props: TooltipProps<string, string>) {
-  console.log(props);
-
   return (
     <div className="chartTooltip">
       {props?.label && <div className="chartTooltipTitle">{props.label}</div>}
       <div className="chartTooltipContent">
         {props?.payload?.map(function (payload, index) {
           const name = payload?.name || payload?.payload?.name;
-
-          const value = payload?.value || payload?.payload?.value;
-
+          const value =
+            typeof payload?.value === "number"
+              ? payload?.value
+              : payload?.payload?.value || 0;
           return (
             <div className="chartTooltipPayload" key={`payload-${index}`}>
               <div
@@ -54,17 +53,17 @@ const ChartTooltip = function (props: TooltipProps<string, string>) {
                   {payload?.name || payload?.payload?.name}
                 </div>
               )}
-              {value && (
+              {typeof value === "number" && (
                 <div className="chartTooltipPayloadValue">
                   {typeof payload?.formatter === "function"
                     ? payload?.formatter(
-                        payload.value as string,
+                        String(value),
                         payload.name as string,
                         payload,
                         index,
                         payload as unknown as Payload<string, string>[],
                       )
-                    : payload?.value || payload?.payload?.value}
+                    : value}
                 </div>
               )}
             </div>

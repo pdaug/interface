@@ -347,7 +347,7 @@ const DashboardProducts = function ({
                   new Intl.NumberFormat("pt-BR", {
                     style: "currency",
                     currency: "BRL",
-                  }).format(value),
+                  }).format(value || 0),
               },
               {
                 type: "monotone",
@@ -361,7 +361,7 @@ const DashboardProducts = function ({
                   new Intl.NumberFormat("pt-BR", {
                     style: "currency",
                     currency: "BRL",
-                  }).format(value),
+                  }).format(value || 0),
               },
             ]}
             axisXProps={{
@@ -384,7 +384,7 @@ const DashboardProducts = function ({
                 new Intl.NumberFormat(instance.language, {
                   currency: instance.currency,
                   style: "currency",
-                }).format(value),
+                }).format(value || 0),
             }}
             data={chartSalesPurchases}
           />
