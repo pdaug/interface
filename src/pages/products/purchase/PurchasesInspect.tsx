@@ -30,7 +30,6 @@ import { TypeProduct } from "../../../types/Product";
 import { TypeAccount } from "../../../types/Account";
 import { TypeSupplier } from "../../../types/Supplier";
 import { TypeSchedule } from "../../../types/Schedules";
-import { TypeCustomer } from "../../../types/Customers";
 import { ApiResponsePaginate } from "../../../types/Api";
 
 // hooks
@@ -73,7 +72,7 @@ const PurchasesInspect = function () {
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<TypeProduct[]>([]);
   const [accounts, setAccounts] = useState<TypeAccount[]>([]);
-  const [suppliers, setSuppliers] = useState<TypeCustomer[]>([]);
+  const [suppliers, setSuppliers] = useState<TypeSupplier[]>([]);
 
   const [form, setForm] = useState<Partial<TypePurchase>>({
     purchaseId: GenerateNumbers(6),
