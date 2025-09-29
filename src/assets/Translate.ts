@@ -202,6 +202,7 @@ const TranslatePt = {
     registration_state: "Inscrição estadual",
     taxpayer: "Contribuinte",
     tax_regime: "Regime tributário",
+    origin: "Origem",
     // options
     icms: "Contribuinte ICMS",
     exempt: "Contribuinte isento de IE",
@@ -210,6 +211,10 @@ const TranslatePt = {
     lucro_presumido: "Lucro presumido",
     lucro_real: "Lucro real",
     non_taxregime: "Sem regime",
+    created: "Criado",
+    imported: "Importado",
+    contact: "Contato",
+    integration: "Integração",
     // placeholders
     name_placeholder: "Ex. Fulano LTDA",
     description_placeholder: "Digite aqui uma breve descrição sobre o cliente",
@@ -1449,6 +1454,7 @@ const TranslateEn = {
     registration_state: "Registration state",
     taxpayer: "Tax payer",
     tax_regime: "Tax regime",
+    origin: "Origin",
     // options
     icms: "Tax payer ICMS",
     exempt: "Tax payer exempt IE",
@@ -1457,6 +1463,10 @@ const TranslateEn = {
     lucro_presumido: "Lucro presumido",
     lucro_real: "Lucro real",
     non_taxregime: "Non tax regime",
+    created: "Created",
+    imported: "Imported",
+    contact: "Contact",
+    integration: "Integration",
     // placeholders
     name_placeholder: "e.g. John Doe Inc",
     description_placeholder: "Type here a brief description about the customer",

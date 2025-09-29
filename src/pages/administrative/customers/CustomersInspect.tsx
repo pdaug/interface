@@ -39,6 +39,7 @@ import {
   InputMask,
   InputSelect,
 } from "../../../components/inputs/Input";
+import Badge from "../../../components/badges/Badge";
 import Avatar from "../../../components/avatars/Avatar";
 import Button from "../../../components/buttons/Button";
 import Wrapper from "../../../components/wrapper/Wrapper";
@@ -84,6 +85,9 @@ const CustomersInspect = function () {
     taxregime: "non_taxregime",
 
     addresses: [],
+
+    origin: "created",
+    originIntegration: null,
 
     userId: user.id,
     workspaceId,
@@ -139,7 +143,7 @@ const CustomersInspect = function () {
     if (!id) return;
     setLoading(true);
     try {
-      const response = await apis.Customer.get(
+      const response = await apis.Customer.get<TypeCustomer>(
         token,
         instance.name,
         id,
@@ -153,6 +157,9 @@ const CustomersInspect = function () {
         navigate("/f/customers");
         return;
       }
+      response.data.result.origin = response.data.result?.origin || "created";
+      response.data.result.originIntegration =
+        response.data.result?.originIntegration || null;
       setForm(response.data.result);
       return;
     } catch (err) {
@@ -1100,7 +1107,29 @@ const CustomersInspect = function () {
           />
 
           <Wrapper>
-            <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
+            <Horizontal
+              internal={1}
+              className="itemsCenter"
+              styles={{ justifyContent: "flex-end" }}
+            >
+              <Horizontal internal={0.4} className="itemsCenter">
+                <span
+                  style={{
+                    color: "var(--textLight)",
+                    fontSize: "var(--textSmall)",
+                  }}
+                >
+                  {t.customer.origin}:
+                </span>
+                <Badge
+                  category="Info"
+                  value={
+                    t.customer[form.origin as keyof typeof t.customer] ||
+                    t.components.unknown
+                  }
+                />
+              </Horizontal>
+              <div className="flex1"></div>
               <Button
                 type="button"
                 category="Neutral"

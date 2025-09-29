@@ -27,6 +27,10 @@ export type TypeCustomer = {
 
   addresses: TypeAddress[];
 
+  // origin
+  origin: "created" | "imported" | "contact" | "integration";
+  originIntegration?: string | null;
+
   workspaceId: string;
   userId: string;
 
