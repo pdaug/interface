@@ -209,6 +209,8 @@ const CustomersOrders = function () {
 
       <Horizontal internal={1}>
         <Stats
+          animation
+          loading={loading}
           title={t.customer.stats_order_title_quantity}
           value={orders?.length || 0}
           Icon={Blueprint}
@@ -218,6 +220,8 @@ const CustomersOrders = function () {
           stylesContainer={{ flex: 1 }}
         />
         <Stats
+          animation
+          loading={loading}
           title={t.customer.stats_order_title_total}
           value={orders?.reduce(function (acc, item) {
             const { total } = Calculate.totalOrder(item);

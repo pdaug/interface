@@ -443,6 +443,7 @@ const OrdersList = function () {
 
       <Horizontal internal={1}>
         <Stats
+          animation
           loading={loading}
           Icon={Blueprint}
           title={t.order.stats_quantity}
@@ -452,6 +453,7 @@ const OrdersList = function () {
         />
 
         <Stats
+          animation
           loading={loading}
           category="Success"
           Icon={Blueprint}
@@ -463,6 +465,7 @@ const OrdersList = function () {
         />
 
         <Stats
+          animation
           loading={loading}
           category="Warning"
           Icon={Blueprint}
@@ -474,6 +477,7 @@ const OrdersList = function () {
         />
 
         <Stats
+          animation
           category="Danger"
           loading={loading}
           Icon={Blueprint}

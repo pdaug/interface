@@ -207,6 +207,8 @@ const CustomersSales = function () {
 
       <Horizontal internal={1}>
         <Stats
+          animation
+          loading={loading}
           title={t.customer.stats_sale_title_quantity}
           value={sales?.length || 0}
           Icon={Tag}
@@ -216,6 +218,8 @@ const CustomersSales = function () {
           stylesContainer={{ flex: 1 }}
         />
         <Stats
+          animation
+          loading={loading}
           title={t.customer.stats_sale_title_total}
           value={sales?.reduce(function (acc, item) {
             const { total } = Calculate.totalSale(item);

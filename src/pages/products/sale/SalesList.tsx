@@ -440,6 +440,7 @@ const SalesList = function () {
 
       <Horizontal internal={1}>
         <Stats
+          animation
           Icon={Tag}
           loading={loading}
           title={t.sale.stats_quantity}
@@ -449,6 +450,7 @@ const SalesList = function () {
         />
 
         <Stats
+          animation
           Icon={Tag}
           category="Success"
           loading={loading}
@@ -460,6 +462,7 @@ const SalesList = function () {
         />
 
         <Stats
+          animation
           Icon={Tag}
           category="Warning"
           loading={loading}
@@ -471,6 +474,7 @@ const SalesList = function () {
         />
 
         <Stats
+          animation
           Icon={Tag}
           category="Danger"
           loading={loading}

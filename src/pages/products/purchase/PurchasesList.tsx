@@ -318,6 +318,7 @@ const PurchasesList = function () {
 
       <Horizontal internal={1}>
         <Stats
+          animation
           loading={loading}
           Icon={ShoppingBagOpen}
           title={t.purchase.stats_quantity}
@@ -327,6 +328,7 @@ const PurchasesList = function () {
         />
 
         <Stats
+          animation
           loading={loading}
           category="Success"
           Icon={ShoppingBagOpen}
@@ -338,6 +340,7 @@ const PurchasesList = function () {
         />
 
         <Stats
+          animation
           loading={loading}
           category="Warning"
           Icon={ShoppingBagOpen}
@@ -349,6 +352,7 @@ const PurchasesList = function () {
         />
 
         <Stats
+          animation
           category="Danger"
           loading={loading}
           Icon={ShoppingBagOpen}

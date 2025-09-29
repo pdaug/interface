@@ -680,6 +680,8 @@ const DocumentsFolder = function () {
             </Wrapper>
 
             <Stats
+              animation
+              loading={loading}
               styles={{ flex: "none", width: 280 }}
               title={t.document.documents_total_title}
               footer={t.document.documents_total_description}
@@ -689,6 +691,8 @@ const DocumentsFolder = function () {
             />
 
             <Stats
+              animation
+              loading={loading}
               styles={{ flex: "none", width: 280 }}
               title={t.document.documents_relation_title}
               footer={t.document.documents_relation_description}

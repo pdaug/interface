@@ -217,6 +217,8 @@ const SuppliersPurchase = function () {
 
       <Horizontal internal={1}>
         <Stats
+          animation
+          loading={loading}
           title={t.supplier.stats_purchase_title_quantity}
           value={purchases?.length || 0}
           Icon={ShoppingBagOpen}
@@ -226,6 +228,8 @@ const SuppliersPurchase = function () {
           stylesContainer={{ flex: 1 }}
         />
         <Stats
+          animation
+          loading={loading}
           title={t.supplier.stats_purchase_title_total}
           value={purchases?.reduce(function (acc, item) {
             const { total } = Calculate.totalPurchase(item);
