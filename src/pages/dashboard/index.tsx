@@ -535,12 +535,12 @@ const Dashboard = function () {
         <DashboardSchedules interval={interval} hidden={hidden} />
       )}
 
-      {!preferencesHidden?.productsStats &&
-        !preferencesHidden?.productsSales &&
-        !preferencesHidden?.productsPurchases &&
-        !preferencesHidden?.productsCharts && (
-          <DashboardProducts interval={interval} hidden={hidden} />
-        )}
+      {(!preferencesHidden?.productsStats ||
+        !preferencesHidden?.productsSales ||
+        !preferencesHidden?.productsPurchases ||
+        !preferencesHidden?.productsCharts) && (
+        <DashboardProducts interval={interval} hidden={hidden} />
+      )}
 
       {!preferencesHidden?.servicesStats &&
         !preferencesHidden?.servicesOrders &&

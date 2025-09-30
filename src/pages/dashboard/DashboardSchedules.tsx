@@ -220,7 +220,7 @@ const DashboardSchedules = function ({
 
             <InputSelect
               empty={t.stacks.no_option}
-              label={t.schedule.charts}
+              label={t.components.charts}
               value={String(hidden?.schedulesCharts)}
               options={[
                 {
@@ -244,7 +244,7 @@ const DashboardSchedules = function ({
 
             <InputSelect
               empty={t.stacks.no_option}
-              label={t.schedule.table}
+              label={t.components.table}
               value={String(hidden?.schedulesTable)}
               options={[
                 {
