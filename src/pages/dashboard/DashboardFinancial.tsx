@@ -152,7 +152,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
                       description: t.toast.error_filter,
                     });
                     console.error(
-                      "[src/pages/dashboard/DashboardExchangesIndexes.tsx]",
+                      "[src/pages/dashboard/DashboardFinancial.tsx]",
                       err,
                     );
                   }

@@ -879,6 +879,8 @@ const TranslatePt = {
     stats_lost_description: "Total em valor de vendas perdidas",
   },
   schedule: {
+    charts: "Gráficos",
+    table: "Tabela",
     schedule: "Agenda",
     schedules: "Agendas",
     all_day: "Dia inteiro",
@@ -2131,6 +2133,8 @@ const TranslateEn = {
     stats_lost_description: "Total value of sales losted",
   },
   schedule: {
+    charts: "Charts",
+    table: "Table",
     schedule: "Schedule",
     schedules: "Schedules",
     all_day: "All day",

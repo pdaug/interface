@@ -529,11 +529,11 @@ const Dashboard = function () {
         <DashboardFinancial hidden={hidden} />
       )}
 
-      {!preferencesHidden?.schedulesStats &&
-        !preferencesHidden?.schedulesCharts &&
-        !preferencesHidden?.schedulesTable && (
-          <DashboardSchedules interval={interval} hidden={hidden} />
-        )}
+      {(!preferencesHidden?.schedulesStats ||
+        !preferencesHidden?.schedulesCharts ||
+        !preferencesHidden?.schedulesTable) && (
+        <DashboardSchedules interval={interval} hidden={hidden} />
+      )}
 
       {!preferencesHidden?.productsStats &&
         !preferencesHidden?.productsSales &&
