@@ -31,6 +31,7 @@ import Schedule from "./internal/Schedule";
 import Dashboard from "./internal/Dashboard";
 import Workspace from "./internal/Workspace";
 import DocumentApi from "./internal/Document";
+import Preference from "./internal/Preference";
 
 export default {
   // external
@@ -52,6 +53,7 @@ export default {
   Login,
   Order,
   Password,
+  Preference,
   Product,
   Purchase,
   Sale,

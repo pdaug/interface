@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 
 // types
 import { TypeUser } from "../types/User";
+import { ApiPreference } from "../types/Api";
 import { TypeInstance } from "../types/Instance";
 import { TypeWorkspace } from "../types/Workspace";
 
@@ -14,9 +15,11 @@ type SystemState = {
   workspaces: TypeWorkspace[];
   workspaceId: string;
   version: string | number;
+  preferences: ApiPreference;
   saveToken: (token: string) => void;
   saveUser: (user: TypeUser) => void;
   setUsers: (users: TypeUser[]) => void;
+  setPreferences: (preferences: ApiPreference) => void;
   saveInstance: (instance: TypeInstance) => void;
   saveWorkspaces: (workspaces: TypeWorkspace[]) => void;
   saveVersion: (version: string | number) => void;
@@ -35,6 +38,7 @@ const useSystem = create<SystemState>()(
         workspaces: [],
         version: 0.1,
         workspaceId: "",
+        preferences: {},
       };
       const saveToken = function (token: string) {
         set({ token });
@@ -46,6 +50,11 @@ const useSystem = create<SystemState>()(
       };
       const setUsers = function (users: TypeUser[]) {
         set({ users });
+        return;
+      };
+      const setPreferences = function (preferences: ApiPreference) {
+        console.log({ preferences });
+        set({ preferences });
         return;
       };
       const saveInstance = function (instance: TypeInstance) {
@@ -73,6 +82,7 @@ const useSystem = create<SystemState>()(
         saveToken,
         saveUser,
         setUsers,
+        setPreferences,
         saveInstance,
         saveWorkspaces,
         selectWorkspace,

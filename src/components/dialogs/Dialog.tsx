@@ -19,6 +19,7 @@ import Button, { ButtonCategories } from "../buttons/Button";
 export type DialogContextProps = {
   open: boolean;
   title: string;
+  nonFooter?: boolean;
   description: string | React.JSX.Element | (() => React.JSX.Element);
   category: ButtonCategories;
   confirmIcon?: PhosphorIcon;
@@ -137,36 +138,38 @@ export const DialogElement = function () {
             )}
           </div>
         </div>
-        <div className="dialogFooter">
-          <Button
-            type="button"
-            category="Neutral"
-            disabled={loading}
-            text={dialogProps.cancelText || t.components.cancel}
-            onClick={async function () {
-              setLoading(true);
-              if (dialogProps.onCancel) await dialogProps?.onCancel();
-              CloseDialog();
-              setLoading(false);
-              return;
-            }}
-          />
-          {dialogProps.confirmText && (
+        {!dialogProps.nonFooter && (
+          <div className="dialogFooter">
             <Button
-              type="submit"
+              type="button"
+              category="Neutral"
               disabled={loading}
-              Icon={dialogProps.confirmIcon}
-              text={dialogProps.confirmText}
-              category={dialogProps.category}
+              text={dialogProps.cancelText || t.components.cancel}
               onClick={async function () {
                 setLoading(true);
-                if (dialogProps.onConfirm) await dialogProps?.onConfirm();
+                if (dialogProps.onCancel) await dialogProps?.onCancel();
+                CloseDialog();
                 setLoading(false);
                 return;
               }}
             />
-          )}
-        </div>
+            {dialogProps.confirmText && (
+              <Button
+                type="submit"
+                disabled={loading}
+                Icon={dialogProps.confirmIcon}
+                text={dialogProps.confirmText}
+                category={dialogProps.category}
+                onClick={async function () {
+                  setLoading(true);
+                  if (dialogProps.onConfirm) await dialogProps?.onConfirm();
+                  setLoading(false);
+                  return;
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -253,6 +253,8 @@ const TranslatePt = {
     dashboard: "Painel",
     customize: "Personalizar",
     exchange_indexes: "Cotações e índices",
+    exchanges: "Cotações",
+    indexes: "Índices",
     // greetings
     good_dawn_1: "Boa manhãzinha, {{name}}!",
     good_dawn_2: "Ótimo início de dia, {{name}}!",
@@ -1088,6 +1090,7 @@ const TranslatePt = {
     success_edit: "O item foi editado.",
     success_delete: "O item foi deletado.",
     success_workspace: "A organização foi selecionada.",
+    success_filter: "O filtro foi aplicado.",
     // warning
     warning_restore: "O item não foi restaurado.",
     warning_find: "O item não foi encontrado.",
@@ -1095,11 +1098,13 @@ const TranslatePt = {
     warning_edit: "O item não foi editado.",
     warning_delete: "O item não foi deletado.",
     warning_copy: "O id não foi copiado.",
+    warning_filter: "O filtro não foi aplicado.",
     // error
     error_restore: "Houve um erro ao restaurar o item.",
     error_create: "Houve um erro ao criar o item.",
     error_edit: "Houve um erro ao editar o item.",
     error_delete: "Houve um erro ao deletar o item.",
+    error_filter: "Houve um erro ao aplicar o filtro.",
   },
   user: {
     // list
@@ -1502,6 +1507,8 @@ const TranslateEn = {
     dashboard: "Dashboard",
     customize: "Customize",
     exchange_indexes: "Exchange rates and Indexes",
+    exchanges: "Exchanges",
+    indexes: "Indexes",
     // greetings
     good_dawn_1: "Good morning, {{name}}!",
     good_dawn_2: "Great start of day, {{name}}!",
@@ -2327,6 +2334,7 @@ const TranslateEn = {
     success_edit: "The item was edited.",
     success_delete: "The item was deleted.",
     success_workspace: "The workspace was selected.",
+    success_filter: "The filter was applied.",
     // warning
     warning_restore: "Item not restored.",
     warning_find: "Item not found.",
@@ -2334,11 +2342,13 @@ const TranslateEn = {
     warning_edit: "The item not been edited.",
     warning_delete: "The item was not deleted.",
     warning_copy: "The id was not copied.",
+    warning_filter: "The filter was not applied.",
     // error
     error_restore: "An error ocurred while restored the item.",
     error_create: "An error occurred while creating the item.",
     error_edit: "An error occurred while editing the item.",
     error_delete: "An error occurred while deleting the item.",
+    error_filter: "An error occurred while applying the filter.",
   },
   user: {
     // list

@@ -10,7 +10,7 @@ import apis from "../apis";
 import { TypeUser } from "../types/User";
 import { TypeInstance } from "../types/Instance";
 import { TypeWorkspace } from "../types/Workspace";
-import { ApiResponsePaginate } from "../types/Api";
+import { ApiPreference, ApiResponsePaginate } from "../types/Api";
 
 // hooks
 import useAsync from "../hooks/useAsync";
@@ -30,12 +30,13 @@ const Login = function () {
     user,
     instance,
     setUsers,
-    saveToken,
     saveUser,
+    saveToken,
+    saveVersion,
     saveInstance,
     saveWorkspaces,
+    setPreferences,
     selectWorkspace,
-    saveVersion,
   } = useSystem();
   const play = useSounds();
   const t = useTranslate();
@@ -162,6 +163,26 @@ const Login = function () {
         });
         return;
       }
+
+      // fetch preferences
+      const responsePreference = await apis.Preference.get<ApiPreference>(
+        form.instance,
+        responseLogin.data.result.token,
+        responseLogin.data.result.user.id,
+      );
+      if (!responsePreference?.data?.result) {
+        play("alert");
+        toast.dismiss(toastId);
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_user,
+        });
+        return;
+      }
+      const newPreferences = { ...responsePreference.data.result };
+      delete newPreferences.id;
+      delete newPreferences.updatedAt;
+      delete newPreferences.userId;
+      setPreferences(newPreferences);
 
       saveInstance(responseInstance.data?.result);
       saveToken(responseLogin.data.result.token);

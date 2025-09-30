@@ -147,3 +147,13 @@ export type ApiIndexes = {
   nome: string;
   valor: number;
 }[];
+
+export type ApiPreferenceData =
+  | string
+  | number
+  | boolean
+  | Record<string, boolean>;
+
+export type ApiPreference = {
+  [key: string]: string | number | boolean | Record<string, boolean>;
+};
