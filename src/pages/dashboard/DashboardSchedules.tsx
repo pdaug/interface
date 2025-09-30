@@ -39,12 +39,12 @@ import Wrapper from "../../components/wrapper/Wrapper";
 import Profile from "../../components/profiles/Profile";
 import Tooltip from "../../components/tooltips/Tooltip";
 import Callout from "../../components/callouts/Callout";
-import { Horizontal, Vertical } from "../../components/aligns/Align";
+import { InputSelect } from "../../components/inputs/Input";
+import { useDialog } from "../../components/dialogs/Dialog";
 import Table, { TableData } from "../../components/tables/Table";
 import { ChartBar, ChartPie } from "../../components/charts/Chart";
+import { Horizontal, Vertical } from "../../components/aligns/Align";
 import Badge, { BadgeCategories } from "../../components/badges/Badge";
-import { useDialog } from "../../components/dialogs/Dialog";
-import { InputSelect } from "../../components/inputs/Input";
 
 const DashboardSchedules = function ({
   interval,
@@ -183,7 +183,7 @@ const DashboardSchedules = function ({
       width: 520,
       nonFooter: true,
       category: "Success",
-      title: `${t.components.filter}: ${t.financial.financial}`,
+      title: `${t.components.filter}: ${t.schedule.schedules}`,
       description: function () {
         const [hidden, setHidden] = useState<Record<string, boolean>>({
           ...preferencesHidden,
