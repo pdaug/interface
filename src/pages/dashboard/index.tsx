@@ -521,7 +521,7 @@ const Dashboard = function () {
         </Tooltip>
       </Horizontal>
 
-      {!preferencesHidden?.exchanges && !preferencesHidden.indexes && (
+      {(!preferencesHidden?.exchanges || !preferencesHidden.indexes) && (
         <DashboardExchangesIndexes />
       )}
 

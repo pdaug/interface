@@ -139,6 +139,7 @@ const DashboardExchangesIndexes = function () {
       title: `${t.components.filter}: ${t.dashboard.exchanges_indexes}`,
       description: function () {
         const [hidden, setHidden] = useState<Record<string, boolean>>({
+          ...preferencesHidden,
           exchanges: preferencesHidden?.exchanges || false,
           indexes: preferencesHidden?.indexes || false,
         });
@@ -260,135 +261,144 @@ const DashboardExchangesIndexes = function () {
         />
       </Horizontal>
 
-      <Horizontal internal={1}>
-        <Stats
-          animation
-          loading={loading}
-          metric={Math.abs(parseFloat(dollar?.pctChange || "0")) / 100}
-          metricStatus={
-            parseFloat(dollar?.pctChange || "0") > 0 ? "Up" : "Down"
-          }
-          metricLocale={instance.language}
-          metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
-          title={t.dashboard.stats_exchange_dollar}
-          Icon={CoinVertical}
-          value={parseFloat(dollar?.bid || "1")}
-          valueLocale={instance.language}
-          valueOptions={{ style: "currency", currency: instance.currency }}
-        />
+      {!preferencesHidden?.exchanges && (
+        <Horizontal internal={1}>
+          <Stats
+            animation
+            loading={loading}
+            metric={Math.abs(parseFloat(dollar?.pctChange || "0")) / 100}
+            metricStatus={
+              parseFloat(dollar?.pctChange || "0") > 0 ? "Up" : "Down"
+            }
+            metricLocale={instance.language}
+            metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
+            title={t.dashboard.stats_exchange_dollar}
+            Icon={CoinVertical}
+            value={parseFloat(dollar?.bid || "1")}
+            valueLocale={instance.language}
+            valueOptions={{ style: "currency", currency: instance.currency }}
+          />
 
-        <Stats
-          animation
-          loading={loading}
-          metric={Math.abs(parseFloat(euro?.pctChange || "0")) / 100}
-          metricStatus={parseFloat(euro?.pctChange || "0") > 0 ? "Up" : "Down"}
-          metricLocale={instance.language}
-          metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
-          title={t.dashboard.stats_exchange_euro}
-          Icon={CoinVertical}
-          value={parseFloat(euro?.bid || "1")}
-          valueLocale={instance.language}
-          valueOptions={{ style: "currency", currency: instance.currency }}
-        />
+          <Stats
+            animation
+            loading={loading}
+            metric={Math.abs(parseFloat(euro?.pctChange || "0")) / 100}
+            metricStatus={
+              parseFloat(euro?.pctChange || "0") > 0 ? "Up" : "Down"
+            }
+            metricLocale={instance.language}
+            metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
+            title={t.dashboard.stats_exchange_euro}
+            Icon={CoinVertical}
+            value={parseFloat(euro?.bid || "1")}
+            valueLocale={instance.language}
+            valueOptions={{ style: "currency", currency: instance.currency }}
+          />
 
-        <Stats
-          animation
-          loading={loading}
-          metric={Math.abs(parseFloat(pound?.pctChange || "0")) / 100}
-          metricStatus={parseFloat(pound?.pctChange || "0") > 0 ? "Up" : "Down"}
-          metricLocale={instance.language}
-          metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
-          title={t.dashboard.stats_exchange_pound}
-          Icon={CoinVertical}
-          value={parseFloat(pound?.bid || "1")}
-          valueLocale={instance.language}
-          valueOptions={{ style: "currency", currency: instance.currency }}
-        />
+          <Stats
+            animation
+            loading={loading}
+            metric={Math.abs(parseFloat(pound?.pctChange || "0")) / 100}
+            metricStatus={
+              parseFloat(pound?.pctChange || "0") > 0 ? "Up" : "Down"
+            }
+            metricLocale={instance.language}
+            metricOptions={{ style: "percent", minimumFractionDigits: 4 }}
+            title={t.dashboard.stats_exchange_pound}
+            Icon={CoinVertical}
+            value={parseFloat(pound?.bid || "1")}
+            valueLocale={instance.language}
+            valueOptions={{ style: "currency", currency: instance.currency }}
+          />
 
-        <Stats
-          animation
-          loading={loading}
-          title={t.dashboard.stats_exchange_bitcoin}
-          Icon={CurrencyBtc}
-          value={bitcoin?.buy || 0}
-          valueLocale={instance.language}
-          valueOptions={{ style: "currency", currency: instance.currency }}
-        />
-      </Horizontal>
+          <Stats
+            animation
+            loading={loading}
+            title={t.dashboard.stats_exchange_bitcoin}
+            Icon={CurrencyBtc}
+            value={bitcoin?.buy || 0}
+            valueLocale={instance.language}
+            valueOptions={{ style: "currency", currency: instance.currency }}
+          />
+        </Horizontal>
+      )}
 
-      <Horizontal internal={1}>
-        <Stats
-          animation
-          loading={loading}
-          title={t.dashboard.stats_index_selic}
-          Icon={PresentationChart}
-          value={
-            (indexes.find((index) => index.nome === "Selic")?.valor || 0) / 100
-          }
-          valueLocale={instance.language}
-          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
-          footer={
-            <Horizontal internal={0.4} className="itemsCenter">
-              <LinkSimple size={16} color="var(--infoColor)" />
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href="https://www.bcb.gov.br/controleinflacao/taxaselic"
-              >
-                {t.dashboard.stats_index_selic_description}
-              </a>
-            </Horizontal>
-          }
-        />
+      {!preferencesHidden?.indexes && (
+        <Horizontal internal={1}>
+          <Stats
+            animation
+            loading={loading}
+            title={t.dashboard.stats_index_selic}
+            Icon={PresentationChart}
+            value={
+              (indexes.find((index) => index.nome === "Selic")?.valor || 0) /
+              100
+            }
+            valueLocale={instance.language}
+            valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
+            footer={
+              <Horizontal internal={0.4} className="itemsCenter">
+                <LinkSimple size={16} color="var(--infoColor)" />
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://www.bcb.gov.br/controleinflacao/taxaselic"
+                >
+                  {t.dashboard.stats_index_selic_description}
+                </a>
+              </Horizontal>
+            }
+          />
 
-        <Stats
-          animation
-          loading={loading}
-          title={t.dashboard.stats_index_cdi}
-          Icon={PresentationChart}
-          value={
-            (indexes.find((index) => index.nome === "CDI")?.valor || 0) / 100
-          }
-          valueLocale={instance.language}
-          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
-          footer={
-            <Horizontal internal={0.4} className="itemsCenter">
-              <LinkSimple size={16} color="var(--infoColor)" />
-              <a
-                href="https://pt.wikipedia.org/wiki/Certificado_de_Dep%C3%B3sito_Interbanc%C3%A1rio"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t.dashboard.stats_index_cdi_description}
-              </a>
-            </Horizontal>
-          }
-        />
+          <Stats
+            animation
+            loading={loading}
+            title={t.dashboard.stats_index_cdi}
+            Icon={PresentationChart}
+            value={
+              (indexes.find((index) => index.nome === "CDI")?.valor || 0) / 100
+            }
+            valueLocale={instance.language}
+            valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
+            footer={
+              <Horizontal internal={0.4} className="itemsCenter">
+                <LinkSimple size={16} color="var(--infoColor)" />
+                <a
+                  href="https://pt.wikipedia.org/wiki/Certificado_de_Dep%C3%B3sito_Interbanc%C3%A1rio"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t.dashboard.stats_index_cdi_description}
+                </a>
+              </Horizontal>
+            }
+          />
 
-        <Stats
-          animation
-          loading={loading}
-          title={t.dashboard.stats_index_ipca}
-          Icon={PresentationChart}
-          value={
-            (indexes.find((index) => index.nome === "IPCA")?.valor || 0) / 100
-          }
-          valueLocale={instance.language}
-          valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
-          footer={
-            <Horizontal internal={0.4} className="itemsCenter">
-              <LinkSimple size={16} color="var(--infoColor)" />
-              <a
-                href="https://pt.wikipedia.org/wiki/%C3%8Dndice_de_pre%C3%A7os_no_consumidor"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t.dashboard.stats_index_ipca_description}
-              </a>
-            </Horizontal>
-          }
-        />
-      </Horizontal>
+          <Stats
+            animation
+            loading={loading}
+            title={t.dashboard.stats_index_ipca}
+            Icon={PresentationChart}
+            value={
+              (indexes.find((index) => index.nome === "IPCA")?.valor || 0) / 100
+            }
+            valueLocale={instance.language}
+            valueOptions={{ style: "percent", minimumFractionDigits: 2 }}
+            footer={
+              <Horizontal internal={0.4} className="itemsCenter">
+                <LinkSimple size={16} color="var(--infoColor)" />
+                <a
+                  href="https://pt.wikipedia.org/wiki/%C3%8Dndice_de_pre%C3%A7os_no_consumidor"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t.dashboard.stats_index_ipca_description}
+                </a>
+              </Horizontal>
+            }
+          />
+        </Horizontal>
+      )}
     </React.Fragment>
   );
 };
