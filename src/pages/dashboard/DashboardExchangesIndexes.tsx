@@ -251,7 +251,15 @@ const DashboardExchangesIndexes = function () {
   return (
     <React.Fragment>
       <Horizontal internal={1} className="itemsCenter">
-        <h3 className="flex1">{t.dashboard.exchanges_indexes}</h3>
+        {preferencesHidden?.exchanges && preferencesHidden?.indexes && (
+          <h3 className="flex1">{t.dashboard.exchanges_indexes}</h3>
+        )}
+        {preferencesHidden?.exchanges && !preferencesHidden?.indexes && (
+          <h3 className="flex1">{t.dashboard.indexes}</h3>
+        )}
+        {!preferencesHidden?.exchanges && preferencesHidden?.indexes && (
+          <h3 className="flex1">{t.dashboard.exchanges}</h3>
+        )}
 
         <Button
           category="Neutral"
