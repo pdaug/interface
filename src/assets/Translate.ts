@@ -408,6 +408,8 @@ const TranslatePt = {
   financial: {
     financial: "Financeiro",
     financials: "Financeiros",
+    inflows: "Receitas",
+    outflows: "Despesas",
   },
   integration: {
     integration: "Integração",
@@ -1658,6 +1660,8 @@ const TranslateEn = {
   financial: {
     financial: "Financial",
     financials: "Financials",
+    inflows: "Inflows",
+    outflows: "Outflows",
   },
   integration: {
     integration: "Integration",

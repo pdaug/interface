@@ -525,7 +525,7 @@ const Dashboard = function () {
         <DashboardExchangesIndexes />
       )}
 
-      {!preferencesHidden?.inflows && !preferencesHidden?.outflows && (
+      {(!preferencesHidden?.inflows || !preferencesHidden?.outflows) && (
         <DashboardFinancial hidden={hidden} />
       )}
 
