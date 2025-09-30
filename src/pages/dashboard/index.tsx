@@ -542,12 +542,12 @@ const Dashboard = function () {
         <DashboardProducts interval={interval} hidden={hidden} />
       )}
 
-      {!preferencesHidden?.servicesStats &&
-        !preferencesHidden?.servicesOrders &&
-        !preferencesHidden?.servicesVehicles &&
-        !preferencesHidden?.servicesCharts && (
-          <DashboardServices interval={interval} hidden={hidden} />
-        )}
+      {(!preferencesHidden?.servicesStats ||
+        !preferencesHidden?.servicesOrders ||
+        !preferencesHidden?.servicesVehicles ||
+        !preferencesHidden?.servicesCharts) && (
+        <DashboardServices interval={interval} hidden={hidden} />
+      )}
 
       <div style={{ minHeight: 128 }}></div>
     </React.Fragment>
