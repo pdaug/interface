@@ -252,7 +252,7 @@ const TranslatePt = {
   dashboard: {
     dashboard: "Painel",
     customize: "Personalizar",
-    exchange_indexes: "Cotações e índices",
+    exchanges_indexes: "Cotações e índices",
     exchanges: "Cotações",
     indexes: "Índices",
     // greetings
@@ -1506,7 +1506,7 @@ const TranslateEn = {
   dashboard: {
     dashboard: "Dashboard",
     customize: "Customize",
-    exchange_indexes: "Exchange rates and Indexes",
+    exchanges_indexes: "Exchange rates and Indexes",
     exchanges: "Exchanges",
     indexes: "Indexes",
     // greetings

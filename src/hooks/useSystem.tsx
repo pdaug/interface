@@ -100,6 +100,7 @@ const useSystem = create<SystemState>()(
           instance: state.instance,
           workspaces: state.workspaces,
           workspaceId: state.workspaceId,
+          preferences: state.preferences,
           version: state.version,
         };
       },

@@ -45,6 +45,11 @@ const DashboardExchangesIndexes = function () {
   const [dollar, setDollar] = useState<ApiExchangeContent | null>(null);
   const [bitcoin, setBitcoin] = useState<ApiBitcoinContent | null>(null);
 
+  const preferencesHidden =
+    preferences?.hidden && typeof preferences?.hidden === "object"
+      ? preferences?.hidden
+      : {};
+
   // fetch exchanges and indexes
   useAsync(
     async function () {
@@ -126,140 +131,132 @@ const DashboardExchangesIndexes = function () {
     [instance.currency],
   );
 
+  const filterAction = function () {
+    OpenDialog({
+      width: 520,
+      nonFooter: true,
+      category: "Success",
+      title: `${t.components.filter}: ${t.dashboard.exchanges_indexes}`,
+      description: function () {
+        const [hidden, setHidden] = useState<Record<string, boolean>>({
+          exchanges: preferencesHidden?.exchanges || false,
+          indexes: preferencesHidden?.indexes || false,
+        });
+
+        return (
+          <Vertical internal={1}>
+            <InputSelect
+              empty={t.stacks.no_option}
+              label={t.dashboard.exchanges}
+              value={String(hidden?.exchanges)}
+              options={[
+                {
+                  id: "true",
+                  value: "true",
+                  text: t.components.hide,
+                },
+                {
+                  id: "false",
+                  value: "false",
+                  text: t.components.show,
+                },
+              ]}
+              onChange={function (event) {
+                const newHidden = { ...hidden };
+                newHidden.exchanges = event.target?.value === "true";
+                setHidden(newHidden);
+                return;
+              }}
+            />
+            <InputSelect
+              empty={t.stacks.no_option}
+              label={t.dashboard.indexes}
+              value={String(hidden?.indexes)}
+              options={[
+                {
+                  id: "true",
+                  value: "true",
+                  text: t.components.hide,
+                },
+                {
+                  id: "false",
+                  value: "false",
+                  text: t.components.show,
+                },
+              ]}
+              onChange={function (event) {
+                const newHidden = { ...hidden };
+                newHidden.indexes = event.target?.value === "true";
+                setHidden(newHidden);
+                return;
+              }}
+            />
+
+            <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
+              <Button
+                category="Neutral"
+                text={t.components.cancel}
+                onClick={CloseDialog}
+              />
+              <Button
+                category="Info"
+                text={t.components.filter}
+                onClick={async function () {
+                  try {
+                    const response = await apis.Preference.set<ApiPreference>(
+                      instance.name,
+                      token,
+                      user.id,
+                      { hidden },
+                    );
+                    if (!response.data) {
+                      play("alert");
+                      toast.warning(t.toast.warning_error, {
+                        description: t.toast.warning_filter,
+                      });
+                      return;
+                    }
+                    const newPreferences = { ...response.data.result };
+                    delete newPreferences.id;
+                    delete newPreferences.updatedAt;
+                    delete newPreferences.userId;
+                    setPreferences(newPreferences);
+                    play("ok");
+                    toast.success(t.toast.success, {
+                      description: t.toast.success_filter,
+                    });
+                    CloseDialog();
+                  } catch (err) {
+                    play("alert");
+                    toast.error(t.toast.warning_error, {
+                      description: t.toast.error_filter,
+                    });
+                    console.error(
+                      "[src/pages/dashboard/DashboardExchangesIndexes.tsx]",
+                      err,
+                    );
+                  }
+                  return;
+                }}
+              />
+            </Horizontal>
+          </Vertical>
+        );
+      },
+    });
+    return;
+  };
+
   return (
     <React.Fragment>
       <Horizontal internal={1} className="itemsCenter">
-        <h3 className="flex1">{t.dashboard.exchange_indexes}</h3>
+        <h3 className="flex1">{t.dashboard.exchanges_indexes}</h3>
 
         <Button
           category="Neutral"
           Icon={FunnelSimple}
           text={t.components.filter}
-          onClick={function () {
-            OpenDialog({
-              width: 520,
-              nonFooter: true,
-              category: "Success",
-              title: `${t.components.filter}: ${t.dashboard.exchange_indexes}`,
-              description: function () {
-                const [hidden, setHidden] = useState<Record<string, boolean>>({
-                  exchanges:
-                    (typeof preferences?.hidden === "object" &&
-                      preferences?.hidden?.exchanges) ||
-                    false,
-                  indexes:
-                    (typeof preferences?.hidden === "object" &&
-                      preferences?.hidden?.indexes) ||
-                    false,
-                });
-
-                return (
-                  <Vertical internal={1}>
-                    <InputSelect
-                      empty={t.stacks.no_option}
-                      label={t.dashboard.exchanges}
-                      value={String(hidden?.exchanges)}
-                      options={[
-                        {
-                          id: "true",
-                          value: "true",
-                          text: t.components.hide,
-                        },
-                        {
-                          id: "false",
-                          value: "false",
-                          text: t.components.show,
-                        },
-                      ]}
-                      onChange={function (event) {
-                        const newHidden = { ...hidden };
-                        newHidden.exchanges = event.target?.value === "true";
-                        setHidden(newHidden);
-                        return;
-                      }}
-                    />
-                    <InputSelect
-                      empty={t.stacks.no_option}
-                      label={t.dashboard.indexes}
-                      value={String(hidden?.indexes)}
-                      options={[
-                        {
-                          id: "true",
-                          value: "true",
-                          text: t.components.hide,
-                        },
-                        {
-                          id: "false",
-                          value: "false",
-                          text: t.components.show,
-                        },
-                      ]}
-                      onChange={function (event) {
-                        const newHidden = { ...hidden };
-                        newHidden.indexes = event.target?.value === "true";
-                        setHidden(newHidden);
-                        return;
-                      }}
-                    />
-
-                    <Horizontal
-                      internal={1}
-                      styles={{ justifyContent: "flex-end" }}
-                    >
-                      <Button
-                        category="Neutral"
-                        text={t.components.cancel}
-                        onClick={CloseDialog}
-                      />
-                      <Button
-                        category="Info"
-                        text={t.components.filter}
-                        onClick={async function () {
-                          try {
-                            const response =
-                              await apis.Preference.set<ApiPreference>(
-                                instance.name,
-                                token,
-                                user.id,
-                                { hidden },
-                              );
-                            if (!response.data) {
-                              play("alert");
-                              toast.warning(t.toast.warning_error, {
-                                description: t.toast.warning_filter,
-                              });
-                              return;
-                            }
-                            const newPreferences = { ...response.data.result };
-                            delete newPreferences.id;
-                            delete newPreferences.updatedAt;
-                            delete newPreferences.userId;
-                            setPreferences(newPreferences);
-                            play("ok");
-                            toast.success(t.toast.success, {
-                              description: t.toast.success_filter,
-                            });
-                            CloseDialog();
-                          } catch (err) {
-                            play("alert");
-                            toast.error(t.toast.warning_error, {
-                              description: t.toast.error_filter,
-                            });
-                            console.error(
-                              "[src/pages/dashboard/DashboardExchangesIndexes.tsx]",
-                              err,
-                            );
-                          }
-                          return;
-                        }}
-                      />
-                    </Horizontal>
-                  </Vertical>
-                );
-              },
-            });
-            return;
-          }}
+          onClick={filterAction}
         />
       </Horizontal>
 
