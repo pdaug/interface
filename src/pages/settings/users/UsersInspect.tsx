@@ -250,6 +250,10 @@ const UsersInspect = function () {
       toast.success(t.toast.success, {
         description: t.toast.success_create,
       });
+      // add user in system
+      const usersClone = [...users];
+      usersClone.push(response.data.result);
+      setUsers(usersClone);
       navigate("/f/users");
       return;
     } catch (err) {
