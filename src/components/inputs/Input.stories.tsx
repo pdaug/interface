@@ -242,7 +242,6 @@ export const Check: StoryObj = {
           value={checked}
           onChange={(newChecked) => {
             setChecked(newChecked);
-            console.log(newChecked);
           }}
           options={[{ id: "check", value: "check", label: "Without label" }]}
         />
@@ -251,7 +250,6 @@ export const Check: StoryObj = {
           label="Input Check"
           onChange={(newTerms) => {
             setTerms(newTerms);
-            console.log(newTerms);
           }}
           options={[{ id: "agree", value: "agree", label: "Agree" }]}
         />
@@ -260,7 +258,6 @@ export const Check: StoryObj = {
           label="Input Check Multiple"
           onChange={(newFruits) => {
             setFruits(newFruits);
-            console.log(newFruits);
           }}
           options={[
             { id: "apple", value: "apple", label: "Apple" },
@@ -275,7 +272,6 @@ export const Check: StoryObj = {
           label="Input Check Horizontal"
           onChange={(newGames) => {
             setGames(newGames);
-            console.log(newGames);
           }}
           options={[
             { id: "galaga", value: "galaga", label: "Galaga" },

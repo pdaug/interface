@@ -53,7 +53,6 @@ const useSystem = create<SystemState>()(
         return;
       };
       const setPreferences = function (preferences: ApiPreference) {
-        console.log({ preferences });
         set({ preferences });
         return;
       };

@@ -57,8 +57,6 @@ const Dashboard = function () {
     end: endOfDay(new Date()),
   });
 
-  console.log({ startPreferences: preferences });
-
   const [greeting, setGreeting] = useState<string>("");
   const [hidden, setHidden] = useState<boolean>(false);
   const [accounts, setAccounts] = useState<TypeAccount[]>([]);
