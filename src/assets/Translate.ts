@@ -287,29 +287,6 @@ const TranslatePt = {
     good_rest_4: "Sonhe bem, {{name}}!",
     good_rest_5: "Decansar é importante, {{name}}!",
     good_rest_6: "Feche os olhos, {{name}}!",
-    // stats
-    stats_inflows_title: "Receitas",
-    stats_inflows_description: "Valor da receita no período.",
-    stats_inflows_receive_title: "Receitas a receber",
-    stats_inflows_receive_description: "Valor da receita a receber no período.",
-    stats_inflows_late_title: "Receitas em atraso",
-    stats_inflows_late_description: "Valor da receita em atraso no período.",
-    stats_outflows_title: "Despesas",
-    stats_outflows_description: "Valor da despesa no período.",
-    stats_outflows_pay_title: "Despesas a pagar",
-    stats_outflows_pay_description: "Valor da despesa a pagar no período.",
-    stats_outflows_late_title: "Despesas em atraso",
-    stats_outflows_late_description: "Valor da despesa em atraso no período.",
-    // exchange and indexes
-    stats_index_selic: "SELIC",
-    stats_index_selic_description: "O que é a SELIC?",
-    stats_index_cdi: "CDI",
-    stats_index_cdi_description: "O que é o CDI?",
-    stats_index_ipca: "IPCA",
-    stats_index_ipca_description: "O que é o IPCA?",
-    stats_exchange_dollar: "Dólar",
-    stats_exchange_euro: "Euro",
-    stats_exchange_pound: "Libra Esterlina",
     // charts
     chart_inflows_title: "Receitas ao longo do período",
     chart_inflows_description:
@@ -329,6 +306,39 @@ const TranslatePt = {
     chart_schedules_time: "Itens agendados ao longo do tempo",
     chart_schedules_time_description:
       "Visualização dos itens agendados ao longo do período.",
+    // stats exchange and indexes
+    stats_index_selic: "SELIC",
+    stats_index_selic_description: "O que é a SELIC?",
+    stats_index_cdi: "CDI",
+    stats_index_cdi_description: "O que é o CDI?",
+    stats_index_ipca: "IPCA",
+    stats_index_ipca_description: "O que é o IPCA?",
+    stats_exchange_dollar: "Dólar",
+    stats_exchange_euro: "Euro",
+    stats_exchange_pound: "Libra Esterlina",
+    // stats financial
+    stats_inflows_title: "Receitas",
+    stats_inflows_description: "Valor da receita no período.",
+    stats_inflows_receive_title: "Receitas a receber",
+    stats_inflows_receive_description: "Valor da receita a receber no período.",
+    stats_inflows_late_title: "Receitas em atraso",
+    stats_inflows_late_description: "Valor da receita em atraso no período.",
+    stats_outflows_title: "Despesas",
+    stats_outflows_description: "Valor da despesa no período.",
+    stats_outflows_pay_title: "Despesas a pagar",
+    stats_outflows_pay_description: "Valor da despesa a pagar no período.",
+    stats_outflows_late_title: "Despesas em atraso",
+    stats_outflows_late_description: "Valor da despesa em atraso no período.",
+    // stats customers
+    stats_customers_title: "Novos clientes",
+    stats_customers_description:
+      "Quantidade de clientes cadastrados no período.",
+    stats_customers_average: "Valor médio por cliente",
+    stats_customers_average_description:
+      "Média que o cliente gastou no período.",
+    stats_customers_frequency: "Frequência de compra por cliente",
+    stats_customers_frequency_description:
+      "Média de compra feita por clientes no período.",
     // stats schedules
     stats_schedules_title: "Itens agendados",
     stats_schedules_description: "Quantidade de itens agendados no período.",
@@ -1544,32 +1554,6 @@ const TranslateEn = {
     good_rest_4: "Dream well, {{name}}!",
     good_rest_5: "Resting is important, {{name}}!",
     good_rest_6: "Close your eyes, {{name}}!",
-    // stats
-    stats_inflows_title: "Inflows",
-    stats_inflows_description: "Total inflows already received",
-    stats_inflows_receive_title: "Receivable inflows",
-    stats_inflows_receive_description: "Total inflows yet to be received",
-    stats_inflows_late_title: "Overdue inflows",
-    stats_inflows_late_description:
-      "Total inflows that should have already been received",
-    stats_outflows_title: "Outflows",
-    stats_outflows_description: "Total outflows already made",
-    stats_outflows_pay_title: "Pending outflows",
-    stats_outflows_pay_description: "Total outflows yet to be made",
-    stats_outflows_late_title: "Overdue outflows",
-    stats_outflows_late_description:
-      "Total outflows that should have already been made",
-    // exchange and indexes
-    stats_index_selic: "SELIC",
-    stats_index_selic_description: "What is the SELIC?",
-    stats_index_cdi: "CDI",
-    stats_index_cdi_description: "What is the CDI?",
-    stats_index_ipca: "IPCA",
-    stats_index_ipca_description: "What is the IPCA?",
-    stats_exchange_dollar: "Dollar",
-    stats_exchange_euro: "Euro",
-    stats_exchange_pound: "Pound Sterling",
-    stats_exchange_bitcoin: "Bitcoin",
     // charts
     chart_inflows_title: "Financial Inflows",
     chart_inflows_description:
@@ -1589,6 +1573,42 @@ const TranslateEn = {
     chart_schedules_time: "Items scheduled over time",
     chart_schedules_time_description:
       "Visualization of the scheduled items over the selected time range.",
+    // stats exchange and indexes
+    stats_index_selic: "SELIC",
+    stats_index_selic_description: "What is the SELIC?",
+    stats_index_cdi: "CDI",
+    stats_index_cdi_description: "What is the CDI?",
+    stats_index_ipca: "IPCA",
+    stats_index_ipca_description: "What is the IPCA?",
+    stats_exchange_dollar: "Dollar",
+    stats_exchange_euro: "Euro",
+    stats_exchange_pound: "Pound Sterling",
+    stats_exchange_bitcoin: "Bitcoin",
+    // stats financial
+    stats_inflows_title: "Inflows",
+    stats_inflows_description: "Total inflows already received",
+    stats_inflows_receive_title: "Receivable inflows",
+    stats_inflows_receive_description: "Total inflows yet to be received",
+    stats_inflows_late_title: "Overdue inflows",
+    stats_inflows_late_description:
+      "Total inflows that should have already been received",
+    stats_outflows_title: "Outflows",
+    stats_outflows_description: "Total outflows already made",
+    stats_outflows_pay_title: "Pending outflows",
+    stats_outflows_pay_description: "Total outflows yet to be made",
+    stats_outflows_late_title: "Overdue outflows",
+    stats_outflows_late_description:
+      "Total outflows that should have already been made",
+    // stats customers
+    stats_customers_title: "New customers",
+    stats_customers_description:
+      "Quantity of customers registered in the period.",
+    stats_customers_average: "Average spent by customer",
+    stats_customers_average_description:
+      "Average spent by customer in the period.",
+    stats_customers_frequency: "Frequency by customer",
+    stats_customers_frequency_description:
+      "Average purchase made by customers in the period.",
     // stats schedules
     stats_schedules_title: "Items scheduled",
     stats_schedules_description: "Quantity of items scheduled in the period.",

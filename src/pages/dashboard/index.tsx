@@ -34,6 +34,7 @@ import { InputInterval, InputSelect } from "../../components/inputs/Input";
 // sections
 import DashboardProducts from "./DashboardProducts";
 import DashboardServices from "./DashboardServices";
+import DashboardCustomers from "./DashboardCustomers";
 import DashboardSchedules from "./DashboardSchedules";
 import DashboardFinancial from "./DashboardFinancial";
 import DashboardExchangesIndexes from "./DashboardExchangesIndexes";
@@ -526,6 +527,8 @@ const Dashboard = function () {
       {(!preferencesHidden?.inflows || !preferencesHidden?.outflows) && (
         <DashboardFinancial hidden={hidden} />
       )}
+
+      <DashboardCustomers interval={interval} hidden={hidden} />
 
       {(!preferencesHidden?.schedulesStats ||
         !preferencesHidden?.schedulesCharts ||

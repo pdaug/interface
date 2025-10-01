@@ -1,6 +1,29 @@
+import { AxiosRequestConfig } from "axios";
+
 // apis
-import { ApiBaseCrud } from "../Base";
+import { ApiBase, ApiBaseCrud } from "../Base";
 
-const Customer = ApiBaseCrud("customer");
+// types
+import { ApiResponse } from "../../types/Api";
 
-export default Customer;
+const path = "customer";
+
+const Customer = ApiBaseCrud(path);
+
+export default {
+  ...Customer,
+  stats: function <T>(
+    Authorization: string,
+    instance: string,
+    params: { dateStart: string; dateEnd: string },
+    workspaceId?: string,
+  ) {
+    const headers = {
+      Authorization,
+      "X-Instance": instance,
+      "X-Workspace": workspaceId,
+    };
+    const config: AxiosRequestConfig = { headers, params };
+    return ApiBase.get<ApiResponse<T>>(`/${path}/stats`, config);
+  },
+};
