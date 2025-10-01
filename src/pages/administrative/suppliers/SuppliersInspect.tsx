@@ -398,7 +398,7 @@ const SuppliersInspect = function () {
                 />
                 <Input
                   min={4}
-                  max={32}
+                  max={128}
                   type="email"
                   name="email"
                   disabled={loading}

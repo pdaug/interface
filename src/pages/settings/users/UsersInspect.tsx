@@ -457,7 +457,7 @@ const UsersInspect = function () {
               <Horizontal internal={1}>
                 <Input
                   min={4}
-                  max={32}
+                  max={128}
                   required
                   type="email"
                   name="email"

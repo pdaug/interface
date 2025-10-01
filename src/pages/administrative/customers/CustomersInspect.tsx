@@ -561,7 +561,7 @@ const CustomersInspect = function () {
                   }}
                 />
                 <Input
-                  max={32}
+                  max={128}
                   type="email"
                   name="email"
                   disabled={loading}
