@@ -106,13 +106,13 @@ const Login = function () {
       }
 
       // fetch login
-      const responseLogin = await apis.Login<{ user: TypeUser; token: string }>(
-        form.instance,
-        {
-          login: form.username,
-          password: form.password,
-        },
-      );
+      const responseLogin = await apis.Login<{
+        user: TypeUser;
+        token: string;
+      }>(form.instance, {
+        login: form.username,
+        password: form.password,
+      });
       if (!responseLogin?.data?.result) {
         play("alert");
         toast.dismiss(toastId);
