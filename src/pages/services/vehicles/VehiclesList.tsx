@@ -453,13 +453,15 @@ const VehiclesList = function () {
                     photoIcon={CarProfile}
                     photo={brandFinded?.image || ""}
                     name={
-                      brand.toLowerCase() === "other"
-                        ? t.components.other
-                        : brand || (
-                            <i style={{ color: "var(--textLight)" }}>
-                              {t.vehicle.no_brand}
-                            </i>
-                          )
+                      brand.toLowerCase() === "other" ? (
+                        t.components.other
+                      ) : brand ? (
+                        `${brand.slice(0, 1).toUpperCase()}${brand.slice(1)}`
+                      ) : (
+                        <i style={{ color: "var(--textLight)" }}>
+                          {t.vehicle.no_brand}
+                        </i>
+                      )
                     }
                   />
                 );
