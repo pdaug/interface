@@ -51,3 +51,44 @@ export type TypeVehicle = {
   updatedAt: string | null;
   deletedAt: string | null;
 };
+
+export type TypeVehicleRefuelFuel =
+  | "gasoline"
+  | "gasoline_additive"
+  | "gasoline_premium"
+  | "gasoline_octane"
+  | "ethanol"
+  | "ethanol_additive"
+  | "diesel"
+  | "diesel_s10"
+  | "diesel_s500"
+  | "gas"
+  | "kerosene"
+  | "arla"
+  | "bioethanol"
+  | "biodiesel"
+  | "others";
+
+export type TypeVehicleRefuelUnitType =
+  | "liter"
+  | "gallon"
+  | "kg"
+  | "barrel"
+  | "m3";
+
+export type TypeVehicleRefuel = {
+  id?: string;
+  fuel: TypeVehicleRefuelFuel;
+  gasStation: string;
+  unitPrice: string;
+  unitType: TypeVehicleRefuelUnitType;
+  unityQuantity: number;
+  total: string;
+  vehicleId: string;
+  userId: string;
+  workspaceId: string;
+  refuelAt: string;
+  createdAt: string;
+  updatedAt: string | null;
+  deletedAt: string | null;
+};

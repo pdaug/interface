@@ -86,3 +86,25 @@ export const VehicleBrandsOptions = [
   { name: "volkswagen", image: "/brands/volkswagen.png" },
   { name: "volvo", image: "/brands/volvo.png" },
 ];
+
+export const VehicleGasStationOptions = [
+  { name: "ALE", image: "/gas_stations/ale.jpeg" },
+  { name: "Assaí", image: "/gas_stations/assai.png" },
+  { name: "Atacadão", image: "/gas_stations/atacadao.png" },
+  { name: "Atem", image: "/gas_stations/atem.png" },
+  { name: "Carrefour", image: "/gas_stations/carrefour.png" },
+  { name: "Charrua", image: "/gas_stations/charrua.png" },
+  { name: "ESSO", image: "/gas_stations/esso.png" },
+  { name: "Graal", image: "/gas_stations/graal.jpg" },
+  { name: "Ipiranga", image: "/gas_stations/ipiranga.jpg" },
+  { name: "Larco", image: "/gas_stations/larco.jpeg" },
+  { name: "Petrobras", image: "/gas_stations/petrobras.png" },
+  { name: "Petronas", image: "/gas_stations/petronas.jpeg" },
+  { name: "Rede7", image: "/gas_stations/rede7.png" },
+  { name: "Repsol", image: "/gas_stations/repsol.jpg" },
+  { name: "Rodoil", image: "/gas_stations/rodoil.webp" },
+  { name: "Shell", image: "/gas_stations/shell.png" },
+  { name: "Texaco", image: "/gas_stations/texaco.webp" },
+  { name: "TotalEnergy", image: "/gas_stations/totalenergy.png" },
+  { name: "Vibra", image: "/gas_stations/vibra.jpeg" },
+];

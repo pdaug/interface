@@ -15,7 +15,7 @@ export type WrapperProps = {
   children: React.ReactNode;
   onCancel?: () => void;
   onCancelLabel?: string;
-  onConfirm?: () => void;
+  onConfirm?: (() => void) | (() => Promise<void>);
   onConfirmLabel?: string;
   actions?: ButtonProps[];
   styles?: React.CSSProperties;
@@ -83,7 +83,7 @@ const Wrapper = function ({
             })}
           {onConfirm && (
             <Button
-              type="button"
+              type="submit"
               category="Success"
               text={onConfirmLabel || "Confirm"}
               onClick={onConfirm}
