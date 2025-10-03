@@ -79,6 +79,7 @@ export type TypeVehicleRefuelUnitType =
 export type TypeVehicleRefuel = {
   id?: string;
   fuel: TypeVehicleRefuelFuel;
+  gasBrand: string;
   gasStation: string;
   unitPrice: string;
   unitType: TypeVehicleRefuelUnitType;
