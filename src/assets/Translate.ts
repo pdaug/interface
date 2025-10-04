@@ -57,6 +57,7 @@ const TranslatePt = {
       "Somente os itens com prioridade serão mostrados na tabela",
   },
   components: {
+    new: "Novo",
     of: "de",
     to_invoice: "Faturar",
     total: "Total",
@@ -1181,6 +1182,7 @@ const TranslatePt = {
     vehicle: "Veículo",
     vehicles: "Veículos",
     new: "Novo veículo",
+    new_refuel: "Novo abastecimento",
     // inputs
     gas_brand: "Bandeira do posto",
     refuel_at: "Data de abastecimento",
@@ -1359,6 +1361,7 @@ const TranslateEn = {
       "Only schedules with priority will be shown in the table",
   },
   components: {
+    new: "New",
     of: "of",
     to_invoice: "To invoice",
     total: "Total",
@@ -2470,6 +2473,7 @@ const TranslateEn = {
     vehicle: "Vehicle",
     vehicles: "Vehicles",
     new: "New vehicle",
+    new_refuel: "New refuel",
     // inputs
     gas_brand: "Gas brand",
     refuel_at: "Refuel at",

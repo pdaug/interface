@@ -6,7 +6,7 @@ import "./Wrapper.css";
 
 // components
 import { Horizontal, Vertical } from "../aligns/Align";
-import Button, { ButtonProps } from "../buttons/Button";
+import Button, { ButtonCategories, ButtonProps } from "../buttons/Button";
 
 export type WrapperProps = {
   title?: string;
@@ -15,6 +15,7 @@ export type WrapperProps = {
   children: React.ReactNode;
   onCancel?: () => void;
   onCancelLabel?: string;
+  onConfirmCategory?: ButtonCategories;
   onConfirm?: (() => void) | (() => Promise<void>);
   onConfirmLabel?: string;
   actions?: ButtonProps[];
@@ -31,6 +32,7 @@ const Wrapper = function ({
   onCancelLabel,
   onConfirm,
   onConfirmLabel,
+  onConfirmCategory,
   actions,
   styles,
   contentStyles,
@@ -84,7 +86,7 @@ const Wrapper = function ({
           {onConfirm && (
             <Button
               type="submit"
-              category="Success"
+              category={onConfirmCategory || "Success"}
               text={onConfirmLabel || "Confirm"}
               onClick={onConfirm}
             />

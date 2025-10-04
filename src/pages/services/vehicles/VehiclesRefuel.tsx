@@ -1,8 +1,14 @@
+import {
+  Trash,
+  GasCan,
+  Asterisk,
+  CarProfile,
+  PencilSimple,
+} from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Asterisk, CarProfile, GasCan } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
@@ -47,9 +53,11 @@ import Wrapper from "../../../components/wrapper/Wrapper";
 import Tooltip from "../../../components/tooltips/Tooltip";
 import Callout from "../../../components/callouts/Callout";
 import Profile from "../../../components/profiles/Profile";
+import { useDialog } from "../../../components/dialogs/Dialog";
 import Table, { TableData } from "../../../components/tables/Table";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
+import { format } from "date-fns";
 
 const VehiclesRefuel = function () {
   const t = useTranslate();
@@ -59,23 +67,30 @@ const VehiclesRefuel = function () {
   const navigate = useNavigate();
   const { renderByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
+  const { OpenDialog, CloseDialog } = useDialog();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
-  const [loading, setLoading] = useState(false);
-  const [vehicles, setVehicles] = useState<TypeVehicle[]>([]);
-  const [refuels, setRefuels] = useState<TypeVehicleRefuel[]>([]);
-  const [form, setForm] = useState<Partial<TypeVehicleRefuel>>({
+  const formInitial: TypeVehicleRefuel = {
     fuel: "gasoline",
     gasStation: "",
     gasBrand: "other",
     unitPrice: "0.00",
     unitType: "liter",
-    unityQuantity: 0,
+    unitQuantity: 0,
     total: "0.00",
     vehicleId: "",
     workspaceId,
     userId: user.id,
-  });
+    refuelAt: "",
+    createdAt: new Date().toISOString(),
+    updatedAt: null,
+    deletedAt: null,
+  };
+
+  const [loading, setLoading] = useState(false);
+  const [vehicles, setVehicles] = useState<TypeVehicle[]>([]);
+  const [refuels, setRefuels] = useState<TypeVehicleRefuel[]>([]);
+  const [form, setForm] = useState<Partial<TypeVehicleRefuel>>(formInitial);
 
   const userFinded = form.userId
     ? users.find(function (userLocal) {
@@ -87,36 +102,10 @@ const VehiclesRefuel = function () {
     return gasStation.name === form.gasBrand;
   });
 
-  // fetch vehicle and refuel
-  useAsync(async function () {
+  const FetchRefuel = async function () {
     const toastId = toast.loading(t.components.loading);
     setLoading(true);
     try {
-      const response = await apis.Vehicle.list<
-        ApiResponsePaginate<TypeVehicle>
-      >(
-        token,
-        instance.name,
-        {
-          pageSize: 999,
-          pageCurrent: 1,
-          orderField: "name",
-          orderSort: "asc",
-        },
-        workspaceId,
-      );
-      if (!response.data?.result?.items || response.status !== 200) {
-        play("alert");
-        toast.dismiss(toastId);
-        toast.warning(t.toast.warning_error, {
-          description: t.stacks.no_find_item,
-        });
-        navigate("/f/vehicles");
-        setLoading(false);
-        return;
-      }
-      setVehicles(response.data.result.items);
-
       const responseRefuel = await apis.VehicleRefuel.list<
         ApiResponsePaginate<TypeVehicleRefuel>
       >(
@@ -144,7 +133,6 @@ const VehiclesRefuel = function () {
         return;
       }
       setRefuels(responseRefuel.data.result.items);
-
       toast.dismiss(toastId);
       return;
     } catch (err) {
@@ -161,16 +149,58 @@ const VehiclesRefuel = function () {
       toast.dismiss(toastId);
       setLoading(false);
     }
+  };
+
+  // fetch refuel
+  useAsync(async function () {
+    try {
+      const response = await apis.Vehicle.list<
+        ApiResponsePaginate<TypeVehicle>
+      >(
+        token,
+        instance.name,
+        {
+          pageSize: 999,
+          pageCurrent: 1,
+          orderField: "name",
+          orderSort: "asc",
+        },
+        workspaceId,
+      );
+      if (!response.data?.result?.items || response.status !== 200) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        navigate("/f/vehicles");
+        return;
+      }
+      setVehicles(response.data.result.items);
+      return;
+    } catch (err) {
+      play("alert");
+      toast.error(t.toast.warning_error, {
+        description: t.stacks.no_find_item,
+      });
+      console.error("[src/pages/services/vehicles/VehiclesRefuel.tsx]", err);
+      navigate("/f/vehicles");
+      return;
+    }
   }, []);
+
+  // fetch refuel
+  useAsync(FetchRefuel, []);
 
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     const toastId = toast.loading(t.components.loading);
+    // fix date in refuel
+    form.refuelAt = new Date(form.refuelAt || 0).toISOString();
     try {
       // is editing
       if (form.id) {
-        const response = await apis.Vehicle.update(
+        const response = await apis.VehicleRefuel.update(
           token,
           instance.name,
           form.id,
@@ -190,11 +220,13 @@ const VehiclesRefuel = function () {
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
         });
-        navigate("/f/vehicles");
+        // navigate("/f/vehicles");
+        await FetchRefuel();
+        setForm(formInitial);
         return;
       }
       // is creating
-      const response = await apis.Vehicle.create<TypeVehicle>(
+      const response = await apis.VehicleRefuel.create<TypeVehicleRefuel>(
         token,
         instance.name,
         form,
@@ -213,7 +245,9 @@ const VehiclesRefuel = function () {
       toast.success(t.toast.success, {
         description: t.toast.success_create,
       });
-      navigate("/f/vehicles");
+      // navigate("/f/vehicles");
+      await FetchRefuel();
+      setForm(formInitial);
       return;
     } catch (err) {
       play("alert");
@@ -237,6 +271,75 @@ const VehiclesRefuel = function () {
       }, 500);
     }
   };
+
+  const getOptions = [
+    {
+      id: "edit",
+      label: t.components.edit,
+      Icon: PencilSimple,
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          const dataTyped = data as unknown as Partial<TypeVehicleRefuel>;
+          dataTyped.refuelAt = format(
+            new Date(dataTyped.refuelAt || 0),
+            "yyyy-MM-dd HH:mm",
+          );
+          setForm(dataTyped);
+        }
+        return;
+      },
+    },
+    {
+      id: "delete",
+      label: t.components.delete,
+      Icon: Trash,
+      IconColor: "var(--dangerColor",
+      styles: { color: "var(--dangerColor)" },
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (!data || typeof data !== "object" || !("id" in data)) return;
+        OpenDialog({
+          category: "Danger",
+          title: t.dialog.title_delete,
+          description: t.dialog.description_delete,
+          confirmText: t.components.delete,
+          onConfirm: async function () {
+            try {
+              const response = await apis.VehicleRefuel.delete(
+                token,
+                instance.name,
+                data.id as string,
+                workspaceId,
+              );
+              if (!response.data?.result) {
+                play("alert");
+                toast.warning(t.toast.warning_error, {
+                  description: t.toast.error_delete,
+                });
+                return;
+              }
+              play("ok");
+              toast.success(t.toast.success, {
+                description: t.toast.success_delete,
+              });
+              CloseDialog();
+              await FetchRefuel();
+              return;
+            } catch (err) {
+              play("alert");
+              toast.error(t.toast.warning_error, {
+                description: t.toast.error_delete,
+              });
+              console.error(
+                "[src/pages/services/vehicles/VehiclesRefuel.tsx]",
+                err,
+              );
+              return;
+            }
+          },
+        });
+      },
+    },
+  ];
 
   return renderByPlan(
     "advanced",
@@ -273,13 +376,28 @@ const VehiclesRefuel = function () {
           <Wrapper
             title={t.vehicle.title_refuel}
             description={t.vehicle.subtitle_refuel}
-            onConfirmLabel={t.components.save}
+            onConfirmCategory={form.id ? "Info" : "Success"}
+            onConfirmLabel={form.id ? t.components.edit : t.components.save}
             onConfirm={() => {}}
             onCancelLabel={t.components.cancel}
             onCancel={function () {
               navigate("/f/vehicles");
               return;
             }}
+            actions={
+              form.id
+                ? [
+                    {
+                      category: "Neutral",
+                      text: t.vehicle.new_refuel,
+                      onClick: function () {
+                        setForm(formInitial);
+                        return;
+                      },
+                    },
+                  ]
+                : []
+            }
           >
             <Horizontal internal={1} className="itemsCenter">
               <Avatar
@@ -437,10 +555,10 @@ const VehiclesRefuel = function () {
                       // calculate total
                       if (
                         Number(newForm.unitPrice) > 0 &&
-                        newForm.unityQuantity
+                        newForm.unitQuantity
                       ) {
                         newForm.total = Number(
-                          Number(newForm.unitPrice) * newForm.unityQuantity,
+                          Number(newForm.unitPrice) * newForm.unitQuantity,
                         ).toFixed(2);
                       }
 
@@ -457,23 +575,23 @@ const VehiclesRefuel = function () {
                     type="number"
                     placeholder="0"
                     disabled={loading}
-                    name="unityQuantity"
+                    name="unitQuantity"
                     id="vehicle_unity_quantity"
                     label={`${t.vehicle.unit_quantity} (${t.vehicle?.[form.unitType as keyof typeof t.vehicle] || t.components.unknown})`}
-                    value={String(form?.unityQuantity || "")}
+                    value={String(form?.unitQuantity || "")}
                     onChange={function (event) {
                       const newForm = { ...form };
-                      newForm.unityQuantity = Number(
+                      newForm.unitQuantity = Number(
                         event.currentTarget?.value || 0,
                       );
 
                       // calculate total
                       if (
                         Number(newForm.unitPrice) > 0 &&
-                        newForm.unityQuantity
+                        newForm.unitQuantity
                       ) {
                         newForm.total = Number(
-                          Number(newForm.unitPrice) * newForm.unityQuantity,
+                          Number(newForm.unitPrice) * newForm.unitQuantity,
                         ).toFixed(2);
                       }
 
@@ -494,9 +612,9 @@ const VehiclesRefuel = function () {
                       newForm.total = value || "";
 
                       // calculate price
-                      if (Number(newForm.total) > 0 && newForm.unityQuantity) {
+                      if (Number(newForm.total) > 0 && newForm.unitQuantity) {
                         newForm.unitPrice = Number(
-                          Number(newForm.total) / newForm.unityQuantity,
+                          Number(newForm.total) / newForm.unitQuantity,
                         ).toFixed(2);
                       }
 
@@ -572,15 +690,23 @@ const VehiclesRefuel = function () {
                   />
                   <Input
                     required
-                    type="date"
                     name="refuelAt"
+                    type="datetime-local"
                     id="vehicle_refuel_at"
                     placeholder="yyyy-MM-dd"
                     label={t.vehicle.refuel_at}
-                    value={form?.refuelAt || ""}
+                    value={
+                      form?.refuelAt
+                        ? format(
+                            new Date(form.refuelAt || 0),
+                            "yyyy-MM-dd HH:mm",
+                          )
+                        : ""
+                    }
                     onChange={function (event) {
                       const newForm = { ...form };
-                      newForm.refuelAt = event.currentTarget?.value || "";
+                      const newRefuelAt = `${event.currentTarget?.value}:00`;
+                      newForm.refuelAt = newRefuelAt;
                       setForm(newForm);
                       return;
                     }}
@@ -656,6 +782,7 @@ const VehiclesRefuel = function () {
         border
         noSelect
         loading={loading}
+        options={getOptions}
         data={refuels as TableData[]}
         columns={{
           fuel: {

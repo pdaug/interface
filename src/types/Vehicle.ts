@@ -83,7 +83,7 @@ export type TypeVehicleRefuel = {
   gasStation: string;
   unitPrice: string;
   unitType: TypeVehicleRefuelUnitType;
-  unityQuantity: number;
+  unitQuantity: number;
   total: string;
   vehicleId: string;
   userId: string;
