@@ -6,6 +6,7 @@ import {
   PencilSimple,
   QuestionMark,
   DownloadSimple,
+  GasCan,
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import React, { useState } from "react";
@@ -17,14 +18,17 @@ import { endOfDay, startOfYear } from "date-fns";
 import apis from "../../../apis";
 
 // assets
-import { VehicleBrandsOptions } from "../../../assets/Vehicle";
+import {
+  VehicleBrandsOptions,
+  VehicleGasStationOptions,
+} from "../../../assets/Vehicle";
 
 // utils
 import Download from "../../../utils/Download";
 import Clipboard from "../../../utils/Clipboard";
 
 // types
-import { TypeVehicle } from "../../../types/Vehicle";
+import { TypeVehicle, TypeVehicleRefuel } from "../../../types/Vehicle";
 import { ApiResponsePaginate } from "../../../types/Api";
 import { TypeInputInterval } from "../../../types/Components";
 
@@ -32,6 +36,7 @@ import { TypeInputInterval } from "../../../types/Components";
 import useAsync from "../../../hooks/useAsync";
 import useSounds from "../../../hooks/useSounds";
 import useSystem from "../../../hooks/useSystem";
+import useCurrency from "../../../hooks/useCurrency";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 import usePermission from "../../../hooks/usePermission";
@@ -54,17 +59,23 @@ const VehiclesList = function () {
   const t = useTranslate();
   const play = useSounds();
   const navigate = useNavigate();
+  const Currency = useCurrency();
   const { renderByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
   const { users, token, instance, workspaces, workspaceId } = useSystem();
 
-  const [page, setPage] = useState<number>(1);
-  const [total, setTotal] = useState<number>(0);
+  const [vehicles, setVehicles] = useState<TypeVehicle[]>([]);
+  const [pageVehicles, setPageVehicles] = useState<number>(1);
+  const [totalVehicles, setTotalVehicles] = useState<number>(0);
+  const [selectedVehicles, setSelectedVehicles] = useState<string[]>([]);
+
+  const [refuels, setRefuels] = useState<TypeVehicleRefuel[]>([]);
+  const [pageRefuels, setPageRefuels] = useState<number>(1);
+  const [totalRefuels, setTotalRefuels] = useState<number>(0);
+
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
-  const [selected, setSelected] = useState<string[]>([]);
-  const [vehicles, setVehicles] = useState<TypeVehicle[]>([]);
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: startOfYear(new Date()),
     end: endOfDay(new Date()),
@@ -82,7 +93,7 @@ const VehiclesList = function () {
         instance.name,
         {
           pageSize,
-          pageCurrent: searchDebounced ? 1 : page,
+          pageCurrent: searchDebounced ? 1 : pageVehicles,
           searchField: "name",
           search: searchDebounced,
           dateStart: interval.start ? interval.start.toISOString() : undefined,
@@ -102,7 +113,7 @@ const VehiclesList = function () {
         return;
       }
       setVehicles(response.data.result.items);
-      setTotal(response.data.result.pagination.total);
+      setTotalVehicles(response.data.result.pagination.total);
       return;
     } catch (err) {
       play("alert");
@@ -116,10 +127,64 @@ const VehiclesList = function () {
     }
   };
 
-  // fetch vehicles
-  useAsync(FetchVehicles, [interval, workspaceId, page, searchDebounced]);
+  const FetchRefuel = async function () {
+    setLoading(true);
+    try {
+      const responseRefuel = await apis.VehicleRefuel.list<
+        ApiResponsePaginate<TypeVehicleRefuel>
+      >(
+        token,
+        instance.name,
+        {
+          pageSize,
+          searchField: "gasStation",
+          search: searchDebounced,
+          pageCurrent: searchDebounced ? 1 : pageRefuels,
+          orderField: "createdAt",
+          orderSort: "desc",
+          dateStart: interval.start ? interval.start.toISOString() : undefined,
+          dateEnd: interval.end ? interval.end.toISOString() : undefined,
+        },
+        workspaceId,
+      );
+      if (
+        !responseRefuel.data?.result?.items ||
+        responseRefuel.status !== 200
+      ) {
+        play("alert");
+        toast.warning(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        navigate("/f/vehicles");
+        setLoading(false);
+        return;
+      }
+      setRefuels(responseRefuel.data.result.items);
+      setTotalRefuels(responseRefuel.data.result.pagination.total);
+    } catch (err) {
+      play("alert");
+      toast.error(t.toast.warning_error, {
+        description: t.stacks.no_find_item,
+      });
+      console.error("[src/pages/services/vehicles/VehiclesList.tsx]", err);
+      navigate("/f/vehicles");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const getOptions = [
+  // fetch vehicles
+  useAsync(FetchVehicles, [
+    interval,
+    workspaceId,
+    pageVehicles,
+    searchDebounced,
+  ]);
+
+  // fetch refuel
+  useAsync(FetchRefuel, [interval, workspaceId, pageRefuels, searchDebounced]);
+
+  const getOptionsVehicles = [
     {
       id: "copy",
       label: t.components.copy_id,
@@ -219,6 +284,70 @@ const VehiclesList = function () {
     },
   ];
 
+  const getOptionsRefuel = [
+    {
+      id: "edit",
+      label: t.components.edit,
+      Icon: PencilSimple,
+      onClick: function (_: React.MouseEvent, data: unknown) {
+        if (data && typeof data === "object" && "id" in data) {
+          navigate(`/f/vehicles/refuel/${data.id}`);
+        }
+        return;
+      },
+    },
+    {
+      id: "delete",
+      label: t.components.delete,
+      Icon: Trash,
+      IconColor: "var(--dangerColor",
+      styles: { color: "var(--dangerColor)" },
+      onClick: async function (_: React.MouseEvent, data: unknown) {
+        if (!data || typeof data !== "object" || !("id" in data)) return;
+        OpenDialog({
+          category: "Danger",
+          title: t.dialog.title_delete,
+          description: t.dialog.description_delete,
+          confirmText: t.components.delete,
+          onConfirm: async function () {
+            try {
+              const response = await apis.VehicleRefuel.delete(
+                token,
+                instance.name,
+                data.id as string,
+                workspaceId,
+              );
+              if (!response.data?.result) {
+                play("alert");
+                toast.warning(t.toast.warning_error, {
+                  description: t.toast.error_delete,
+                });
+                return;
+              }
+              play("ok");
+              toast.success(t.toast.success, {
+                description: t.toast.success_delete,
+              });
+              CloseDialog();
+              await FetchRefuel();
+              return;
+            } catch (err) {
+              play("alert");
+              toast.error(t.toast.warning_error, {
+                description: t.toast.error_delete,
+              });
+              console.error(
+                "[src/pages/services/vehicles/VehiclesRefuel.tsx]",
+                err,
+              );
+              return;
+            }
+          },
+        });
+      },
+    },
+  ];
+
   return renderByPlan(
     "advanced",
     <React.Fragment>
@@ -289,11 +418,11 @@ const VehiclesList = function () {
         />
         <Button
           category="Neutral"
-          disabled={!selected.length}
+          disabled={!selectedVehicles.length}
           text={t.components.export}
           onClick={function () {
             const data = vehicles.filter(function (vehicle) {
-              return selected.includes(vehicle.id);
+              return selectedVehicles.includes(vehicle.id);
             });
             Download.JSON(data, `vehicles.json`);
             play("ok");
@@ -330,10 +459,13 @@ const VehiclesList = function () {
         </Tooltip>
       </Horizontal>
 
-      <Vertical internal={1} styles={{ flex: 1 }}>
+      <Vertical internal={1}>
         <Table
           border
           loading={loading}
+          selected={selectedVehicles}
+          setSelected={setSelectedVehicles}
+          options={getOptionsVehicles}
           data={vehicles as TableData[]}
           columns={{
             status: {
@@ -509,16 +641,159 @@ const VehiclesList = function () {
               },
             },
           }}
-          selected={selected}
-          setSelected={setSelected}
-          options={getOptions}
         />
 
         <Pagination
           display
-          pageCurrent={page}
-          setPage={setPage}
-          itemsTotal={total}
+          pageCurrent={pageVehicles}
+          setPage={setPageVehicles}
+          itemsTotal={totalVehicles}
+          pageSize={pageSize}
+        />
+      </Vertical>
+
+      <Vertical internal={1}>
+        <Table
+          border
+          noSelect
+          loading={loading}
+          options={getOptionsRefuel}
+          data={refuels as TableData[]}
+          columns={{
+            fuel: {
+              label: t.vehicle.fuel,
+              maxWidth: "160px",
+              handler: function (data) {
+                return (
+                  <Badge
+                    category="Info"
+                    value={
+                      t.vehicle[data.fuel as keyof typeof t.vehicle] ||
+                      t.components.unknown
+                    }
+                  />
+                );
+              },
+            },
+            gas_station: {
+              label: t.vehicle.gas_station,
+              handler: function (data) {
+                const gasBrandFinded = VehicleGasStationOptions.find(
+                  function (gasStation) {
+                    return gasStation.name === data.gasBrand;
+                  },
+                );
+                return (
+                  <Profile
+                    padding={false}
+                    photoIcon={GasCan}
+                    name={
+                      data?.gasStation ? (
+                        <div
+                          style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            navigate(`/f/vehicles/refuel/${data.id}`)
+                          }
+                        >
+                          {data.gasStation as string}
+                        </div>
+                      ) : (
+                        <i style={{ color: "var(--textLight)" }}>
+                          {t.vehicle.no_gas_station}
+                        </i>
+                      )
+                    }
+                    photo={gasBrandFinded?.image || ""}
+                    description={
+                      t.components?.[
+                        gasBrandFinded?.name as keyof typeof t.components
+                      ] ||
+                      gasBrandFinded?.name ||
+                      ""
+                    }
+                  />
+                );
+              },
+            },
+            vehicleId: {
+              label: t.vehicle.vehicle,
+              handler: function (data) {
+                const brandFinded = VehicleBrandsOptions?.find(
+                  function (brand) {
+                    return (
+                      brand.name ===
+                      ((data?.vehicleBrand as string) || "")?.toLowerCase()
+                    );
+                  },
+                );
+                return (
+                  <Profile
+                    padding={false}
+                    photoIcon={CarProfile}
+                    name={data?.vehicleName as string}
+                    photo={brandFinded?.image || ""}
+                    description={
+                      brandFinded?.name?.toLowerCase() === "other" ? (
+                        t.components.other
+                      ) : brandFinded?.name ? (
+                        `${brandFinded?.name?.slice(0, 1).toUpperCase()}${brandFinded?.name?.slice(1)}`
+                      ) : (
+                        <i style={{ color: "var(--textLight)" }}>
+                          {t.vehicle.no_brand}
+                        </i>
+                      )
+                    }
+                  />
+                );
+              },
+            },
+            total: {
+              label: t.components.total,
+              maxWidth: 160,
+              handler: function (data) {
+                return <span>{Currency(data.total as string)}</span>;
+              },
+            },
+            user: {
+              label: t.components.user,
+              maxWidth: 180,
+              handler: function (data) {
+                const userFinded = users?.find(function (user) {
+                  return user.id === data.userId;
+                });
+                return (
+                  <Tooltip
+                    content={t.components[userFinded?.role || "collaborator"]}
+                  >
+                    <Profile
+                      photoCircle
+                      photoSize={3}
+                      padding={false}
+                      styles={{ lineHeight: 1 }}
+                      photo={userFinded?.photo || ""}
+                      description={userFinded?.email || ""}
+                      name={userFinded?.name || t.components.unknown}
+                    />
+                  </Tooltip>
+                );
+              },
+            },
+            refuelAt: {
+              label: t.vehicle.refuel_at,
+              maxWidth: 180,
+              handler: function (data) {
+                const datetime = instanceDateTime(data.refuelAt as string);
+                return datetime;
+              },
+            },
+          }}
+        />
+
+        <Pagination
+          display
+          pageCurrent={pageRefuels}
+          setPage={setPageRefuels}
+          itemsTotal={totalRefuels}
           pageSize={pageSize}
         />
       </Vertical>

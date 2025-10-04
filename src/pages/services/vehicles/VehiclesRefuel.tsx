@@ -1,14 +1,9 @@
-import {
-  Trash,
-  GasCan,
-  Asterisk,
-  CarProfile,
-  PencilSimple,
-} from "@phosphor-icons/react";
 import { toast } from "sonner";
+import { format } from "date-fns";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { GasCan, Asterisk } from "@phosphor-icons/react";
+import { useNavigate, useParams } from "react-router-dom";
 
 // apis
 import apis from "../../../apis";
@@ -17,10 +12,7 @@ import apis from "../../../apis";
 import Convert from "../../../utils/Convert";
 
 // assets
-import {
-  VehicleBrandsOptions,
-  VehicleGasStationOptions,
-} from "../../../assets/Vehicle";
+import { VehicleGasStationOptions } from "../../../assets/Vehicle";
 
 // types
 import {
@@ -36,7 +28,6 @@ import useAsync from "../../../hooks/useAsync";
 import useSystem from "../../../hooks/useSystem";
 import useSounds from "../../../hooks/useSounds";
 import useSchema from "../../../hooks/useSchema";
-import useCurrency from "../../../hooks/useCurrency";
 import useDateTime from "../../../hooks/useDateTime";
 import useTranslate from "../../../hooks/useTranslate";
 import usePermission from "../../../hooks/usePermission";
@@ -47,27 +38,21 @@ import {
   InputMoney,
   InputSelect,
 } from "../../../components/inputs/Input";
-import Badge from "../../../components/badges/Badge";
 import Avatar from "../../../components/avatars/Avatar";
 import Wrapper from "../../../components/wrapper/Wrapper";
-import Tooltip from "../../../components/tooltips/Tooltip";
 import Callout from "../../../components/callouts/Callout";
 import Profile from "../../../components/profiles/Profile";
-import { useDialog } from "../../../components/dialogs/Dialog";
-import Table, { TableData } from "../../../components/tables/Table";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import { format } from "date-fns";
 
 const VehiclesRefuel = function () {
   const t = useTranslate();
   const play = useSounds();
+  const { id } = useParams();
   const Schema = useSchema();
-  const Currency = useCurrency();
   const navigate = useNavigate();
   const { renderByPlan } = usePermission();
   const { instanceDateTime } = useDateTime();
-  const { OpenDialog, CloseDialog } = useDialog();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
   const formInitial: TypeVehicleRefuel = {
@@ -79,6 +64,8 @@ const VehiclesRefuel = function () {
     unitQuantity: 0,
     total: "0.00",
     vehicleId: "",
+    vehicleName: "",
+    vehicleBrand: "",
     workspaceId,
     userId: user.id,
     refuelAt: "",
@@ -89,7 +76,6 @@ const VehiclesRefuel = function () {
 
   const [loading, setLoading] = useState(false);
   const [vehicles, setVehicles] = useState<TypeVehicle[]>([]);
-  const [refuels, setRefuels] = useState<TypeVehicleRefuel[]>([]);
   const [form, setForm] = useState<Partial<TypeVehicleRefuel>>(formInitial);
 
   const userFinded = form.userId
@@ -102,56 +88,7 @@ const VehiclesRefuel = function () {
     return gasStation.name === form.gasBrand;
   });
 
-  const FetchRefuel = async function () {
-    const toastId = toast.loading(t.components.loading);
-    setLoading(true);
-    try {
-      const responseRefuel = await apis.VehicleRefuel.list<
-        ApiResponsePaginate<TypeVehicleRefuel>
-      >(
-        token,
-        instance.name,
-        {
-          pageSize: 999,
-          pageCurrent: 1,
-          orderField: "createdAt",
-          orderSort: "desc",
-        },
-        workspaceId,
-      );
-      if (
-        !responseRefuel.data?.result?.items ||
-        responseRefuel.status !== 200
-      ) {
-        play("alert");
-        toast.dismiss(toastId);
-        toast.warning(t.toast.warning_error, {
-          description: t.stacks.no_find_item,
-        });
-        navigate("/f/vehicles");
-        setLoading(false);
-        return;
-      }
-      setRefuels(responseRefuel.data.result.items);
-      toast.dismiss(toastId);
-      return;
-    } catch (err) {
-      play("alert");
-      toast.dismiss(toastId);
-      toast.error(t.toast.warning_error, {
-        description: t.stacks.no_find_item,
-      });
-      console.error("[src/pages/services/vehicles/VehiclesRefuel.tsx]", err);
-      navigate("/f/vehicles");
-      setLoading(false);
-      return;
-    } finally {
-      toast.dismiss(toastId);
-      setLoading(false);
-    }
-  };
-
-  // fetch refuel
+  // fetch vehicle
   useAsync(async function () {
     try {
       const response = await apis.Vehicle.list<
@@ -188,9 +125,6 @@ const VehiclesRefuel = function () {
     }
   }, []);
 
-  // fetch refuel
-  useAsync(FetchRefuel, []);
-
   const onSubmit = async function (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
@@ -199,11 +133,11 @@ const VehiclesRefuel = function () {
     form.refuelAt = new Date(form.refuelAt || 0).toISOString();
     try {
       // is editing
-      if (form.id) {
+      if (id) {
         const response = await apis.VehicleRefuel.update(
           token,
           instance.name,
-          form.id,
+          id,
           form,
           workspaceId,
         );
@@ -220,9 +154,7 @@ const VehiclesRefuel = function () {
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
         });
-        // navigate("/f/vehicles");
-        await FetchRefuel();
-        setForm(formInitial);
+        navigate("/f/vehicles");
         return;
       }
       // is creating
@@ -245,9 +177,7 @@ const VehiclesRefuel = function () {
       toast.success(t.toast.success, {
         description: t.toast.success_create,
       });
-      // navigate("/f/vehicles");
-      await FetchRefuel();
-      setForm(formInitial);
+      navigate("/f/vehicles");
       return;
     } catch (err) {
       play("alert");
@@ -261,7 +191,7 @@ const VehiclesRefuel = function () {
         return;
       }
       toast.error(t.toast.warning_error, {
-        description: form.id ? t.toast.error_edit : t.toast.error_create,
+        description: id ? t.toast.error_edit : t.toast.error_create,
       });
       return;
     } finally {
@@ -272,74 +202,42 @@ const VehiclesRefuel = function () {
     }
   };
 
-  const getOptions = [
-    {
-      id: "edit",
-      label: t.components.edit,
-      Icon: PencilSimple,
-      onClick: function (_: React.MouseEvent, data: unknown) {
-        if (data && typeof data === "object" && "id" in data) {
-          const dataTyped = data as unknown as Partial<TypeVehicleRefuel>;
-          dataTyped.refuelAt = format(
-            new Date(dataTyped.refuelAt || 0),
-            "yyyy-MM-dd HH:mm",
-          );
-          setForm(dataTyped);
-        }
-        return;
-      },
-    },
-    {
-      id: "delete",
-      label: t.components.delete,
-      Icon: Trash,
-      IconColor: "var(--dangerColor",
-      styles: { color: "var(--dangerColor)" },
-      onClick: async function (_: React.MouseEvent, data: unknown) {
-        if (!data || typeof data !== "object" || !("id" in data)) return;
-        OpenDialog({
-          category: "Danger",
-          title: t.dialog.title_delete,
-          description: t.dialog.description_delete,
-          confirmText: t.components.delete,
-          onConfirm: async function () {
-            try {
-              const response = await apis.VehicleRefuel.delete(
-                token,
-                instance.name,
-                data.id as string,
-                workspaceId,
-              );
-              if (!response.data?.result) {
-                play("alert");
-                toast.warning(t.toast.warning_error, {
-                  description: t.toast.error_delete,
-                });
-                return;
-              }
-              play("ok");
-              toast.success(t.toast.success, {
-                description: t.toast.success_delete,
-              });
-              CloseDialog();
-              await FetchRefuel();
-              return;
-            } catch (err) {
-              play("alert");
-              toast.error(t.toast.warning_error, {
-                description: t.toast.error_delete,
-              });
-              console.error(
-                "[src/pages/services/vehicles/VehiclesRefuel.tsx]",
-                err,
-              );
-              return;
-            }
-          },
+  const FetchRefuel = async function () {
+    if (!id) return;
+    const toastId = toast.loading(t.components.loading);
+    try {
+      const response = await apis.VehicleRefuel.get(
+        token,
+        instance.name,
+        id,
+        workspaceId,
+      );
+      if (!response.data?.result || response.status !== 200) {
+        play("alert");
+        toast.dismiss(toastId);
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
         });
-      },
-    },
-  ];
+        navigate("/f/vehicles");
+        setLoading(false);
+        return;
+      }
+      setForm(response.data.result);
+    } catch (err) {
+      play("alert");
+      toast.dismiss(toastId);
+      toast.error(t.toast.warning_error, {
+        description: t.stacks.no_find_item,
+      });
+      console.error("[src/pages/services/vehicles/VehiclesRefuel.tsx]", err);
+      navigate("/f/vehicles");
+    } finally {
+      setLoading(false);
+      toast.dismiss(toastId);
+    }
+  };
+
+  useAsync(FetchRefuel, [id, token, instance.name, workspaceId]);
 
   return renderByPlan(
     "advanced",
@@ -376,8 +274,8 @@ const VehiclesRefuel = function () {
           <Wrapper
             title={t.vehicle.title_refuel}
             description={t.vehicle.subtitle_refuel}
-            onConfirmCategory={form.id ? "Info" : "Success"}
-            onConfirmLabel={form.id ? t.components.edit : t.components.save}
+            onConfirmCategory={id ? "Info" : "Success"}
+            onConfirmLabel={id ? t.components.edit : t.components.save}
             onConfirm={() => {}}
             onCancelLabel={t.components.cancel}
             onCancel={function () {
@@ -385,7 +283,7 @@ const VehiclesRefuel = function () {
               return;
             }}
             actions={
-              form.id
+              id
                 ? [
                     {
                       category: "Neutral",
@@ -533,6 +431,13 @@ const VehiclesRefuel = function () {
                     onChange={function (event) {
                       const newForm = { ...form };
                       newForm.vehicleId = event.currentTarget?.value || "";
+                      const vehicleFinded = vehicles.find(function (vehicle) {
+                        return vehicle.id === newForm.vehicleId;
+                      });
+                      if (vehicleFinded) {
+                        newForm.vehicleName = vehicleFinded.name;
+                        newForm.vehicleBrand = vehicleFinded.brand;
+                      }
                       setForm(newForm);
                       return;
                     }}
@@ -713,7 +618,7 @@ const VehiclesRefuel = function () {
                   />
                 </Horizontal>
 
-                {Boolean(form.id) && (
+                {Boolean(id) && (
                   <Horizontal internal={1}>
                     <div
                       className="flex flex1"
@@ -777,131 +682,6 @@ const VehiclesRefuel = function () {
           />
         </Vertical>
       </form>
-
-      <Table
-        border
-        noSelect
-        loading={loading}
-        options={getOptions}
-        data={refuels as TableData[]}
-        columns={{
-          fuel: {
-            label: t.vehicle.fuel,
-            maxWidth: "160px",
-            handler: function (data) {
-              return (
-                <Badge
-                  category="Info"
-                  value={
-                    t.vehicle[data.fuel as keyof typeof t.vehicle] ||
-                    t.components.unknown
-                  }
-                />
-              );
-            },
-          },
-          gas_station: {
-            label: t.vehicle.gas_station,
-            handler: function (data) {
-              const gasBrandFinded = VehicleGasStationOptions.find(
-                function (gasStation) {
-                  return gasStation.name === data.gasBrand;
-                },
-              );
-              return (
-                <Profile
-                  padding={false}
-                  photoIcon={GasCan}
-                  name={
-                    (data?.gasStation as string) || (
-                      <i style={{ color: "var(--textLight)" }}>
-                        {t.vehicle.no_gas_station}
-                      </i>
-                    )
-                  }
-                  photo={gasBrandFinded?.image || ""}
-                  description={
-                    t.components?.[
-                      gasBrandFinded?.name as keyof typeof t.components
-                    ] ||
-                    gasBrandFinded?.name ||
-                    ""
-                  }
-                />
-              );
-            },
-          },
-          vehicleId: {
-            label: t.vehicle.vehicle,
-            handler: function (data) {
-              const vehicleFinded = vehicles?.find(function (vehicle) {
-                return vehicle.id === data.vehicleId;
-              });
-              const brandFinded = VehicleBrandsOptions?.find(function (brand) {
-                return brand.name === vehicleFinded?.brand;
-              });
-              return (
-                <Profile
-                  padding={false}
-                  photoIcon={CarProfile}
-                  name={vehicleFinded?.name}
-                  photo={brandFinded?.image || ""}
-                  description={
-                    brandFinded?.name?.toLowerCase() === "other" ? (
-                      t.components.other
-                    ) : brandFinded?.name ? (
-                      `${brandFinded?.name?.slice(0, 1).toUpperCase()}${brandFinded?.name?.slice(1)}`
-                    ) : (
-                      <i style={{ color: "var(--textLight)" }}>
-                        {t.vehicle.no_brand}
-                      </i>
-                    )
-                  }
-                />
-              );
-            },
-          },
-          total: {
-            label: t.components.total,
-            maxWidth: 160,
-            handler: function (data) {
-              return <span>{Currency(data.total as string)}</span>;
-            },
-          },
-          user: {
-            label: t.components.user,
-            maxWidth: 180,
-            handler: function (data) {
-              const userFinded = users?.find(function (user) {
-                return user.id === data.userId;
-              });
-              return (
-                <Tooltip
-                  content={t.components[userFinded?.role || "collaborator"]}
-                >
-                  <Profile
-                    photoCircle
-                    photoSize={3}
-                    padding={false}
-                    styles={{ lineHeight: 1 }}
-                    photo={userFinded?.photo || ""}
-                    description={userFinded?.email || ""}
-                    name={userFinded?.name || t.components.unknown}
-                  />
-                </Tooltip>
-              );
-            },
-          },
-          refuelAt: {
-            label: t.vehicle.refuel_at,
-            maxWidth: 180,
-            handler: function (data) {
-              const datetime = instanceDateTime(data.refuelAt as string);
-              return datetime;
-            },
-          },
-        }}
-      />
     </React.Fragment>,
   );
 };

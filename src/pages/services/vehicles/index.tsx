@@ -22,7 +22,11 @@ export default [
     Component: VehiclesRefuel,
   },
   {
-    path: "maintenance",
+    path: "refuel/:id",
+    Component: VehiclesRefuel,
+  },
+  {
+    path: "maintenance/:id",
     Component: VehiclesMaintenance,
   },
 ];
