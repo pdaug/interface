@@ -86,6 +86,8 @@ export type TypeVehicleRefuel = {
   unitQuantity: number;
   total: string;
   vehicleId: string;
+  vehicleName: string;
+  vehicleBrand: string;
   userId: string;
   workspaceId: string;
   refuelAt: string;
