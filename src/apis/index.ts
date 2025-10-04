@@ -33,6 +33,7 @@ import Workspace from "./internal/Workspace";
 import DocumentApi from "./internal/Document";
 import Preference from "./internal/Preference";
 import VehicleRefuel from "./internal/VehicleRefuel";
+import VehicleMaintenance from "./internal/VehicleMaintenance";
 
 export default {
   // external
@@ -66,6 +67,7 @@ export default {
   Supplier,
   User,
   Vehicle,
+  VehicleMaintenance,
   VehicleRefuel,
   WhatsApp,
   Workspace,

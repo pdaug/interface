@@ -26,6 +26,10 @@ export default [
     Component: VehiclesRefuel,
   },
   {
+    path: "maintenance",
+    Component: VehiclesMaintenance,
+  },
+  {
     path: "maintenance/:id",
     Component: VehiclesMaintenance,
   },

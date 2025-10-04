@@ -697,10 +697,12 @@ const InputMoney = function ({
 }: InputMoneyProps) {
   return (
     <div className="input">
-      <div className="inputHeader" data-required={String(Boolean(required))}>
-        <label htmlFor={id}>{label}</label>
-        {helper && <span>{helper}</span>}
-      </div>
+      {label && (
+        <div className="inputHeader" data-required={String(Boolean(required))}>
+          <label htmlFor={id}>{label}</label>
+          {helper && <span>{helper}</span>}
+        </div>
+      )}
       <div className={`inputMoney ${currency ? "inputMoneyCurrency" : ""}`}>
         <input
           id={id}

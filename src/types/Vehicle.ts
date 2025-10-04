@@ -95,3 +95,74 @@ export type TypeVehicleRefuel = {
   updatedAt: string | null;
   deletedAt: string | null;
 };
+
+export type TypeVehicleMaintenanceType =
+  | "preventive"
+  | "corrective"
+  | "predictive"
+  | "detective"
+  | "others";
+
+export type TypeVehicleMaintenanceCategory =
+  | "mechanic"
+  | "auto_electrician"
+  | "specialist"
+  | "machinist"
+  | "welder"
+  | "body_repairman"
+  | "panel_beater"
+  | "automotive_painter"
+  | "polisher"
+  | "detailer"
+  | "tire_repairman"
+  | "assembler"
+  | "automotive_installer"
+  | "upholsterer"
+  | "glazier"
+  | "locksmith"
+  | "others";
+
+export type TypeVehicleMaintenanceInspection = {
+  name: string;
+  reason: string;
+};
+
+export type TypeVehicleMaintenanceRepair = {
+  name: string;
+  description: string;
+  pricing: string;
+};
+
+export type TypeVehicleMaintenance = {
+  id?: string;
+  name: string;
+  local: string;
+
+  type: TypeVehicleMaintenanceType;
+  category: TypeVehicleMaintenanceCategory;
+
+  maintenanceStart: string;
+  maintenanceEstimatedEnd: string;
+  maintenanceEnd?: string;
+
+  pricingInstallment: number;
+  pricingTotal: string;
+
+  // relationships
+  inspection: TypeVehicleMaintenanceInspection[];
+  repair: TypeVehicleMaintenanceRepair[];
+
+  // vehicle
+  vehicleId: string;
+  vehicleName: string;
+  vehicleBrand: string;
+
+  // relations
+  userId: string;
+  accountId: string;
+  workspaceId: string;
+
+  createdAt: string;
+  updatedAt: string | null;
+  deletedAt: string | null;
+};

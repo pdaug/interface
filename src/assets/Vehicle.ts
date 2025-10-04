@@ -1,3 +1,9 @@
+// types
+import {
+  TypeVehicleMaintenanceCategory,
+  TypeVehicleMaintenanceType,
+} from "../types/Vehicle";
+
 export const VehicleCategoryOptions = [
   "passenger",
   "motocycle",
@@ -109,3 +115,32 @@ export const VehicleGasStationOptions = [
   { name: "Vibra", image: "/stations/vibra.jpeg" },
   { name: "other", image: "" },
 ];
+
+export const VehicleMaintenanceTypeOptions: TypeVehicleMaintenanceType[] = [
+  "preventive",
+  "corrective",
+  "predictive",
+  "detective",
+  "others",
+];
+
+export const VehicleMaintenanceCategoryOptions: TypeVehicleMaintenanceCategory[] =
+  [
+    "mechanic",
+    "auto_electrician",
+    "specialist",
+    "machinist",
+    "welder",
+    "body_repairman",
+    "panel_beater",
+    "automotive_painter",
+    "polisher",
+    "detailer",
+    "tire_repairman",
+    "assembler",
+    "automotive_installer",
+    "upholsterer",
+    "glazier",
+    "locksmith",
+    "others",
+  ];
