@@ -440,7 +440,11 @@ const VehiclesMaintenance = function () {
                   name="maintenanceStart"
                   id="vehicle_maintenance_start"
                   label={t.vehicle.maintenance_start}
-                  value={form.maintenanceStart || ""}
+                  value={
+                    form.maintenanceStart
+                      ? form.maintenanceStart.slice(0, 10)
+                      : ""
+                  }
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.maintenanceStart = event.currentTarget?.value || "";
@@ -455,7 +459,11 @@ const VehiclesMaintenance = function () {
                   name="maintenanceEstimatedEnd"
                   id="vehicle_maintenance_estimated_end"
                   label={t.vehicle.maintenance_estimated_end}
-                  value={form.maintenanceEstimatedEnd || ""}
+                  value={
+                    form.maintenanceEstimatedEnd
+                      ? form.maintenanceEstimatedEnd.slice(0, 10)
+                      : ""
+                  }
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.maintenanceEstimatedEnd =
@@ -470,7 +478,9 @@ const VehiclesMaintenance = function () {
                   placeholder="yyyy-MM-dd"
                   id="vehicle_maintenance_end"
                   label={t.vehicle.maintenance_end}
-                  value={form.maintenanceEnd || ""}
+                  value={
+                    form.maintenanceEnd ? form.maintenanceEnd.slice(0, 10) : ""
+                  }
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.maintenanceEnd = event.currentTarget?.value || "";
