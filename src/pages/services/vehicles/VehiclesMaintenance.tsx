@@ -191,7 +191,7 @@ const VehiclesMaintenance = function () {
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
         });
-        navigate("/f/vehicles");
+        navigate(`/f/vehicles/inspect/${id}`);
         return;
       }
       // is creating
@@ -215,7 +215,7 @@ const VehiclesMaintenance = function () {
       toast.success(t.toast.success, {
         description: t.toast.success_create,
       });
-      navigate("/f/vehicles");
+      navigate(`/f/vehicles/inspect/${response.data.result.vehicleId}`);
       return;
     } catch (err) {
       play("alert");

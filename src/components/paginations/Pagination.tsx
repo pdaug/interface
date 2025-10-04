@@ -12,6 +12,7 @@ export type PaginationProps = {
   pageSize: number;
   itemsTotal: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  styles?: React.CSSProperties;
 };
 
 const Pagination = function ({
@@ -20,6 +21,7 @@ const Pagination = function ({
   pageSize = 10,
   itemsTotal,
   setPage,
+  styles,
 }: PaginationProps) {
   const t = useTranslate();
 
@@ -52,7 +54,7 @@ const Pagination = function ({
   };
 
   return (
-    <div className="pagination">
+    <div className="pagination" style={styles}>
       {display && (
         <div className="paginationData">
           <span>{t.components.pagination_showing}</span>

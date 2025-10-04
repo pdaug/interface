@@ -38,6 +38,7 @@ import {
   InputMoney,
   InputSelect,
 } from "../../../components/inputs/Input";
+import Button from "../../../components/buttons/Button";
 import Avatar from "../../../components/avatars/Avatar";
 import Wrapper from "../../../components/wrapper/Wrapper";
 import Callout from "../../../components/callouts/Callout";
@@ -55,7 +56,9 @@ const VehiclesRefuel = function () {
   const { instanceDateTime } = useDateTime();
   const { user, users, token, instance, workspaces, workspaceId } = useSystem();
 
-  const formInitial: TypeVehicleRefuel = {
+  const [loading, setLoading] = useState(false);
+  const [vehicles, setVehicles] = useState<TypeVehicle[]>([]);
+  const [form, setForm] = useState<Partial<TypeVehicleRefuel>>({
     fuel: "gasoline",
     gasStation: "",
     gasBrand: "other",
@@ -72,11 +75,7 @@ const VehiclesRefuel = function () {
     createdAt: new Date().toISOString(),
     updatedAt: null,
     deletedAt: null,
-  };
-
-  const [loading, setLoading] = useState(false);
-  const [vehicles, setVehicles] = useState<TypeVehicle[]>([]);
-  const [form, setForm] = useState<Partial<TypeVehicleRefuel>>(formInitial);
+  });
 
   const userFinded = form.userId
     ? users.find(function (userLocal) {
@@ -154,7 +153,7 @@ const VehiclesRefuel = function () {
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
         });
-        navigate("/f/vehicles");
+        navigate(`/f/vehicles/inspect/${id}`);
         return;
       }
       // is creating
@@ -177,7 +176,7 @@ const VehiclesRefuel = function () {
       toast.success(t.toast.success, {
         description: t.toast.success_create,
       });
-      navigate("/f/vehicles");
+      navigate(`/f/vehicles/inspect/${response.data.result.vehicleId}`);
       return;
     } catch (err) {
       play("alert");
@@ -274,28 +273,6 @@ const VehiclesRefuel = function () {
           <Wrapper
             title={t.vehicle.title_refuel}
             description={t.vehicle.subtitle_refuel}
-            onConfirmCategory={id ? "Info" : "Success"}
-            onConfirmLabel={id ? t.components.edit : t.components.save}
-            onConfirm={() => {}}
-            onCancelLabel={t.components.cancel}
-            onCancel={function () {
-              navigate("/f/vehicles");
-              return;
-            }}
-            actions={
-              id
-                ? [
-                    {
-                      category: "Neutral",
-                      text: t.vehicle.new_refuel,
-                      onClick: function () {
-                        setForm(formInitial);
-                        return;
-                      },
-                    },
-                  ]
-                : []
-            }
           >
             <Horizontal internal={1} className="itemsCenter">
               <Avatar
@@ -680,6 +657,23 @@ const VehiclesRefuel = function () {
             text={t.callout.required_fields}
             styles={{ fontSize: "var(--textSmall)" }}
           />
+
+          <Wrapper>
+            <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
+              <Button
+                type="button"
+                category="Neutral"
+                disabled={loading}
+                text={t.components.cancel}
+              />
+              <Button
+                type="submit"
+                disabled={loading}
+                category={id ? "Info" : "Success"}
+                text={id ? t.components.edit : t.components.save}
+              />
+            </Horizontal>
+          </Wrapper>
         </Vertical>
       </form>
     </React.Fragment>,
