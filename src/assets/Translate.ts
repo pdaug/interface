@@ -334,10 +334,10 @@ const TranslatePt = {
     stats_customers_title: "Novos clientes",
     stats_customers_description:
       "Quantidade de clientes cadastrados no período.",
-    stats_customers_average: "Valor médio por cliente",
+    stats_customers_average: "Média de venda por cliente",
     stats_customers_average_description:
       "Média que o cliente gastou no período.",
-    stats_customers_frequency: "Frequência de compra por cliente",
+    stats_customers_frequency: "Frequência de venda por cliente",
     stats_customers_frequency_description:
       "Média de compra feita por clientes no período.",
     // stats schedules

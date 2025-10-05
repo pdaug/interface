@@ -7,23 +7,23 @@ import { FunnelSimple, IdentificationCard } from "@phosphor-icons/react";
 import apis from "../../apis";
 
 // types
-import { ApiPreference } from "../../types/Api";
 import {
+  TypeStats,
   DashboardHiddenProps,
   DashboardIntervalProps,
-  TypeStats,
 } from "../../types/Dashboard";
+import { ApiPreference } from "../../types/Api";
 
 // hooks
 import useAsync from "../../hooks/useAsync";
 import useSounds from "../../hooks/useSounds";
 import useSystem from "../../hooks/useSystem";
 import useTranslate from "../../hooks/useTranslate";
-import { useDialog } from "../../components/dialogs/Dialog";
 
 // components
 import Stats from "../../components/stats/Stats";
 import Button from "../../components/buttons/Button";
+import { useDialog } from "../../components/dialogs/Dialog";
 import { InputSelect } from "../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../components/aligns/Align";
 
@@ -38,8 +38,9 @@ const DashboardCustomers = function ({
   const { user, token, preferences, workspaceId, setPreferences } = useSystem();
 
   const [loading, setLoading] = useState<boolean>(true);
-
   const [statsCustomers, setStatsCustomers] = useState<TypeStats>({});
+
+  console.log(statsCustomers);
 
   const preferencesHidden =
     preferences?.hidden && typeof preferences?.hidden === "object"
@@ -218,7 +219,7 @@ const DashboardCustomers = function ({
             loading={loading}
             title={t.dashboard.stats_customers_average}
             Icon={IdentificationCard}
-            value={statsCustomers.conflicts || 0}
+            value={statsCustomers.averageSalesValues || 0}
             valueLocale={instance.language}
             valueOptions={{ style: "currency", currency: instance.currency }}
             footer={t.dashboard.stats_customers_average_description}
@@ -230,9 +231,8 @@ const DashboardCustomers = function ({
             loading={loading}
             title={t.dashboard.stats_customers_frequency}
             Icon={IdentificationCard}
-            value={statsCustomers.interactions || 0}
-            valueLocale={instance.language}
-            valueOptions={{ style: "currency", currency: instance.currency }}
+            value={statsCustomers.averageSalesFrequency || 0}
+            valueUnit={t.sale.sales.toLowerCase()}
             footer={t.dashboard.stats_customers_frequency_description}
           />
         </Horizontal>
