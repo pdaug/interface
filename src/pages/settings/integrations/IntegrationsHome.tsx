@@ -1,6 +1,7 @@
-import React from "react";
 import { toast } from "sonner";
-import { GearSix, QuestionMark } from "@phosphor-icons/react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Barricade, GearSix, QuestionMark } from "@phosphor-icons/react";
 
 // hooks
 import useTranslate from "../../../hooks/useTranslate";
@@ -15,7 +16,28 @@ const integrationLogoSize = 42;
 
 const IntegrationsHome = function () {
   const t = useTranslate();
-  const { OpenDialog } = useDialog();
+  const navigate = useNavigate();
+  const { OpenDialog, CloseDialog } = useDialog();
+
+  useEffect(function () {
+    OpenDialog({
+      title: t.menu.integrations,
+      description: t.dialog.description_wip,
+      category: "Warning",
+      confirmIcon: Barricade,
+      confirmText: t.components.confirm,
+      onConfirm: function () {
+        CloseDialog();
+        return;
+      },
+      onCancel: function () {
+        navigate("/f");
+        CloseDialog();
+        return;
+      },
+    });
+    return;
+  }, []);
 
   return (
     <React.Fragment>

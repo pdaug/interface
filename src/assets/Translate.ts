@@ -387,6 +387,7 @@ const TranslatePt = {
       "Compartilhe o item com outras pessoas através dos botões abaixo:",
     title_close: "Fechar",
     description_close: "Deseja realmente fechar este item?",
+    description_wip: "Esse módulo ainda está em desenvolvimento",
   },
   document: {
     placeholder: "Digite aqui o conteúdo do seu documento...",
@@ -1735,6 +1736,7 @@ const TranslateEn = {
     description_share: "Share the item with others using the buttons below:",
     title_close: "Close",
     description_close: "Do you really want close this item?",
+    description_wip: "This module is still in development",
   },
   document: {
     placeholder: "Type here the document content...",

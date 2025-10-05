@@ -1,19 +1,21 @@
-import { useState } from "react";
 import {
+  Edge,
+  Node,
+  Handle,
   addEdge,
+  Position,
+  BaseEdge,
+  ReactFlow,
+  EdgeChange,
+  NodeChange,
+  Connection,
   applyEdgeChanges,
   applyNodeChanges,
-  BaseEdge,
-  Connection,
-  Edge,
-  EdgeChange,
   getSmoothStepPath,
-  Handle,
-  Node,
-  NodeChange,
-  Position,
-  ReactFlow,
 } from "@xyflow/react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Barricade } from "@phosphor-icons/react";
 
 // components
 import {
@@ -23,6 +25,7 @@ import {
 } from "../../../components/inputs/Input";
 import Badge from "../../../components/badges/Badge";
 import { Vertical } from "../../../components/aligns/Align";
+import { useDialog } from "../../../components/dialogs/Dialog";
 
 // hooks
 import useTranslate from "../../../hooks/useTranslate";
@@ -30,7 +33,9 @@ import usePermission from "../../../hooks/usePermission";
 
 const AutomationsPanel = function () {
   const t = useTranslate();
+  const navigate = useNavigate();
   const { renderByPlan } = usePermission();
+  const { OpenDialog, CloseDialog } = useDialog();
 
   const [nodes, setNodes] = useState<Node[]>([
     {
@@ -96,6 +101,26 @@ const AutomationsPanel = function () {
     setEdges(newEdges);
     return;
   };
+
+  useEffect(function () {
+    OpenDialog({
+      title: t.menu.automations,
+      description: t.dialog.description_wip,
+      category: "Warning",
+      confirmIcon: Barricade,
+      confirmText: t.components.confirm,
+      onConfirm: function () {
+        CloseDialog();
+        return;
+      },
+      onCancel: function () {
+        navigate("/f");
+        CloseDialog();
+        return;
+      },
+    });
+    return;
+  }, []);
 
   return renderByPlan(
     "advanced",
