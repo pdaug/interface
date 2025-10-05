@@ -85,7 +85,7 @@ const DashboardProducts = function ({
             description: t.stacks.no_find_item,
           });
           console.error(
-            "[src/pages/Dashboard.tsx]",
+            "[src/pages/dashboard/DashboardProducts.tsx]",
             responseProductsStats.data,
           );
           return;
@@ -110,7 +110,10 @@ const DashboardProducts = function ({
           toast.warning(t.toast.warning_error, {
             description: t.stacks.no_find_item,
           });
-          console.warn("[src/pages/Dashboard.tsx]", responseSalesStats.data);
+          console.warn(
+            "[src/pages/dashboard/DashboardProducts.tsx]",
+            responseSalesStats.data,
+          );
           return;
         }
         setStatsSales(responseSalesStats.data.result);
@@ -134,7 +137,7 @@ const DashboardProducts = function ({
             description: t.stacks.no_find_item,
           });
           console.warn(
-            "[src/pages/Dashboard.tsx]",
+            "[src/pages/dashboard/DashboardProducts.tsx]",
             responsePurchasesStats.data,
           );
           return;
@@ -145,7 +148,7 @@ const DashboardProducts = function ({
         toast.error(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        console.error("[src/pages/Dashboard.tsx]", err);
+        console.error("[src/pages/dashboard/DashboardProducts.tsx]", err);
       } finally {
         setLoading(false);
       }
@@ -181,7 +184,7 @@ const DashboardProducts = function ({
         toast.error(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        console.error("[src/pages/Dashboard.tsx]", err);
+        console.error("[src/pages/dashboard/DashboardProducts.tsx]", err);
       }
       return;
     },

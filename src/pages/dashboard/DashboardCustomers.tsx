@@ -40,8 +40,6 @@ const DashboardCustomers = function ({
   const [loading, setLoading] = useState<boolean>(true);
   const [statsCustomers, setStatsCustomers] = useState<TypeStats>({});
 
-  console.log(statsCustomers);
-
   const preferencesHidden =
     preferences?.hidden && typeof preferences?.hidden === "object"
       ? preferences?.hidden

@@ -23,6 +23,8 @@ import useTranslate from "../../hooks/useTranslate";
 // components
 import Stats from "../../components/stats/Stats";
 import Button from "../../components/buttons/Button";
+import Wrapper from "../../components/wrapper/Wrapper";
+import { ChartLine } from "../../components/charts/Chart";
 import { useDialog } from "../../components/dialogs/Dialog";
 import { InputSelect } from "../../components/inputs/Input";
 import { Horizontal, Vertical } from "../../components/aligns/Align";
@@ -42,6 +44,10 @@ const DashboardServices = function ({
   const [statsOrders, setStatsOrders] = useState<TypeStats>({});
   const [statsServices, setStatsServices] = useState<TypeStats>({});
   const [statsVehicles, setStatsVehicles] = useState<TypeStats>({});
+  const [chartOrdersMaintenancesRefuels, setChartOrdersMaintenancesRefuels] =
+    useState<
+      { date: string; order: number; maintenance: number; refuel: number }[]
+    >([]);
 
   const preferencesHidden =
     preferences?.hidden && typeof preferences?.hidden === "object"
@@ -72,7 +78,10 @@ const DashboardServices = function ({
           toast.warning(t.toast.warning_error, {
             description: t.stacks.no_find_item,
           });
-          console.warn("[src/pages/Dashboard.tsx]", responseServicesStats.data);
+          console.warn(
+            "[src/pages/dashboard/DashboardServices.tsx]",
+            responseServicesStats.data,
+          );
           return;
         }
         setStatsServices(responseServicesStats.data.result);
@@ -95,7 +104,10 @@ const DashboardServices = function ({
           toast.warning(t.toast.warning_error, {
             description: t.stacks.no_find_item,
           });
-          console.warn("[src/pages/Dashboard.tsx]", responseOrdersStats.data);
+          console.warn(
+            "[src/pages/dashboard/DashboardServices.tsx]",
+            responseOrdersStats.data,
+          );
           return;
         }
         setStatsOrders(responseOrdersStats.data.result);
@@ -118,7 +130,10 @@ const DashboardServices = function ({
           toast.warning(t.toast.warning_error, {
             description: t.stacks.no_find_item,
           });
-          console.warn("[src/pages/Dashboard.tsx]", responseVehiclesStats.data);
+          console.warn(
+            "[src/pages/dashboard/DashboardServices.tsx]",
+            responseVehiclesStats.data,
+          );
           return;
         }
         setStatsVehicles(responseVehiclesStats.data.result);
@@ -127,9 +142,48 @@ const DashboardServices = function ({
         toast.error(t.toast.warning_error, {
           description: t.stacks.no_find_item,
         });
-        console.error("[src/pages/Dashboard.tsx]", err);
+        console.error("[src/pages/dashboard/DashboardServices.tsx]", err);
       } finally {
         setLoading(false);
+      }
+      return;
+    },
+    [interval, workspaceId],
+  );
+
+  // fetch charts
+  useAsync(
+    async function () {
+      try {
+        const response = await apis.Dashboard.ChartOrdersMaintenancesRefuels<
+          {
+            date: string;
+            order: number;
+            maintenance: number;
+            refuel: number;
+          }[]
+        >(instance.name, token, workspaceId, {
+          dateStart: interval.start
+            ? interval.start.toISOString()
+            : startOfYear(new Date()).toISOString(),
+          dateEnd: interval.end
+            ? interval.end.toISOString()
+            : endOfDay(new Date()).toISOString(),
+        });
+        if (!response.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          return;
+        }
+        setChartOrdersMaintenancesRefuels(response.data.result);
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/dashboard/DashboardServices.tsx]", err);
       }
       return;
     },
@@ -448,6 +502,96 @@ const DashboardServices = function ({
             footer={t.dashboard.stats_vehicles_maintenance_description}
           />
         </Horizontal>
+      )}
+
+      {!preferencesHidden?.servicesCharts && (
+        <div>
+          <Wrapper
+            title={t.dashboard.chart_sales_purchases_title}
+            description={t.dashboard.chart_sales_purchases_description}
+          >
+            <ChartLine
+              id="chart_orders_maintenances_refuels"
+              height={320}
+              gridProps={{
+                stroke: "#dedede",
+                strokeWidth: 1,
+                vertical: false,
+                horizontal: true,
+              }}
+              margin={{ top: 8, right: 8, left: 48, bottom: 16 }}
+              lines={[
+                {
+                  type: "monotone",
+                  name: t.order.orders,
+                  dataKey: "order",
+                  stroke: "var(--successColor)",
+                  strokeDasharray: "1",
+                  strokeWidth: 4,
+                  dot: false,
+                  formatter: (value: number) =>
+                    new Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    }).format(value || 0),
+                },
+                {
+                  type: "monotone",
+                  name: t.vehicle.maintenance,
+                  dataKey: "maintenance",
+                  stroke: "var(--warningColor)",
+                  strokeDasharray: "1",
+                  strokeWidth: 4,
+                  dot: false,
+                  formatter: (value: number) =>
+                    new Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    }).format(value || 0),
+                },
+                {
+                  type: "monotone",
+                  name: t.vehicle.refuel,
+                  dataKey: "refuel",
+                  stroke: "var(--dangerColor)",
+                  strokeDasharray: "1",
+                  strokeWidth: 4,
+                  dot: false,
+                  formatter: (value: number) =>
+                    new Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    }).format(value || 0),
+                },
+              ]}
+              axisXProps={{
+                stroke: "#bebebe",
+                strokeWidth: 1,
+                dataKey: "date",
+                tick: {
+                  fontSize: 10,
+                  fill: "#222",
+                  angle: 30,
+                  dy: 16,
+                } as Record<string, number | string>,
+                interval: 0,
+                padding: { left: 15, right: 15 },
+              }}
+              axisYProps={{
+                tick: { fontSize: 10, fill: "#222" },
+                stroke: "",
+                strokeWidth: 0,
+                width: 24,
+                tickFormatter: (value) =>
+                  new Intl.NumberFormat(instance.language, {
+                    currency: instance.currency,
+                    style: "currency",
+                  }).format(value || 0),
+              }}
+              data={chartOrdersMaintenancesRefuels}
+            />
+          </Wrapper>
+        </div>
       )}
     </React.Fragment>
   );
