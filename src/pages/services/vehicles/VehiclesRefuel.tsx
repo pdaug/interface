@@ -153,7 +153,7 @@ const VehiclesRefuel = function () {
         toast.success(t.toast.success, {
           description: t.toast.success_edit,
         });
-        navigate(`/f/vehicles/inspect/${id}`);
+        navigate(`/f/vehicles/inspect/${form.vehicleId}`);
         return;
       }
       // is creating
