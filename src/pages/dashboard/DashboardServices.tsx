@@ -12,6 +12,7 @@ import {
   DashboardHiddenProps,
   DashboardIntervalProps,
 } from "../../types/Dashboard";
+import { ApiPreference } from "../../types/Api";
 
 // hooks
 import useAsync from "../../hooks/useAsync";
@@ -22,10 +23,9 @@ import useTranslate from "../../hooks/useTranslate";
 // components
 import Stats from "../../components/stats/Stats";
 import Button from "../../components/buttons/Button";
-import { Horizontal, Vertical } from "../../components/aligns/Align";
 import { useDialog } from "../../components/dialogs/Dialog";
 import { InputSelect } from "../../components/inputs/Input";
-import { ApiPreference } from "../../types/Api";
+import { Horizontal, Vertical } from "../../components/aligns/Align";
 
 const DashboardServices = function ({
   hidden,
@@ -41,6 +41,7 @@ const DashboardServices = function ({
 
   const [statsOrders, setStatsOrders] = useState<TypeStats>({});
   const [statsServices, setStatsServices] = useState<TypeStats>({});
+  const [statsVehicles, setStatsVehicles] = useState<TypeStats>({});
 
   const preferencesHidden =
     preferences?.hidden && typeof preferences?.hidden === "object"
@@ -98,6 +99,29 @@ const DashboardServices = function ({
           return;
         }
         setStatsOrders(responseOrdersStats.data.result);
+
+        const responseVehiclesStats = await apis.Vehicle.stats<TypeStats>(
+          token,
+          instance.name,
+          {
+            dateStart: interval.start
+              ? interval.start.toISOString()
+              : startOfYear(new Date()).toISOString(),
+            dateEnd: interval.end
+              ? interval.end.toISOString()
+              : endOfDay(new Date()).toISOString(),
+          },
+          workspaceId,
+        );
+        if (!responseVehiclesStats.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          console.warn("[src/pages/Dashboard.tsx]", responseVehiclesStats.data);
+          return;
+        }
+        setStatsVehicles(responseVehiclesStats.data.result);
       } catch (err) {
         play("alert");
         toast.error(t.toast.warning_error, {
@@ -393,7 +417,7 @@ const DashboardServices = function ({
             loading={loading}
             Icon={Truck}
             title={t.dashboard.stats_vehicles_title}
-            value={0}
+            value={statsVehicles.quantity || 0}
             valueUnit={t.vehicle.vehicle.toLowerCase()}
             footer={t.dashboard.stats_vehicles_description}
           />
@@ -405,7 +429,7 @@ const DashboardServices = function ({
             category="Warning"
             Icon={Truck}
             title={t.dashboard.stats_vehicles_fuel}
-            value={0}
+            value={-statsVehicles.refuels || 0}
             valueLocale={instance.language}
             valueOptions={{ style: "currency", currency: instance.currency }}
             footer={t.dashboard.stats_vehicles_fuel_description}
@@ -418,7 +442,7 @@ const DashboardServices = function ({
             category="Warning"
             Icon={Truck}
             title={t.dashboard.stats_vehicles_maintenance}
-            value={-0}
+            value={-statsVehicles.maintenances || 0}
             valueLocale={instance.language}
             valueOptions={{ style: "currency", currency: instance.currency }}
             footer={t.dashboard.stats_vehicles_maintenance_description}
