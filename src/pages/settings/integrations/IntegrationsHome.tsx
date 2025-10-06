@@ -75,7 +75,7 @@ const IntegrationsHome = function () {
                       <iframe
                         height={400}
                         style={{ border: "none", width: "100%" }}
-                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        src="https://www.youtube.com/embed/mx5WGJPhfvA?si=mB9xElXB9CjheQjp"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       />
                     ),
@@ -143,7 +143,7 @@ const IntegrationsHome = function () {
                       <iframe
                         height={400}
                         style={{ border: "none", width: "100%" }}
-                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        src="https://www.youtube.com/embed/mx5WGJPhfvA?si=mB9xElXB9CjheQjp"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       />
                     ),
@@ -205,7 +205,7 @@ const IntegrationsHome = function () {
                       <iframe
                         height={400}
                         style={{ border: "none", width: "100%" }}
-                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        src="https://www.youtube.com/embed/mx5WGJPhfvA?si=mB9xElXB9CjheQjp"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       />
                     ),
@@ -269,7 +269,7 @@ const IntegrationsHome = function () {
                       <iframe
                         height={400}
                         style={{ border: "none", width: "100%" }}
-                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        src="https://www.youtube.com/embed/mx5WGJPhfvA?si=mB9xElXB9CjheQjp"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       />
                     ),
@@ -337,7 +337,7 @@ const IntegrationsHome = function () {
                       <iframe
                         height={400}
                         style={{ border: "none", width: "100%" }}
-                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        src="https://www.youtube.com/embed/mx5WGJPhfvA?si=mB9xElXB9CjheQjp"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       />
                     ),
@@ -399,7 +399,7 @@ const IntegrationsHome = function () {
                       <iframe
                         height={400}
                         style={{ border: "none", width: "100%" }}
-                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        src="https://www.youtube.com/embed/mx5WGJPhfvA?si=mB9xElXB9CjheQjp"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       />
                     ),
@@ -465,7 +465,7 @@ const IntegrationsHome = function () {
                       <iframe
                         height={400}
                         style={{ border: "none", width: "100%" }}
-                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        src="https://www.youtube.com/embed/mx5WGJPhfvA?si=mB9xElXB9CjheQjp"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       />
                     ),
@@ -531,7 +531,7 @@ const IntegrationsHome = function () {
                       <iframe
                         height={400}
                         style={{ border: "none", width: "100%" }}
-                        src="https://www.youtube.com/embed/L-yA7-puosA"
+                        src="https://www.youtube.com/embed/mx5WGJPhfvA?si=mB9xElXB9CjheQjp"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       />
                     ),
