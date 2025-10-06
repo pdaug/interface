@@ -185,14 +185,14 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
             animation
             hidden={hidden}
             loading={loading}
-            metric={0.1}
-            metricStatus="Up"
-            metricLocale="pt-BR"
-            metricOptions={{ style: "percent" }}
+            // metric={0}
+            // metricStatus="Up"
+            // metricLocale="pt-BR"
+            // metricOptions={{ style: "percent" }}
             title={t.dashboard.stats_inflows_title}
             Icon={TrendUp}
             category="Success"
-            value={5000}
+            value={0}
             valueLocale={instance.language}
             valueOptions={{ style: "currency", currency: instance.currency }}
             footer={t.dashboard.stats_inflows_description}
@@ -204,7 +204,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
             loading={loading}
             title={t.dashboard.stats_inflows_receive_title}
             Icon={TrendUp}
-            value={500}
+            value={0}
             valueLocale={instance.language}
             valueOptions={{ style: "currency", currency: instance.currency }}
             footer={t.dashboard.stats_inflows_receive_description}
@@ -216,7 +216,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
             loading={loading}
             title={t.dashboard.stats_inflows_late_title}
             Icon={TrendUp}
-            value={1000}
+            value={0}
             valueLocale={instance.language}
             valueOptions={{ style: "currency", currency: instance.currency }}
             footer={t.dashboard.stats_inflows_late_description}
@@ -230,14 +230,14 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
             animation
             hidden={hidden}
             loading={loading}
-            metric={0.05}
-            metricStatus="Down"
-            metricLocale="pt-BR"
-            metricOptions={{ style: "percent" }}
+            // metric={0.05}
+            // metricStatus="Down"
+            // metricLocale="pt-BR"
+            // metricOptions={{ style: "percent" }}
             title={t.dashboard.stats_outflows_title}
             Icon={TrendDown}
             category="Danger"
-            value={-1000}
+            value={0}
             valueLocale={instance.language}
             valueOptions={{ style: "currency", currency: instance.currency }}
             footer={t.dashboard.stats_outflows_description}
@@ -249,7 +249,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
             loading={loading}
             title={t.dashboard.stats_outflows_pay_title}
             Icon={TrendDown}
-            value={-50}
+            value={0}
             valueLocale={instance.language}
             valueOptions={{ style: "currency", currency: instance.currency }}
             footer={t.dashboard.stats_outflows_pay_description}
@@ -261,7 +261,7 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
             loading={loading}
             title={t.dashboard.stats_outflows_late_title}
             Icon={TrendDown}
-            value={-100}
+            value={0}
             valueLocale={instance.language}
             valueOptions={{ style: "currency", currency: instance.currency }}
             footer={t.dashboard.stats_outflows_late_description}
@@ -320,15 +320,17 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
                     style: "currency",
                   }).format(value),
               }}
-              data={[
-                { date: "01/01", inflow: 1000 },
-                { date: "02/01", inflow: 500 },
-                { date: "03/01", inflow: 2000 },
-                { date: "04/01", inflow: 500 },
-                { date: "05/01", inflow: 0 },
-                { date: "06/01", inflow: 0 },
-                { date: "07/01", inflow: 1000 },
-              ]}
+              data={
+                [
+                  // { date: "01/01", inflow: 1000 },
+                  // { date: "02/01", inflow: 500 },
+                  // { date: "03/01", inflow: 2000 },
+                  // { date: "04/01", inflow: 500 },
+                  // { date: "05/01", inflow: 0 },
+                  // { date: "06/01", inflow: 0 },
+                  // { date: "07/01", inflow: 1000 },
+                ]
+              }
             />
           </Wrapper>
         )}
@@ -383,15 +385,17 @@ const DashboardFinancial = function ({ hidden }: DashboardHiddenProps) {
                     style: "currency",
                   }).format(value),
               }}
-              data={[
-                { date: "01/01", outflow: 50 },
-                { date: "02/01", outflow: 100 },
-                { date: "03/01", outflow: 200 },
-                { date: "04/01", outflow: 150 },
-                { date: "05/01", outflow: 50 },
-                { date: "06/01", outflow: 100 },
-                { date: "07/01", outflow: 100 },
-              ]}
+              data={
+                [
+                  // { date: "01/01", outflow: 50 },
+                  // { date: "02/01", outflow: 100 },
+                  // { date: "03/01", outflow: 200 },
+                  // { date: "04/01", outflow: 150 },
+                  // { date: "05/01", outflow: 50 },
+                  // { date: "06/01", outflow: 100 },
+                  // { date: "07/01", outflow: 100 },
+                ]
+              }
             />
           </Wrapper>
         )}
