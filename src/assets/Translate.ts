@@ -55,6 +55,8 @@ const TranslatePt = {
     plan_limit_users: "O seu plano contem um limite de usuários",
     only_schedules_with_priority:
       "Somente os itens com prioridade serão mostrados na tabela",
+    only_new_customers:
+      "Somente os dados de novos clientes no período serão mostrados",
   },
   components: {
     average: "Média",
@@ -1413,6 +1415,8 @@ const TranslateEn = {
     plan_limit_users: "Your plan contains a limit of users",
     only_schedules_with_priority:
       "Only schedules with priority will be shown in the table",
+    only_new_customers:
+      "Only the data of new customers in the period will be shown",
   },
   components: {
     average: "Average",

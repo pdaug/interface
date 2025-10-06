@@ -30,6 +30,7 @@ import Badge from "../../components/badges/Badge";
 import Button from "../../components/buttons/Button";
 import Profile from "../../components/profiles/Profile";
 import Tooltip from "../../components/tooltips/Tooltip";
+import Callout from "../../components/callouts/Callout";
 import { useDialog } from "../../components/dialogs/Dialog";
 import { InputSelect } from "../../components/inputs/Input";
 import Table, { TableData } from "../../components/tables/Table";
@@ -459,6 +460,16 @@ const DashboardCustomers = function ({
           />
         </Horizontal>
       )}
+
+      <div>
+        <Callout
+          Icon={IdentificationCard}
+          IconSize={16}
+          category="Warning"
+          text={t.callout.only_new_customers}
+          styles={{ fontSize: "var(--textSmall)" }}
+        />
+      </div>
     </React.Fragment>
   );
 };
