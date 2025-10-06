@@ -507,8 +507,10 @@ const DashboardServices = function ({
       {!preferencesHidden?.servicesCharts && (
         <div>
           <Wrapper
-            title={t.dashboard.chart_sales_purchases_title}
-            description={t.dashboard.chart_sales_purchases_description}
+            title={t.dashboard.chart_orders_maintenances_refuels_title}
+            description={
+              t.dashboard.chart_orders_maintenances_refuels_description
+            }
           >
             <ChartLine
               id="chart_orders_maintenances_refuels"

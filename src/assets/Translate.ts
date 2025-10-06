@@ -312,6 +312,10 @@ const TranslatePt = {
     chart_schedules_time: "Itens agendados ao longo do tempo",
     chart_schedules_time_description:
       "Visualização dos itens agendados ao longo do período.",
+    chart_orders_maintenances_refuels_title:
+      "Ordens, manutenções e abastecimentos ao longo do tempo",
+    chart_orders_maintenances_refuels_description:
+      "Visualização das ordens, manutenções e abastecimentos ao longo do período.",
     // stats exchange and indexes
     stats_index_selic: "SELIC",
     stats_index_selic_description: "O que é a SELIC?",
@@ -1679,6 +1683,10 @@ const TranslateEn = {
     chart_schedules_time: "Items scheduled over time",
     chart_schedules_time_description:
       "Visualization of the scheduled items over the selected time range.",
+    chart_orders_maintenances_refuels_title:
+      "Orders, maintenances and refuels over time",
+    chart_orders_maintenances_refuels_description:
+      "Visualization of the orders, maintenances and refuels over the selected time range.",
     // stats exchange and indexes
     stats_index_selic: "SELIC",
     stats_index_selic_description: "What is the SELIC?",
