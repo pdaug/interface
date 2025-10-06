@@ -149,6 +149,10 @@ const Dashboard = function () {
           inflows: preferencesHidden?.inflows || false,
           outflows: preferencesHidden?.outflows || false,
 
+          customersStats: preferencesHidden?.customersStats || false,
+          customersCharts: preferencesHidden?.customersCharts || false,
+          customersTable: preferencesHidden?.customersTable || false,
+
           schedulesStats: preferencesHidden?.schedulesStats || false,
           schedulesCharts: preferencesHidden?.schedulesCharts || false,
           schedulesTable: preferencesHidden?.schedulesTable || false,
@@ -166,40 +170,76 @@ const Dashboard = function () {
 
         return (
           <Vertical internal={1}>
-            <InputSelect
-              empty={t.stacks.no_option}
-              label={t.dashboard.exchanges_indexes}
-              value={String(hidden?.exchanges && hidden?.indexes)}
-              options={[
-                {
-                  id: "true",
-                  value: "true",
-                  text: t.components.hide,
-                },
-                {
-                  id: "false",
-                  value: "false",
-                  text: t.components.show,
-                },
-              ]}
-              onChange={function (event) {
-                const newHidden = { ...hidden };
-                if (event.target?.value === "true") {
-                  newHidden.exchanges = true;
-                  newHidden.indexes = true;
-                } else {
-                  newHidden.exchanges = false;
-                  newHidden.indexes = false;
-                }
-                setHidden(newHidden);
-                return;
-              }}
-            />
+            <Horizontal internal={1}>
+              <InputSelect
+                empty={t.stacks.no_option}
+                label={t.dashboard.exchanges_indexes}
+                value={String(hidden?.exchanges && hidden?.indexes)}
+                options={[
+                  {
+                    id: "true",
+                    value: "true",
+                    text: t.components.hide,
+                  },
+                  {
+                    id: "false",
+                    value: "false",
+                    text: t.components.show,
+                  },
+                ]}
+                onChange={function (event) {
+                  const newHidden = { ...hidden };
+                  if (event.target?.value === "true") {
+                    newHidden.exchanges = true;
+                    newHidden.indexes = true;
+                  } else {
+                    newHidden.exchanges = false;
+                    newHidden.indexes = false;
+                  }
+                  setHidden(newHidden);
+                  return;
+                }}
+              />
+
+              <InputSelect
+                empty={t.stacks.no_option}
+                label={t.financial.financial}
+                value={String(hidden?.inflows && hidden?.outflows)}
+                options={[
+                  {
+                    id: "true",
+                    value: "true",
+                    text: t.components.hide,
+                  },
+                  {
+                    id: "false",
+                    value: "false",
+                    text: t.components.show,
+                  },
+                ]}
+                onChange={function (event) {
+                  const newHidden = { ...hidden };
+                  if (event.target?.value === "true") {
+                    newHidden.inflows = true;
+                    newHidden.outflows = true;
+                  } else {
+                    newHidden.inflows = false;
+                    newHidden.outflows = false;
+                  }
+                  setHidden(newHidden);
+                  return;
+                }}
+              />
+            </Horizontal>
 
             <InputSelect
               empty={t.stacks.no_option}
-              label={t.financial.financial}
-              value={String(hidden?.inflows && hidden?.outflows)}
+              label={t.customer.customers}
+              value={String(
+                hidden?.customersStats &&
+                  hidden?.customersCharts &&
+                  hidden?.customersTable,
+              )}
               options={[
                 {
                   id: "true",
@@ -215,11 +255,13 @@ const Dashboard = function () {
               onChange={function (event) {
                 const newHidden = { ...hidden };
                 if (event.target?.value === "true") {
-                  newHidden.inflows = true;
-                  newHidden.outflows = true;
+                  newHidden.customersStats = true;
+                  newHidden.customersCharts = true;
+                  newHidden.customersTable = true;
                 } else {
-                  newHidden.inflows = false;
-                  newHidden.outflows = false;
+                  newHidden.customersStats = false;
+                  newHidden.customersCharts = false;
+                  newHidden.customersTable = false;
                 }
                 setHidden(newHidden);
                 return;
@@ -262,83 +304,85 @@ const Dashboard = function () {
               }}
             />
 
-            <InputSelect
-              empty={t.stacks.no_option}
-              label={t.product.products}
-              value={String(
-                hidden?.productsStats &&
-                  hidden?.productsSales &&
-                  hidden?.productsPurchases &&
-                  hidden?.productsCharts,
-              )}
-              options={[
-                {
-                  id: "true",
-                  value: "true",
-                  text: t.components.hide,
-                },
-                {
-                  id: "false",
-                  value: "false",
-                  text: t.components.show,
-                },
-              ]}
-              onChange={function (event) {
-                const newHidden = { ...hidden };
-                if (event.target?.value === "true") {
-                  newHidden.productsStats = true;
-                  newHidden.productsSales = true;
-                  newHidden.productsPurchases = true;
-                  newHidden.productsCharts = true;
-                } else {
-                  newHidden.productsStats = false;
-                  newHidden.productsSales = false;
-                  newHidden.productsPurchases = false;
-                  newHidden.productsCharts = false;
-                }
-                setHidden(newHidden);
-                return;
-              }}
-            />
+            <Horizontal internal={1}>
+              <InputSelect
+                empty={t.stacks.no_option}
+                label={t.product.products}
+                value={String(
+                  hidden?.productsStats &&
+                    hidden?.productsSales &&
+                    hidden?.productsPurchases &&
+                    hidden?.productsCharts,
+                )}
+                options={[
+                  {
+                    id: "true",
+                    value: "true",
+                    text: t.components.hide,
+                  },
+                  {
+                    id: "false",
+                    value: "false",
+                    text: t.components.show,
+                  },
+                ]}
+                onChange={function (event) {
+                  const newHidden = { ...hidden };
+                  if (event.target?.value === "true") {
+                    newHidden.productsStats = true;
+                    newHidden.productsSales = true;
+                    newHidden.productsPurchases = true;
+                    newHidden.productsCharts = true;
+                  } else {
+                    newHidden.productsStats = false;
+                    newHidden.productsSales = false;
+                    newHidden.productsPurchases = false;
+                    newHidden.productsCharts = false;
+                  }
+                  setHidden(newHidden);
+                  return;
+                }}
+              />
 
-            <InputSelect
-              empty={t.stacks.no_option}
-              label={t.service.services}
-              value={String(
-                hidden?.servicesStats &&
-                  hidden?.servicesOrders &&
-                  hidden?.servicesVehicles &&
-                  hidden?.servicesCharts,
-              )}
-              options={[
-                {
-                  id: "true",
-                  value: "true",
-                  text: t.components.hide,
-                },
-                {
-                  id: "false",
-                  value: "false",
-                  text: t.components.show,
-                },
-              ]}
-              onChange={function (event) {
-                const newHidden = { ...hidden };
-                if (event.target?.value === "true") {
-                  newHidden.servicesStats = true;
-                  newHidden.servicesOrders = true;
-                  newHidden.servicesVehicles = true;
-                  newHidden.servicesCharts = true;
-                } else {
-                  newHidden.servicesStats = false;
-                  newHidden.servicesOrders = false;
-                  newHidden.servicesVehicles = false;
-                  newHidden.servicesCharts = false;
-                }
-                setHidden(newHidden);
-                return;
-              }}
-            />
+              <InputSelect
+                empty={t.stacks.no_option}
+                label={t.service.services}
+                value={String(
+                  hidden?.servicesStats &&
+                    hidden?.servicesOrders &&
+                    hidden?.servicesVehicles &&
+                    hidden?.servicesCharts,
+                )}
+                options={[
+                  {
+                    id: "true",
+                    value: "true",
+                    text: t.components.hide,
+                  },
+                  {
+                    id: "false",
+                    value: "false",
+                    text: t.components.show,
+                  },
+                ]}
+                onChange={function (event) {
+                  const newHidden = { ...hidden };
+                  if (event.target?.value === "true") {
+                    newHidden.servicesStats = true;
+                    newHidden.servicesOrders = true;
+                    newHidden.servicesVehicles = true;
+                    newHidden.servicesCharts = true;
+                  } else {
+                    newHidden.servicesStats = false;
+                    newHidden.servicesOrders = false;
+                    newHidden.servicesVehicles = false;
+                    newHidden.servicesCharts = false;
+                  }
+                  setHidden(newHidden);
+                  return;
+                }}
+              />
+            </Horizontal>
 
             <Horizontal internal={1} styles={{ justifyContent: "flex-end" }}>
               <Button
