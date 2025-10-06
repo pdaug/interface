@@ -51,6 +51,22 @@ export const ApiBaseCrud = function (path: string) {
       const config: AxiosRequestConfig = { headers, params };
       return ApiBase.get<ApiResponse<T>>(`/${path}`, config);
     },
+    fetch: function <T>(
+      Authorization: string,
+      instance: string,
+      params: {
+        ids: string;
+      },
+      workspaceId?: string,
+    ) {
+      const headers = {
+        Authorization,
+        "X-Instance": instance,
+        "X-Workspace": workspaceId,
+      };
+      const config: AxiosRequestConfig = { headers, params };
+      return ApiBase.get<ApiResponse<T>>(`/${path}/fetch`, config);
+    },
     get: function <T>(
       Authorization: string,
       instance: string,

@@ -57,6 +57,8 @@ const TranslatePt = {
       "Somente os itens com prioridade serão mostrados na tabela",
   },
   components: {
+    average: "Média",
+    frequency: "Frequência",
     new: "Novo",
     of: "de",
     to_invoice: "Faturar",
@@ -336,10 +338,10 @@ const TranslatePt = {
       "Quantidade de clientes cadastrados no período.",
     stats_customers_average: "Média de venda por cliente",
     stats_customers_average_description:
-      "Média que o cliente gastou no período.",
+      "Valor total das vendas / Total de clientes.",
     stats_customers_frequency: "Frequência de venda por cliente",
     stats_customers_frequency_description:
-      "Média de compra feita por clientes no período.",
+      "Quantidade de vendas / Total de clientes.",
     // stats schedules
     stats_schedules_title: "Itens agendados",
     stats_schedules_description: "Quantidade de itens agendados no período.",
@@ -1413,6 +1415,8 @@ const TranslateEn = {
       "Only schedules with priority will be shown in the table",
   },
   components: {
+    average: "Average",
+    frequency: "Frequency",
     new: "New",
     of: "of",
     to_invoice: "To invoice",

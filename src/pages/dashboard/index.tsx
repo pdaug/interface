@@ -528,7 +528,11 @@ const Dashboard = function () {
         <DashboardFinancial hidden={hidden} />
       )}
 
-      <DashboardCustomers interval={interval} hidden={hidden} />
+      {(!preferencesHidden?.customersStats ||
+        !preferencesHidden?.customersCharts ||
+        !preferencesHidden?.customersTable) && (
+        <DashboardCustomers interval={interval} hidden={hidden} />
+      )}
 
       {(!preferencesHidden?.schedulesStats ||
         !preferencesHidden?.schedulesCharts ||

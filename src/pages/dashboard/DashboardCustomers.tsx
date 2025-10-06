@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { endOfDay, startOfYear } from "date-fns";
 import { FunnelSimple, IdentificationCard } from "@phosphor-icons/react";
 
@@ -13,18 +14,25 @@ import {
   DashboardIntervalProps,
 } from "../../types/Dashboard";
 import { ApiPreference } from "../../types/Api";
+import { TypeCustomer } from "../../types/Customers";
 
 // hooks
 import useAsync from "../../hooks/useAsync";
 import useSounds from "../../hooks/useSounds";
 import useSystem from "../../hooks/useSystem";
+import useCurrency from "../../hooks/useCurrency";
+import useDateTime from "../../hooks/useDateTime";
 import useTranslate from "../../hooks/useTranslate";
 
 // components
 import Stats from "../../components/stats/Stats";
+import Badge from "../../components/badges/Badge";
 import Button from "../../components/buttons/Button";
+import Profile from "../../components/profiles/Profile";
+import Tooltip from "../../components/tooltips/Tooltip";
 import { useDialog } from "../../components/dialogs/Dialog";
 import { InputSelect } from "../../components/inputs/Input";
+import Table, { TableData } from "../../components/tables/Table";
 import { Horizontal, Vertical } from "../../components/aligns/Align";
 
 const DashboardCustomers = function ({
@@ -33,12 +41,19 @@ const DashboardCustomers = function ({
 }: DashboardHiddenProps & DashboardIntervalProps) {
   const t = useTranslate();
   const play = useSounds();
+  const Currency = useCurrency();
+  const navigate = useNavigate();
   const { instance } = useSystem();
+  const { instanceDateTime } = useDateTime();
   const { OpenDialog, CloseDialog } = useDialog();
-  const { user, token, preferences, workspaceId, setPreferences } = useSystem();
+  const { user, users, token, preferences, workspaceId, setPreferences } =
+    useSystem();
 
   const [loading, setLoading] = useState<boolean>(true);
+  const [customers, setCustomers] = useState<TypeCustomer[]>([]);
   const [statsCustomers, setStatsCustomers] = useState<TypeStats>({});
+
+  console.log(statsCustomers);
 
   const preferencesHidden =
     preferences?.hidden && typeof preferences?.hidden === "object"
@@ -89,7 +104,44 @@ const DashboardCustomers = function ({
       }
       return;
     },
-    [interval, workspaceId],
+    [interval, token, instance, workspaceId],
+  );
+
+  // fetch customers
+  useAsync(
+    async function () {
+      if (!statsCustomers?.salesValues) return;
+      const ids = Object.keys(statsCustomers.salesValues);
+      if (ids.length === 0) return;
+      const idsString = ids.join(",");
+      try {
+        const responseCustomers = await apis.Customer.fetch<TypeCustomer[]>(
+          token,
+          instance.name,
+          {
+            ids: idsString,
+          },
+          workspaceId,
+        );
+        if (!responseCustomers.data?.result) {
+          play("alert");
+          toast.warning(t.toast.warning_error, {
+            description: t.stacks.no_find_item,
+          });
+          return;
+        }
+        setCustomers(responseCustomers.data.result);
+        return;
+      } catch (err) {
+        play("alert");
+        toast.error(t.toast.warning_error, {
+          description: t.stacks.no_find_item,
+        });
+        console.error("[src/pages/dashboard/DashboardCustomers.tsx]", err);
+      }
+      return;
+    },
+    [token, instance, statsCustomers.salesValues, workspaceId],
   );
 
   const filterAction = function () {
@@ -102,6 +154,8 @@ const DashboardCustomers = function ({
         const [hidden, setHidden] = useState<Record<string, boolean>>({
           ...preferencesHidden,
           customersStats: preferencesHidden?.customersStats || false,
+          customersCharts: preferencesHidden?.customersCharts || false,
+          customersTable: preferencesHidden?.customersTable || false,
         });
 
         return (
@@ -125,6 +179,54 @@ const DashboardCustomers = function ({
               onChange={function (event) {
                 const newHidden = { ...hidden };
                 newHidden.customersStats = event.target?.value === "true";
+                setHidden(newHidden);
+                return;
+              }}
+            />
+
+            <InputSelect
+              empty={t.stacks.no_option}
+              label={t.components.charts}
+              value={String(hidden?.customersCharts)}
+              options={[
+                {
+                  id: "true",
+                  value: "true",
+                  text: t.components.hide,
+                },
+                {
+                  id: "false",
+                  value: "false",
+                  text: t.components.show,
+                },
+              ]}
+              onChange={function (event) {
+                const newHidden = { ...hidden };
+                newHidden.customersCharts = event.target?.value === "true";
+                setHidden(newHidden);
+                return;
+              }}
+            />
+
+            <InputSelect
+              empty={t.stacks.no_option}
+              label={t.components.table}
+              value={String(hidden?.customersTable)}
+              options={[
+                {
+                  id: "true",
+                  value: "true",
+                  text: t.components.hide,
+                },
+                {
+                  id: "false",
+                  value: "false",
+                  text: t.components.show,
+                },
+              ]}
+              onChange={function (event) {
+                const newHidden = { ...hidden };
+                newHidden.customersTable = event.target?.value === "true";
                 setHidden(newHidden);
                 return;
               }}
@@ -230,8 +332,130 @@ const DashboardCustomers = function ({
             title={t.dashboard.stats_customers_frequency}
             Icon={IdentificationCard}
             value={statsCustomers.averageSalesFrequency || 0}
-            valueUnit={t.sale.sales.toLowerCase()}
+            valueLocale={instance.language}
+            valueOptions={{ style: "percent" }}
             footer={t.dashboard.stats_customers_frequency_description}
+          />
+        </Horizontal>
+      )}
+
+      {!preferencesHidden?.customersTable && (
+        <Horizontal internal={1}>
+          <Table
+            border
+            noSelect
+            loading={loading}
+            data={customers as TableData[]}
+            styles={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+            }}
+            stylesBody={{ overflowY: "scroll" }}
+            columns={{
+              status: {
+                label: t.components.status,
+                maxWidth: "96px",
+                handler: function (data) {
+                  return (
+                    <Badge
+                      category={data.status ? "Success" : "Danger"}
+                      value={
+                        data.status
+                          ? t.components.active
+                          : t.components.inactive
+                      }
+                    />
+                  );
+                },
+              },
+              name: {
+                label: t.customer.name,
+                handler: function (data) {
+                  return (
+                    <div
+                      className="cursor"
+                      onClick={function () {
+                        navigate(`/f/customers/inspect/${data.id}`);
+                        return;
+                      }}
+                    >
+                      <Profile
+                        photoSize={4}
+                        padding={false}
+                        name={data.name as string}
+                        photo={(data.photo as string) ?? undefined}
+                        description={(data?.representativeName as string) || ""}
+                      />
+                    </div>
+                  );
+                },
+              },
+              average: {
+                label: t.components.average,
+                maxWidth: 180,
+                handler: function (data) {
+                  const average = statsCustomers?.salesValues?.[
+                    data.id as keyof typeof statsCustomers.salesValues
+                  ]
+                    ? Number(
+                        statsCustomers?.salesValues?.[
+                          data.id as keyof typeof statsCustomers.salesValues
+                        ],
+                      )
+                    : 0;
+                  return `${Currency(average)}/${t.sale.sale}`;
+                },
+              },
+              frequency: {
+                label: t.components.frequency,
+                maxWidth: 180,
+                handler: function (data) {
+                  const frequency = statsCustomers?.salesFrequency?.[
+                    data.id as keyof typeof statsCustomers.salesFrequency
+                  ]
+                    ? Number(
+                        statsCustomers?.salesFrequency?.[
+                          data.id as keyof typeof statsCustomers.salesFrequency
+                        ],
+                      )
+                    : 0;
+                  return `${frequency} ${t.sale.sales}`;
+                },
+              },
+              user: {
+                label: t.components.user,
+                maxWidth: 200,
+                handler: function (data) {
+                  const userFinded = users?.find(function (user) {
+                    return user.id === data.userId;
+                  });
+                  return (
+                    <Tooltip
+                      content={t.components[userFinded?.role || "collaborator"]}
+                    >
+                      <Profile
+                        photoCircle
+                        photoSize={3}
+                        padding={false}
+                        styles={{ lineHeight: 1 }}
+                        photo={userFinded?.photo || ""}
+                        description={userFinded?.email || ""}
+                        name={userFinded?.name || t.components.unknown}
+                      />
+                    </Tooltip>
+                  );
+                },
+              },
+              createdAt: {
+                label: t.components.created_at,
+                maxWidth: 180,
+                handler: function (data) {
+                  const datetime = instanceDateTime(data.createdAt as string);
+                  return datetime;
+                },
+              },
+            }}
           />
         </Horizontal>
       )}

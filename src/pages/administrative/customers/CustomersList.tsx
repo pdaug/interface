@@ -392,6 +392,9 @@ const CustomersList = function () {
           border
           loading={loading}
           data={customers as TableData[]}
+          selected={selected}
+          setSelected={setSelected}
+          options={getOptions}
           columns={{
             status: {
               label: t.components.status,
@@ -572,9 +575,6 @@ const CustomersList = function () {
               },
             },
           }}
-          selected={selected}
-          setSelected={setSelected}
-          options={getOptions}
         />
         <Pagination
           display
