@@ -192,6 +192,7 @@ const TranslatePt = {
     customers: "Clientes",
     new: "Novo cliente",
     // inputs
+    interactions: "Interações",
     name: "Nome do cliente",
     description: "Descrição",
     document: "Documento",
@@ -336,14 +337,23 @@ const TranslatePt = {
     stats_outflows_late_description: "Valor da despesa em atraso no período.",
     // stats customers
     stats_customers_title: "Novos clientes",
+    stats_customers_interation: "Interação dos clientes",
+    stats_customers_interation_description:
+      "Quantidade de interações dos clientes no período.",
     stats_customers_description:
       "Quantidade de clientes cadastrados no período.",
-    stats_customers_average: "Média de venda por cliente",
-    stats_customers_average_description:
+    stats_customers_sales_average: "Média de venda por cliente",
+    stats_customers_sales_average_description:
       "Valor total das vendas / Total de clientes.",
-    stats_customers_frequency: "Frequência de venda por cliente",
-    stats_customers_frequency_description:
+    stats_customers_sales_frequency: "Frequência de venda por cliente",
+    stats_customers_sales_frequency_description:
       "Quantidade de vendas / Total de clientes.",
+    stats_customers_orders_average: "Média de ordem por cliente",
+    stats_customers_orders_average_description:
+      "Valor total das ordens / Total de clientes.",
+    stats_customers_orders_frequency: "Frequência de ordem por cliente",
+    stats_customers_orders_frequency_description:
+      "Quantidade de ordens / Total de clientes.",
     // stats schedules
     stats_schedules_title: "Itens agendados",
     stats_schedules_description: "Quantidade de itens agendados no período.",
@@ -1552,6 +1562,7 @@ const TranslateEn = {
     customers: "Customers",
     new: "New customer",
     // inputs
+    interactions: "Interactions",
     name: "Customer name",
     description: "Description",
     document: "Document",
@@ -1696,14 +1707,23 @@ const TranslateEn = {
       "Total outflows that should have already been made",
     // stats customers
     stats_customers_title: "New customers",
+    stats_customers_interation: "Customers interaction",
+    stats_customers_interation_description:
+      "Quantity of interactions of customers in the period.",
     stats_customers_description:
       "Quantity of customers registered in the period.",
-    stats_customers_average: "Average spent by customer",
-    stats_customers_average_description:
-      "Average spent by customer in the period.",
-    stats_customers_frequency: "Frequency by customer",
-    stats_customers_frequency_description:
-      "Average purchase made by customers in the period.",
+    stats_customers_sales_average: "Average sales by customer",
+    stats_customers_sales_average_description:
+      "Total sales value / Total customers.",
+    stats_customers_sales_frequency: "Sales frequency by customer",
+    stats_customers_sales_frequency_description:
+      "Quantity of sales / Total customers.",
+    stats_customers_orders_average: "Average orders by customer",
+    stats_customers_orders_average_description:
+      "Total orders value / Total customers.",
+    stats_customers_orders_frequency: "Orders frequency by customer",
+    stats_customers_orders_frequency_description:
+      "Quantity of orders / Total customers.",
     // stats schedules
     stats_schedules_title: "Items scheduled",
     stats_schedules_description: "Quantity of items scheduled in the period.",

@@ -301,43 +301,83 @@ const DashboardCustomers = function ({
       </Horizontal>
 
       {!preferencesHidden?.customersStats && (
-        <Horizontal internal={1}>
-          <Stats
-            animation
-            hidden={hidden}
-            loading={loading}
-            title={t.dashboard.stats_customers_title}
-            Icon={IdentificationCard}
-            category="Info"
-            value={statsCustomers.quantity || 0}
-            valueUnit={t.customer.customers.toLowerCase()}
-            footer={t.dashboard.stats_customers_description}
-          />
+        <React.Fragment>
+          <Horizontal internal={1}>
+            <Stats
+              animation
+              hidden={hidden}
+              loading={loading}
+              title={t.dashboard.stats_customers_title}
+              Icon={IdentificationCard}
+              category="Info"
+              value={statsCustomers.quantity || 0}
+              valueUnit={t.customer.customers.toLowerCase()}
+              footer={t.dashboard.stats_customers_description}
+            />
 
-          <Stats
-            animation
-            hidden={hidden}
-            loading={loading}
-            title={t.dashboard.stats_customers_average}
-            Icon={IdentificationCard}
-            value={statsCustomers.averageSalesValues || 0}
-            valueLocale={instance.language}
-            valueOptions={{ style: "currency", currency: instance.currency }}
-            footer={t.dashboard.stats_customers_average_description}
-          />
+            <Stats
+              animation
+              hidden={hidden}
+              loading={loading}
+              title={t.dashboard.stats_customers_sales_average}
+              Icon={IdentificationCard}
+              value={statsCustomers.averageSalesValues || 0}
+              valueLocale={instance.language}
+              valueOptions={{ style: "currency", currency: instance.currency }}
+              footer={t.dashboard.stats_customers_sales_average_description}
+            />
 
-          <Stats
-            animation
-            hidden={hidden}
-            loading={loading}
-            title={t.dashboard.stats_customers_frequency}
-            Icon={IdentificationCard}
-            value={statsCustomers.averageSalesFrequency || 0}
-            valueLocale={instance.language}
-            valueOptions={{ style: "percent" }}
-            footer={t.dashboard.stats_customers_frequency_description}
-          />
-        </Horizontal>
+            <Stats
+              animation
+              hidden={hidden}
+              loading={loading}
+              title={t.dashboard.stats_customers_sales_frequency}
+              Icon={IdentificationCard}
+              value={statsCustomers.averageSalesFrequency || 0}
+              valueLocale={instance.language}
+              valueOptions={{ style: "percent" }}
+              footer={t.dashboard.stats_customers_sales_frequency_description}
+            />
+          </Horizontal>
+
+          <Horizontal internal={1}>
+            <Stats
+              animation
+              hidden={hidden}
+              loading={loading}
+              title={t.dashboard.stats_customers_interation}
+              Icon={IdentificationCard}
+              category="Info"
+              value={statsCustomers.interactions || 0}
+              valueUnit={t.customer.interactions.toLowerCase()}
+              footer={t.dashboard.stats_customers_interation_description}
+            />
+
+            <Stats
+              animation
+              hidden={hidden}
+              loading={loading}
+              title={t.dashboard.stats_customers_orders_average}
+              Icon={IdentificationCard}
+              value={statsCustomers.averageOrderValues || 0}
+              valueLocale={instance.language}
+              valueOptions={{ style: "currency", currency: instance.currency }}
+              footer={t.dashboard.stats_customers_orders_average_description}
+            />
+
+            <Stats
+              animation
+              hidden={hidden}
+              loading={loading}
+              title={t.dashboard.stats_customers_orders_frequency}
+              Icon={IdentificationCard}
+              value={statsCustomers.averageOrderFrequency || 0}
+              valueLocale={instance.language}
+              valueOptions={{ style: "percent" }}
+              footer={t.dashboard.stats_customers_orders_frequency_description}
+            />
+          </Horizontal>
+        </React.Fragment>
       )}
 
       {!preferencesHidden?.customersTable && (
@@ -392,8 +432,8 @@ const DashboardCustomers = function ({
                   );
                 },
               },
-              average: {
-                label: t.components.average,
+              sales: {
+                label: t.sale.sales,
                 maxWidth: 180,
                 handler: function (data) {
                   const average = statsCustomers?.salesValues?.[
@@ -405,13 +445,6 @@ const DashboardCustomers = function ({
                         ],
                       )
                     : 0;
-                  return `${Currency(average)}/${t.sale.sale}`;
-                },
-              },
-              frequency: {
-                label: t.components.frequency,
-                maxWidth: 180,
-                handler: function (data) {
                   const frequency = statsCustomers?.salesFrequency?.[
                     data.id as keyof typeof statsCustomers.salesFrequency
                   ]
@@ -421,7 +454,42 @@ const DashboardCustomers = function ({
                         ],
                       )
                     : 0;
-                  return `${frequency} ${t.sale.sales}`;
+                  return (
+                    <div>
+                      <div>{`${Currency(average)}/${t.sale.sale}`}</div>
+                      <div>{`${frequency} ${t.sale.sales}`}</div>
+                    </div>
+                  );
+                },
+              },
+              orders: {
+                label: t.order.orders,
+                maxWidth: 180,
+                handler: function (data) {
+                  const average = statsCustomers?.orderValues?.[
+                    data.id as keyof typeof statsCustomers.orderValues
+                  ]
+                    ? Number(
+                        statsCustomers?.orderValues?.[
+                          data.id as keyof typeof statsCustomers.orderValues
+                        ],
+                      )
+                    : 0;
+                  const frequency = statsCustomers?.orderFrequency?.[
+                    data.id as keyof typeof statsCustomers.orderFrequency
+                  ]
+                    ? Number(
+                        statsCustomers?.orderFrequency?.[
+                          data.id as keyof typeof statsCustomers.orderFrequency
+                        ],
+                      )
+                    : 0;
+                  return (
+                    <div>
+                      <div>{`${Currency(average)}/${t.order.order}`}</div>
+                      <div>{`${frequency} ${t.order.orders}`}</div>
+                    </div>
+                  );
                 },
               },
               user: {
