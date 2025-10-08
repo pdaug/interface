@@ -59,6 +59,10 @@ const TranslatePt = {
       "Somente os dados de novos clientes no período serão mostrados",
   },
   components: {
+    order_alphabetical: "Alfabética",
+    order_creation: "Criação",
+    order_newest: "Mais recentes",
+    order_oldest: "Mais antigos",
     average: "Média",
     frequency: "Frequência",
     new: "Novo",
@@ -1433,6 +1437,10 @@ const TranslateEn = {
       "Only the data of new customers in the period will be shown",
   },
   components: {
+    order_alphabetical: "Alphabetical",
+    order_creation: "Creation",
+    order_newest: "Newest",
+    order_oldest: "Oldest",
     average: "Average",
     frequency: "Frequency",
     new: "New",
