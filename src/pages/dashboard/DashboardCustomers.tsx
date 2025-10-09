@@ -379,7 +379,7 @@ const DashboardCustomers = function ({
       )}
 
       {!preferencesHidden?.customersTable && (
-        <Horizontal internal={1}>
+        <Horizontal styles={{ maxHeight: 400 }}>
           <Table
             border
             noSelect
