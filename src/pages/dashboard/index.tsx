@@ -40,9 +40,6 @@ import DashboardFinancial from "./DashboardFinancial";
 import DashboardExchangesIndexes from "./DashboardExchangesIndexes";
 
 const Dashboard = function () {
-  const t = useTranslate();
-  const play = useSounds();
-  const { OpenDialog, CloseDialog } = useDialog();
   const {
     user,
     token,
@@ -52,6 +49,9 @@ const Dashboard = function () {
     preferences,
     setPreferences,
   } = useSystem();
+  const t = useTranslate();
+  const play = useSounds();
+  const { OpenDialog, CloseDialog } = useDialog();
 
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: subDays(new Date(), 30),
@@ -547,8 +547,10 @@ const Dashboard = function () {
               OpenDialog({
                 width: 700,
                 category: "Success",
-                title: t.components.help,
+                // title: t.components.help,
+                title: "",
                 cancelText: t.components.close,
+                stylesContent: { padding: "4px", margin: 0 },
                 description: (
                   <iframe
                     height={400}

@@ -54,8 +54,6 @@ const DashboardCustomers = function ({
   const [customers, setCustomers] = useState<TypeCustomer[]>([]);
   const [statsCustomers, setStatsCustomers] = useState<TypeStats>({});
 
-  console.log(statsCustomers);
-
   const preferencesHidden =
     preferences?.hidden && typeof preferences?.hidden === "object"
       ? preferences?.hidden

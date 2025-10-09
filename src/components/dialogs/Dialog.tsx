@@ -29,6 +29,8 @@ export type DialogContextProps = {
   cancelText?: string;
   onCancel?: (() => void) | (() => Promise<void>);
   width?: number | string;
+  styles?: React.CSSProperties;
+  stylesContent?: React.CSSProperties;
 };
 
 export type DialogContextType = {
@@ -50,6 +52,8 @@ export const DialogProvider = function ({ children }: DialogProviderProps) {
     description: "",
     confirmText: "Confirmar",
     category: "Success",
+    styles: {},
+    stylesContent: {},
     onConfirm: function () {
       return;
     },
@@ -122,14 +126,19 @@ export const DialogElement = function () {
     <div className={`dialog ${dialogProps?.open ? "dialogOpen" : ""}`}>
       <div
         ref={dialogContainerRef}
-        style={{ width: dialogProps?.width || "35rem" }}
+        style={{ ...dialogProps?.styles, width: dialogProps?.width || "35rem" }}
         className={`dialogContainer ${dialogProps?.open ? "dialogContainerOpen" : ""}`}
       >
-        <div className="dialogContent">
-          <div className="dialogTitle">
-            {dialogProps.Icon && <dialogProps.Icon />}
-            <span>{dialogProps.title}</span>
-          </div>
+        <div
+          className="dialogContent"
+          style={{ ...dialogProps?.stylesContent }}
+        >
+          {dialogProps.title && (
+            <div className="dialogTitle">
+              {dialogProps.Icon && <dialogProps.Icon />}
+              <span>{dialogProps.title}</span>
+            </div>
+          )}
           <div className="dialogDescription">
             {typeof dialogProps.description === "function" ? (
               <dialogProps.description />
