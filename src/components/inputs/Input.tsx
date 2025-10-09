@@ -10,7 +10,7 @@ import {
   startOfMonth,
 } from "date-fns";
 import { withMask } from "use-mask-input";
-import React, { forwardRef, useEffect, useRef } from "react";
+import React, { forwardRef, useRef } from "react";
 import DatePicker, { CalendarContainer } from "react-datepicker";
 
 // locale
@@ -341,13 +341,6 @@ const InputInterval = function ({
   const t = useTranslate();
   const { instance } = useSystem();
   const { instanceDate } = useDateTime();
-
-  useEffect(() => {
-    // Reposiciona o calendário sempre que `viewDate` mudar
-    if (datePickerRef.current) {
-      datePickerRef.current.setOpen(true); // mantém aberto
-    }
-  }, [value[0]]);
 
   const noFilterDate = !value[0] && !value[1];
 
