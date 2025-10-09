@@ -328,7 +328,7 @@ const ProductsInspect = function () {
                 />
                 <Input
                   min={1}
-                  max={32}
+                  max={128}
                   required
                   name="name"
                   id="product_name"
@@ -607,11 +607,11 @@ const ProductsInspect = function () {
                     />
                     <Input
                       min={1}
-                      max={32}
+                      max={128}
                       required
+                      disabled={loading}
                       label={t.product.variant_name}
                       name={`variant.${index}.name`}
-                      disabled={loading}
                       id={`product_variant_${index}_name`}
                       placeholder={t.product.variant_name_placeholder}
                       value={form?.variants?.[index].name || ""}

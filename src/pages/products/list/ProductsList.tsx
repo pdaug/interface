@@ -358,6 +358,8 @@ const ProductsList = function () {
                   <Card
                     mode="Large"
                     key={product.id}
+                    stylesContent={{ flex: 1 }}
+                    styles={{ display: "flex", flexDirection: "column" }}
                     photo={product?.variants?.[0]?.photo || ""}
                     photoChildren={
                       <React.Fragment>
@@ -415,6 +417,7 @@ const ProductsList = function () {
                       style={{
                         color: "var(--textLight)",
                         fontSize: "var(--textSmall)",
+                        flex: 1,
                       }}
                     >
                       {product?.variants?.[0].name}
@@ -621,6 +624,8 @@ const ProductsList = function () {
           pageSize={pageSize}
         />
       </Vertical>
+
+      <div style={{ minHeight: 128 }}></div>
     </React.Fragment>,
   );
 };

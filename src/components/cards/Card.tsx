@@ -13,6 +13,7 @@ export type CardProps = {
   children: React.ReactNode;
   footer?: React.ReactNode;
   styles?: React.CSSProperties;
+  stylesContent?: React.CSSProperties;
   onClick?: () => void;
   onDoubleClick?: React.MouseEventHandler;
 };
@@ -26,6 +27,7 @@ const Card = function ({
   children,
   footer,
   styles,
+  stylesContent,
   onClick,
   onDoubleClick,
 }: CardProps) {
@@ -47,7 +49,9 @@ const Card = function ({
           <div className="cardPhotoChildren">{photoChildren}</div>
         </div>
       )}
-      <div className="cardContent">{children}</div>
+      <div className="cardContent" style={stylesContent}>
+        {children}
+      </div>
       {footer && <div className="cardFooter">{footer}</div>}
     </div>
   );
