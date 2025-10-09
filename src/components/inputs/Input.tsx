@@ -1,11 +1,23 @@
+import {
+  subDays,
+  endOfDay,
+  isToday,
+  endOfWeek,
+  isSameDay,
+  endOfMonth,
+  startOfDay,
+  startOfWeek,
+  startOfMonth,
+} from "date-fns";
 import { withMask } from "use-mask-input";
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import DatePicker, { CalendarContainer } from "react-datepicker";
-import { endOfDay, isSameDay, isToday, startOfDay, subDays } from "date-fns";
 
 // locale
 import { ptBR, enUS } from "date-fns/locale";
 import { registerLocale } from "react-datepicker";
+
+// register locales
 registerLocale("pt", ptBR);
 registerLocale("en", enUS);
 
@@ -324,9 +336,18 @@ const InputInterval = function ({
   readOnly,
   onChange,
 }: InputIntervalProps) {
+  const datePickerRef = useRef<DatePicker>(null);
+
   const t = useTranslate();
   const { instance } = useSystem();
   const { instanceDate } = useDateTime();
+
+  useEffect(() => {
+    // Reposiciona o calendário sempre que `viewDate` mudar
+    if (datePickerRef.current) {
+      datePickerRef.current.setOpen(true); // mantém aberto
+    }
+  }, [value[0]]);
 
   const noFilterDate = !value[0] && !value[1];
 
@@ -339,11 +360,23 @@ const InputInterval = function ({
     isSameDay(value[0], subDays(new Date(), 7)) &&
     isToday(value[1]);
 
+  const isIntervalThisWeek =
+    value[0] &&
+    value[1] &&
+    isSameDay(value[0], startOfWeek(new Date())) &&
+    isSameDay(value[1], endOfWeek(new Date()));
+
   const isIntervalMonth =
     value[0] &&
     value[1] &&
     isSameDay(value[0], subDays(new Date(), 30)) &&
     isToday(value[1]);
+
+  const isIntervalThisMonth =
+    value[0] &&
+    value[1] &&
+    isSameDay(value[0], startOfMonth(new Date())) &&
+    isSameDay(value[1], endOfMonth(new Date()));
 
   const ButtonInputInterval = forwardRef<
     HTMLDivElement,
@@ -358,8 +391,10 @@ const InputInterval = function ({
           <span>
             {noFilterDate && t.components.no_filter_date}
             {isIntervalToday && t.components.today}
-            {isIntervalWeek && t.components.this_week}
-            {isIntervalMonth && t.components.this_month}
+            {isIntervalWeek && t.components.week}
+            {isIntervalThisWeek && t.components.this_week}
+            {isIntervalMonth && t.components.month}
+            {isIntervalThisMonth && t.components.this_month}
           </span>
         ) : (
           <React.Fragment>
@@ -408,32 +443,66 @@ const InputInterval = function ({
                 }}
               />
             </Horizontal>
-            <Button
-              type="button"
-              category={isIntervalWeek ? "Info" : "Neutral"}
-              text={t.components.this_week}
-              onClick={function () {
-                if (onChange)
-                  onChange([
-                    startOfDay(subDays(new Date(), 7)),
-                    endOfDay(new Date()),
-                  ]);
-                return;
-              }}
-            />
-            <Button
-              type="button"
-              category={isIntervalMonth ? "Info" : "Neutral"}
-              text={t.components.this_month}
-              onClick={function () {
-                if (onChange)
-                  onChange([
-                    startOfDay(subDays(new Date(), 30)),
-                    endOfDay(new Date()),
-                  ]);
-                return;
-              }}
-            />
+            <Horizontal internal={0.4}>
+              <Button
+                type="button"
+                style={{ flex: 1 }}
+                category={isIntervalWeek ? "Info" : "Neutral"}
+                text={t.components.week}
+                onClick={function () {
+                  if (onChange)
+                    onChange([
+                      startOfDay(subDays(new Date(), 7)),
+                      endOfDay(new Date()),
+                    ]);
+                  return;
+                }}
+              />
+              <Button
+                type="button"
+                style={{ flex: 1 }}
+                category={isIntervalThisWeek ? "Info" : "Neutral"}
+                text={t.components.this_week}
+                onClick={function () {
+                  if (onChange)
+                    onChange([
+                      startOfDay(startOfWeek(new Date())),
+                      endOfDay(endOfWeek(new Date())),
+                    ]);
+                  return;
+                }}
+              />
+            </Horizontal>
+            <Horizontal internal={0.4}>
+              <Button
+                type="button"
+                style={{ flex: 1 }}
+                category={isIntervalMonth ? "Info" : "Neutral"}
+                text={t.components.month}
+                onClick={function () {
+                  if (onChange)
+                    onChange([
+                      startOfDay(subDays(new Date(), 30)),
+                      endOfDay(new Date()),
+                    ]);
+                  return;
+                }}
+              />
+              <Button
+                type="button"
+                style={{ flex: 1 }}
+                category={isIntervalThisMonth ? "Info" : "Neutral"}
+                text={t.components.this_month}
+                onClick={function () {
+                  if (onChange)
+                    onChange([
+                      startOfDay(startOfMonth(new Date())),
+                      endOfDay(endOfMonth(new Date())),
+                    ]);
+                  return;
+                }}
+              />
+            </Horizontal>
           </Vertical>
         </Vertical>
       </CalendarContainer>
@@ -450,7 +519,9 @@ const InputInterval = function ({
       )}
       <div className="inputInterval">
         <DatePicker
+          ref={datePickerRef}
           selectsRange
+          openToDate={value[0] ? value[0] : new Date()}
           name={name}
           readOnly={readOnly}
           disabled={disabled}
