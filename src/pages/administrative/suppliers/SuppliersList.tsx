@@ -35,6 +35,11 @@ import useTranslate from "../../../hooks/useTranslate";
 import usePermission from "../../../hooks/usePermission";
 
 // components
+import {
+  Input,
+  InputSelect,
+  InputInterval,
+} from "../../../components/inputs/Input";
 import Badge from "../../../components/badges/Badge";
 import Button from "../../../components/buttons/Button";
 import Tooltip from "../../../components/tooltips/Tooltip";
@@ -44,7 +49,6 @@ import Table, { TableData } from "../../../components/tables/Table";
 import Pagination from "../../../components/paginations/Pagination";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import { Input, InputInterval } from "../../../components/inputs/Input";
 
 const pageSize = 10;
 
@@ -62,6 +66,7 @@ const SuppliersList = function () {
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
+  const [order, setOrder] = useState<string>("createdAt");
   const [suppliers, setSuppliers] = useState<TypeSupplier[]>([]);
   const [interval, setInterval] = useState<TypeInputInterval>({
     start: startOfYear(new Date()),
@@ -73,6 +78,24 @@ const SuppliersList = function () {
   const FetchSuppliers = async function () {
     setLoading(true);
     try {
+      let orderSort = "";
+      let orderField = "";
+      if (order === "createdAt") {
+        orderSort = "desc";
+        orderField = "createdAt";
+      }
+      if (order === "newest") {
+        orderSort = "desc";
+        orderField = "createdAt";
+      }
+      if (order === "oldest") {
+        orderSort = "asc";
+        orderField = "createdAt";
+      }
+      if (order === "name") {
+        orderSort = "asc";
+        orderField = "name";
+      }
       const response = await apis.Supplier.list<
         ApiResponsePaginate<TypeSupplier>
       >(
@@ -81,8 +104,8 @@ const SuppliersList = function () {
         {
           pageSize,
           pageCurrent: searchDebounced ? 1 : page,
-          // searchField: "name",
-          // search: searchDebounced,
+          orderSort,
+          orderField,
           dateStart: interval.start ? interval.start.toISOString() : undefined,
           dateEnd: interval.end ? interval.end.toISOString() : undefined,
           showDeleted: "true",
@@ -154,7 +177,13 @@ const SuppliersList = function () {
   };
 
   // fetch suppliers
-  useAsync(FetchSuppliers, [interval, page, workspaceId, searchDebounced]);
+  useAsync(FetchSuppliers, [
+    interval,
+    order,
+    page,
+    workspaceId,
+    searchDebounced,
+  ]);
 
   const getOptions = [
     {
@@ -296,7 +325,7 @@ const SuppliersList = function () {
         </h2>
       </Horizontal>
 
-      <Horizontal internal={1} styles={{ overflow: "hidden" }}>
+      <Horizontal internal={1}>
         <Button
           Icon={Plus}
           category="Success"
@@ -313,6 +342,40 @@ const SuppliersList = function () {
                 start: start ? new Date(start) : null,
                 end: end ? new Date(end) : null,
               });
+              return;
+            }}
+          />
+        </div>
+        <div style={{ width: 140 }}>
+          <InputSelect
+            label=""
+            empty=""
+            value={order}
+            options={[
+              {
+                id: "name",
+                value: "name",
+                text: t.components.order_alphabetical,
+              },
+              {
+                id: "createdAt",
+                value: "createdAt",
+                text: t.components.order_creation,
+              },
+              {
+                id: "newest",
+                value: "newest",
+                text: t.components.order_newest,
+              },
+              {
+                id: "oldest",
+                value: "oldest",
+                text: t.components.order_oldest,
+              },
+            ]}
+            onChange={function (event) {
+              const newOrder = event.currentTarget?.value || "createdAt";
+              setOrder(newOrder);
               return;
             }}
           />
@@ -567,6 +630,8 @@ const SuppliersList = function () {
           pageSize={pageSize}
         />
       </Vertical>
+
+      <div style={{ minHeight: 128 }}></div>
     </React.Fragment>
   );
 };

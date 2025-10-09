@@ -392,7 +392,7 @@ const CustomersInspect = function () {
                 />
                 <Input
                   min={4}
-                  max={32}
+                  max={64}
                   required
                   name="name"
                   id="customer_name"
@@ -483,6 +483,15 @@ const CustomersInspect = function () {
                   label={t.customer.mobile}
                   value={form?.mobile || ""}
                   placeholder={t.customer.mobile_placeholder}
+                  onPaste={function (event) {
+                    event.preventDefault();
+                    const pastedText = event.clipboardData.getData("text");
+                    const mobile = pastedText.replace(/\D/g, "");
+                    const newForm = { ...form };
+                    newForm.mobile = mobile;
+                    setForm(newForm);
+                    return;
+                  }}
                   onChange={async function (event) {
                     const newForm = { ...form };
                     const mobileRaw = event.currentTarget?.value || "";
@@ -553,6 +562,15 @@ const CustomersInspect = function () {
                   label={t.customer.phone_1}
                   value={form?.phone1 || ""}
                   placeholder={t.customer.phone_placeholder}
+                  onPaste={function (event) {
+                    event.preventDefault();
+                    const pastedText = event.clipboardData.getData("text");
+                    const phone1 = pastedText.replace(/\D/g, "");
+                    const newForm = { ...form };
+                    newForm.phone1 = phone1;
+                    setForm(newForm);
+                    return;
+                  }}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.phone1 = event.currentTarget?.value || "";
@@ -812,6 +830,15 @@ const CustomersInspect = function () {
                   label={t.customer.phone_2}
                   value={form?.phone2 || ""}
                   placeholder={t.customer.phone_placeholder}
+                  onPaste={function (event) {
+                    event.preventDefault();
+                    const pastedText = event.clipboardData.getData("text");
+                    const phone2 = pastedText.replace(/\D/g, "");
+                    const newForm = { ...form };
+                    newForm.phone2 = phone2;
+                    setForm(newForm);
+                    return;
+                  }}
                   onChange={function (event) {
                     const newForm = { ...form };
                     newForm.phone2 = event.currentTarget?.value || "";

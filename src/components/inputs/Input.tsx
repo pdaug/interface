@@ -486,6 +486,7 @@ export type InputMaskProps = {
   disabled?: boolean;
   required?: boolean;
   readOnly?: boolean;
+  onPaste?: React.ClipboardEventHandler<HTMLInputElement>;
   helper?: string;
   list?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
@@ -502,6 +503,7 @@ const InputMask = function ({
   minLength,
   maxLength,
   disabled,
+  onPaste,
   required,
   readOnly,
   helper,
@@ -522,6 +524,7 @@ const InputMask = function ({
           type="text"
           value={value}
           ref={inputRef}
+          onPaste={onPaste}
           disabled={disabled}
           required={required}
           onChange={onChange}
