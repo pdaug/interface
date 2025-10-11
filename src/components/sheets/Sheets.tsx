@@ -63,7 +63,16 @@ const Sheets = function ({
         {Object.values(formatter)?.map(function (value, index) {
           const format = value(0);
           return (
-            <div className="sheetCell" key={`sheet-header-${index}`}>
+            <div
+              className="sheetCell"
+              key={`sheet-header-${index}`}
+              style={{
+                maxWidth: `calc(100% / ${Object.entries(formatter)?.length})`,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
               {format.title}
             </div>
           );

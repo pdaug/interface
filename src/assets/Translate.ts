@@ -61,6 +61,8 @@ const TranslatePt = {
       "As entradas de parcelas serão habilitadas com o método de pagamento Boleto, Cartão de Crédito, Cheque e Carteira Digital.",
     flow_date_payment_enable:
       "As entradas de datas serão habilitadas de acordo com o estágio escolhido.",
+    edit_only_this_installments:
+      "Ao editar você estará alterando os dados de apenas esta parcela",
   },
   components: {
     order_alphabetical: "Alfabética",
@@ -1105,6 +1107,7 @@ const TranslatePt = {
   },
   stacks: {
     // no
+    no_date: "Sem data",
     no_name: "Sem nome",
     no_action: "Nenhuma ação encontrada",
     no_entity: "Nenhum módulo encontrado",
@@ -1123,6 +1126,7 @@ const TranslatePt = {
     no_integration: "Nenhuma integração encontrada",
     session_expired: "A sessão expirou",
     no_address: "Sem endereço",
+    no_overdue: "O item não está vencido",
     // helper
     invalid_value: "Valor está inválido",
     invalid_installments_times: "Parcela atual está inválida",
@@ -1132,6 +1136,11 @@ const TranslatePt = {
     wrong_file_format: "O arquivo está com o formato errado",
     limit_image_5mb: "A imagem excede o limite de 5MB",
     // fields
+    invalid_payment_installments_times: "Parcela atual não é válida",
+    invalid_payment_date: "Data de pagamento não é válida",
+    invalid_payment_expires: "Data de vencimento não é válida",
+    invalid_entity_id: "Id da entidade não é válido",
+    invalid_payment_installments: "Total de parcelas não é válido",
     invalid_enum_value: "Valor desconhecido",
     wrong_credentials: "As credenciais estão incorretas",
     incorrect_length: "Tamanho incorreto",
@@ -1519,6 +1528,8 @@ const TranslateEn = {
       "The installments entries will be enabled with the payment methods Boleto, Credit Card, Cheque and E-wallet.",
     flow_date_payment_enable:
       "The date entries will be enabled according to the stage chosen.",
+    edit_only_this_installments:
+      "When editing you will be changing the data of only this installment",
   },
   components: {
     order_alphabetical: "Alphabetical",
@@ -2596,6 +2607,7 @@ const TranslateEn = {
   },
   stacks: {
     // no
+    no_date: "No date",
     no_name: "No name",
     no_action: "No ação found",
     no_entity: "No module found",
@@ -2614,6 +2626,8 @@ const TranslateEn = {
     no_integration: "No integration found",
     session_expired: "Your sessions is expired",
     no_address: "No address",
+    no_overdue: "The item is not overdue",
+
     // helper
     invalid_value: "Value is invalid",
     invalid_installments_times: "Current installment is invalid",
@@ -2623,6 +2637,11 @@ const TranslateEn = {
     wrong_file_format: "The file has the wrong format",
     limit_image_5mb: "The image file exceeds the 5MB limit",
     // fields
+    invalid_payment_installments_times: "Current installment is invalid",
+    invalid_payment_date: "Payment date is invalid",
+    invalid_payment_expires: "Payment expires is invalid",
+    invalid_entity_id: "Entity id is invalid",
+    invalid_payment_installments: "Total installments is invalid",
     invalid_enum_value: "Unknown value",
     wrong_credentials: "Wrong credentials",
     incorrect_length: "Incorrect length",

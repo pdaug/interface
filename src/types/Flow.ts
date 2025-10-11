@@ -7,6 +7,7 @@ export type TypeFlowStages =
   | "review"
   | "scheduled"
   | "paid"
+  | "overdued"
   | "reconciled"
   | "canceled"
   | "expired"

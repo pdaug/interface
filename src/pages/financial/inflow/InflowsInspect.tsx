@@ -2,22 +2,14 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { addMonths, format } from "date-fns";
-import { Asterisk, Receipt } from "@phosphor-icons/react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Asterisk, PencilSimple, Receipt } from "@phosphor-icons/react";
 
 // apis
 import apis from "../../../apis";
 
-// types
-import {
-  TypeFlow,
-  TypeFlowStages,
-  TypeFlowEntities,
-  TypeFlowPaymentMethod,
-} from "../../../types/Flow";
-import { TypeSale } from "../../../types/Sale";
-import { TypeAccount } from "../../../types/Account";
-import { ApiResponsePaginate } from "../../../types/Api";
+// utils
+import Calculate from "../../../utils/Calculate";
 
 // assets
 import {
@@ -25,6 +17,23 @@ import {
   FlowEntitiesOptions,
   FlowPaymentMethodsOptions,
 } from "../../../assets/Flow";
+
+// types
+import {
+  TypeVehicleRefuel,
+  TypeVehicleMaintenance,
+} from "../../../types/Vehicle";
+import {
+  TypeFlow,
+  TypeFlowStages,
+  TypeFlowEntities,
+  TypeFlowPaymentMethod,
+} from "../../../types/Flow";
+import { TypeSale } from "../../../types/Sale";
+import { TypeOrder } from "../../../types/Order";
+import { TypeAccount } from "../../../types/Account";
+import { TypePurchase } from "../../../types/Purchases";
+import { ApiResponsePaginate } from "../../../types/Api";
 
 // hooks
 import useAsync from "../../../hooks/useAsync";
@@ -51,13 +60,6 @@ import Profile from "../../../components/profiles/Profile";
 import Callout from "../../../components/callouts/Callout";
 import Breadcrumb from "../../../components/breadcrumbs/Breadcrumb";
 import { Horizontal, Vertical } from "../../../components/aligns/Align";
-import Calculate from "../../../utils/Calculate";
-import { TypePurchase } from "../../../types/Purchases";
-import { TypeOrder } from "../../../types/Order";
-import {
-  TypeVehicleMaintenance,
-  TypeVehicleRefuel,
-} from "../../../types/Vehicle";
 
 const InflowsInspect = function () {
   const t = useTranslate();
@@ -84,7 +86,7 @@ const InflowsInspect = function () {
     paymentTimes: 0,
     paymentInstallments: 0,
     paymentMethod: "cash",
-    paymentDate: "",
+    paymentDate: null,
     paymentExpires: null,
     recurringId: null,
     userId: user.id,
@@ -406,18 +408,93 @@ const InflowsInspect = function () {
     setLoading(true);
 
     // check is payment times is greater than payment installments
+    if (
+      form.paymentTimes &&
+      form.paymentInstallments &&
+      form.paymentTimes > form.paymentInstallments
+    ) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.invalid_payment_installments_times,
+      });
+      setLoading(false);
+      console.error("[src/pages/financial/inflow/InflowsInspect.tsx]", form);
+      return;
+    }
 
     // check is paid must be payment date
+    if (form.stage === "paid" && !form.paymentDate) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.invalid_payment_date,
+      });
+      setLoading(false);
+      console.error("[src/pages/financial/inflow/InflowsInspect.tsx]", form);
+      return;
+    }
 
     // check entity name is different manual and no has entity id
+    if (form.entityName !== "manual" && !form.entityId) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.invalid_entity_id,
+      });
+      setLoading(false);
+      console.error("[src/pages/financial/inflow/InflowsInspect.tsx]", form);
+      return;
+    }
 
-    // check payment method is credit nature and has not installments
+    // check payment method is enabled installments and has not installments
+    if (enableInstallments && !form.paymentInstallments) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.invalid_payment_installments,
+      });
+      setLoading(false);
+      console.error("[src/pages/financial/inflow/InflowsInspect.tsx]", form);
+      return;
+    }
 
     // check has installment but no has payment times
+    if (enableInstallments && !form.paymentTimes) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.invalid_payment_installments_times,
+      });
+      setLoading(false);
+      console.error("[src/pages/financial/inflow/InflowsInspect.tsx]", form);
+      return;
+    }
 
     // check date payment is greater than date expires
+    if (
+      form.paymentDate &&
+      form.paymentExpires &&
+      form.paymentDate > form.paymentExpires
+    ) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.invalid_payment_expires,
+      });
+      setLoading(false);
+      console.error("[src/pages/financial/inflow/InflowsInspect.tsx]", form);
+      return;
+    }
 
     // check date now is greater than date payment and stage is not overdued
+    if (
+      form.paymentDate &&
+      new Date() > new Date(form.paymentDate) &&
+      form.stage !== "overdued"
+    ) {
+      play("alert");
+      toast.warning(t.toast.warning_error, {
+        description: t.stacks.no_overdue,
+      });
+      setLoading(false);
+      console.error("[src/pages/financial/inflow/InflowsInspect.tsx]", form);
+      return;
+    }
 
     try {
       // is editing
@@ -929,6 +1006,15 @@ const InflowsInspect = function () {
               />
             </Vertical>
           </Wrapper>
+
+          {Boolean(id) && enableInstallments && (
+            <Callout
+              Icon={PencilSimple}
+              category="Warning"
+              text={t.callout.edit_only_this_installments}
+              styles={{ fontSize: "var(--textSmall)" }}
+            />
+          )}
 
           <Callout
             Icon={Asterisk}

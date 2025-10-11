@@ -71,7 +71,7 @@ const InflowsList = function () {
   const [loading, setLoading] = useState<boolean>(true);
   const [selected, setSelected] = useState<string[]>([]);
   const [inflows, setInflows] = useState<TypeFlow[]>([]);
-  const [accountId, setAccountId] = useState<string>("");
+  const [accountId, setAccountId] = useState<string>("all");
   const [accounts, setAccounts] = useState<TypeAccount[]>([]);
   const [stages, setStages] = useState<TypeFlowStages | "all">("all");
   const [interval, setInterval] = useState<TypeInputInterval>({
@@ -94,11 +94,25 @@ const InflowsList = function () {
           filter: JSON.stringify({
             type: "inflow",
             stage: stages !== "all" ? stages : undefined,
-            accountId: accountId !== "" ? accountId : undefined,
-            paymentDate: {
-              $gte: interval.start ? interval.start.toISOString() : undefined,
-              $lt: interval.end ? interval.end.toISOString() : undefined,
-            },
+            accountId: accountId !== "all" ? accountId : undefined,
+            $or: [
+              {
+                paymentDate: {
+                  $gte: interval.start
+                    ? interval.start.toISOString()
+                    : undefined,
+                  $lt: interval.end ? interval.end.toISOString() : undefined,
+                },
+              },
+              {
+                createdAt: {
+                  $gte: interval.start
+                    ? interval.start.toISOString()
+                    : undefined,
+                  $lt: interval.end ? interval.end.toISOString() : undefined,
+                },
+              },
+            ],
           }),
         },
         workspaceId,
@@ -339,10 +353,10 @@ const InflowsList = function () {
         <div style={{ maxWidth: 256 }}>
           <InputSelect
             label=""
-            value={accountId}
-            empty={t.account.account}
+            value={accountId || "all"}
+            empty={t.inflow.all_accounts}
             options={[
-              { id: "", name: t.inflow.all_accounts, status: true },
+              { id: "all", name: t.inflow.all_accounts, status: true },
               ...accounts,
             ].map(function (userLocal) {
               return {
@@ -485,7 +499,7 @@ const InflowsList = function () {
             },
             accountId: {
               label: t.account.account,
-              maxWidth: 160,
+              maxWidth: 140,
               handler: function (data) {
                 const accountFinded = accounts?.find(function (account) {
                   return account.id === data.accountId;
@@ -545,9 +559,23 @@ const InflowsList = function () {
             },
             paymentDate: {
               label: t.inflow.payment_date,
-              maxWidth: 160,
+              maxWidth: 180,
               handler: function (data) {
                 const datetime = instanceDateTime(data.paymentDate as string);
+                return data.paymentDate ? (
+                  datetime
+                ) : (
+                  <i style={{ color: "var(--textLight)" }}>
+                    {t.stacks.no_date}
+                  </i>
+                );
+              },
+            },
+            createdAt: {
+              label: t.components.created_at,
+              maxWidth: 180,
+              handler: function (data) {
+                const datetime = instanceDateTime(data.createdAt as string);
                 return datetime;
               },
             },
