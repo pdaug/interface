@@ -611,6 +611,7 @@ const CustomersList = function () {
             // },
             user: {
               label: t.components.user,
+              maxWidth: 180,
               handler: function (data) {
                 const userFinded = users?.find(function (user) {
                   return user.id === data.userId;
@@ -634,6 +635,7 @@ const CustomersList = function () {
             },
             createdAt: {
               label: t.components.created_at,
+              maxWidth: 160,
               handler: function (data) {
                 const datetime = instanceDateTime(data.createdAt as string);
                 return datetime;

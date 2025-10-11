@@ -12,12 +12,13 @@ import { Horizontal, Vertical } from "../../../components/aligns/Align";
 import Button, { ButtonCategories } from "../../../components/buttons/Button";
 
 const plansHierarchy = {
-  personal: 0,
+  essential: 0,
   advanced: 1,
   professional: 2,
 };
 
 type TypePlan = {
+  plan: string;
   isActive: boolean;
   title: string;
   description: string;
@@ -30,6 +31,7 @@ type TypePlan = {
 };
 
 const Plan = function ({
+  plan,
   isActive,
   title,
   description,
@@ -73,6 +75,11 @@ const Plan = function ({
         </div>
       )}
       <Vertical internal={2} className="itemsCenter flex1">
+        <img
+          alt={plan}
+          style={{ width: 80, height: 80 }}
+          src={`/plans/plan_${plan.toLowerCase()}_transparent.png`}
+        />
         <Vertical internal={0.4} className="itemsCenter">
           <h2 style={{ margin: 0, padding: 0 }}>{title}</h2>
           <p
@@ -157,9 +164,10 @@ const PlansPanel = function () {
         className="justifyCenter"
       >
         <Plan
-          isActive={instance.paymentPlan === "personal"}
-          title={t.plans.plan_personal}
-          description={t.plans.plan_personal_description}
+          plan="essential"
+          isActive={instance.paymentPlan === "essential"}
+          title={t.plans.plan_essential}
+          description={t.plans.plan_essential_description}
           currency={instance.currency}
           price={28}
           items={[
@@ -171,16 +179,17 @@ const PlansPanel = function () {
           ]}
           buttonLabel={t.plans.upgrade}
           buttonDisabled={
-            plansHierarchy.personal <= plansHierarchy[instance.paymentPlan]
+            plansHierarchy.essential <= plansHierarchy[instance.paymentPlan]
           }
           buttonCategory={
-            plansHierarchy.personal <= plansHierarchy[instance.paymentPlan]
+            plansHierarchy.essential <= plansHierarchy[instance.paymentPlan]
               ? "Neutral"
               : "Success"
           }
         />
 
         <Plan
+          plan="advanced"
           isActive={instance.paymentPlan === "advanced"}
           title={t.plans.plan_advanced}
           description={t.plans.plan_advanced_description}
@@ -191,9 +200,7 @@ const PlansPanel = function () {
             { content: t.plans.item_app_mobile },
             { content: t.plans.item_until_5_users },
             { content: t.plans.item_until_2_workspaces },
-            { content: t.plans.item_until_5_automations },
             { content: t.plans.item_all_modules, bold: true },
-            { content: t.plans.item_artificial_intelligence, bold: true },
           ]}
           buttonLabel={t.plans.upgrade}
           buttonDisabled={
@@ -207,22 +214,21 @@ const PlansPanel = function () {
         />
 
         <Plan
+          plan="professional"
           isActive={instance.paymentPlan === "professional"}
           title={t.plans.plan_professional}
           description={t.plans.plan_professional_description}
           currency={instance.currency}
-          price={420}
+          price={360}
           items={[
             { content: t.plans.item_suport },
             { content: t.plans.item_app_mobile },
             { content: t.plans.item_user_unlimited, bold: true },
             { content: t.plans.item_workspace_unlimited, bold: true },
-            { content: t.plans.item_automations_unlimited, bold: true },
             { content: t.plans.item_all_modules },
-            { content: t.plans.item_artificial_intelligence },
+            { content: t.plans.item_automations, bold: true },
+            { content: t.plans.item_artificial_intelligence, bold: true },
             { content: t.plans.item_team_training, bold: true },
-            { content: t.plans.item_access_api, bold: true },
-            { content: t.plans.item_domain_customization, bold: true },
           ]}
           buttonLabel={t.plans.upgrade}
           buttonDisabled={

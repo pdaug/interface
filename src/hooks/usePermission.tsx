@@ -32,11 +32,11 @@ const usePermission = function () {
 
   const checkByPlan = function (needs: TypeInstancePlan) {
     if (!instance) return false;
-    const currentPlan = instance?.paymentPlan || "personal";
+    const currentPlan = instance?.paymentPlan || "essential";
     const permissions = {
-      personal: ["personal"],
-      advanced: ["personal", "advanced"],
-      professional: ["personal", "advanced", "professional"],
+      essential: ["essential"],
+      advanced: ["essential", "advanced"],
+      professional: ["essential", "advanced", "professional"],
     };
     return permissions[currentPlan].includes(needs);
   };
