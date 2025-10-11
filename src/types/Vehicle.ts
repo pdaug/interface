@@ -77,7 +77,7 @@ export type TypeVehicleRefuelUnitType =
   | "m3";
 
 export type TypeVehicleRefuel = {
-  id?: string;
+  id: string;
   fuel: TypeVehicleRefuelFuel;
   gasBrand: string;
   gasStation: string;
@@ -134,7 +134,7 @@ export type TypeVehicleMaintenanceRepair = {
 };
 
 export type TypeVehicleMaintenance = {
-  id?: string;
+  id: string;
   name: string;
   local: string;
 

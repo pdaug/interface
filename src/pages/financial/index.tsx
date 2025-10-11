@@ -1,3 +1,9 @@
 // pages
+import inflows from "./inflow";
 
-export default [];
+export default [
+  {
+    path: "inflows",
+    children: inflows,
+  },
+];

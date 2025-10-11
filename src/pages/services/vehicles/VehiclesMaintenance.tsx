@@ -60,7 +60,8 @@ const VehiclesMaintenance = function () {
   const [loading, setLoading] = useState(false);
   const [vehicles, setVehicles] = useState<TypeVehicle[]>([]);
   const [accounts, setAccounts] = useState<TypeAccount[]>([]);
-  const [form, setForm] = useState<TypeVehicleMaintenance>({
+  const [form, setForm] = useState<Partial<TypeVehicleMaintenance>>({
+    id: "",
     name: "",
     local: "",
     type: "corrective",
@@ -618,6 +619,7 @@ const VehiclesMaintenance = function () {
                   text={t.vehicle.inspection_add}
                   onClick={function () {
                     const newForm = { ...form };
+                    if (!newForm.inspection) return;
                     newForm.inspection.push({ name: "", reason: "" });
                     setForm(newForm);
                     return;
@@ -625,7 +627,7 @@ const VehiclesMaintenance = function () {
                 />
               </Horizontal>
 
-              {form.inspection.length > 0 && (
+              {form.inspection && form.inspection.length > 0 && (
                 <Vertical internal={1}>
                   {form.inspection.map(function (inspection, index) {
                     return (
@@ -687,6 +689,7 @@ const VehiclesMaintenance = function () {
                                 confirmText: t.components.remove,
                                 onConfirm: function () {
                                   const newForm = { ...form };
+                                  if (!newForm.inspection) return;
                                   newForm.inspection.splice(index, 1);
                                   setForm(newForm);
                                   CloseDialog();
@@ -711,6 +714,7 @@ const VehiclesMaintenance = function () {
                   text={t.vehicle.repair_add}
                   onClick={function () {
                     const newForm = { ...form };
+                    if (!newForm.repair) return;
                     newForm.repair.push({
                       name: "",
                       description: "",
@@ -722,7 +726,7 @@ const VehiclesMaintenance = function () {
                 />
               </Horizontal>
 
-              {form.repair.length > 0 && (
+              {form.repair && form.repair.length > 0 && (
                 <Vertical internal={1}>
                   {form.repair.map(function (repair, index) {
                     return (
@@ -795,6 +799,7 @@ const VehiclesMaintenance = function () {
                                 confirmText: t.components.remove,
                                 onConfirm: function () {
                                   const newForm = { ...form };
+                                  if (!newForm.repair) return;
                                   newForm.repair.splice(index, 1);
                                   setForm(newForm);
                                   CloseDialog();

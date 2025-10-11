@@ -278,7 +278,7 @@ const Login = function () {
                 required
                 name="instance"
                 id="login_instance"
-                placeholder="johndoe"
+                placeholder="instance"
                 value={form.instance}
                 label={t.login.instance}
                 onChange={function (event) {
@@ -296,7 +296,7 @@ const Login = function () {
               id="login_username"
               value={form.username}
               label={t.login.username}
-              placeholder="johndoe@mail.com"
+              placeholder="contact@mail.com"
               onChange={function (event) {
                 const newForm = { ...form };
                 newForm.username = event.currentTarget?.value || "";

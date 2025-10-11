@@ -11,6 +11,7 @@ import AddressPosition from "./external/Address";
 // apis internal
 import User from "./internal/User";
 import Sale from "./internal/Sale";
+import Flow from "./internal/Flow";
 import Audit from "./internal/Audit";
 import Order from "./internal/Order";
 import Login from "./internal/Login";
@@ -51,6 +52,7 @@ export default {
   Customer,
   Dashboard,
   DocumentApi,
+  Flow,
   Instance,
   Login,
   Order,
