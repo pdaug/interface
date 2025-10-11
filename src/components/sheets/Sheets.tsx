@@ -12,7 +12,12 @@ export type SheetsBase = {
   [key: string]: number | string;
 };
 
-export type SheetsFormatterType = "number" | "text" | "money" | "select";
+export type SheetsFormatterType =
+  | "number"
+  | "text"
+  | "money"
+  | "date"
+  | "select";
 
 export type SheetsFormatter = {
   [key: string]: (index: number) => {
@@ -80,6 +85,12 @@ const Sheets = function ({
                     <div
                       className="sheetCell"
                       key={`sheet-row-${rowIndex}-cell-${cellIndex}`}
+                      style={{
+                        maxWidth: `calc(100% / ${Object.entries(formatter)?.length})`,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
                     >
                       {format.type === "number" && (
                         <input
@@ -103,6 +114,25 @@ const Sheets = function ({
                       {format.type === "text" && (
                         <input
                           type="text"
+                          value={row[key]}
+                          minLength={format?.min}
+                          maxLength={format?.max}
+                          disabled={format.disabled}
+                          readOnly={format?.readOnly}
+                          placeholder={format?.placeholder}
+                          id={`${key}-${rowIndex}-${cellIndex}`}
+                          name={`${key}-${rowIndex}-${cellIndex}`}
+                          onChange={function (event) {
+                            const newRow = rows[rowIndex];
+                            newRow[key] = event?.currentTarget?.value || "";
+                            format.onChange(row);
+                            return;
+                          }}
+                        />
+                      )}
+                      {format.type === "date" && (
+                        <input
+                          type="date"
                           value={row[key]}
                           minLength={format?.min}
                           maxLength={format?.max}
